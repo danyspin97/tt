@@ -1,5 +1,8 @@
 libsrc = [
-    'service.d'
+    'bundle.d',
+    'longrun.d',
+    'oneshot.d',
+    'service.d',
 ]
 
 libtt_soversion = 0

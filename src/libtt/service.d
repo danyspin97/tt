@@ -6,8 +6,6 @@ class Service {
     // User that will own the service
     // Can be 'root', 'user' or any valid user in the system
     string[] user;
-    // Notify option of s6-rc
-    int notify = -1;
 
     class Script {
         enum BuildType {
@@ -15,6 +13,11 @@ class Service {
             Custom
         }
         BuildType build = BuildType.Auto;
+        // Script to execute
         string execute;
+        // shebang for she script
+        string shebang;
+        // run as the user contained in "runas"
+        string runas;
     }
 }
