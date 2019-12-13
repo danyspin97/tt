@@ -8,7 +8,8 @@ import std.experimental.logger;
 
 import confini;
 
-import define;
+import libtt.define;
+import libtt.dirs;
 
 struct EnvWrapper {
     string[string] hash;

@@ -56,5 +56,7 @@ if servicedir == 'datadir/tt/service'
     servicedir =  datadir / 'tt/service'
 endif
 
+tt_inc = include_directories('src')
+
 subdir('src')
 

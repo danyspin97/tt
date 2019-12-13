@@ -32,6 +32,7 @@ libtt_soversion = 0
 
 libtt = library('libtt',
     libsrc,
+    include_directories: tt_inc,
     dependencies: [ libconfini ],
     install: true,
     version: meson.project_version(),

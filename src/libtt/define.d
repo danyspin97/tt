@@ -1,4 +1,4 @@
-module libtt;
+module libtt.define;
 
 import confini;
 
