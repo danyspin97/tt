@@ -1,0 +1,19 @@
+module libtt.dirs;
+
+enum Version = "@version@";
+
+struct dirs {
+    string bin = "@bindir@";
+    string conf = "@confdir@";
+    string exeline_prefix = "@execline_prefix@";
+    string libexec = "@libexecdir@";
+    string live = "@livedir@";
+    string log = "@logdir@";
+    string service = "@servicedir@";
+    string system = "@systemdir@";
+
+    string custom_scripts = "@confdir@";
+    string admin_service = "@confdir@/service";
+    string admin_conf = "@confdir@/conf";
+}
+
