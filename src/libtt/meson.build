@@ -1,10 +1,31 @@
+dirs_config = configuration_data({
+    'version': meson.project_version(),
+    'livedir': livedir,
+    'systemdir': systemdir,
+    'confdir': confdir,
+    'logdir': logdir,
+    'servicedir': servicedir,
+    'bindir': bindir,
+    'libexecdir': libexecdir,
+    'execline_prefix': execline_prefix
+})
+
+configure_file(
+    input: 'dirs.d.in',
+    output: 'dirs.d',
+    configuration: dirs_config,
+    install: true,
+    install_dir: get_option('includedir') / 'd/libtt'
+)
+
 libsrc = [
     'bundle.d',
+    'define.d',
     'env.d',
     'longrun.d',
     'oneshot.d',
     'service.d',
-    '/usr/include/d/confini.d'
+    '/usr/include/d/confini.d',
 ]
 
 libtt_soversion = 0

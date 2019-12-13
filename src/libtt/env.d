@@ -6,11 +6,12 @@ import std.string : fromStringz, toStringz ;
 
 import confini;
 
+import define;
+
 struct EnvWrapper {
     string[string] hash;
 }
 
-extern (C) alias IniCallback = const int function(IniDispatch* dispatch, void* v_null);
 extern (C) IniCallback get_env_parse_callback() {
     return (IniDispatch* dispatch, void* env_p) {
         ini_unquote(dispatch.data, dispatch.format);
@@ -19,6 +20,7 @@ extern (C) IniCallback get_env_parse_callback() {
         auto key = to!string(dispatch.data);
         auto val = to!string(dispatch.value);
         env.hash[key] = val;
+
         return 0;
     };
 }
