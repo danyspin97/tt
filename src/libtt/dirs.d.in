@@ -2,7 +2,7 @@ module libtt.dirs;
 
 enum Version = "@version@";
 
-struct dirs {
+struct Dirs {
     string bin = "@bindir@";
     string conf = "@confdir@";
     string exeline_prefix = "@execline_prefix@";
@@ -16,4 +16,5 @@ struct dirs {
     string admin_service = "@confdir@/service";
     string admin_conf = "@confdir@/conf";
 }
+static Dirs dirs;
 
