@@ -3,4 +3,7 @@ project('tt', 'd',
 
 pkg = import('pkgconfig')
 
+libconfini = dependency('libconfini')
+
 subdir('src')
+

@@ -1,18 +1,27 @@
 libsrc = [
     'bundle.d',
+    'env.d',
     'longrun.d',
     'oneshot.d',
     'service.d',
+    '/usr/include/d/confini.d'
 ]
 
 libtt_soversion = 0
 
 libtt = library('libtt',
     libsrc,
-    dependencies: [],
+    dependencies: [ libconfini ],
     install: true,
     version: meson.project_version(),
-    soversion: libtt_soversion
+    soversion: libtt_soversion,
+    link_args: ['-shared', '-link-defaultlib-shared'],
+)
+
+libtt_dep = declare_dependency(
+    link_with: libtt,
+    include_directories: tt_inc,
+    link_args: '-link-defaultlib-shared',
 )
 
 pkg.generate(name: 'libtt',
