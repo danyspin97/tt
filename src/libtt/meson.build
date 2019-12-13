@@ -25,6 +25,7 @@ libsrc = [
     'longrun.d',
     'oneshot.d',
     'service.d',
+    'service_parser.d',
     meson.current_build_dir() / 'dirs.d',
     '/usr/include/d/confini.d',
 ]
