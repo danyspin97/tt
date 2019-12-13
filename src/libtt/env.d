@@ -4,6 +4,8 @@ import std.conv : to ;
 import std.stdio : writeln ;
 import std.string : fromStringz, toStringz ;
 
+import std.experimental.logger;
+
 import confini;
 
 import define;
@@ -46,14 +48,24 @@ IniFormat get_env_format() {
 EnvWrapper parse_env(string path) {
     EnvWrapper env;
 
-    if (load_ini_path(
+    uint ret = load_ini_path(
                 toStringz(path),
                 get_env_format(),
                 null,
                 get_env_parse_callback(),
-                &env)) {
-        writeln("Something went wrong");
+                &env);
+
+    if (ret == CONFINI_ERROR) {
+        criticalf("Something went wrong when parsing file %s", path);
+    } else if(ret == ConfiniInterruptNo.CONFINI_ENOMEM) {
+        criticalf("Could not alloc memory when reading file %s", path);
+    } else if (ret == ConfiniInterruptNo.CONFINI_ENOENT) {
+        logf("No file at: %s", path);
+    } else if (ret == ConfiniInterruptNo.CONFINI_EIO) {
+        criticalf("Could not read file at: %s", path);
     }
+
+    logf("Loaded file with path: %s", path);
 
     return env;
 }
