@@ -24,6 +24,7 @@ libsrc = [
     'env.d',
     'longrun.d',
     'oneshot.d',
+    'section_parser.d',
     'service.d',
     'service_parser.d',
     meson.current_build_dir() / 'dirs.d',

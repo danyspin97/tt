@@ -17,9 +17,6 @@ import libtt.dirs;
 
 alias RowParser = const int function(string key, string value, Service service);
 
-int main_section_parser(string key, string value, Service service) {
-    return 0;
-}
 
 int service_parser(bool system_mode = true) {
     immutable string[] dirs_to_read = [ dirs.service, dirs.admin_service ];
