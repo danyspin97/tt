@@ -5,4 +5,8 @@ class Oneshot : Service {
     Script stop;
 
     Service[] depends;
+
+    this(Service s) {
+        super(s);
+    }
 }

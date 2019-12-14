@@ -20,4 +20,12 @@ class Service {
         // run as the user contained in "runas"
         string runas;
     }
+
+    this() {}
+
+    this(Service s) {
+        name = s.name;
+        description = s.description;
+        user = s.user;
+    }
 }

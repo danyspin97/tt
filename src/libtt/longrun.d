@@ -19,4 +19,8 @@ class Longrun : Service {
             execute = "";
         }
     }
+
+    this(Service s) {
+        super(s);
+    }
 }
