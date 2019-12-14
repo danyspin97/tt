@@ -18,7 +18,7 @@ import libtt.dirs;
 
 import libtt.section_parser;
 
-alias RowParser = const int function(string key, string value, ref Service service);
+alias RowParser = const int function(string key, string value, Service* service);
 
 int parse_all_services(bool system_mode = true) {
     immutable string[] dirs_to_read = [ dirs.service, dirs.admin_service ];
@@ -61,7 +61,7 @@ extern (C) int service_dispatcher (IniDispatch* dispatch, void* data) {
 
     static string current_section;
 
-    auto service = cast(Service)data;
+    auto service = cast(Service*)data;
 
     // dispatch.type does always contains 0, breaking this
     //if (dispatch.type == IniNodeType.INI_SECTION) {
@@ -105,14 +105,12 @@ IniFormat get_service_format() {
 Service parse_single_service(string path) {
     Service service = new Service();
 
-    auto ptr = cast(void*)service;
-
     uint ret = load_ini_path(
                 toStringz(path),
                 get_service_format(),
                 null,
                 &service_dispatcher,
-                ptr);
+                &service);
 
     if (ret == CONFINI_ERROR) {
         criticalf("Something went wrong when parsing file %s", path);
@@ -124,16 +122,17 @@ Service parse_single_service(string path) {
         criticalf("Could not read file at: %s", path);
     }
 
+    log(service.name);
     return service;
 }
 
-void convert_service(ref Service service, string type) {
+void convert_service(Service* service, string type) {
     if (type == "oneshot") {
-        service = new Oneshot(service);
+        *service = new Oneshot(*service);
     } else if (type == "longrun") {
-        service = new Longrun(service);
+        *service = new Longrun(*service);
     } else if (type == "bundle") {
-        service = new Bundle(service);
+        *service = new Bundle(*service);
     } else {
         criticalf("Type %s is not allowed for services", type);
     }
