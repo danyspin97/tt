@@ -15,17 +15,15 @@ struct EnvWrapper {
     string[string] hash;
 }
 
-extern (C) IniCallback get_env_parse_callback() {
-    return (IniDispatch* dispatch, void* env_p) {
-        ini_unquote(dispatch.data, dispatch.format);
-        ini_string_parse(dispatch.value, dispatch.format);
-        auto env = cast(EnvWrapper*)env_p;
-        auto key = to!string(dispatch.data);
-        auto val = to!string(dispatch.value);
-        env.hash[key] = val;
+extern (C) int env_parse_callback(IniDispatch* dispatch, void* env_p) {
+    ini_unquote(dispatch.data, dispatch.format);
+    ini_string_parse(dispatch.value, dispatch.format);
+    auto env = cast(EnvWrapper*)env_p;
+    auto key = to!string(dispatch.data);
+    auto val = to!string(dispatch.value);
+    env.hash[key] = val;
 
-        return 0;
-    };
+    return 0;
 }
 
 IniFormat get_env_format() {
@@ -53,7 +51,7 @@ EnvWrapper parse_env(string path) {
                 toStringz(path),
                 get_env_format(),
                 null,
-                get_env_parse_callback(),
+                &env_parse_callback,
                 &env);
 
     if (ret == CONFINI_ERROR) {
