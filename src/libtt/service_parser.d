@@ -63,16 +63,17 @@ extern (C) int service_dispatcher (IniDispatch* dispatch, void* service_ptr) {
 
     auto service = cast(Service)service_ptr;
 
-    if (dispatch.type == IniNodeType.INI_SECTION) {
-        auto section = to!string(dispatch.data);
-        if ((section in key_parse_dispatch) != null) {
-            criticalf("Section named %s is not allowed", section);
-        }
+    // dispatch.type does always contains 0, breaking this
+    //if (dispatch.type == IniNodeType.INI_SECTION) {
+    auto section = to!string(dispatch.data);
+    if ((section in key_parse_dispatch) != null) {
+            // criticalf("Section named %s is not allowed", section);
+       // }
         current_section = section;
         return 0;
-    }
+    } else {
 
-    if (dispatch.type == IniNodeType.INI_KEY) {
+    // if (dispatch.type == IniNodeType.INI_KEY) {
         ini_unquote(dispatch.data, dispatch.format);
         ini_string_parse(dispatch.value, dispatch.format);
 
