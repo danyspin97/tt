@@ -49,7 +49,7 @@ auto parse_services(string [] service_names, bool system_mode = true) {
     return services;
 }
 
-extern (C) int service_dispatcher (IniDispatch* dispatch, void* service_ptr) {
+extern (C) int service_dispatcher (IniDispatch* dispatch, void* data) {
     const RowParser[string] key_parse_dispatch = [
         "main": &main_section_parser,
         "start": &start_section_parser,
@@ -61,7 +61,7 @@ extern (C) int service_dispatcher (IniDispatch* dispatch, void* service_ptr) {
 
     static string current_section;
 
-    auto service = cast(Service)service_ptr;
+    auto service = cast(Service)data;
 
     // dispatch.type does always contains 0, breaking this
     //if (dispatch.type == IniNodeType.INI_SECTION) {
@@ -103,14 +103,16 @@ IniFormat get_service_format() {
 }
 
 Service parse_single_service(string path) {
-    Service service;
+    Service service = new Service();
+
+    auto ptr = cast(void*)service;
 
     uint ret = load_ini_path(
                 toStringz(path),
                 get_service_format(),
                 null,
                 &service_dispatcher,
-                &service);
+                ptr);
 
     if (ret == CONFINI_ERROR) {
         criticalf("Something went wrong when parsing file %s", path);
