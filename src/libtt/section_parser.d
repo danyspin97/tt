@@ -9,7 +9,17 @@ import libtt.oneshot : Oneshot;
 import libtt.longrun : Longrun;
 import libtt.bundle : Bundle;
 
-import libtt.service_parser;
+void convert_service(Service* service, string type) {
+    if (type == "oneshot") {
+        *service = new Oneshot(*service);
+    } else if (type == "longrun") {
+        *service = new Longrun(*service);
+    } else if (type == "bundle") {
+        *service = new Bundle(*service);
+    } else {
+        criticalf("Type %s is not allowed for services", type);
+    }
+}
 
 int main_section_parser(string key, string value, Service* service) {
     switch (key) {

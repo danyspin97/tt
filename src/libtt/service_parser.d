@@ -126,15 +126,3 @@ Service parse_single_service(string path) {
     return service;
 }
 
-void convert_service(Service* service, string type) {
-    if (type == "oneshot") {
-        *service = new Oneshot(*service);
-    } else if (type == "longrun") {
-        *service = new Longrun(*service);
-    } else if (type == "bundle") {
-        *service = new Bundle(*service);
-    } else {
-        criticalf("Type %s is not allowed for services", type);
-    }
-}
-
