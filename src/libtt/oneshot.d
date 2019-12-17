@@ -11,5 +11,8 @@ class Oneshot : Service {
 
     this(Service s) {
         super(s);
+
+        start = new Script();
+        stop = new Script();
     }
 }

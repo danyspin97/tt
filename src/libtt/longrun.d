@@ -25,5 +25,8 @@ class Longrun : Service {
 
     this(Service s) {
         super(s);
+
+        run = new Script();
+        finish = new Script();
     }
 }
