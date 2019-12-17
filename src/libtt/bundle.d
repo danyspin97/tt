@@ -1,4 +1,6 @@
-import service : Service;
+module libtt.bundle;
+
+import libtt.service : Service;
 
 class Bundle : Service {
     Service[] contents;

@@ -1,4 +1,6 @@
-import service : Service;
+module libtt.oneshot;
+
+import libtt.service : Service;
 
 class Oneshot : Service {
     Script start;

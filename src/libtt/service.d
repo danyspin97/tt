@@ -1,3 +1,5 @@
+module libtt.service;
+
 class Service {
     // Name of the service, same as the service file
     string name;

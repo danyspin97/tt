@@ -4,8 +4,10 @@ import std.experimental.logger;
 
 import confini;
 
-import libtt.service;
-import libtt.oneshot;
+import libtt.service : Service;
+import libtt.oneshot : Oneshot;
+import libtt.longrun : Longrun;
+import libtt.bundle : Bundle;
 
 import libtt.service_parser;
 
