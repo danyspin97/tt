@@ -1,8 +1,12 @@
 module libtt.section_parser;
 
+import std.conv: to;
+
 import std.experimental.logger;
 
-import confini;
+import confini : IniDispatch, ini_string_parse ;
+
+import libtt.script_parser: parse_script;
 
 import libtt.service : Service;
 import libtt.oneshot : Oneshot;
@@ -21,7 +25,11 @@ void convert_service(Service* service, string type) {
     }
 }
 
-int main_section_parser(string key, string value, Service* service) {
+int main_section_parser(IniDispatch* dispatch, void* service_ptr) {
+    ini_string_parse(dispatch.value, dispatch.format);
+    auto key = to!string(dispatch.data);
+    auto value = to!string(dispatch.value);
+    auto service = cast(Service*)service_ptr;
     switch (key) {
         case "name":
             service.name = value;
@@ -39,24 +47,27 @@ int main_section_parser(string key, string value, Service* service) {
     return 0;
 }
 
-int start_section_parser(string key, string value, Service* service) {
-    //auto oneshot = cast(Oneshot*)service;
+int start_section_parser(IniDispatch* dispatch, void* service_ptr) {
+    auto oneshot = cast(Oneshot*)service_ptr;
+    return parse_script(dispatch, oneshot.start);
+}
+
+int stop_section_parser(IniDispatch* dispatch, void* service_ptr) {
+    auto oneshot = cast(Oneshot*)service_ptr;
+    return parse_script(dispatch, oneshot.stop);
+}
+
+int run_section_parser(IniDispatch* dispatch, void* service_ptr) {
+    auto longrun = cast(Longrun*)service_ptr;
+    return parse_script(dispatch, longrun.run);
+}
+
+int environment_section_parser(IniDispatch* dispatch, void* service_ptr) {
     return 0;
 }
 
-int stop_section_parser(string key, string value, Service* service) {
-    return 0;
-}
-
-int run_section_parser(string key, string value, Service* service) {
-    return 0;
-}
-
-int environment_section_parser(string key, string value, Service* service) {
-    return 0;
-}
-
-int logger_section_parser(string key, string value, Service* service) {
+int logger_section_parser(IniDispatch* dispatch, void* service_ptr) {
+    auto oneshot = cast(Longrun*)service_ptr;
     return 0;
 }
 

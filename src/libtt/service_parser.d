@@ -18,8 +18,6 @@ import libtt.dirs;
 
 import libtt.section_parser;
 
-alias RowParser = const int function(string key, string value, Service* service);
-
 int parse_all_services(bool system_mode = true) {
     immutable string[] dirs_to_read = [ dirs.service, dirs.admin_service ];
 
@@ -49,8 +47,8 @@ auto parse_services(string [] service_names, bool system_mode = true) {
     return services;
 }
 
-extern (C) int service_dispatcher (IniDispatch* dispatch, void* data) {
-    const RowParser[string] key_parse_dispatch = [
+extern (C) int service_dispatcher (IniDispatch* dispatch, void* service_ptr) {
+    const auto key_parse_dispatch = [
         "main": &main_section_parser,
         "start": &start_section_parser,
         "stop": &stop_section_parser,
@@ -59,27 +57,18 @@ extern (C) int service_dispatcher (IniDispatch* dispatch, void* data) {
         "logger": &logger_section_parser
     ];
 
-    static string current_section;
-
-    auto service = cast(Service*)data;
-
     // dispatch.type does always contains 0, breaking this
     //if (dispatch.type == IniNodeType.INI_SECTION) {
-    auto section = to!string(dispatch.data);
-    if ((section in key_parse_dispatch) != null) {
+    auto key = to!string(dispatch.data);
+    if ((key in key_parse_dispatch) != null) {
             // criticalf("Section named %s is not allowed", section);
        // }
-        current_section = section;
         return 0;
     } else {
 
     // if (dispatch.type == IniNodeType.INI_KEY) {
-        ini_unquote(dispatch.data, dispatch.format);
-        ini_string_parse(dispatch.value, dispatch.format);
-
-        auto key = to!string(dispatch.data);
-        auto value = to!string(dispatch.value);
-        return key_parse_dispatch[current_section](key, value, service);
+        auto section = to!string(dispatch.append_to);
+        return key_parse_dispatch[section](dispatch, service_ptr);
     }
 
     return 1;
