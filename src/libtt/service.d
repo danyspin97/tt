@@ -9,6 +9,8 @@ class Service {
     // Can be 'root', 'user' or any valid user in the system
     string[] user;
 
+    // The path from where the service has been loaded
+    string path;
 
     this() {}
 
