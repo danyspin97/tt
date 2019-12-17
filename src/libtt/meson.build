@@ -24,6 +24,7 @@ libsrc = [
     'env.d',
     'longrun.d',
     'oneshot.d',
+    'script.d',
     'section_parser.d',
     'service.d',
     'service_parser.d',

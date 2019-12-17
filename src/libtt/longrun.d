@@ -1,6 +1,7 @@
 module libtt.longrun;
 
 import libtt.service : Service;
+import libtt.script : Script;
 
 class Longrun : Service {
     // Script to setup and execute the longrun program

@@ -9,19 +9,6 @@ class Service {
     // Can be 'root', 'user' or any valid user in the system
     string[] user;
 
-    class Script {
-        enum BuildType {
-            Auto,
-            Custom
-        }
-        BuildType build = BuildType.Auto;
-        // Script to execute
-        string execute;
-        // shebang for she script
-        string shebang;
-        // run as the user contained in "runas"
-        string runas;
-    }
 
     this() {}
 
