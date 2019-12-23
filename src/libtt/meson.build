@@ -19,19 +19,11 @@ configure_file(
 )
 
 libsrc = [
-    'bundle.d',
     'define.d',
-    'env.d',
-    'longrun.d',
-    'oneshot.d',
-    'script.d',
-    'script_parser.d',
-    'section_parser.d',
-    'service.d',
-    'service_parser.d',
     meson.current_build_dir() / 'dirs.d',
-    '/usr/include/d/confini.d',
 ]
+
+subdir('services')
 
 libtt_soversion = 0
 

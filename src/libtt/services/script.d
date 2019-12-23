@@ -1,4 +1,4 @@
-module libtt.script;
+module libtt.services.script;
 
 enum BuildType {
     Auto,

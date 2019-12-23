@@ -1,13 +1,15 @@
-module libtt.oneshot;
+module libtt.services.oneshot;
 
-import libtt.service : Service;
-import libtt.script : Script;
+import libtt.services.service;
+import libtt.services.script;
 
 class Oneshot : Service {
     Script start;
     Script stop;
 
     Service[] depends;
+
+    string lol;
 
     this(Service s) {
         super(s);
