@@ -1,19 +1,59 @@
 module libtt.services.script;
 
-enum BuildType {
-    Auto,
-    Custom
-}
+import libtt.services.environment : Environment;
 
-class Script {
-    BuildType build = BuildType.Auto;
-    // Script to execute
-    string execute;
-    // shebang for she script
-    string shebang;
-    // run as the user contained in "runas"
-    string runas;
+class Script
+{
+public:
+    enum Type
+    {
+        Bash,
+        Custom,
+        Execline,
+        Sh,
+        Zsh
+    };
 
-    bool is_parsing;
+    @property Type type () { return m_type; }
+    @property string execute () { return m_execute; }
+    @property string shebang () { return m_shebang; }
+    @property string user () { return m_user;}
+    @property string group () { return m_group; }
+    @property ref const(Environment) environment () { return m_env; }
+
+    this (
+        string execute,
+        string user,
+        string group,
+        Environment environment,
+        Type type,
+        string shebang = ""
+    ) {
+        m_execute = execute;
+        m_user = user;
+        m_group = group;
+        m_env = environment;
+        m_type = type;
+        setShebang(shebang);
+    }
+
+private:
+    void setShebang (string shebang)
+    {
+        switch (type)
+        {
+            // TODO: handle both shebang and execute script when
+            // type != Type.Execline
+            default:
+                break;
+        }
+    }
+
+    Type m_type;
+    string m_execute;
+    string m_shebang;
+    string m_user;
+    string m_group;
+    Environment m_env;
 }
 

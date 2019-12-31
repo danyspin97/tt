@@ -1,20 +1,23 @@
 module libtt.services.oneshot;
 
-import libtt.services.service;
-import libtt.services.script;
+import libtt.services.service : Service;
+import libtt.services.script : Script;
 
-class Oneshot : Service {
-    Script start;
-    Script stop;
+class Oneshot : Service
+{
+public:
+    @property ref const(Script) start() { return m_start; }
+    @property ref const(Script) stop() { return m_stop; }
+    @property const(Service[]) dependencies() { return m_depends; }
 
-    Service[] depends;
-
-    string lol;
-
-    this(Service s) {
+    this(Service s)
+    {
         super(s);
-
-        start = new Script();
-        stop = new Script();
     }
+
+private:
+    Script m_start;
+    Script m_stop;
+
+    Service[] m_depends;
 }

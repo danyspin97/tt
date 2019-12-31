@@ -1,9 +1,34 @@
 module libtt.services.environment;
 
-import libtt.define;
-import libtt.dirs;
+class Environment
+{
+public:
+    const(string) get(string key)
+    {
+        return env[key];
+    }
 
-struct Environment {
-    private string[string] env;
+    ref const(string[string]) getAll()
+    {
+        return env;
+    }
+
+    void set(string key, string value)
+    {
+        env[key] = value;
+    }
+
+    bool setUnique(string key, string value)
+    {
+        if (key in env)
+        {
+            return false;
+        }
+
+        env[key] = value;
+        return true;
+    }
+private:
+    string[string] env;
 }
 
