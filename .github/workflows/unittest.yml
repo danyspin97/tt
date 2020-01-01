@@ -1,0 +1,53 @@
+name: Run Unittests
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        dc: [dmd-latest, ldc-latest]
+        libconfini_ver: [1.12.0]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.x"
+      - uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Install D compiler
+        uses: mihails-strasuns/setup-dlang@v0.3.1
+        with:
+          compiler: ${{ matrix.dc }}
+
+      - name: Install meson
+        run: pip3 install meson
+
+      - name: Install libconfini
+        run: |
+          wget https://github.com/madmurphy/libconfini/releases/download/${{ matrix.libconfini_ver }}/libconfini-${{ matrix.libconfini_ver}}-with-configure.tar.gz
+          tar xf libconfini-${{ matrix.libconfini_ver}}-with-configure.tar.gz
+          cd libconfini-${{ matrix.libconfini_ver}}-with-configure
+          ./configure && sudo make install
+
+      - name: Install libconfini-d
+        run: |
+          git clone https://github.com/danyspin97/libconfini-d
+          cd libconfini-d
+          meson build && sudo -E /home/runner/work/tt/tt/ninja-build/ninja -C build install
+
+      - name: Test meson build
+        run: meson build && ninja -C build
+
+      - name: Run dub tests
+        run: dub test -b unittest-cov libtt
+
+      #- name: Upload Codecoverage
+      #  uses: codecov/codecov-action@v1
+      #  with:
+      #    token: ${{ secrets.CODECOV_TOKEN }}
+      #    flags: unittests
+      #    fail_ci_if_error: true
