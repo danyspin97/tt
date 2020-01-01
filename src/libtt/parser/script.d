@@ -7,8 +7,8 @@ import std.experimental.logger;
 
 import confini : IniDispatch;
 
-import libtt.script : BuildType, Script;
-import libtt.oneshot : Oneshot;
+import libtt.services.script : /*BuildType,*/ Script;
+import libtt.services.oneshot : Oneshot;
 
 int start_parsing_execute(string value, ref Script script) {
     if (value[0] != '(') {
@@ -46,10 +46,12 @@ int parse_script(IniDispatch* dispatch, ref Script script) {
     auto value = to!string(dispatch.value);
     switch (key) {
         case "type":
+            /*
             if (value == "auto") {
                 script.build = BuildType.Auto;
             }
             break;
+            */
         case "execute":
             return start_parsing_execute(value, script);
             break;

@@ -8,10 +8,10 @@ import confini : IniDispatch, ini_string_parse ;
 
 import libtt.script_parser: parse_script;
 
-import libtt.service : Service;
-import libtt.oneshot : Oneshot;
-import libtt.longrun : Longrun;
-import libtt.bundle : Bundle;
+import libtt.services.service : Service;
+import libtt.services.oneshot : Oneshot;
+import libtt.services.longrun : Longrun;
+import libtt.services.bundle : Bundle;
 
 void convert_service(Service* service, string type) {
     if (type == "oneshot") {

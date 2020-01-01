@@ -11,7 +11,7 @@ dirs_config = configuration_data({
 })
 
 configure_file(
-    input: 'dirs.d.in',
+    input: 'dirs.d',
     output: 'dirs.d',
     configuration: dirs_config,
     install: true,
