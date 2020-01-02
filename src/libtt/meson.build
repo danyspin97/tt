@@ -34,13 +34,13 @@ libtt = library('libtt',
     install: true,
     version: meson.project_version(),
     soversion: libtt_soversion,
-    link_args: ['-shared', '-link-defaultlib-shared'],
+    link_args: ['-shared', link_runtime_shared_arg],
 )
 
 libtt_dep = declare_dependency(
     link_with: libtt,
     include_directories: tt_inc,
-    link_args: '-link-defaultlib-shared',
+    link_args: link_runtime_shared_arg,
 )
 
 pkg.generate(name: 'libtt',
