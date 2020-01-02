@@ -6,7 +6,7 @@ import std.experimental.logger;
 
 import confini : IniDispatch, ini_string_parse ;
 
-import libtt.script_parser: parse_script;
+import libtt.parser.script: parse_script;
 
 import libtt.services.service : Service;
 import libtt.services.oneshot : Oneshot;
