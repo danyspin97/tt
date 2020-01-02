@@ -36,7 +36,7 @@ subdir('services')
 
 libtt_soversion = 0
 
-libtt = library('libtt',
+libtt = library('tt',
     libsrc,
     include_directories: tt_inc,
     dependencies: [ libconfini ],
