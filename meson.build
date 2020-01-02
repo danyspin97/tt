@@ -3,7 +3,7 @@ project('tt', 'd',
 
 pkg = import('pkgconfig')
 
-libconfini = dependency('libconfini')
+libconfini = dependency('libconfini-d')
 
 prefix = get_option('prefix')
 bindir = get_option('bindir')
@@ -63,7 +63,7 @@ link_runtime_shared_arg = []
 if compiler_id == 'llvm'
     link_runtime_shared_arg = ['-link-defaultlib-shared']
 elif compiler_id == 'dmd'
-    link_runtime_shared_arg = ['-defaultlib=phobos2', '-debuglib=phobos2']
+#    link_runtime_shared_arg = ['-defaultlib=phobos2', '-debuglib=phobos2']
 elif compiler_id == 'gcc'
     link_runtime_shared_arg = ['-shared-libphobos']
 endif
