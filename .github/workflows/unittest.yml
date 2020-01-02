@@ -43,7 +43,9 @@ jobs:
         run: meson build && ninja -C build
 
       - name: Run dub tests
-        run: dub test -b unittest-cov libtt
+        run: |
+          sed '/importPaths/a "\/usr\/local\/include\/d",' -i src/libtt/dub.json
+          dub test -b unittest-cov libtt
 
       #- name: Upload Codecoverage
       #  uses: codecov/codecov-action@v1
