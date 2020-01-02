@@ -20,7 +20,16 @@ configure_file(
 
 libsrc = [
     'define.d',
-    meson.current_build_dir() / 'dirs.d',
+    'dirs.d',
+    'parser/parser.d',
+    'parser/script.d',
+    'parser/section.d',
+    'services/bundle.d',
+    'services/environment.d',
+    'services/longrun.d',
+    'services/oneshot.d',
+    'services/script.d',
+    'services/service.d',
 ]
 
 subdir('services')
