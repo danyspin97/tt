@@ -10,7 +10,7 @@ dirs_config = configuration_data({
     'execline_prefix': execline_prefix
 })
 
-configure_file(
+dirs_d = configure_file(
     input: 'dirs.d',
     output: 'dirs.d',
     configuration: dirs_config,
@@ -19,8 +19,8 @@ configure_file(
 )
 
 libsrc = [
+    dirs_d,
     'define.d',
-    'dirs.d',
     'parser/parser.d',
     'parser/script.d',
     'parser/section.d',
