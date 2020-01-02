@@ -32,8 +32,6 @@ libsrc = [
     'services/service.d',
 ]
 
-subdir('services')
-
 libtt_soversion = 0
 
 libtt = library('tt',
