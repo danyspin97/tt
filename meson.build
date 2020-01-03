@@ -3,8 +3,6 @@ project('tt', 'd',
 
 pkg = import('pkgconfig')
 
-libconfini = dependency('libconfini-d')
-
 prefix = get_option('prefix')
 bindir = get_option('bindir')
 datadir = get_option('datadir')

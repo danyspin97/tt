@@ -21,9 +21,6 @@ dirs_d = configure_file(
 libsrc = [
     dirs_d,
     'define.d',
-    'parser/parser.d',
-    'parser/script.d',
-    'parser/section.d',
     'services/bundle.d',
     'services/environment.d',
     'services/longrun.d',
@@ -37,7 +34,6 @@ libtt_soversion = 0
 libtt = library('tt',
     libsrc,
     include_directories: tt_inc,
-    dependencies: [ libconfini ],
     install: true,
     version: meson.project_version(),
     soversion: libtt_soversion,
