@@ -20,7 +20,6 @@ dirs_d = configure_file(
 
 libsrc = [
     dirs_d,
-    'define.d',
     'services/bundle.d',
     'services/environment.d',
     'services/longrun.d',
