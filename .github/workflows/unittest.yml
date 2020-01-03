@@ -26,19 +26,6 @@ jobs:
       - name: Install meson
         run: pip3 install meson
 
-      - name: Install libconfini
-        run: |
-          wget https://github.com/madmurphy/libconfini/releases/download/${{ matrix.libconfini_ver }}/libconfini-${{ matrix.libconfini_ver}}-with-configure.tar.gz
-          tar xf libconfini-${{ matrix.libconfini_ver}}-with-configure.tar.gz
-          cd libconfini-${{ matrix.libconfini_ver}}-with-configure
-          ./configure && sudo make install
-
-      - name: Install libconfini-d
-        run: |
-          git clone https://github.com/danyspin97/libconfini-d
-          cd libconfini-d
-          meson build && sudo -E /home/runner/work/tt/tt/ninja-build/ninja -C build install
-
       - name: Test meson build
         run: meson build && ninja -C build
 
