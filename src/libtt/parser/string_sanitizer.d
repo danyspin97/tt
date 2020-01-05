@@ -21,6 +21,12 @@ public:
     }
 
 private:
+    // Only used for unit testing
+    this()
+    {
+
+    }
+
     void parseLine()
     {
         try
@@ -42,6 +48,24 @@ private:
         m_value = strip(value);
         enforce(m_key != "", "Key cannot be empty.");
         enforce(m_value != "", "Value cannot be empty.");
+    }
+
+    unittest
+    {
+        auto sanitizer = new StringSanitizer();
+        sanitizer.line = `foo="bar"`;
+        import std.exception : assertNotThrown;
+        assertNotThrown!FormatException(sanitizer.tryParseLine());
+        assert(sanitizer.key == "foo");
+        assert(sanitizer.value == "bar");
+    }
+
+    unittest
+    {
+        auto sanitizer = new StringSanitizer();
+        sanitizer.line = `foo=bar`;
+        import std.exception : assertThrown;
+        assertThrown!FormatException(sanitizer.tryParseLine());
     }
 
     string line;
