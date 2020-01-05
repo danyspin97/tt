@@ -4,6 +4,7 @@
 module libtt.parser.service_parser.d;
 
 import std.ascii : newline;
+import std.format : FormatException;
 import std.stdio : File;
 
 import libtt.services.service : Service;
@@ -56,7 +57,6 @@ public:
 
     string getSectionOrDefault(string _default)
     {
-        import std.format : FormatException;
         try
         {
             string section;
