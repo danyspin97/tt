@@ -3,6 +3,7 @@
 
 module libtt.parser.string_sanitizer;
 
+import std.exception : enforce;
 import std.format : FormatException, formattedRead;
 import std.string : strip;
 
@@ -16,28 +17,31 @@ public:
     this(string line)
     {
         this.line = line;
-        parseLineAndValidate();
+        parseLine();
     }
 
 private:
-    void parseLineAndValidate()
+    void parseLine()
     {
         try
         {
-            parseLine();
-            m_valid = true;
+            tryParseLine();
         }
         catch (FormatException e)
         {
-            m_valid = false;
         }
     }
 
-    void parseLine()
+    void tryParseLine()
     {
+        scope(success) m_valid = true;
+        scope(failure) m_valid = false;
+
         line.formattedRead!"%s=\"%s\""(m_key, m_value);
         m_key = strip(key);
         m_value = strip(value);
+        enforce(m_key != "", "Key cannot be empty.");
+        enforce(m_value != "", "Value cannot be empty.");
     }
 
     string line;
