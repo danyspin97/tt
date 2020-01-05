@@ -19,7 +19,7 @@ jobs:
       - uses: seanmiddleditch/gha-setup-ninja@master
 
       - name: Install D compiler
-        uses: mihails-strasuns/setup-dlang@v0.3.1
+        uses: mihails-strasuns/setup-dlang@v0.5.0
         with:
           compiler: ${{ matrix.dc }}
 
