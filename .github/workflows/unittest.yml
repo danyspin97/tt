@@ -29,10 +29,13 @@ jobs:
       - name: Test meson build
         run: meson build && ninja -C build
 
-      - name: Run dub tests
-        run: |
-          sed '/importPaths/a "\/usr\/local\/include\/d",' -i src/libtt/dub.json
-          dub test -b unittest-cov libtt
+      - name: Run meson tests
+        run: ninja -C build test
+
+      #- name: Run dub tests
+      #  run: |
+      #    sed '/importPaths/a "\/usr\/local\/include\/d",' -i src/libtt/dub.json
+      #    dub test -b unittest-cov libtt
 
       #- name: Upload Codecoverage
       #  uses: codecov/codecov-action@v1
