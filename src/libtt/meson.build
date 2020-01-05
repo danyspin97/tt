@@ -18,8 +18,7 @@ dirs_d = configure_file(
     install_dir: get_option('includedir') / 'd/libtt'
 )
 
-libsrc = [
-    dirs_d,
+libsrc = files(
     'parser/service_parser.d',
     'parser/string_sanitizer.d',
     'services/bundle.d',
@@ -28,7 +27,7 @@ libsrc = [
     'services/oneshot.d',
     'services/script.d',
     'services/service.d',
-]
+) + [dirs_d]
 
 libtt_soversion = 0
 
