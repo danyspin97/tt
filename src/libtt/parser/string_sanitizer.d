@@ -68,6 +68,20 @@ private:
         assertThrown!FormatException(sanitizer.tryParseLine());
     }
 
+    unittest
+    {
+        auto line = `foo="bar"`;
+        auto sanitizer = new StringSanitizer(line);
+        assert(sanitizer.lineValid);
+    }
+
+    unittest
+    {
+        auto line = `foo=bar`;
+        auto sanitizer = new StringSanitizer(line);
+        assert(!sanitizer.lineValid);
+    }
+
     string line;
     string m_key;
     string m_value;
