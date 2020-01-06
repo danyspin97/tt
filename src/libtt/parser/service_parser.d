@@ -21,9 +21,17 @@ public:
         service = dispatchParserPerType();
     }
 
+private:
     void openFile()
     {
         file = File(path, "r");
+    }
+
+    unittest
+    {
+        auto parser = new ServiceParser();
+        parser.path = "../src/libtt/test/mainSection";
+        parser.openFile();
     }
 
     void scanForMainSection()
@@ -40,6 +48,24 @@ public:
         auto errorMessage = "No main section could be found for service "
                 ~ path;
         throw new Exception(errorMessage);
+    }
+
+    unittest
+    {
+        auto parser = new ServiceParser();
+        parser.path = "../src/libtt/test/mainSection";
+        parser.openFile();
+        import std.exception : assertNotThrown;
+        assertNotThrown!Exception(parser.scanForMainSection());
+    }
+
+    unittest
+    {
+        auto parser = new ServiceParser();
+        parser.path = "../src/libtt/test/noSection";
+        parser.openFile();
+        import std.exception : assertThrown;
+        assertThrown!Exception(parser.scanForMainSection());
     }
 
     void parseMainSection()
@@ -69,12 +95,44 @@ public:
         }
     }
 
+    unittest
+    {
+        auto parser = new ServiceParser();
+        parser.path = "../src/libtt/test/mainSection";
+        parser.openFile();
+        assert(parser.getSectionOrDefault("") == "main");
+    }
+
+    unittest
+    {
+        auto parser = new ServiceParser();
+        parser.path = "../src/libtt/test/noSection";
+        parser.openFile();
+        assert(parser.getSectionOrDefault("") == "");
+    }
+
     bool fileNotFinished()
     {
         return !file.eof;
     }
 
-private:
+    unittest
+    {
+        auto parser = new ServiceParser();
+        parser.path = "../src/libtt/test/mainSection";
+        parser.openFile();
+        assert(parser.fileNotFinished());
+        parser.file.readln();
+        assert(parser.file.readln() == "");
+        assert(!parser.fileNotFinished());
+    }
+
+    // Only used in unit testing
+    this()
+    {
+
+    }
+
     string path;
     File file;
     Service service;
