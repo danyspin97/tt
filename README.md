@@ -1,5 +1,7 @@
 # tt
 
+[![codecov](https://codecov.io/gh/DanySpin97/tt/branch/master/graph/badge.svg)](https://codecov.io/gh/DanySpin97/tt)
+
 tt is a Work in Progress init and service manager inspired by [66](https://web.obarun.org/software/66) and based on
 the [s6](https://skarnet.org/software/s6/) suite.
 
