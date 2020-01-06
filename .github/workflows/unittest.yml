@@ -32,14 +32,14 @@ jobs:
       - name: Run meson tests
         run: ninja -C build test
 
-      #- name: Run dub tests
-      #  run: |
-      #    sed '/importPaths/a "\/usr\/local\/include\/d",' -i src/libtt/dub.json
-      #    dub test -b unittest-cov libtt
+      - name: Run dub tests
+        run: |
+          sed '/importPaths/a "\/usr\/local\/include\/d",' -i src/libtt/dub.json
+          dub test -b unittest-cov libtt
 
-      #- name: Upload Codecoverage
-      #  uses: codecov/codecov-action@v1
-      #  with:
-      #    token: ${{ secrets.CODECOV_TOKEN }}
-      #    flags: unittests
-      #    fail_ci_if_error: true
+      - name: Upload Codecoverage
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          fail_ci_if_error: true

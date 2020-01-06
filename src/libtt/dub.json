@@ -13,5 +13,8 @@
     ],
     "importPaths": [
         "../",
+    ],
+    "excludedSourceFiles": [
+        "test/main.d"
     ]
 }
