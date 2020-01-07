@@ -20,7 +20,7 @@ dirs_d = configure_file(
 
 libsrc = files(
     'parser/service_parser.d',
-    'parser/string_sanitizer.d',
+    'parser/key_value_parser.d',
     'services/bundle.d',
     'services/environment.d',
     'services/longrun.d',

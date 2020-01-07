@@ -1,13 +1,13 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.string_sanitizer;
+module libtt.parser.key_value_parser;
 
 import std.exception : enforce;
 import std.format : FormatException, formattedRead;
 import std.string : strip;
 
-class StringSanitizer
+class KeyValueParser
 {
 public:
     @property string key() { return m_key; }
@@ -52,34 +52,34 @@ private:
 
     unittest
     {
-        auto sanitizer = new StringSanitizer();
-        sanitizer.line = `foo="bar"`;
+        auto parser = new KeyValueParser();
+        parser.line = `foo="bar"`;
         import std.exception : assertNotThrown;
-        assertNotThrown!FormatException(sanitizer.tryParseLine());
-        assert(sanitizer.key == "foo");
-        assert(sanitizer.value == "bar");
+        assertNotThrown!FormatException(parser.tryParseLine());
+        assert(parser.key == "foo");
+        assert(parser.value == "bar");
     }
 
     unittest
     {
-        auto sanitizer = new StringSanitizer();
-        sanitizer.line = `foo=bar`;
+        auto parser = new KeyValueParser();
+        parser.line = `foo=bar`;
         import std.exception : assertThrown;
-        assertThrown!FormatException(sanitizer.tryParseLine());
+        assertThrown!FormatException(parser.tryParseLine());
     }
 
     unittest
     {
         auto line = `foo="bar"`;
-        auto sanitizer = new StringSanitizer(line);
-        assert(sanitizer.lineValid);
+        auto parser = new KeyValueParser(line);
+        assert(parser.lineValid);
     }
 
     unittest
     {
         auto line = `foo=bar`;
-        auto sanitizer = new StringSanitizer(line);
-        assert(!sanitizer.lineValid);
+        auto parser = new KeyValueParser(line);
+        assert(!parser.lineValid);
     }
 
     string line;
