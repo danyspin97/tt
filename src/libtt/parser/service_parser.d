@@ -4,9 +4,13 @@
 module libtt.parser.service_parser.d;
 
 import std.ascii : newline;
+import std.exception : enforce;
 import std.format : FormatException;
+import std.path : baseName, stripExtension;
 import std.stdio : File;
 
+import libtt.parser.section_parser : SectionParser;
+import libtt.parser.key_value_parser : KeyValueParser;
 import libtt.services.service : Service;
 
 class ServiceParser
@@ -16,8 +20,8 @@ public:
     {
         this.path = path;
         openFile();
-        scanForMainSection();
         parseMainSection();
+        validateName();
         service = dispatchParserPerType();
     }
 
@@ -34,11 +38,35 @@ private:
         parser.openFile();
     }
 
+    void parseMainSection()
+    {
+        scanForMainSection();
+        while (fileNotFinished())
+        {
+            currentLine = file.readln();
+
+            if (currentLine == "")
+            {
+                continue;
+            }
+
+            auto sectionParser = new SectionParser(currentLine);
+            if (sectionParser.lineValid())
+            {
+                return;
+            }
+
+           handleCamp();
+        }
+    }
+
     void scanForMainSection()
     {
         while (fileNotFinished())
         {
-            auto currentSection = getSectionOrDefault("");
+            auto line = file.readln();
+            auto sectionParser = new SectionParser(line);
+            auto currentSection = sectionParser.getSectionOrDefault("");
             if (currentSection == "main")
             {
                 return;
@@ -68,47 +96,64 @@ private:
         assertThrown!Exception(parser.scanForMainSection());
     }
 
-    void parseMainSection()
-    {
-        while (fileNotFinished())
-        {
 
+    void handleCamp()
+    {
+        string key, value;
+        auto keyValueParser = new KeyValueParser(currentLine);
+        if (keyValueParser.lineValid())
+        {
+            key = keyValueParser.key;
+            value = keyValueParser.value;
         }
+
+        // TODO: Handle multiline values here
+
+        fillServiceDataWith(key, value);
+    }
+
+    void fillServiceDataWith(string key, string value)
+    {
+        switch (key)
+        {
+            case "name":
+                name = value;
+                break;
+            case "description":
+                description = value;
+                break;
+            case "polish_name":
+                polishName = value;
+                break;
+            case "type":
+                type = value;
+                break;
+            default:
+                auto errorMessage = `Camp named "` ~ key ~ `" is not allowed.`;
+                throw new Exception(errorMessage);
+        }
+    }
+
+    void validateName()
+    {
+        auto nameFromPath = stripExtension(baseName(path));
+        auto enforceMessage = "The name camp must match the name of the file";
+        enforce(name == nameFromPath, enforceMessage);
     }
 
     Service dispatchParserPerType()
     {
-        return null;
-    }
-
-    string getSectionOrDefault(string _default)
-    {
-        try
+        switch (type)
         {
-            string section;
-            file.readf!"[%s]"(section);
-            return section;
+            case "bundle":
+                return null;
+            case "longrun":
+                return null;
+            case "oneshot":
+                return null;
+            default:
+                throw new Exception(`Type "` ~ type ~ `" is not supported.`);
         }
-        catch (FormatException e)
-        {
-            return _default;
-        }
-    }
-
-    unittest
-    {
-        auto parser = new ServiceParser();
-        parser.path = "src/libtt/test/mainSection";
-        parser.openFile();
-        assert(parser.getSectionOrDefault("") == "main");
-    }
-
-    unittest
-    {
-        auto parser = new ServiceParser();
-        parser.path = "src/libtt/test/noSection";
-        parser.openFile();
-        assert(parser.getSectionOrDefault("") == "");
     }
 
     bool fileNotFinished()
@@ -133,9 +178,10 @@ private:
 
     }
 
-    string path;
     File file;
     Service service;
+    string path;
+    string currentLine;
 
     // Base Service attributes
     string name;
