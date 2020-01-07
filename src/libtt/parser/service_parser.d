@@ -30,7 +30,7 @@ private:
     unittest
     {
         auto parser = new ServiceParser();
-        parser.path = "../src/libtt/test/mainSection";
+        parser.path = "src/libtt/test/mainSection";
         parser.openFile();
     }
 
@@ -53,7 +53,7 @@ private:
     unittest
     {
         auto parser = new ServiceParser();
-        parser.path = "../src/libtt/test/mainSection";
+        parser.path = "src/libtt/test/mainSection";
         parser.openFile();
         import std.exception : assertNotThrown;
         assertNotThrown!Exception(parser.scanForMainSection());
@@ -62,7 +62,7 @@ private:
     unittest
     {
         auto parser = new ServiceParser();
-        parser.path = "../src/libtt/test/noSection";
+        parser.path = "src/libtt/test/noSection";
         parser.openFile();
         import std.exception : assertThrown;
         assertThrown!Exception(parser.scanForMainSection());
@@ -98,7 +98,7 @@ private:
     unittest
     {
         auto parser = new ServiceParser();
-        parser.path = "../src/libtt/test/mainSection";
+        parser.path = "src/libtt/test/mainSection";
         parser.openFile();
         assert(parser.getSectionOrDefault("") == "main");
     }
@@ -106,7 +106,7 @@ private:
     unittest
     {
         auto parser = new ServiceParser();
-        parser.path = "../src/libtt/test/noSection";
+        parser.path = "src/libtt/test/noSection";
         parser.openFile();
         assert(parser.getSectionOrDefault("") == "");
     }
@@ -119,7 +119,7 @@ private:
     unittest
     {
         auto parser = new ServiceParser();
-        parser.path = "../src/libtt/test/mainSection";
+        parser.path = "src/libtt/test/mainSection";
         parser.openFile();
         assert(parser.fileNotFinished());
         parser.file.readln();

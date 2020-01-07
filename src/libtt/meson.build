@@ -59,3 +59,4 @@ install_subdir(
     exclude_directories: 'test'
 )
 
+subdir('test')
