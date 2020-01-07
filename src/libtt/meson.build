@@ -53,5 +53,9 @@ pkg.generate(name: 'libtt',
     description: 'tt library to manage services.',
 )
 
-install_subdir('.', install_dir: get_option('includedir') / 'd/libtt/')
+install_subdir(
+    '.',
+    install_dir: get_option('includedir') / 'd/libtt/',
+    exclude_directories: 'test'
+)
 
