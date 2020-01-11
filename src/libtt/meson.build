@@ -27,6 +27,7 @@ libsrc = files(
     'services/environment.d',
     'services/longrun.d',
     'services/oneshot.d',
+    'services/service_options.d',
     'services/script.d',
     'services/service.d',
 ) + [dirs_d]
