@@ -10,5 +10,6 @@ package struct MainSection
     string polishName;
     string description;
     string type;
+    string path;
 }
 

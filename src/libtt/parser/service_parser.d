@@ -19,7 +19,7 @@ class ServiceParser
 public:
     this(string path)
     {
-        this.path = path;
+        mainSection.path = path;
         openFile();
         parseMainSection();
         validateName();
@@ -29,13 +29,13 @@ public:
 private:
     void openFile()
     {
-        file = File(path, "r");
+        file = File(mainSection.path, "r");
     }
 
     unittest
     {
         auto parser = new ServiceParser();
-        parser.path = "src/libtt/test/mainSection";
+        parser.mainSection.path = "src/libtt/test/mainSection";
         parser.openFile();
     }
 
@@ -75,14 +75,14 @@ private:
         }
 
         auto errorMessage = "No main section could be found for service "
-                ~ path;
+                ~ mainSection.path;
         throw new Exception(errorMessage);
     }
 
     unittest
     {
         auto parser = new ServiceParser();
-        parser.path = "src/libtt/test/mainSection";
+        parser.mainSection.path = "src/libtt/test/mainSection";
         parser.openFile();
         import std.exception : assertNotThrown;
         assertNotThrown!Exception(parser.scanForMainSection());
@@ -91,7 +91,7 @@ private:
     unittest
     {
         auto parser = new ServiceParser();
-        parser.path = "src/libtt/test/noSection";
+        parser.mainSection.path = "src/libtt/test/noSection";
         parser.openFile();
         import std.exception : assertThrown;
         assertThrown!Exception(parser.scanForMainSection());
@@ -137,7 +137,7 @@ private:
 
     void validateName()
     {
-        auto nameFromPath = stripExtension(baseName(path));
+        auto nameFromPath = stripExtension(baseName(mainSection.path));
         auto enforceMessage = "The name camp must match the name of the file";
         enforce(mainSection.name == nameFromPath, enforceMessage);
     }
@@ -166,7 +166,7 @@ private:
     unittest
     {
         auto parser = new ServiceParser();
-        parser.path = "src/libtt/test/mainSection";
+        parser.mainSection.path = "src/libtt/test/mainSection";
         parser.openFile();
         assert(parser.fileNotFinished());
         parser.file.readln();
@@ -182,7 +182,6 @@ private:
 
     File file;
     Service service;
-    string path;
     string currentLine;
 
     MainSection mainSection;
