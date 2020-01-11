@@ -9,8 +9,9 @@ import std.format : FormatException;
 import std.path : baseName, stripExtension;
 import std.stdio : File;
 
-import libtt.parser.section_parser : SectionParser;
 import libtt.parser.key_value_parser : KeyValueParser;
+import libtt.parser.main_section : MainSection;
+import libtt.parser.section_parser : SectionParser;
 import libtt.services.service : Service;
 
 class ServiceParser
@@ -117,16 +118,16 @@ private:
         switch (key)
         {
             case "name":
-                name = value;
+                mainSection.name = value;
                 break;
             case "description":
-                description = value;
+                mainSection.description = value;
                 break;
             case "polish_name":
-                polishName = value;
+                mainSection.polishName = value;
                 break;
             case "type":
-                type = value;
+                mainSection.type = value;
                 break;
             default:
                 auto errorMessage = `Camp named "` ~ key ~ `" is not allowed.`;
@@ -138,12 +139,12 @@ private:
     {
         auto nameFromPath = stripExtension(baseName(path));
         auto enforceMessage = "The name camp must match the name of the file";
-        enforce(name == nameFromPath, enforceMessage);
+        enforce(mainSection.name == nameFromPath, enforceMessage);
     }
 
     Service dispatchParserPerType()
     {
-        switch (type)
+        switch (mainSection.type)
         {
             case "bundle":
                 return null;
@@ -152,7 +153,8 @@ private:
             case "oneshot":
                 return null;
             default:
-                throw new Exception(`Type "` ~ type ~ `" is not supported.`);
+                auto msg = `Type "` ~ mainSection.type ~ `" is not supported.`;
+                throw new Exception(msg);
         }
     }
 
@@ -183,11 +185,6 @@ private:
     string path;
     string currentLine;
 
-    // Base Service attributes
-    string name;
-    string polishName;
-    string description;
-
-    string type;
+    MainSection mainSection;
 }
 
