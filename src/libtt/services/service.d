@@ -3,7 +3,7 @@
 
 module libtt.services.service;
 
-import libtt.services.service_options;
+import libtt.services.service_options : ServiceOptions;
 
 abstract class Service
 {
@@ -14,6 +14,7 @@ public:
     @property string path() { return m_path; }
     @property ServiceOptions options() { return m_options; }
 
+protected:
     this (
         string name,
         string polishName,

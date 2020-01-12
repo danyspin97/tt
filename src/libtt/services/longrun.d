@@ -3,10 +3,10 @@
 
 module libtt.services.longrun;
 
-import libtt.services.service : Service;
-import libtt.services.script : Script;
-import libtt.services.environment : Environment;
 import libtt.services.logger_script : LoggerScript;
+import libtt.services.longrun_options : LongrunOptions;
+import libtt.services.script : Script;
+import libtt.services.service : Service;
 
 class Longrun : Service
 {
@@ -15,10 +15,45 @@ public:
     @property ref const(Script) finish () { return m_finish; }
     @property ref const(Service[]) dependencies () { return m_depends; }
 
+    this(
+        string name,
+        string polishName,
+        string description,
+        string path,
+        ref LongrunOptions options,
+        ref Script run,
+        ref Script finish,
+        ref Script logger,
+        Service[] dependencies
+    ) {
+        super(
+            name,
+            polishName,
+            description,
+            path,
+            options
+        );
+
+        m_run = run;
+        m_finish = finish;
+        m_depends = dependencies;
+
+        if (logger is null)
+        {
+            m_logger = defaultLogger;
+        }
+    }
+
 private:
+    LoggerScript defaultLogger()
+    {
+        // TODO: instance a LoggerScript object
+        return null;
+    }
+
     Script m_run;
     Script m_finish;
-    Logger m_logger;
+    LoggerScript m_logger;
 
     Service[] m_depends;
 }
