@@ -3,6 +3,9 @@
 
 module libtt.services.logger_script;
 
+import libtt.services.environment : Environment;
+import libtt.services.script : Script;
+
 class LoggerScript : Script
 {
 public:
