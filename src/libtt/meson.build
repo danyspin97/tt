@@ -24,13 +24,16 @@ libsrc = files(
     'parser/section_parser.d',
     'parser/service_parser.d',
     'services/bundle.d',
+    'services/bundle_options.d',
     'services/environment.d',
     'services/logger_script.d',
     'services/longrun.d',
+    'services/longrun_options.d',
     'services/oneshot.d',
-    'services/service_options.d',
+    'services/oneshot_options.d',
     'services/script.d',
     'services/service.d',
+    'services/service_options.d',
 ) + [dirs_d]
 
 libtt_soversion = 0
