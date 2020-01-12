@@ -25,6 +25,7 @@ libsrc = files(
     'parser/service_parser.d',
     'services/bundle.d',
     'services/environment.d',
+    'services/logger_script.d',
     'services/longrun.d',
     'services/oneshot.d',
     'services/service_options.d',
