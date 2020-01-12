@@ -10,11 +10,6 @@ public:
     @property ref const(Script) stop() { return m_stop; }
     @property const(Service[]) dependencies() { return m_depends; }
 
-    this(Service s)
-    {
-        super(s);
-    }
-
 private:
     Script m_start;
     Script m_stop;

@@ -25,14 +25,6 @@ public:
         m_options = options;
     }
 
-    this (Service s)
-    {
-        m_name = s.name;
-        m_polishName = s.polishName;
-        m_description = s.description;
-        m_path = s.path;
-    }
-
 private:
     string m_name;
     string m_polishName;

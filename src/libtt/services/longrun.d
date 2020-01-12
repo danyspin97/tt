@@ -45,9 +45,6 @@ public:
     @property ref const(Script) finish () { return m_finish; }
     @property ref const(Service[]) dependencies () { return m_depends; }
 
-    this(Service s) {
-        super(s);
-    }
 private:
     Script m_run;
     Script m_finish;
