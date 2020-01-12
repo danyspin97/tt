@@ -11,6 +11,7 @@ import std.stdio : File;
 
 import libtt.parser.key_value_parser : KeyValueParser;
 import libtt.parser.main_section : MainSection;
+import libtt.parser.oneshot_parser : OneshotParser;
 import libtt.parser.section_parser : SectionParser;
 import libtt.services.service : Service;
 
@@ -151,7 +152,7 @@ private:
             case "longrun":
                 return null;
             case "oneshot":
-                return null;
+                return new OneshotParser(mainSection).service;
             default:
                 auto msg = `Type "` ~ mainSection.type ~ `" is not supported.`;
                 throw new Exception(msg);
