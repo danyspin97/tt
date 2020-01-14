@@ -13,7 +13,6 @@ class Longrun : Service
 public:
     @property ref const(Script) run () { return m_run; }
     @property ref const(Script) finish () { return m_finish; }
-    @property ref const(Service[]) dependencies () { return m_depends; }
 
     this(
         string name,
@@ -24,7 +23,6 @@ public:
         ref Script run,
         ref Script finish,
         ref Script logger,
-        Service[] dependencies
     ) {
         super(
             name,
@@ -36,7 +34,6 @@ public:
 
         m_run = run;
         m_finish = finish;
-        m_depends = dependencies;
 
         if (logger is null)
         {
@@ -54,6 +51,4 @@ private:
     Script m_run;
     Script m_finish;
     LoggerScript m_logger;
-
-    Service[] m_depends;
 }
