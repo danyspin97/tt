@@ -3,6 +3,9 @@
 
 module libtt.services.service;
 
+import std.exception : enforce;
+import std.path : baseName, stripExtension;
+
 import libtt.services.service_options : ServiceOptions;
 
 abstract class Service
@@ -27,9 +30,18 @@ protected:
         m_description = description;
         m_path = path;
         m_options = options;
+
+        validatePath();
     }
 
 private:
+    void validatePath()
+    {
+        auto nameFromPath = stripExtension(baseName(path));
+        auto enforceMessage = "The name camp must match the name of the file";
+        enforce(name == nameFromPath, enforceMessage);
+    }
+
     string m_name;
     string m_polishName;
     string m_description;

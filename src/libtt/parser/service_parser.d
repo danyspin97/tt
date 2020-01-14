@@ -4,9 +4,7 @@
 module libtt.parser.service_parser.d;
 
 import std.ascii : newline;
-import std.exception : enforce;
 import std.format : FormatException;
-import std.path : baseName, stripExtension;
 import std.stdio : File;
 
 import libtt.parser.key_value_parser : KeyValueParser;
@@ -23,7 +21,6 @@ public:
         mainSection.path = path;
         openFile();
         parseMainSection();
-        validateName();
         service = dispatchParserPerType();
     }
 
@@ -134,13 +131,6 @@ private:
                 auto errorMessage = `Camp named "` ~ key ~ `" is not allowed.`;
                 throw new Exception(errorMessage);
         }
-    }
-
-    void validateName()
-    {
-        auto nameFromPath = stripExtension(baseName(mainSection.path));
-        auto enforceMessage = "The name camp must match the name of the file";
-        enforce(mainSection.name == nameFromPath, enforceMessage);
     }
 
     Service dispatchParserPerType()
