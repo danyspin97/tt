@@ -35,6 +35,7 @@ libsrc = files(
     'services/script.d',
     'services/service.d',
     'services/service_options.d',
+    'signal.d'
 ) + [dirs_d]
 
 libtt_soversion = 0
