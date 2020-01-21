@@ -1,13 +1,13 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.section_parser;
+module libtt.parser.section_line_parser;
 
 import std.exception : enforce;
 import std.format : FormatException, formattedRead;
 import std.string : strip;
 
-class SectionParser
+class SectionLineParser
 {
 public:
     @property string section() { return m_section; }
@@ -22,14 +22,14 @@ public:
     unittest
     {
         auto line = "[foo]";
-        auto parser = new SectionParser(line);
+        auto parser = new SectionLineParser(line);
         assert(parser.lineValid);
     }
 
     unittest
     {
         auto line = "foo";
-        auto parser = new SectionParser(line);
+        auto parser = new SectionLineParser(line);
         assert(!parser.lineValid);
     }
 
@@ -74,7 +74,7 @@ private:
 
     unittest
     {
-        auto parser = new SectionParser();
+        auto parser = new SectionLineParser();
         parser.line = "[foo]";
         import std.exception : assertNotThrown;
         assertNotThrown!FormatException(parser.tryParseLine());
@@ -83,7 +83,7 @@ private:
 
     unittest
     {
-        auto parser = new SectionParser();
+        auto parser = new SectionLineParser();
         parser.line = "foo";
         import std.exception : assertThrown;
         assertThrown!FormatException(parser.tryParseLine());

@@ -22,7 +22,7 @@ libsrc = files(
     'parser/key_value_parser.d',
     'parser/main_section.d',
     'parser/oneshot_parser.d',
-    'parser/section_parser.d',
+    'parser/section_line_parser.d',
     'parser/service_parser.d',
     'services/bundle.d',
     'services/bundle_options.d',
