@@ -18,7 +18,6 @@ public:
         string description,
         string path,
         ref BundleOptions options,
-        Service[] contents
     ) {
         super(
             name,
@@ -27,10 +26,5 @@ public:
             path,
             options
         );
-
-        m_contents = contents;
     }
-
-private:
-    Service[] m_contents;
 }
