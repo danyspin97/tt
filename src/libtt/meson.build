@@ -23,6 +23,7 @@ libsrc = files(
     'parser/main_section.d',
     'parser/section_builder.d',
     'parser/section_line_parser.d',
+    'parser/service_director.d',
     'services/bundle.d',
     'services/bundle_options.d',
     'services/environment.d',
