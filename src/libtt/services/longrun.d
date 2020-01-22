@@ -13,6 +13,17 @@ class Longrun : Service
 public:
     @property ref const(Script) run () { return m_run; }
     @property ref const(Script) finish () { return m_finish; }
+    @property void finish(Script finish) { m_finish = finish; }
+    @property const(LoggerScript) logger()
+    {
+        if (m_logger is null)
+        {
+            return defaultLogger;
+        }
+
+        return m_logger;
+    }
+    @property void logger(LoggerScript logger) { m_logger = logger; }
 
     this(
         string name,
@@ -21,8 +32,6 @@ public:
         string path,
         ref LongrunOptions options,
         ref Script run,
-        ref Script finish,
-        ref Script logger,
     ) {
         super(
             name,
@@ -33,12 +42,6 @@ public:
         );
 
         m_run = run;
-        m_finish = finish;
-
-        if (logger is null)
-        {
-            m_logger = defaultLogger;
-        }
     }
 
 private:

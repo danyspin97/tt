@@ -3,15 +3,17 @@
 
 module libtt.services.oneshot;
 
+import libtt.services.environment : Environment;
 import libtt.services.oneshot_options : OneshotOptions;
-import libtt.services.service : Service;
 import libtt.services.script : Script;
+import libtt.services.service : Service;
 
 class Oneshot : Service
 {
 public:
     @property ref const(Script) start() { return m_start; }
     @property ref const(Script) stop() { return m_stop; }
+    @property void stop(Script stop) { m_stop = stop; }
 
     this(
         string name,
@@ -19,8 +21,7 @@ public:
         string description,
         string path,
         ref OneshotOptions options,
-        ref Script start,
-        ref Script stop,
+        ref Script start
     ) {
         super(
             name,
@@ -30,8 +31,7 @@ public:
             options
         );
 
-        m_start = start,
-        m_stop = stop;
+        m_start = start;
     }
 
 private:
