@@ -19,13 +19,16 @@ dirs_d = configure_file(
 )
 
 libsrc = files(
+    'parser/bundle_director.d',
     'parser/bundle_options_builder.d',
     'parser/environment_builder.d',
     'parser/key_value_parser.d',
     'parser/logger_script_builder.d',
+    'parser/longrun_director.d',
     'parser/longrun_options_builder.d',
     'parser/main_section_builder.d',
     'parser/main_section.d',
+    'parser/oneshot_director.d',
     'parser/oneshot_options_builder.d',
     'parser/script_builder.d',
     'parser/section_builder.d',
