@@ -43,7 +43,7 @@ private:
         scope(success) m_valid = true;
         scope(failure) m_valid = false;
 
-        line.formattedRead!"%s=\"%s\""(m_key, m_value);
+        line.formattedRead!`%s="%s"`(m_key, m_value);
         m_key = strip(key);
         m_value = strip(value);
         enforce(m_key != "", "Key cannot be empty.");
