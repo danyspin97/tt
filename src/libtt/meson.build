@@ -33,6 +33,7 @@ libsrc = files(
     'parser/oneshot_options_builder.d',
     'parser/parser_factory.d',
     'parser/service_parser.d',
+    'parser/services_parser.d',
     'parser/script_builder.d',
     'parser/section_builder.d',
     'parser/section_line_parser.d',
