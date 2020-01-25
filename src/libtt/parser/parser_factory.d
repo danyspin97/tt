@@ -11,14 +11,7 @@ import libtt.parser.service_director : ServiceDirector;
 class ParserFactory
 {
 public:
-    @property ServiceDirector director() { return m_director; }
-    this(string type)
-    {
-        m_director = dispatchDirectorPerType(type);
-    }
-
-private:
-    ServiceDirector dispatchDirectorPerType(string type)
+    static ServiceDirector getDirectorPerType(string type)
     {
         switch (type)
         {
@@ -33,7 +26,5 @@ private:
                 throw new Exception(msg);
         }
     }
-
-    ServiceDirector m_director;
 }
 
