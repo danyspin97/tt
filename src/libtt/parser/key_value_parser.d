@@ -3,9 +3,8 @@
 
 module libtt.parser.key_value_parser;
 
-import std.exception : enforce;
-import std.format : FormatException, formattedRead;
-import std.string : strip;
+import std.regex : ctRegex, matchAll;
+import std.string : chomp, chompPrefix, strip;
 
 class KeyValueParser
 {
@@ -29,43 +28,35 @@ private:
 
     void parseLine()
     {
-        try
+        // Match
+        // key = value
+        // key = "value1 value2"
+        auto keyValueRegex = ctRegex!(`^ *(\w+) *= *(\".+\"|\w+)$`);
+        auto match = matchAll(line, keyValueRegex);
+        if (!match)
         {
-            tryParseLine();
+            m_valid = false;
+            return;
         }
-        catch (FormatException e)
-        {
-        }
-    }
-
-    void tryParseLine()
-    {
-        scope(success) m_valid = true;
-        scope(failure) m_valid = false;
-
-        line.formattedRead!`%s="%s"`(m_key, m_value);
-        m_key = strip(key);
-        m_value = strip(value);
-        enforce(m_key != "", "Key cannot be empty.");
-        enforce(m_value != "", "Value cannot be empty.");
+        m_key = match.captures[1];
+        m_value = match.captures[2].chomp(`"`).chompPrefix(`"`).strip;
+        m_valid = true;
     }
 
     unittest
     {
         auto parser = new KeyValueParser();
         parser.line = `foo="bar"`;
-        import std.exception : assertNotThrown;
-        assertNotThrown!FormatException(parser.tryParseLine());
-        assert(parser.key == "foo");
-        assert(parser.value == "bar");
+        parser.parseLine();
     }
 
     unittest
     {
         auto parser = new KeyValueParser();
         parser.line = `foo=bar`;
-        import std.exception : assertThrown;
-        assertThrown!FormatException(parser.tryParseLine());
+        parser.parseLine();
+        assert(parser.key == "foo");
+        assert(parser.value == "bar");
     }
 
     unittest
