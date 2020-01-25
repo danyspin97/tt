@@ -8,6 +8,7 @@ import std.container : DList;
 import std.format : FormatException;
 import std.typecons : Tuple, tuple;
 
+import libtt.parser.dummy_builder : DummyBuilder;
 import libtt.parser.key_value_parser : KeyValueParser;
 import libtt.parser.main_section : MainSection;
 import libtt.parser.section_line_parser : SectionLineParser;
@@ -38,7 +39,7 @@ private:
 
     void parseSections()
     {
-        SectionBuilder currentBuilder;
+        SectionBuilder currentBuilder = new DummyBuilder();
         foreach (line ; serviceLines[])
         {
             auto sectionLineParser = new SectionLineParser(line);
