@@ -82,14 +82,16 @@ protected:
     {
         switch (key)
         {
-            case "type":
-                return &type;
-            case "user":
-                return &user;
+            case "execute":
+                return &execute;
             case "group":
                 return &group;
             case "shebang":
                 return &shebang;
+            case "type":
+                return &type;
+            case "user":
+                return &user;
             default:
                 auto errorMessage = `Camp named "` ~ key ~ `" is not allowed.`;
                 throw new Exception(errorMessage);
