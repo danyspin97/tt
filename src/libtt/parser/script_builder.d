@@ -82,14 +82,14 @@ protected:
     {
         switch (key)
         {
+            case "build":
+                return &type;
             case "execute":
                 return &execute;
             case "group":
                 return &group;
             case "shebang":
                 return &shebang;
-            case "type":
-                return &type;
             case "user":
                 return &user;
             default:
