@@ -1,3 +1,6 @@
+// Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
+// Distributed under the terms of the GNU General Public License v2
+
 module libtt.services.script;
 
 import libtt.services.environment : Environment;
@@ -5,52 +8,38 @@ import libtt.services.environment : Environment;
 class Script
 {
 public:
-    enum Type
-    {
-        Bash,
-        Custom,
-        Execline,
-        Sh,
-        Zsh
-    };
-
-    @property Type type () { return m_type; }
-    @property string execute () { return m_execute; }
-    @property string shebang () { return m_shebang; }
-    @property string user () { return m_user;}
-    @property string group () { return m_group; }
+    @property string execute() { return shebang ~ m_execute; }
+    @property string shebang() { return m_shebang; }
+    @property string user() { return m_user;}
+    @property void user(string user) { m_user = user; }
+    @property string group() { return m_group; }
+    @property void group(string group) { m_group = group; }
     @property ref const(Environment) environment () { return m_env; }
 
     this (
         string execute,
-        string user,
-        string group,
+        string shebang,
         Environment environment,
-        Type type,
-        string shebang = ""
     ) {
         m_execute = execute;
-        m_user = user;
-        m_group = group;
+        m_shebang = shebang;
         m_env = environment;
-        m_type = type;
-        setShebang(shebang);
     }
 
-private:
-    void setShebang (string shebang)
+    void prependCode(string code)
     {
-        switch (type)
-        {
-            // TODO: handle both shebang and execute script when
-            // type != Type.Execline
-            default:
-                break;
-        }
+        code ~= m_execute;
+        m_execute = code;
     }
 
-    Type m_type;
+    void appendCode(string code)
+    {
+        m_execute ~= code;
+    }
+
+protected:
     string m_execute;
+private:
     string m_shebang;
     string m_user;
     string m_group;
