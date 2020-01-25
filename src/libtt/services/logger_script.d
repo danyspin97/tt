@@ -9,30 +9,29 @@ import libtt.services.script : Script;
 class LoggerScript : Script
 {
 public:
+    @property void execute(string execute) { m_execute = execute; }
     @property string destination() { return m_destination; }
+    @property void destination(string destination)
+    {
+        m_destination = destination;
+    }
     @property uint maxsize() { return m_maxsize; }
+    @property void maxsize(uint maxsize) { m_maxsize = maxsize; }
 
     this (
-        string execute,
-        string user,
-        string group,
-        Environment environment,
-        string destination,
-        uint maxsize,
-        Type type,
-        string shebang = ""
+        string shebang,
+        Environment environment
     ) {
         super(
-            getDefaultExecute(),
-            user,
-            group,
-            environment,
-            type,
-            shebang
+            defaultExecute,
+            shebang,
+            environment
         );
+
+        execute = defaultExecute;
     }
 private:
-    string getDefaultExecute()
+    string defaultExecute()
     {
         // TODO add default logger script
         return "";
