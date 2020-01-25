@@ -1,39 +1,36 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.parser_;
+module libtt.parser.service_parser;
 
 import std.container : DList;
 import std.range : drop;
 import std.stdio : File;
 
 import libtt.parser.key_value_parser : KeyValueParser;
+import libtt.parser.parser_factory : ParserFactory;
 import libtt.parser.section_line_parser : SectionLineParser;
+import libtt.services.service : Service;
 
-class ParserInit
+class ServiceParser
 {
 public:
-    @property DList!string service() { return m_service; }
-    @property string type() { return m_type; }
+    @property Service service() { return m_service; }
 
     this(string path)
     {
         this.path = path;
-        File file = openFile(path);
-        m_service = generateListFrom(file);
-        m_type = getTypeFromService(service);
-    }
-
-    unittest
-    {
-        auto parser = new ParserInit("src/libtt/test/mainSection");
-        assert(parser.type == "oneshot");
+        auto file = openFile(path);
+        auto serviceLines = generateListFrom(file);
+        auto type = getTypeFromService(serviceLines);
+        auto director = ParserFactory.getDirectorPerType(type);
+        m_service = director.parseAndGetService(serviceLines, path);
     }
 
     unittest
     {
         import std.exception : assertThrown;
-        assertThrown!Exception(new ParserInit("src/libtt/test/noSection"));
+        assertThrown!Exception(new ServiceParser("src/libtt/test/noSection"));
     }
 
 private:
@@ -88,9 +85,7 @@ private:
         throw new Exception(errorMessage);
     }
 
-    File file;
+    Service m_service;
     string path;
-    DList!string m_service;
-    string m_type;
 }
 
