@@ -5,16 +5,16 @@ enum Version = "@version@";
 struct Dirs {
     string bin = "@bindir@";
     string conf = "@confdir@";
-    string exeline_prefix = "@execline_prefix@";
+    string execlinePrefix = "@execline_prefix@";
     string libexec = "@libexecdir@";
     string live = "@livedir@";
     string log = "@logdir@";
     string service = "@servicedir@";
     string system = "@systemdir@";
 
-    string custom_scripts = "@confdir@";
-    string admin_service = "@confdir@/service";
-    string admin_conf = "@confdir@/conf";
+    string customScripts = "@confdir@";
+    string adminService = "@confdir@/service";
+    string adminConf = "@confdir@/conf";
 }
 static Dirs dirs;
 
