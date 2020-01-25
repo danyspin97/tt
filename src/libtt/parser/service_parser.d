@@ -44,7 +44,7 @@ private:
         auto list = DList!string();
         foreach (line ; file.byLine())
         {
-            list.insertBack(cast(string)line);
+            list.insertBack(line.idup);
         }
         return list;
     }
