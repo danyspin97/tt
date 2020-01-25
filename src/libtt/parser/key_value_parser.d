@@ -70,7 +70,7 @@ private:
     {
         auto line = `foo=bar`;
         auto parser = new KeyValueParser(line);
-        assert(!parser.lineValid);
+        assert(parser.lineValid);
     }
 
     string line;

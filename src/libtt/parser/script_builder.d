@@ -102,7 +102,7 @@ protected:
     {
         auto builder = new ScriptBuilder();
         builder.type = "oneshot";
-        auto param = builder.getParamByKey("type");
+        auto param = builder.getParamByKey("build");
         assert(*param == "oneshot");
         *param = "longrun";
         assert(builder.type == "longrun");
