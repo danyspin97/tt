@@ -5,13 +5,15 @@ module libtt.parser.script_builder;
 
 import libtt.parser.section_builder : SectionBuilder;
 import libtt.services.script : Script;
+import libtt.services.environment : Environment;
 
 class ScriptBuilder : SectionBuilder
 {
 public:
-    this(Script script)
+    this(ref Script script, ref Environment environment)
     {
         this.script = script;
+        this.environment = environment;
     }
 
     override void parseLine(string line)
@@ -21,4 +23,5 @@ public:
 
 private:
     Script script;
+    Environment environment;
 }
