@@ -3,22 +3,55 @@
 
 module libtt.parser.loggere_script_builder;
 
-import libtt.parser.section_builder : SectionBuilder;
+import libtt.parser.script_builder : ScriptBuilder;
+import libtt.services.environment : Environment;
 import libtt.services.logger_script : LoggerScript;
 
-class LoggerScriptBuilder : SectionBuilder
+class LoggerScriptBuilder : ScriptBuilder
 {
 public:
-    this(LoggerScript loggerScript)
+    this(LoggerScript loggerScript, ref Environment environment)
     {
         this.loggerScript = loggerScript;
+        this.environment = environment;
     }
 
-    override void parseLine(string line)
+    override void endParsing()
     {
+        setShebangPerType(type);
 
+        script = new LoggerScript(
+            shebang,
+            environment
+        );
+
+        if (user != "")
+        {
+            script.user = user;
+        }
+
+        if (group != "")
+        {
+            script.group = group;
+        }
+    }
+
+    override string* getParamByKey(string key)
+    {
+        switch (key)
+        {
+            case "destination":
+                return &destination;
+            case "maxsize":
+                return &maxsize;
+            default:
+                return super.getParamByKey(key);
+        }
     }
 
 private:
     LoggerScript loggerScript;
+
+    string destination;
+    string maxsize;
 }
