@@ -19,6 +19,11 @@ public:
 
     }
 
+    override void endParsing()
+    {
+
+    }
+
 private:
     LongrunOptions longrunOptions;
 }

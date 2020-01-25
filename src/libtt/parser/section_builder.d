@@ -6,4 +6,5 @@ module libtt.parser.section_builder;
 interface SectionBuilder
 {
     void parseLine(string line);
+    void endParsing();
 }

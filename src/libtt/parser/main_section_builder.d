@@ -52,6 +52,11 @@ public:
         }
     }
 
+    override void endParsing()
+    {
+
+    }
+
 private:
     MainSection mainSection;
 }

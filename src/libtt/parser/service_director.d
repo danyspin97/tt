@@ -44,6 +44,7 @@ private:
             auto sectionLineParser = new SectionLineParser(line);
             if (sectionLineParser.lineValid())
             {
+                currentBuilder.endParsing();
                 currentBuilder =
                         getBuilderForSection(sectionLineParser.section);
                 continue;
@@ -51,6 +52,7 @@ private:
 
             currentBuilder.parseLine(line);
         }
+        currentBuilder.endParsing();
     }
 
     Service m_service;
