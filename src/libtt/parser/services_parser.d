@@ -35,13 +35,13 @@ private:
 
     void parseService(string serviceName)
     {
-        if (name in serviceSet)
+        if (serviceName in serviceSet)
         {
             return;
         }
 
-        auto path = getPathForServiceName(name);
-        serviceSet[name] = new ServiceParser(path).service;
+        auto path = getPathForServiceName(serviceName);
+        serviceSet[serviceName] = new ServiceParser(path).service;
     }
 
     string getPathForServiceName(string name)
