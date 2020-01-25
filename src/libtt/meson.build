@@ -28,6 +28,7 @@ libsrc = files(
     'parser/longrun_options_builder.d',
     'parser/main_section_builder.d',
     'parser/main_section.d',
+    'parser/multiline_code_parser.d',
     'parser/oneshot_director.d',
     'parser/oneshot_options_builder.d',
     'parser/parser_factory.d',
