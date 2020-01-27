@@ -42,6 +42,6 @@ public:
 
 private:
     MainSection mainSection;
-    BundleOptions options;
+    BundleOptions options = new BundleOptions();
 }
 

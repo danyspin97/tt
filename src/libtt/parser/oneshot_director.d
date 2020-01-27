@@ -63,5 +63,5 @@ private:
     Script start;
     Script stop;
     Environment environment = new Environment();
-    OneshotOptions options;
+    OneshotOptions options = new OneshotOptions();
 }

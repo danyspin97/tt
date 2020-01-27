@@ -72,6 +72,6 @@ private:
     Script run;
     Script finish;
     LoggerScript logger;
-    LongrunOptions options;
+    LongrunOptions options = new LongrunOptions();
 }
 
