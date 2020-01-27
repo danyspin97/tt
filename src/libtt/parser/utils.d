@@ -30,3 +30,18 @@ unittest
     assert(*param == newValue);
 }
 
+bool parseBoolean(string value)
+{
+    if (value == "yes")
+    {
+        return true;
+    }
+    if (value == "no")
+    {
+        return false;
+    }
+
+    // TODO: Handle this at a higher level
+    throw new Exception("");
+}
+
