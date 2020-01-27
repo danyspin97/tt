@@ -17,6 +17,11 @@ public:
 
     override void parseLine(string line)
     {
+        if (line == "")
+        {
+            return;
+        }
+
         string key, value;
         auto keyValueParser = new KeyValueParser(line);
         if (keyValueParser.lineValid())
