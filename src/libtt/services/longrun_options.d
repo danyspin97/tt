@@ -40,11 +40,22 @@ public:
         m_maxDeath = maxDeath;
     }
 
+    @property bool writeMessage() { return m_writeMessage; }
+    @property void writeMessage(bool writeMessage)
+    {
+        m_writeMessage = writeMessage;
+    }
+
+    @property bool optional() { return m_optional; }
+    @property void optional(bool optional) { m_optional = optional; }
+
 private:
     uint m_notify;
     uint m_timeoutFinish = 5000;
     uint m_timeoutKill = 0;
     Signal m_downSignal = Signal.SIGTERM;
     ushort m_maxDeath = 3;
+    bool m_writeMessage = true;
+    bool m_optional = false;
 }
 
