@@ -3,7 +3,7 @@
 
 module libtt.parser.multiline_code_parser;
 
-import std.regex : matchFirst;
+import std.regex : ctRegex, matchFirst;
 import std.string : strip;
 
 class MultilineCodeParser
@@ -22,7 +22,8 @@ public:
         {
             throw new Exception("");
         }
-        if (matchFirst(line, r"execute ?= ?("))
+        auto regex = ctRegex!r"^ *execute ?= ?\( *$";
+        if (matchFirst(line, regex))
         {
             m_isParsing = true;
             return true;
@@ -45,5 +46,5 @@ public:
 private:
     string code;
     bool m_isParsing = false;
-    uint parenthesesOpened;
 }
+
