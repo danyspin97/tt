@@ -33,6 +33,7 @@ libsrc = files(
     'parser/multiline_value_parser.d',
     'parser/oneshot_director.d',
     'parser/oneshot_options_builder.d',
+    'parser/options_builder.d',
     'parser/parser_factory.d',
     'parser/service_parser.d',
     'parser/services_parser.d',
