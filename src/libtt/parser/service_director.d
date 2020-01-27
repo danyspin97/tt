@@ -24,9 +24,9 @@ public:
     {
     }
 
-    Service parseAndGetService(DList!string serviceLines, string path)
+    Service parseAndGetService(ref DList!string serviceLines, string path)
     {
-        serviceLines = serviceLines;
+        this.serviceLines = serviceLines;
         parseSections();
         return instanceService(path);
     }
