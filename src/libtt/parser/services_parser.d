@@ -21,7 +21,6 @@ public:
         return services;
     }
 
-private:
     void parseServices(string[] serviceNames) {
         string[string] pathForName;
 
@@ -33,6 +32,7 @@ private:
         // TODO: handle dependencies
     }
 
+private:
     void parseService(string serviceName)
     {
         if (serviceName in serviceSet)
