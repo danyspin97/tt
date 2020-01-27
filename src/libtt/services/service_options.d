@@ -8,9 +8,9 @@ import libtt.services.service : Service;
 abstract class ServiceOptions
 {
 public:
-    @property ref Service[] dependencies() { return m_depends; }
-    @property void dependencies(ref Service[] depends) { m_depends = depends; }
+    @property ref string[] dependencies() { return m_depends; }
+    @property void dependencies(ref string[] depends) { m_depends = depends; }
 
 private:
-    Service[] m_depends;
+    string[] m_depends;
 }
