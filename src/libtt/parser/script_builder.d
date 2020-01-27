@@ -55,6 +55,11 @@ public:
 
     override void endParsing()
     {
+        if (executeParser.isParsing())
+        {
+            // TODO: should this be caught by a ServiceDirector class?
+            throw new Exception("");
+        }
         setShebangPerType(type);
 
         script = new Script(
