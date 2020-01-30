@@ -23,6 +23,7 @@ libsrc = files(
     'parser/bundle_options_builder.d',
     'parser/dummy_builder.d',
     'parser/environment_builder.d',
+    'parser/instance_replacer.d',
     'parser/key_value_parser.d',
     'parser/logger_script_builder.d',
     'parser/longrun_director.d',
