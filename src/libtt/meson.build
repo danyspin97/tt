@@ -34,6 +34,7 @@ libsrc = files(
     'parser/multiline_code_parser.d',
     'parser/multiline_value_parser.d',
     'parser/oneshot_director.d',
+    'parser/oneshot_instance_replacer.d',
     'parser/oneshot_options_builder.d',
     'parser/options_builder.d',
     'parser/parser_factory.d',
