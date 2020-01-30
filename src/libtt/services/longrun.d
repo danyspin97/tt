@@ -11,10 +11,10 @@ import libtt.services.service : Service;
 class Longrun : Service
 {
 public:
-    @property ref const(Script) run () { return m_run; }
-    @property ref const(Script) finish () { return m_finish; }
+    @property ref Script run () { return m_run; }
+    @property ref Script finish () { return m_finish; }
     @property void finish(Script finish) { m_finish = finish; }
-    @property const(LoggerScript) logger()
+    @property LoggerScript logger()
     {
         if (m_logger is null)
         {

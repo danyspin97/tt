@@ -11,8 +11,8 @@ import libtt.services.service : Service;
 class Oneshot : Service
 {
 public:
-    @property ref const(Script) start() { return m_start; }
-    @property ref const(Script) stop() { return m_stop; }
+    @property ref Script start() { return m_start; }
+    @property ref Script stop() { return m_stop; }
     @property void stop(Script stop) { m_stop = stop; }
 
     this(
