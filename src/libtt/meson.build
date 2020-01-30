@@ -24,6 +24,7 @@ libsrc = files(
     'parser/dummy_builder.d',
     'parser/environment_builder.d',
     'parser/instance_replacer.d',
+    'parser/instance_service_parser.d',
     'parser/key_value_parser.d',
     'parser/logger_script_builder.d',
     'parser/longrun_director.d',
