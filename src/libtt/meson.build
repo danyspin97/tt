@@ -27,6 +27,7 @@ libsrc = files(
     'parser/key_value_parser.d',
     'parser/logger_script_builder.d',
     'parser/longrun_director.d',
+    'parser/longrun_instance_replacer.d',
     'parser/longrun_options_builder.d',
     'parser/main_section_builder.d',
     'parser/main_section.d',
