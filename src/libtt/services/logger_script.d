@@ -9,7 +9,6 @@ import libtt.services.script : Script;
 class LoggerScript : Script
 {
 public:
-    @property void execute(string execute) { m_execute = execute; }
     @property string destination() { return m_destination; }
     @property void destination(string destination)
     {
