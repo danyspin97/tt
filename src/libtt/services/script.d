@@ -9,7 +9,6 @@ class Script
 {
 public:
     @property string execute() { return shebang ~ m_execute; }
-    @property void execute(string execute) { m_execute = execute; }
     @property string shebang() { return m_shebang; }
     @property string user() { return m_user;}
     @property void user(string user) { m_user = user; }
@@ -25,6 +24,17 @@ public:
         m_execute = execute;
         m_shebang = shebang;
         m_env = environment;
+    }
+
+    void prependCode(string code)
+    {
+        code ~= m_execute;
+        m_execute = code;
+    }
+
+    void appendCode(string code)
+    {
+        m_execute ~= code;
     }
 
 protected:
