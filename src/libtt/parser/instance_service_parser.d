@@ -3,39 +3,39 @@
 
 module libtt.parser.instance_service_parser;
 
-import libtt.parser.longrun_instance_replacer : LongrunInstanceReplacer;
-import libtt.parser.oneshot_instance_replacer : OneshotInstanceReplacer;
-import libtt.parser.service_parser : ServiceParser;
-import libtt.services.service : Service;
-import libtt.services.longrun : Longrun;
-import libtt.services.oneshot : Oneshot;
+import std.container : DList;
+import std.stdio : File;
+import std.string : tr;
 
-class InstanceServiceParser
+import libtt.parser.service_parser : ServiceParser;
+
+enum InstanceToken = "@I";
+
+class InstanceServiceParser : ServiceParser
 {
 public:
-    @property Service service() { return m_service; }
     this (string path, string instanceName)
     {
-        m_service = new ServiceParser(path).service;
-        replaceTokenWithName(instanceName);
+        this.instanceName = instanceName;
+        super(path);
     }
-private:
-    void replaceTokenWithName(string instanceName)
+protected:
+    override DList!string generateListFrom(File file)
     {
-        if (auto oneshot = cast(Oneshot)m_service)
+        auto list = DList!string();
+        foreach (line ; file.byLine())
         {
-            new OneshotInstanceReplacer(instanceName, oneshot);
-            return;
+            auto parsedLine = replaceTokenInLine(line);
+            list.insertBack(parsedLine.idup);
         }
-        if (auto longrun = cast(Longrun)m_service)
-        {
-            new LongrunInstanceReplacer(instanceName, longrun);
-            return;
-        }
-
-        throw new Exception("Bundle services cannot be instanced");
+        return list;
     }
 
-    Service m_service;
-}
+private:
+    char[] replaceTokenInLine(char[] line)
+    {
+        return tr(line, InstanceToken, instanceName);
+    }
 
+    string instanceName;
+}

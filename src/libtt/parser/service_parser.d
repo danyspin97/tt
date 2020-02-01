@@ -33,12 +33,7 @@ public:
         assertThrown!Exception(new ServiceParser("src/libtt/test/noSection"));
     }
 
-private:
-    File openFile(string path)
-    {
-        return File(path, "r");
-    }
-
+protected:
     DList!string generateListFrom(File file)
     {
         auto list = DList!string();
@@ -47,6 +42,12 @@ private:
             list.insertBack(line.idup);
         }
         return list;
+    }
+
+private:
+    File openFile(string path)
+    {
+        return File(path, "r");
     }
 
     string getTypeFromService(DList!string service)
