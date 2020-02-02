@@ -18,6 +18,18 @@ public:
     @property void maxsize(uint maxsize) { m_maxsize = maxsize; }
 
     this (
+        string execute,
+        string shebang,
+        Environment environment
+    ) {
+        super(
+            execute,
+            shebang,
+            environment
+        );
+    }
+
+    this (
         string shebang,
         Environment environment
     ) {
@@ -26,8 +38,6 @@ public:
             shebang,
             environment
         );
-
-        execute = defaultExecute;
     }
 private:
     string defaultExecute()
