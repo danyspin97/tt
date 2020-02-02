@@ -10,6 +10,16 @@ class MultilineCodeParser
 {
 public:
     @property bool isParsing() { return m_isParsing; }
+    @property string code()
+    {
+        if (isParsing())
+        {
+            // TODO: should this be caught by a ServiceDirector class?
+            throw new Exception("");
+        }
+
+        return m_code;
+    }
 
     this()
     {
@@ -18,7 +28,7 @@ public:
 
     bool startParsing(string line)
     {
-        if (isParsing() || code != "")
+        if (isParsing() || m_code != "")
         {
             throw new Exception("");
         }
@@ -40,11 +50,11 @@ public:
             return;
         }
 
-        code ~= line;
+        m_code ~= line;
     }
 
 private:
-    string code;
+    string m_code;
     bool m_isParsing = false;
 }
 
