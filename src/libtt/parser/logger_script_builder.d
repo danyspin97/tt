@@ -20,10 +20,21 @@ public:
     {
         setShebangPerType(type);
 
-        script = new LoggerScript(
-            shebang,
-            environment
-        );
+        if (execute == "")
+        {
+            script = new LoggerScript(
+                shebang,
+                environment
+            );
+        }
+        else
+        {
+            script = new LoggerScript(
+                executeParser.code,
+                shebang,
+                environment
+            );
+        }
 
         if (user != "")
         {
@@ -55,3 +66,4 @@ private:
     string destination;
     string maxsize;
 }
+
