@@ -26,6 +26,10 @@ public:
         {
             // Continue parsing execute parameter
             executeParser.parseLine(line);
+            if (!executeParser.isParsing())
+            {
+                setFailsIfNotEmpty(&execute, executeParser.code);
+            }
             return;
         }
 
