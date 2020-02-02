@@ -59,7 +59,7 @@ public:
 
     override void endParsing()
     {
-        if (executeParser.isParsing())
+        if (execute == "")
         {
             // TODO: should this be caught by a ServiceDirector class?
             throw new Exception("");
