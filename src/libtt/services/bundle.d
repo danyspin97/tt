@@ -10,8 +10,6 @@ import libtt.services.bundle_options : BundleOptions;
 class Bundle : Service
 {
 public:
-    @property const(Service[]) contents() { return contents; }
-
     this (
         string name,
         string polishName,

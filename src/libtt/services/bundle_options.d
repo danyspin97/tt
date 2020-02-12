@@ -7,5 +7,10 @@ import libtt.services.service_options : ServiceOptions;
 
 class BundleOptions : ServiceOptions
 {
+public:
+    @property string[] contents() { return m_contents; }
+    @property contents(string[] contents) { m_contents = contents; }
 
+private:
+    string[] m_contents;
 }
