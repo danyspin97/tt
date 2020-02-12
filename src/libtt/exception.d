@@ -1,5 +1,5 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
-// Copyright 2020 Rasmus Thomsen <cogitri@exherbo.org>
+// Copyright 2020 Rasmus Thomsen <oss@cogitri.dev>
 // Distributed under the terms of the GNU General Public License v2
 
 module libtt.exception;

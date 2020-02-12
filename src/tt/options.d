@@ -1,3 +1,6 @@
+// Copyright 2020 Rasmus Thomsen <oss@cogitri.dev>
+// Distributed under the terms of the GNU General Public License v2
+
 module tt.options;
 
 import std.algorithm.mutation : remove;
