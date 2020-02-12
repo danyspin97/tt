@@ -104,8 +104,9 @@ private:
             }
         }
 
-        auto msg = "Service " ~ name ~ suffix ~ " could not be found.";
-        throw new Exception(msg);
+        auto msg = "Service " ~ name ~ suffix ~ " could not be found in" ~
+                "directories " ~ paths.join(',');
+        throw new ServiceNotFoundParserException(msg);
     }
 
 protected:
