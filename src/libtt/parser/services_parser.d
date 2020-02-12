@@ -8,11 +8,11 @@ import std.array : join, split;
 import std.file : dirEntries, exists, isFile, SpanMode;
 import std.regex : ctRegex, matchFirst;
 
-import libtt.services.service : Service;
 import libtt.exception : ServiceNotFoundParserException;
 import libtt.parser.dependency_reader : DependencyReader;
 import libtt.parser.instance_service_parser : InstanceServiceParser;
 import libtt.parser.service_parser : ServiceParser;
+import libtt.services.service : Service;
 
 abstract class ServicesParser
 {
@@ -20,7 +20,7 @@ public:
     Service[] services()
     {
         Service[] services;
-        foreach (name, service ; serviceSet)
+        foreach (name, service; serviceSet)
         {
             services ~= service;
         }
