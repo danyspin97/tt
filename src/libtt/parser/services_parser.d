@@ -24,9 +24,8 @@ public:
         return services;
     }
 
-    void parseServices(string[] serviceNames) {
-        string[string] pathForName;
-
+    void parseServices(string[] serviceNames)
+    {
         foreach (name; serviceNames)
         {
             parseService(name);
