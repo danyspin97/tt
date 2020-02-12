@@ -3,11 +3,14 @@
 
 module libtt.parser.services_parser;
 
-import std.array : split;
+import std.algorithm : each;
+import std.array : join, split;
 import std.file : dirEntries, exists, isFile, SpanMode;
 import std.regex : ctRegex, matchFirst;
 
 import libtt.services.service : Service;
+import libtt.exception : ServiceNotFoundParserException;
+import libtt.parser.dependency_reader : DependencyReader;
 import libtt.parser.instance_service_parser : InstanceServiceParser;
 import libtt.parser.service_parser : ServiceParser;
 
@@ -31,7 +34,10 @@ public:
             parseService(name);
         }
 
-        // TODO: handle dependencies
+        foreach (name, service; serviceSet)
+        {
+            parseDependenciesOfService(name, service);
+        }
     }
 
 private:
@@ -54,6 +60,20 @@ private:
 
         auto path = getPathForServiceName(serviceName);
         serviceSet[serviceName] = new ServiceParser(path).service;
+    }
+
+    void parseDependenciesOfService(string name, Service service)
+    {
+        auto const deps = DependencyReader.getDependenciesForService(service);
+        try
+        {
+            deps.each!(s => parseService(s));
+        }
+        catch (ServiceNotFoundParserException e)
+        {
+            auto msg = e.msg ~ " while parsing dependencies of service " ~ name ~ suffix;
+            throw new ServiceNotFoundParserException(msg);
+        }
     }
 
     bool isInstancedService(string serviceName)
