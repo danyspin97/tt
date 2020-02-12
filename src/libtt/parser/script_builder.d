@@ -141,7 +141,7 @@ protected:
     Environment environment;
     MultilineCodeParser executeParser = new MultilineCodeParser();
 
-    string type;
+    string type = "auto";
     string shebang;
     string user;
     string group;
