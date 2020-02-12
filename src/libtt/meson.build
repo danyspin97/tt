@@ -19,6 +19,7 @@ dirs_d = configure_file(
 )
 
 libsrc = files(
+    'exception.d',
     'parser/bundle_director.d',
     'parser/bundle_options_builder.d',
     'parser/dependency_reader.d',
