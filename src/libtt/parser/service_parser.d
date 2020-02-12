@@ -73,7 +73,7 @@ private:
         foreach (line ; service[])
         {
             auto sectionLineParser = new SectionLineParser(line);
-            auto currentSection = sectionLineParser.getSectionOrDefault("");
+            auto const currentSection = sectionLineParser.getSectionOrDefault("");
             if (currentSection == "main")
             {
                 return i;
