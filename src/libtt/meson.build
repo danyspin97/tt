@@ -21,6 +21,7 @@ dirs_d = configure_file(
 libsrc = files(
     'parser/bundle_director.d',
     'parser/bundle_options_builder.d',
+    'parser/dependency_reader.d',
     'parser/dummy_builder.d',
     'parser/environment_builder.d',
     'parser/instance_service_parser.d',
