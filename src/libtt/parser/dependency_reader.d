@@ -14,7 +14,7 @@ import libtt.services.service : Service;
 class DependencyReader
 {
 public:
-    string[] getDependenciesForService(Service service)
+    static const(string[]) getDependenciesForService(Service service)
     {
         if (auto bundle = cast(Bundle)service)
         {
@@ -32,19 +32,20 @@ public:
         throw new Exception("");
     }
 
-    string[] getDependenciesForBundle(Bundle bundle)
+private:
+    static const(string[]) getDependenciesForBundle(Bundle bundle)
     {
         auto options = cast(BundleOptions)bundle.options;
         return options.contents;
     }
 
-    string[] getDependenciesForLongrun(Longrun longrun)
+    static const(string[]) getDependenciesForLongrun(Longrun longrun)
     {
         auto options = cast(LongrunOptions)longrun.options;
         return options.dependencies;
     }
 
-    string[] getDependenciesForOneshot(Oneshot oneshot)
+    static const(string[]) getDependenciesForOneshot(Oneshot oneshot)
     {
         auto options = cast(OneshotOptions)oneshot.options;
         return options.dependencies;
