@@ -3,6 +3,7 @@
 
 module libtt.parser.dummy_builder;
 
+import libtt.exception : DummyBuilderException;
 import libtt.parser.section_builder : SectionBuilder;
 
 class DummyBuilder : SectionBuilder
@@ -12,9 +13,15 @@ public:
     {
         if (line != "")
         {
-            // TODO: Handle this at a higher level
-            throw new Exception("");
+            throw new DummyBuilderException("");
         }
+    }
+
+    unittest
+    {
+        auto builder = new DummyBuilder();
+        import std.exception : assertThrown;
+        assertThrown!DummyBuilderException(builder.parseLine("foobar"));
     }
 
     void endParsing()
