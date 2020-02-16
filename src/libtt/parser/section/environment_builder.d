@@ -18,7 +18,11 @@ public:
 
     override void parseLine(string line)
     {
-        auto regex = ctRegex!r" *(\w+) *= *(.*) *";
+        // Use a specialized regex instead of using KeyValueParser
+        // The latter can parse values without quotes, and this shouldn't be
+        // allowed when parsing the environment.
+        // Environment keys are also more strict rules
+        auto regex = ctRegex!` *(\w+) *= *"(.*)" *`;
         auto match = matchAll(line, regex);
         if (!match)
         {
