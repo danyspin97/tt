@@ -3,10 +3,9 @@
 
 module libtt.parser.bundle_director;
 
-import libtt.parser.bundle_options_builder : BundleOptionsBuilder;
+import libtt.parser.section : BundleOptionsBuilder, MainSectionBuilder,
+                              SectionBuilder;
 import libtt.parser.main_section : MainSection;
-import libtt.parser.main_section_builder : MainSectionBuilder;
-import libtt.parser.section_builder : SectionBuilder;
 import libtt.parser.service_director : ServiceDirector;
 import libtt.services.bundle : Bundle;
 import libtt.services.bundle_options : BundleOptions;

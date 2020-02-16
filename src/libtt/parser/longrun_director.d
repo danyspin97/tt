@@ -3,13 +3,10 @@
 
 module libtt.parser.longrun_director;
 
-import libtt.parser.environment_builder : EnvironmentBuilder;
-import libtt.parser.logger_script_builder : LoggerScriptBuilder;
-import libtt.parser.longrun_options_builder : LongrunOptionsBuilder;
-import libtt.parser.main_section_builder : MainSectionBuilder;
+import libtt.parser.section : EnvironmentBuilder, LoggerScriptBuilder,
+                              LongrunOptionsBuilder, MainSectionBuilder,
+                              ScriptBuilder, SectionBuilder;
 import libtt.parser.main_section : MainSection;
-import libtt.parser.script_builder : ScriptBuilder;
-import libtt.parser.section_builder : SectionBuilder;
 import libtt.parser.service_director : ServiceDirector;
 import libtt.services.environment : Environment;
 import libtt.services.logger_script : LoggerScript;

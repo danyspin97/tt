@@ -1,11 +1,11 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.options_builder;
+module libtt.parser.section.options_builder;
 
+import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.parser.key_value_parser : KeyValueParser;
 import libtt.parser.multiline_value_parser : MultilineValueParser;
-import libtt.parser.section_builder : SectionBuilder;
 import libtt.services.oneshot_options : OneshotOptions;
 
 abstract class OptionsBuilder : SectionBuilder

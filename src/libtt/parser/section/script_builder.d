@@ -1,12 +1,12 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.script_builder;
+module libtt.parser.section.script_builder;
 
 import libtt.dirs : dirs;
+import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.parser.multiline_code_parser : MultilineCodeParser;
 import libtt.parser.key_value_parser : KeyValueParser;
-import libtt.parser.section_builder : SectionBuilder;
 import libtt.parser.utils : setFailsIfNotEmpty;
 import libtt.services.script : Script;
 import libtt.services.environment : Environment;

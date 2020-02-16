@@ -3,12 +3,10 @@
 
 module libtt.parser.oneshot_director;
 
-import libtt.parser.environment_builder : EnvironmentBuilder;
 import libtt.parser.main_section : MainSection;
-import libtt.parser.main_section_builder : MainSectionBuilder;
-import libtt.parser.oneshot_options_builder : OneshotOptionsBuilder;
-import libtt.parser.script_builder : ScriptBuilder;
-import libtt.parser.section_builder : SectionBuilder;
+import libtt.parser.section : EnvironmentBuilder, MainSectionBuilder,
+                              OneshotOptionsBuilder, ScriptBuilder,
+                              SectionBuilder;
 import libtt.parser.service_director : ServiceDirector;
 import libtt.services.environment : Environment;
 import libtt.services.oneshot : Oneshot;

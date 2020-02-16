@@ -1,11 +1,11 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.main_section_builder;
+module libtt.parser.section.main_section_builder;
 
+import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.parser.key_value_parser : KeyValueParser;
 import libtt.parser.main_section : MainSection;
-import libtt.parser.section_builder : SectionBuilder;
 
 class MainSectionBuilder : SectionBuilder
 {

@@ -1,11 +1,11 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.environment_builder;
+module libtt.parser.section.environment_builder;
 
 import std.regex : ctRegex, matchAll;
 
-import libtt.parser.section_builder : SectionBuilder;
+import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.services.environment : Environment;
 
 class EnvironmentBuilder : SectionBuilder

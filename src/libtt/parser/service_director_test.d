@@ -5,7 +5,7 @@ module libtt.parser.service_director_test;
 
 import std.container : DList;
 
-import libtt.parser.section_builder : SectionBuilder;
+import libtt.parser.section : SectionBuilder;
 import libtt.parser.service_director : ServiceDirector;
 import libtt.services.service : Service;
 

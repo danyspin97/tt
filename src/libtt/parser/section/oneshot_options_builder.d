@@ -1,11 +1,11 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.oneshot_options_builder;
+module libtt.parser.section.oneshot_options_builder;
 
 import libtt.exception : BooleanParseException, BuilderException;
+import libtt.parser.section.options_builder : OptionsBuilder;
 import libtt.parser.multiline_value_parser : MultilineValueParser;
-import libtt.parser.options_builder : OptionsBuilder;
 import libtt.parser.utils : parseBoolean;
 import libtt.services.oneshot_options : OneshotOptions;
 
