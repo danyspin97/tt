@@ -3,9 +3,9 @@
 
 module libtt.parser.section.main_section_builder;
 
+import libtt.parser.line : KeyValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.parser.key_value_parser : KeyValueParser;
-import libtt.parser.main_section : MainSection;
+import libtt.parser.section.main_section : MainSection;
 
 class MainSectionBuilder : SectionBuilder
 {

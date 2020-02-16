@@ -3,9 +3,8 @@
 
 module libtt.parser.section.options_builder;
 
+import libtt.parser.line : KeyValueParser, MultilineValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.parser.key_value_parser : KeyValueParser;
-import libtt.parser.multiline_value_parser : MultilineValueParser;
 import libtt.services.oneshot_options : OneshotOptions;
 
 abstract class OptionsBuilder : SectionBuilder

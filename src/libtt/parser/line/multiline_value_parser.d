@@ -1,7 +1,7 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.multiline_value_parser;
+module libtt.parser.line.multiline_value_parser;
 
 import std.array : split;
 import std.regex : ctRegex, matchAll, splitter;

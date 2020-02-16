@@ -1,7 +1,7 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.section_line_parser;
+module libtt.parser.line.section_line_parser;
 
 import std.exception : enforce;
 import std.format : FormatException, formattedRead;

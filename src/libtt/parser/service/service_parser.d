@@ -7,9 +7,8 @@ import std.container : DList;
 import std.range : drop;
 import std.stdio : File;
 
-import libtt.parser.key_value_parser : KeyValueParser;
+import libtt.parser.line : KeyValueParser, SectionLineParser;
 import libtt.parser.service.parser_factory : ParserFactory;
-import libtt.parser.section_line_parser : SectionLineParser;
 import libtt.services.service : Service;
 
 class ServiceParser

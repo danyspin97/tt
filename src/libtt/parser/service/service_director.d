@@ -9,9 +9,8 @@ import std.format : FormatException;
 import std.typecons : Tuple, tuple;
 
 import libtt.exception : DummyBuilderException;
+import libtt.parser.line : KeyValueParser, SectionLineParser;
 import libtt.parser.section : DummyBuilder, MainSection, SectionBuilder;
-import libtt.parser.key_value_parser : KeyValueParser;
-import libtt.parser.section_line_parser : SectionLineParser;
 import libtt.services.service : Service;
 
 abstract class ServiceDirector

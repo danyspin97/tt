@@ -5,7 +5,7 @@ module libtt.parser.section.oneshot_options_builder;
 
 import libtt.exception : BooleanParseException, BuilderException;
 import libtt.parser.section.options_builder : OptionsBuilder;
-import libtt.parser.multiline_value_parser : MultilineValueParser;
+import libtt.parser.line : MultilineValueParser;
 import libtt.parser.utils : parseBoolean;
 import libtt.services.oneshot_options : OneshotOptions;
 

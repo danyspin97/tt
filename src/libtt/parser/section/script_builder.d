@@ -5,8 +5,7 @@ module libtt.parser.section.script_builder;
 
 import libtt.dirs : dirs;
 import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.parser.multiline_code_parser : MultilineCodeParser;
-import libtt.parser.key_value_parser : KeyValueParser;
+import libtt.parser.line : KeyValueParser, MultilineCodeParser;
 import libtt.parser.utils : setFailsIfNotEmpty;
 import libtt.services.script : Script;
 import libtt.services.environment : Environment;

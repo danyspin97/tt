@@ -20,10 +20,11 @@ dirs_d = configure_file(
 
 libsrc = files(
     'exception.d',
-    'parser/key_value_parser.d',
-    'parser/multiline_code_parser.d',
-    'parser/multiline_value_parser.d',
-    'parser/section_line_parser.d',
+    'parser/line/key_value_parser.d',
+    'parser/line/multiline_code_parser.d',
+    'parser/line/multiline_value_parser.d',
+    'parser/line/package.d',
+    'parser/line/section_line_parser.d',
     'parser/section/bundle_options_builder.d',
     'parser/section/dummy_builder.d',
     'parser/section/environment_builder.d',
