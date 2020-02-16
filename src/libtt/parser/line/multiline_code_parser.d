@@ -22,6 +22,22 @@ public:
         return m_code;
     }
 
+    unittest
+    {
+        auto parser = new MultilineCodeParser();
+        auto code = "foo";
+        parser.m_code = code;
+        assert(parser.code == code);
+    }
+
+    unittest
+    {
+        auto parser = new MultilineCodeParser();
+        parser.m_isParsing = true;
+        import std.exception : assertThrown;
+        assertThrown!CodeParserNotFinishedException(parser.code);
+    }
+
     this()
     {
 
@@ -43,6 +59,39 @@ public:
         return false;
     }
 
+    unittest
+    {
+        auto parser = new MultilineCodeParser();
+        assert(!parser.startParsing("foo"));
+        assert(!parser.isParsing());
+
+        assert(!parser.startParsing("execute = "));
+        assert(!parser.isParsing());
+
+        assert(!parser.startParsing("execute = ( foo "));
+        assert(!parser.isParsing());
+
+        assert(!parser.startParsing("execute = ( foo )"));
+        assert(!parser.isParsing());
+    }
+
+    unittest
+    {
+        // Start parsing
+        auto parser = new MultilineCodeParser();
+        assert(parser.startParsing("execute = ("));
+        assert(parser.isParsing());
+
+        // Continue parsing
+        auto code = "foo";
+        parser.parseLine(code);
+        assert(parser.m_code == code);
+
+        // End parsing
+        parser.parseLine(")");
+        assert(parser.m_code == code);
+    }
+
     void parseLine(string line)
     {
         if(strip(line) == ")")
@@ -52,6 +101,24 @@ public:
         }
 
         m_code ~= line;
+    }
+
+    unittest
+    {
+        auto parser = new MultilineCodeParser();
+        parser.m_isParsing = true;
+        auto code = "foo";
+        parser.parseLine(code);
+        assert(parser.isParsing());
+        assert(parser.m_code == code);
+    }
+
+    unittest
+    {
+        auto parser = new MultilineCodeParser();
+        parser.m_isParsing = true;
+        parser.parseLine(" ) ");
+        assert(!parser.isParsing());
     }
 
 private:
