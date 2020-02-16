@@ -48,6 +48,9 @@ private:
         auto parser = new KeyValueParser();
         parser.line = `foo="bar"`;
         parser.parseLine();
+        assert(parser.lineValid);
+        assert(parser.key == "foo");
+        assert(parser.value == "bar");
     }
 
     unittest
@@ -55,22 +58,17 @@ private:
         auto parser = new KeyValueParser();
         parser.line = `foo=bar`;
         parser.parseLine();
+        assert(parser.lineValid);
         assert(parser.key == "foo");
         assert(parser.value == "bar");
     }
 
     unittest
     {
-        auto line = `foo="bar"`;
-        auto parser = new KeyValueParser(line);
-        assert(parser.lineValid);
-    }
-
-    unittest
-    {
-        auto line = `foo=bar`;
-        auto parser = new KeyValueParser(line);
-        assert(parser.lineValid);
+        auto parser = new KeyValueParser();
+        parser.line = `foobar`;
+        parser.parseLine();
+        assert(!parser.lineValid);
     }
 
     string line;

@@ -21,15 +21,13 @@ public:
 
     unittest
     {
-        auto line = "[foo]";
-        auto parser = new SectionLineParser(line);
+        auto parser = new SectionLineParser("[foo]");
         assert(parser.lineValid);
     }
 
     unittest
     {
-        auto line = "foo";
-        auto parser = new SectionLineParser(line);
+        auto parser = new SectionLineParser("foo");
         assert(!parser.lineValid);
     }
 
@@ -41,6 +39,19 @@ public:
         }
 
         return _default;
+    }
+
+    unittest
+    {
+        auto parser = new SectionLineParser("[foo]");
+        assert(parser.getSectionOrDefault("bar") == "foo");
+    }
+
+    unittest
+    {
+        auto parser = new SectionLineParser("foo");
+        auto _default = "bar";
+        assert(parser.getSectionOrDefault(_default) == _default);
     }
 
 private:
@@ -93,3 +104,4 @@ private:
     string m_section;
     bool m_valid;
 }
+
