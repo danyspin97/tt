@@ -1,12 +1,12 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.parser_factory;
+module libtt.parser.service.parser_factory;
 
-import libtt.parser.bundle_director : BundleDirector;
-import libtt.parser.longrun_director : LongrunDirector;
-import libtt.parser.oneshot_director : OneshotDirector;
-import libtt.parser.service_director : ServiceDirector;
+import libtt.parser.service.bundle_director : BundleDirector;
+import libtt.parser.service.longrun_director : LongrunDirector;
+import libtt.parser.service.oneshot_director : OneshotDirector;
+import libtt.parser.service.service_director : ServiceDirector;
 
 class ParserFactory
 {

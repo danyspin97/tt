@@ -1,13 +1,13 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.instance_service_parser;
+module libtt.parser.service.instance_service_parser;
 
 import std.container : DList;
 import std.stdio : File;
 import std.string : tr;
 
-import libtt.parser.service_parser : ServiceParser;
+import libtt.parser.service.service_parser : ServiceParser;
 
 enum InstanceToken = "@I";
 

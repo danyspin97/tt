@@ -1,7 +1,7 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.dependency_reader;
+module libtt.parser.service.dependency_reader;
 
 import libtt.services.bundle : Bundle;
 import libtt.services.bundle_options : BundleOptions;

@@ -1,7 +1,7 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.service_director;
+module libtt.parser.service.service_director;
 
 import std.ascii : newline;
 import std.container : DList;
@@ -9,9 +9,8 @@ import std.format : FormatException;
 import std.typecons : Tuple, tuple;
 
 import libtt.exception : DummyBuilderException;
-import libtt.parser.section : DummyBuilder, SectionBuilder;
+import libtt.parser.section : DummyBuilder, MainSection, SectionBuilder;
 import libtt.parser.key_value_parser : KeyValueParser;
-import libtt.parser.main_section : MainSection;
 import libtt.parser.section_line_parser : SectionLineParser;
 import libtt.services.service : Service;
 

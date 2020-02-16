@@ -1,13 +1,12 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.oneshot_director;
+module libtt.parser.service.oneshot_director;
 
-import libtt.parser.main_section : MainSection;
-import libtt.parser.section : EnvironmentBuilder, MainSectionBuilder,
-                              OneshotOptionsBuilder, ScriptBuilder,
-                              SectionBuilder;
-import libtt.parser.service_director : ServiceDirector;
+import libtt.parser.section : EnvironmentBuilder, MainSection,
+                              MainSectionBuilder, OneshotOptionsBuilder,
+                              ScriptBuilder, SectionBuilder;
+import libtt.parser.service.service_director : ServiceDirector;
 import libtt.services.environment : Environment;
 import libtt.services.oneshot : Oneshot;
 import libtt.services.oneshot_options : OneshotOptions;

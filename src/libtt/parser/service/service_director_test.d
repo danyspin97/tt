@@ -1,12 +1,12 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.service_director_test;
+module libtt.parser.service.service_director_test;
 
 import std.container : DList;
 
 import libtt.parser.section : SectionBuilder;
-import libtt.parser.service_director : ServiceDirector;
+import libtt.parser.service.service_director : ServiceDirector;
 import libtt.services.service : Service;
 
 class ServiceDirectorTest : ServiceDirector

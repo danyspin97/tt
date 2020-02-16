@@ -1,7 +1,7 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.services_parser;
+module libtt.parser.service.services_parser;
 
 import std.algorithm : each;
 import std.array : join, split;
@@ -9,9 +9,9 @@ import std.file : dirEntries, exists, isFile, SpanMode;
 import std.regex : ctRegex, matchFirst;
 
 import libtt.exception : ServiceNotFoundParserException;
-import libtt.parser.dependency_reader : DependencyReader;
-import libtt.parser.instance_service_parser : InstanceServiceParser;
-import libtt.parser.service_parser : ServiceParser;
+import libtt.parser.service.dependency_reader : DependencyReader;
+import libtt.parser.service.instance_service_parser : InstanceServiceParser;
+import libtt.parser.service.service_parser : ServiceParser;
 import libtt.services.service : Service;
 
 abstract class ServicesParser

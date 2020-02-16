@@ -1,12 +1,11 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.parser.bundle_director;
+module libtt.parser.service.bundle_director;
 
-import libtt.parser.section : BundleOptionsBuilder, MainSectionBuilder,
-                              SectionBuilder;
-import libtt.parser.main_section : MainSection;
-import libtt.parser.service_director : ServiceDirector;
+import libtt.parser.section : BundleOptionsBuilder, MainSection,
+                              MainSectionBuilder, SectionBuilder;
+import libtt.parser.service.service_director : ServiceDirector;
 import libtt.services.bundle : Bundle;
 import libtt.services.bundle_options : BundleOptions;
 import libtt.services.service : Service;
