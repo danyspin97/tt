@@ -79,7 +79,8 @@ public:
     {
         // Start parsing
         auto parser = new MultilineCodeParser();
-        assert(parser.startParsing("execute = ("));
+        auto token = "execute = (";
+        assert(parser.startParsing(token));
         assert(parser.isParsing());
 
         // Continue parsing
@@ -90,6 +91,19 @@ public:
         // End parsing
         parser.parseLine(")");
         assert(parser.m_code == code);
+
+        // Start parsing again
+        import std.exception : assertThrown;
+        assertThrown!CodeParserNotFinishedException(parser.startParsing(token));
+    }
+
+    unittest
+    {
+        auto parser = new MultilineCodeParser();
+        auto token = "execute=(";
+        parser.m_code = "foo";
+        import std.exception : assertThrown;
+        assertThrown!CodeParserNotFinishedException(parser.startParsing(token));
     }
 
     void parseLine(string line)
