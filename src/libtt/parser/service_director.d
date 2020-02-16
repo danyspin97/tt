@@ -8,6 +8,7 @@ import std.container : DList;
 import std.format : FormatException;
 import std.typecons : Tuple, tuple;
 
+import libtt.exception : DummyBuilderException;
 import libtt.parser.dummy_builder : DummyBuilder;
 import libtt.parser.key_value_parser : KeyValueParser;
 import libtt.parser.main_section : MainSection;
@@ -36,8 +37,19 @@ protected:
     abstract SectionBuilder getBuilderForSection(string section);
 
 private:
-
     void parseSections()
+    {
+        try
+        {
+            tryParseSections();
+        }
+        catch (DummyBuilderException e)
+        {
+            throw new Exception("No line is allowed before a section");
+        }
+    }
+
+    void tryParseSections()
     {
         SectionBuilder currentBuilder = new DummyBuilder();
         foreach (line ; serviceLines[])
