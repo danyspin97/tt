@@ -20,6 +20,14 @@ class BuilderException : Exception
     }
 }
 
+class CodeParserNotFinishedException : Exception
+{
+    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    {
+        super(msg, file, line);
+    }
+}
+
 class DummyBuilderException : Exception
 {
     this(string msg, string file = __FILE__, size_t line = __LINE__) @safe

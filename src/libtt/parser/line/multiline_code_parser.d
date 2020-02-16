@@ -6,6 +6,8 @@ module libtt.parser.line.multiline_code_parser;
 import std.regex : ctRegex, matchFirst;
 import std.string : strip;
 
+import libtt.exception : CodeParserNotFinishedException;
+
 class MultilineCodeParser
 {
 public:
@@ -14,8 +16,7 @@ public:
     {
         if (isParsing())
         {
-            // TODO: should this be caught by a ServiceDirector class?
-            throw new Exception("");
+            throw new CodeParserNotFinishedException("");
         }
 
         return m_code;
@@ -30,7 +31,7 @@ public:
     {
         if (isParsing() || m_code != "")
         {
-            throw new Exception("");
+            throw new CodeParserNotFinishedException("");
         }
         auto regex = ctRegex!r"^ *execute ?= ?\( *$";
         if (matchFirst(line, regex))
