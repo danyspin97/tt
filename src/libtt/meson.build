@@ -44,6 +44,7 @@ libsrc = files(
     'parser/section_builder.d',
     'parser/section_line_parser.d',
     'parser/service_director.d',
+    'parser/service_director_test.d',
     'parser/system_services_parser.d',
     'parser/utils.d',
     'services/bundle.d',
