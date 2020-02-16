@@ -11,6 +11,7 @@ package import libtt.parser.section.bundle_options_builder;
 package import libtt.parser.section.dummy_builder;
 package import libtt.parser.section.logger_script_builder;
 package import libtt.parser.section.longrun_options_builder;
+package import libtt.parser.section.main_section;
 package import libtt.parser.section.main_section_builder;
 package import libtt.parser.section.oneshot_options_builder;
 package import libtt.parser.section.options_builder;
