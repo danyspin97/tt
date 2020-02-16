@@ -3,6 +3,7 @@
 
 module libtt.parser.oneshot_options_builder;
 
+import libtt.exception : BooleanParseException, BuilderException;
 import libtt.parser.multiline_value_parser : MultilineValueParser;
 import libtt.parser.options_builder : OptionsBuilder;
 import libtt.parser.utils : parseBoolean;
@@ -19,18 +20,14 @@ public:
 protected:
     override void setParamByKey(string key, string value)
     {
-        switch (key)
+        try
         {
-            case "optional":
-                oneshotOptions.optional = parseBoolean(value);
-                break;
-            case "write_message":
-                oneshotOptions.writeMessage = parseBoolean(value);
-                break;
-            default:
-                auto errorMessage = `Camp named "` ~ key ~ `" is not allowed`
-                        ~ " in section [options]";
-                throw new Exception(errorMessage);
+            trySetParamByKey(key, value);
+        }
+        catch (BooleanParseException e)
+        {
+            auto msg = e.msg ~ ` while parsing key "` ~ key ~ `"`;
+            throw new BuilderException(msg);
         }
     }
 
@@ -44,6 +41,24 @@ protected:
             default:
                 auto errorMessage = `Camp named "` ~ parser.key ~
                         `" is not allowed in section [options]`;
+                throw new Exception(errorMessage);
+        }
+    }
+
+private:
+    void trySetParamByKey(string key, string value)
+    {
+        switch (key)
+        {
+            case "optional":
+                oneshotOptions.optional = parseBoolean(value);
+                break;
+            case "write_message":
+                oneshotOptions.writeMessage = parseBoolean(value);
+                break;
+            default:
+                auto errorMessage = `Camp named "` ~ key ~ `" is not allowed`
+                        ~ " in section [options]";
                 throw new Exception(errorMessage);
         }
     }

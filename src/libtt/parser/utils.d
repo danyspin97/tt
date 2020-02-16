@@ -3,6 +3,8 @@
 
 module libtt.parser.utils;
 
+import libtt.exception : BooleanParseException;
+
 void setFailsIfNotEmpty(string* param, string newValue)
 {
     if (*param != "")
@@ -41,7 +43,8 @@ bool parseBoolean(string value)
         return false;
     }
 
-    // TODO: Handle this at a higher level
-    throw new Exception("");
+    auto msg = `A boolean value shall be either "yes" or "no";`;
+    msg ~= `the value given was "` ~ value ~ `"`;
+    throw new BooleanParseException(msg);
 }
 
