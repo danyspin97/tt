@@ -20,12 +20,6 @@ public:
     }
 
 private:
-    // Only used for unit testing
-    this()
-    {
-
-    }
-
     void parseLine()
     {
         // Match
