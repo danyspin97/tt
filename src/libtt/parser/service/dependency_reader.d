@@ -3,13 +3,8 @@
 
 module libtt.parser.service.dependency_reader;
 
-import libtt.services.bundle : Bundle;
-import libtt.services.bundle_options : BundleOptions;
-import libtt.services.longrun : Longrun;
-import libtt.services.longrun_options : LongrunOptions;
-import libtt.services.oneshot : Oneshot;
-import libtt.services.oneshot_options : OneshotOptions;
-import libtt.services.service : Service;
+import libtt.data : Bundle, BundleOptions, Longrun, LongrunOptions, Oneshot,
+                    OneshotOptions, Service;
 
 class DependencyReader
 {

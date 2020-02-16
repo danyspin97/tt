@@ -4,7 +4,7 @@
 module libtt.parser.section.longrun_options_builder;
 
 import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.services.longrun_options : LongrunOptions;
+import libtt.data : LongrunOptions;
 
 class LongrunOptionsBuilder : SectionBuilder
 {

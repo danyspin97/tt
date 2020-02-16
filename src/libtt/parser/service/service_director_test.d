@@ -7,7 +7,7 @@ import std.container : DList;
 
 import libtt.parser.section : SectionBuilder;
 import libtt.parser.service.service_director : ServiceDirector;
-import libtt.services.service : Service;
+import libtt.data : Service;
 
 class ServiceDirectorTest : ServiceDirector
 {

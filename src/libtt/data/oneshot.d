@@ -1,12 +1,12 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.services.oneshot;
+module libtt.data.oneshot;
 
-import libtt.services.environment : Environment;
-import libtt.services.oneshot_options : OneshotOptions;
-import libtt.services.script : Script;
-import libtt.services.service : Service;
+import libtt.data.environment : Environment;
+import libtt.data.oneshot_options : OneshotOptions;
+import libtt.data.script : Script;
+import libtt.data.service : Service;
 
 class Oneshot : Service
 {

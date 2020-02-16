@@ -7,8 +7,7 @@ import libtt.dirs : dirs;
 import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.parser.line : KeyValueParser, MultilineCodeParser;
 import libtt.parser.utils : setFailsIfNotEmpty;
-import libtt.services.script : Script;
-import libtt.services.environment : Environment;
+import libtt.data : Environment, Script;
 
 class ScriptBuilder : SectionBuilder
 {

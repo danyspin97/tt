@@ -9,7 +9,7 @@ import std.stdio : File;
 
 import libtt.parser.line : KeyValueParser, SectionLineParser;
 import libtt.parser.service.parser_factory : ParserFactory;
-import libtt.services.service : Service;
+import libtt.data : Service;
 
 class ServiceParser
 {

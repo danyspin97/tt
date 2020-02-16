@@ -1,4 +1,4 @@
-module libtt.services.environment;
+module libtt.data.environment;
 
 class Environment
 {

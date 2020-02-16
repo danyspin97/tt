@@ -1,9 +1,9 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.services.service_options;
+module libtt.data.service_options;
 
-import libtt.services.service : Service;
+import libtt.data.service : Service;
 
 abstract class ServiceOptions
 {

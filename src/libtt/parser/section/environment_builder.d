@@ -6,7 +6,7 @@ module libtt.parser.section.environment_builder;
 import std.regex : ctRegex, matchAll;
 
 import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.services.environment : Environment;
+import libtt.data : Environment;
 
 class EnvironmentBuilder : SectionBuilder
 {

@@ -4,7 +4,7 @@
 module libtt.parser.section.bundle_options_builder;
 
 import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.services.bundle_options : BundleOptions;
+import libtt.data : BundleOptions;
 
 class BundleOptionsBuilder : SectionBuilder
 {

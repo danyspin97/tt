@@ -1,11 +1,11 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.services.longrun_options;
+module libtt.data.longrun_options;
 
 import std.exception : enforce;
 
-import libtt.services.service_options : ServiceOptions;
+import libtt.data.service_options : ServiceOptions;
 import libtt.signal : Signal;
 
 class LongrunOptions : ServiceOptions

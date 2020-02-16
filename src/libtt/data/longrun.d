@@ -1,12 +1,12 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-module libtt.services.longrun;
+module libtt.data.longrun;
 
-import libtt.services.logger_script : LoggerScript;
-import libtt.services.longrun_options : LongrunOptions;
-import libtt.services.script : Script;
-import libtt.services.service : Service;
+import libtt.data.logger_script : LoggerScript;
+import libtt.data.longrun_options : LongrunOptions;
+import libtt.data.script : Script;
+import libtt.data.service : Service;
 
 class Longrun : Service
 {

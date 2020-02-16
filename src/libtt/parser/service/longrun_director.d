@@ -8,12 +8,8 @@ import libtt.parser.section : EnvironmentBuilder, LoggerScriptBuilder,
                               MainSectionBuilder, ScriptBuilder,
                               SectionBuilder;
 import libtt.parser.service.service_director : ServiceDirector;
-import libtt.services.environment : Environment;
-import libtt.services.logger_script : LoggerScript;
-import libtt.services.longrun: Longrun;
-import libtt.services.longrun_options : LongrunOptions;
-import libtt.services.script : Script;
-import libtt.services.service : Service;
+import libtt.data : Environment, LoggerScript, Longrun, LongrunOptions,
+                    Script, Service;
 
 class LongrunDirector : ServiceDirector
 {

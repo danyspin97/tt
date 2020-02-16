@@ -6,9 +6,7 @@ module libtt.parser.service.bundle_director;
 import libtt.parser.section : BundleOptionsBuilder, MainSection,
                               MainSectionBuilder, SectionBuilder;
 import libtt.parser.service.service_director : ServiceDirector;
-import libtt.services.bundle : Bundle;
-import libtt.services.bundle_options : BundleOptions;
-import libtt.services.service : Service;
+import libtt.data : Bundle, BundleOptions, Service;
 
 class BundleDirector : ServiceDirector
 {

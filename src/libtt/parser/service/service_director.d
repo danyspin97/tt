@@ -11,7 +11,7 @@ import std.typecons : Tuple, tuple;
 import libtt.exception : DummyBuilderException;
 import libtt.parser.line : KeyValueParser, SectionLineParser;
 import libtt.parser.section : DummyBuilder, MainSection, SectionBuilder;
-import libtt.services.service : Service;
+import libtt.data : Service;
 
 abstract class ServiceDirector
 {

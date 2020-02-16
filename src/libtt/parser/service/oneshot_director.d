@@ -7,11 +7,7 @@ import libtt.parser.section : EnvironmentBuilder, MainSection,
                               MainSectionBuilder, OneshotOptionsBuilder,
                               ScriptBuilder, SectionBuilder;
 import libtt.parser.service.service_director : ServiceDirector;
-import libtt.services.environment : Environment;
-import libtt.services.oneshot : Oneshot;
-import libtt.services.oneshot_options : OneshotOptions;
-import libtt.services.script : Script;
-import libtt.services.service : Service;
+import libtt.data : Environment, Oneshot, OneshotOptions, Script, Service;
 
 class OneshotDirector : ServiceDirector
 {

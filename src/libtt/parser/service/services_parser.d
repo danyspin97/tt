@@ -12,7 +12,7 @@ import libtt.exception : ServiceNotFoundParserException;
 import libtt.parser.service.dependency_reader : DependencyReader;
 import libtt.parser.service.instance_service_parser : InstanceServiceParser;
 import libtt.parser.service.service_parser : ServiceParser;
-import libtt.services.service : Service;
+import libtt.data : Service;
 
 abstract class ServicesParser
 {

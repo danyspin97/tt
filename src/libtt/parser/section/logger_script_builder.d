@@ -4,8 +4,7 @@
 module libtt.parser.section.logger_script_builder;
 
 import libtt.parser.section.script_builder : ScriptBuilder;
-import libtt.services.environment : Environment;
-import libtt.services.logger_script : LoggerScript;
+import libtt.data : Environment, LoggerScript;
 
 class LoggerScriptBuilder : ScriptBuilder
 {
