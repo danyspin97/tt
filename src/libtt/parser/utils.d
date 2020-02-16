@@ -48,3 +48,19 @@ bool parseBoolean(string value)
     throw new BooleanParseException(msg);
 }
 
+unittest
+{
+    assert(parseBoolean("yes"));
+}
+
+unittest
+{
+    assert(!parseBoolean("no"));
+}
+
+unittest
+{
+    import std.exception : assertThrown;
+    assertThrown!Exception(parseBoolean("foo"));
+}
+
