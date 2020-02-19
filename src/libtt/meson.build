@@ -62,6 +62,13 @@ libsrc = files(
     'data/script.d',
     'data/service.d',
     'data/service_options.d',
+    'serialization/longrun_serialization.d',
+    'serialization/longrun_options_serialization.d',
+    'serialization/oneshot_serialization.d',
+    'serialization/oneshot_options_serialization.d',
+    'serialization/service_serialization.d',
+    'serialization/service_options_serialization.d',
+    'serialization/script_serialization.d',
     'signal.d'
 ) + [dirs_d]
 
