@@ -14,16 +14,17 @@ enum InstanceToken = "@I";
 class InstanceServiceParser : ServiceParser
 {
 public:
-    this (string path, string instanceName)
+    this(string path, string instanceName)
     {
         this.instanceName = instanceName;
         super(path);
     }
+
 protected:
     override DList!string generateListFrom(File file)
     {
         auto list = DList!string();
-        foreach (line ; file.byLine())
+        foreach (line; file.byLine())
         {
             auto parsedLine = replaceTokenInLine(line);
             list.insertBack(parsedLine.idup);

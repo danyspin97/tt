@@ -8,19 +8,43 @@ import libtt.data.environment : Environment;
 class Script
 {
 public:
-    @property string execute() { return shebang ~ m_execute; }
-    @property string shebang() { return m_shebang; }
-    @property string user() { return m_user;}
-    @property void user(string user) { m_user = user; }
-    @property string group() { return m_group; }
-    @property void group(string group) { m_group = group; }
-    @property ref const(Environment) environment () { return m_env; }
+    @property string execute()
+    {
+        return shebang ~ m_execute;
+    }
 
-    this (
-        string execute,
-        string shebang,
-        Environment environment,
-    ) {
+    @property string shebang()
+    {
+        return m_shebang;
+    }
+
+    @property string user()
+    {
+        return m_user;
+    }
+
+    @property void user(string user)
+    {
+        m_user = user;
+    }
+
+    @property string group()
+    {
+        return m_group;
+    }
+
+    @property void group(string group)
+    {
+        m_group = group;
+    }
+
+    @property ref const(Environment) environment()
+    {
+        return m_env;
+    }
+
+    this(string execute, string shebang, Environment environment,)
+    {
         m_execute = execute;
         m_shebang = shebang;
         m_env = environment;
@@ -45,4 +69,3 @@ private:
     string m_group;
     Environment m_env;
 }
-

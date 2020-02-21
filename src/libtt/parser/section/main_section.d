@@ -12,4 +12,3 @@ struct MainSection
     string type;
     string path;
 }
-

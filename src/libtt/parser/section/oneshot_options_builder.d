@@ -35,13 +35,13 @@ protected:
     {
         switch (parser.key)
         {
-            case "depends":
-                oneshotOptions.dependencies = parser.values;
-                break;
-            default:
-                auto errorMessage = `Camp named "` ~ parser.key ~
-                        `" is not allowed in section [options]`;
-                throw new Exception(errorMessage);
+        case "depends":
+            oneshotOptions.dependencies = parser.values;
+            break;
+        default:
+            auto errorMessage = `Camp named "` ~ parser.key
+                ~ `" is not allowed in section [options]`;
+            throw new Exception(errorMessage);
         }
     }
 
@@ -50,19 +50,17 @@ private:
     {
         switch (key)
         {
-            case "optional":
-                oneshotOptions.optional = parseBoolean(value);
-                break;
-            case "write_message":
-                oneshotOptions.writeMessage = parseBoolean(value);
-                break;
-            default:
-                auto errorMessage = `Camp named "` ~ key ~ `" is not allowed`
-                        ~ " in section [options]";
-                throw new Exception(errorMessage);
+        case "optional":
+            oneshotOptions.optional = parseBoolean(value);
+            break;
+        case "write_message":
+            oneshotOptions.writeMessage = parseBoolean(value);
+            break;
+        default:
+            auto errorMessage = `Camp named "` ~ key ~ `" is not allowed` ~ " in section [options]";
+            throw new Exception(errorMessage);
         }
     }
 
     OneshotOptions oneshotOptions;
 }
-

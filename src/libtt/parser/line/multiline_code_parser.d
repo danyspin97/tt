@@ -11,7 +11,11 @@ import libtt.exception : CodeParserNotFinishedException;
 class MultilineCodeParser
 {
 public:
-    @property bool isParsing() { return m_isParsing; }
+    @property bool isParsing()
+    {
+        return m_isParsing;
+    }
+
     @property string code()
     {
         if (isParsing())
@@ -35,6 +39,7 @@ public:
         auto parser = new MultilineCodeParser();
         parser.m_isParsing = true;
         import std.exception : assertThrown;
+
         assertThrown!CodeParserNotFinishedException(parser.code);
     }
 
@@ -94,6 +99,7 @@ public:
 
         // Start parsing again
         import std.exception : assertThrown;
+
         assertThrown!CodeParserNotFinishedException(parser.startParsing(token));
     }
 
@@ -103,12 +109,13 @@ public:
         auto token = "execute=(";
         parser.m_code = "foo";
         import std.exception : assertThrown;
+
         assertThrown!CodeParserNotFinishedException(parser.startParsing(token));
     }
 
     void parseLine(string line)
     {
-        if(strip(line) == ")")
+        if (strip(line) == ")")
         {
             m_isParsing = false;
             return;
@@ -139,4 +146,3 @@ private:
     string m_code;
     bool m_isParsing = false;
 }
-

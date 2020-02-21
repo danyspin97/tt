@@ -21,6 +21,7 @@ public:
     {
         auto builder = new DummyBuilder();
         import std.exception : assertThrown;
+
         assertThrown!DummyBuilderException(builder.parseLine("foobar"));
     }
 

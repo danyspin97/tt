@@ -8,8 +8,15 @@ import libtt.data.service : Service;
 abstract class ServiceOptions
 {
 public:
-    @property ref string[] dependencies() { return m_depends; }
-    @property void dependencies(ref string[] depends) { m_depends = depends; }
+    @property ref string[] dependencies()
+    {
+        return m_depends;
+    }
+
+    @property void dependencies(ref string[] depends)
+    {
+        m_depends = depends;
+    }
 
 private:
     string[] m_depends;

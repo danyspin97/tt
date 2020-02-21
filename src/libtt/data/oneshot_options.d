@@ -8,10 +8,21 @@ import libtt.data.service_options : ServiceOptions;
 class OneshotOptions : ServiceOptions
 {
 public:
-    @property bool optional() { return m_optional; }
-    @property void optional(bool optional) { m_optional = optional; }
+    @property bool optional()
+    {
+        return m_optional;
+    }
 
-    @property bool writeMessage() { return m_writeMessage; }
+    @property void optional(bool optional)
+    {
+        m_optional = optional;
+    }
+
+    @property bool writeMessage()
+    {
+        return m_writeMessage;
+    }
+
     @property void writeMessage(bool writeMessage)
     {
         m_writeMessage = writeMessage;

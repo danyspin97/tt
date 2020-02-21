@@ -11,9 +11,21 @@ import libtt.data.service : Service;
 class Longrun : Service
 {
 public:
-    @property ref Script run () { return m_run; }
-    @property ref Script finish () { return m_finish; }
-    @property void finish(Script finish) { m_finish = finish; }
+    @property ref Script run()
+    {
+        return m_run;
+    }
+
+    @property ref Script finish()
+    {
+        return m_finish;
+    }
+
+    @property void finish(Script finish)
+    {
+        m_finish = finish;
+    }
+
     @property LoggerScript logger()
     {
         if (m_logger is null)
@@ -23,23 +35,16 @@ public:
 
         return m_logger;
     }
-    @property void logger(LoggerScript logger) { m_logger = logger; }
 
-    this(
-        string name,
-        string polishName,
-        string description,
-        string path,
-        ref LongrunOptions options,
-        ref Script run,
-    ) {
-        super(
-            name,
-            polishName,
-            description,
-            path,
-            options
-        );
+    @property void logger(LoggerScript logger)
+    {
+        m_logger = logger;
+    }
+
+    this(string name, string polishName, string description, string path,
+            ref LongrunOptions options, ref Script run,)
+    {
+        super(name, polishName, description, path, options);
 
         m_run = run;
     }

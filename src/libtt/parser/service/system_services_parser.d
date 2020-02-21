@@ -11,7 +11,7 @@ class SystemServicesParser : ServicesParser
 public:
     this()
     {
-        paths = [ dirs.service, dirs.adminService ];
+        paths = [dirs.service, dirs.adminService];
         suffix = ".system";
     }
 }

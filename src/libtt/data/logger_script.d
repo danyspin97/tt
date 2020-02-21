@@ -9,36 +9,36 @@ import libtt.data.script : Script;
 class LoggerScript : Script
 {
 public:
-    @property string destination() { return m_destination; }
+    @property string destination()
+    {
+        return m_destination;
+    }
+
     @property void destination(string destination)
     {
         m_destination = destination;
     }
-    @property uint maxsize() { return m_maxsize; }
-    @property void maxsize(uint maxsize) { m_maxsize = maxsize; }
 
-    this (
-        string execute,
-        string shebang,
-        Environment environment
-    ) {
-        super(
-            execute,
-            shebang,
-            environment
-        );
+    @property uint maxsize()
+    {
+        return m_maxsize;
     }
 
-    this (
-        string shebang,
-        Environment environment
-    ) {
-        super(
-            defaultExecute,
-            shebang,
-            environment
-        );
+    @property void maxsize(uint maxsize)
+    {
+        m_maxsize = maxsize;
     }
+
+    this(string execute, string shebang, Environment environment)
+    {
+        super(execute, shebang, environment);
+    }
+
+    this(string shebang, Environment environment)
+    {
+        super(defaultExecute, shebang, environment);
+    }
+
 private:
     string defaultExecute()
     {

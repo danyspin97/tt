@@ -7,6 +7,7 @@ module libtt.parser.line;
 public import libtt.parser.line.key_value_parser;
 
 package import libtt.parser.line.multiline_code_parser;
-package import libtt.parser.line.multiline_value_parser;
-package import libtt.parser.line.section_line_parser;
 
+package import libtt.parser.line.multiline_value_parser;
+
+package import libtt.parser.line.section_line_parser;

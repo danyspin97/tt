@@ -39,21 +39,21 @@ public:
     {
         switch (key)
         {
-            case "name":
-                mainSection.name = value;
-                break;
-            case "description":
-                mainSection.description = value;
-                break;
-            case "polish_name":
-                mainSection.polishName = value;
-                break;
-            case "type":
-                mainSection.type = value;
-                break;
-            default:
-                auto errorMessage = `Camp named "` ~ key ~ `" is not allowed.`;
-                throw new Exception(errorMessage);
+        case "name":
+            mainSection.name = value;
+            break;
+        case "description":
+            mainSection.description = value;
+            break;
+        case "polish_name":
+            mainSection.polishName = value;
+            break;
+        case "type":
+            mainSection.type = value;
+            break;
+        default:
+            auto errorMessage = `Camp named "` ~ key ~ `" is not allowed.`;
+            throw new Exception(errorMessage);
         }
     }
 

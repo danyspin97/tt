@@ -8,24 +8,23 @@ import std.json;
 import std.algorithm;
 import std.array;
 
-class OneshotOptionsSerialization: ServiceOptionsSerialization
+class OneshotOptionsSerialization : ServiceOptionsSerialization
 {
-    public:
-        this(
-            OneshotOptions oneshotOptions
-        ){
-            super(oneshotOptions);
-            this.oneshotOptions = oneshotOptions;
-        }
+public:
+    this(OneshotOptions oneshotOptions)
+    {
+        super(oneshotOptions);
+        this.oneshotOptions = oneshotOptions;
+    }
 
-        @property override JSONValue json()
-        {
-            auto j = super.json;
-            j.object["optional"] = oneshotOptions.optional;
+    @property override JSONValue json()
+    {
+        auto j = super.json;
+        j.object["optional"] = oneshotOptions.optional;
 
-            return j;
-        }
+        return j;
+    }
 
-    private:
-        OneshotOptions oneshotOptions;
+private:
+    OneshotOptions oneshotOptions;
 }

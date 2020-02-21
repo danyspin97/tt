@@ -20,6 +20,7 @@ unittest
     auto mystring = "oldValue";
     string* param = &mystring;
     import std.exception : assertThrown;
+
     assertThrown!Exception(setFailsIfNotEmpty(param, "newValue"));
 }
 
@@ -61,6 +62,6 @@ unittest
 unittest
 {
     import std.exception : assertThrown;
+
     assertThrown!Exception(parseBoolean("foo"));
 }
-

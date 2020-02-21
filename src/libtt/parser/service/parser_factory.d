@@ -15,16 +15,15 @@ public:
     {
         switch (type)
         {
-            case "bundle":
-                return new BundleDirector();
-            case "longrun":
-                return new LongrunDirector();
-            case "oneshot":
-                return new OneshotDirector();
-            default:
-                auto msg = `Type "` ~ type ~ `" is not supported.`;
-                throw new Exception(msg);
+        case "bundle":
+            return new BundleDirector();
+        case "longrun":
+            return new LongrunDirector();
+        case "oneshot":
+            return new OneshotDirector();
+        default:
+            auto msg = `Type "` ~ type ~ `" is not supported.`;
+            throw new Exception(msg);
         }
     }
 }
-

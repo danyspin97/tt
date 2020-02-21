@@ -9,9 +9,12 @@ import libtt.exception : WordNotValidException;
 
 class UntilTokenParser
 {
-    @property string parsedLine() { return value; }
+    @property string parsedLine()
+    {
+        return value;
+    }
 
-    this (char token)
+    this(char token)
     {
         this.token = token;
     }
@@ -35,7 +38,7 @@ class UntilTokenParser
         }
 
         value = line[0 .. i];
-        return line[i+1 .. $];
+        return line[i + 1 .. $];
     }
 
     unittest
@@ -49,6 +52,7 @@ class UntilTokenParser
     {
         auto parser = new UntilTokenParser(')');
         import std.exception : assertThrown;
+
         assertThrown!WordNotValidException(parser.parseUntilToken("foo"));
     }
 
@@ -56,4 +60,3 @@ private:
     char token;
     string value;
 }
-

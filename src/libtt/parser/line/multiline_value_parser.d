@@ -7,24 +7,31 @@ import std.algorithm : each, endsWith, filter, startsWith;
 import std.array : split;
 import std.exception : assertNotThrown, assertThrown;
 import std.range : popFrontN, popBackN;
-import std.string: strip;
+import std.string : strip;
 import std.uni : isWhite;
 
-import libtt.parser.word : KeyParser, TokenParser, UntilTokenParser,
-                           WhitespaceParser;
+import libtt.parser.word : KeyParser, TokenParser, UntilTokenParser, WhitespaceParser;
 
-import libtt.exception : EmptyValueFoundWhileParsingException,
-                         WordNotValidException,
-                         LineNotValidWhileParsingException,
-                         ParserHasNotBeenInitialized,
-                         ParserIsStillParsingException;
+import libtt.exception : EmptyValueFoundWhileParsingException, WordNotValidException,
+    LineNotValidWhileParsingException, ParserHasNotBeenInitialized, ParserIsStillParsingException;
 
 class MultilineValueParser
 {
 public:
-    @property bool isParsing() { return m_isParsing; }
-    @property string key() { return m_key; }
-    @property string[] values() { return m_values; }
+    @property bool isParsing()
+    {
+        return m_isParsing;
+    }
+
+    @property string key()
+    {
+        return m_key;
+    }
+
+    @property string[] values()
+    {
+        return m_values;
+    }
 
     this()
     {
@@ -68,30 +75,22 @@ public:
     unittest
     {
         auto parser = new MultilineValueParser();
-        assertThrown!LineNotValidWhileParsingException(
-            parser.startParsing(`foo = (foo )`)
-        );
+        assertThrown!LineNotValidWhileParsingException(parser.startParsing(`foo = (foo )`));
     }
 
     unittest
     {
         auto parser = new MultilineValueParser();
-        assertThrown!LineNotValidWhileParsingException(
-            parser.startParsing(`foo = ( foo)`)
-        );
+        assertThrown!LineNotValidWhileParsingException(parser.startParsing(`foo = ( foo)`));
     }
 
     unittest
     {
-        auto linesWithEmptyValues =
-        [
-            "foo = (  )"
-        ];
-        foreach (line ; linesWithEmptyValues)
+        auto linesWithEmptyValues = ["foo = (  )"];
+        foreach (line; linesWithEmptyValues)
         {
             auto parser = new MultilineValueParser();
-            assertThrown!EmptyValueFoundWhileParsingException(
-                    parser.startParsing(line));
+            assertThrown!EmptyValueFoundWhileParsingException(parser.startParsing(line));
         }
     }
 
@@ -107,16 +106,16 @@ public:
 
     unittest
     {
-       auto parser = new MultilineValueParser();
-       auto val = "foo";
-       parser.m_isParsing = true;
-       parser.parseLine(val);
-       assert(parser.values == [val]);
+        auto parser = new MultilineValueParser();
+        auto val = "foo";
+        parser.m_isParsing = true;
+        parser.parseLine(val);
+        assert(parser.values == [val]);
 
-       auto val2 = "bar";
-       parser.parseLine(val2 ~ " )");
-       assert(!parser.isParsing());
-       assert(parser.values == [val, val2]);
+        auto val2 = "bar";
+        parser.parseLine(val2 ~ " )");
+        assert(!parser.isParsing());
+        assert(parser.values == [val, val2]);
     }
 
     unittest
@@ -177,9 +176,12 @@ private:
 
     void tryParseValuesInLine(string line)
     {
-        scope(failure) addValuesFromLine(line);
-        scope(failure) m_isParsing = true;
-        scope(success) m_isParsing = false;
+        scope (failure)
+            addValuesFromLine(line);
+        scope (failure)
+            m_isParsing = true;
+        scope (success)
+            m_isParsing = false;
 
         auto endingParenthesisParser = new UntilTokenParser(')');
         line = endingParenthesisParser.parseUntilToken(line);
@@ -199,22 +201,18 @@ private:
 
     unittest
     {
-        assertNotThrown!LineNotValidWhileParsingException(
-            checkLineStartsWithWhitespace(" foo")
-        );
+        assertNotThrown!LineNotValidWhileParsingException(checkLineStartsWithWhitespace(" foo"));
     }
 
     unittest
     {
-        assertThrown!LineNotValidWhileParsingException(
-            checkLineStartsWithWhitespace("foo")
-        );
+        assertThrown!LineNotValidWhileParsingException(checkLineStartsWithWhitespace("foo"));
     }
 
     static void checkLineEndsWithWhitespace(string line)
     {
         // A space is needed after the parenthesis
-        if (line.length == 0 || !line[$-1].isWhite())
+        if (line.length == 0 || !line[$ - 1].isWhite())
         {
             throw new LineNotValidWhileParsingException("");
         }
@@ -222,16 +220,12 @@ private:
 
     unittest
     {
-        assertThrown!LineNotValidWhileParsingException(
-            checkLineEndsWithWhitespace("")
-        );
+        assertThrown!LineNotValidWhileParsingException(checkLineEndsWithWhitespace(""));
     }
 
     unittest
     {
-        assertNotThrown!LineNotValidWhileParsingException(
-            checkLineStartsWithWhitespace("        ")
-        );
+        assertNotThrown!LineNotValidWhileParsingException(checkLineStartsWithWhitespace("        "));
     }
 
     void addValuesFromLine(string line)
@@ -269,4 +263,3 @@ private:
     string[] m_values;
     bool m_isParsing = false;
 }
-
