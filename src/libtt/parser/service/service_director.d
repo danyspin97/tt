@@ -16,7 +16,10 @@ import libtt.data : Service;
 abstract class ServiceDirector
 {
 public:
-    @property Service service() { return m_service; }
+    @property Service service()
+    {
+        return m_service;
+    }
 
     this()
     {
@@ -49,14 +52,13 @@ private:
     void tryParseSections()
     {
         SectionBuilder currentBuilder = new DummyBuilder();
-        foreach (line ; serviceLines[])
+        foreach (line; serviceLines[])
         {
             auto sectionLineParser = new SectionLineParser(line);
             if (sectionLineParser.lineValid())
             {
                 currentBuilder.endParsing();
-                currentBuilder =
-                        getBuilderForSection(sectionLineParser.section);
+                currentBuilder = getBuilderForSection(sectionLineParser.section);
                 continue;
             }
 
@@ -68,4 +70,3 @@ private:
     Service m_service;
     DList!string serviceLines;
 }
-

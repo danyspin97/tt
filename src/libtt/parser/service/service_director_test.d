@@ -59,9 +59,9 @@ protected:
         auto director = new ServiceDirectorTest();
         auto s = DList!string("foo", "");
         import std.exception : assertThrown;
+
         assertThrown!Exception(director.parseAndGetService(s, ""));
     }
 
     BuilderTest builder;
 }
-

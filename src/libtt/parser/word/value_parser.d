@@ -7,7 +7,10 @@ import std.uni : isWhite;
 
 class ValueParser
 {
-    @property string value() { return m_value; }
+    @property string value()
+    {
+        return m_value;
+    }
 
     /**
      * Returns: The rest of the line.
@@ -77,4 +80,3 @@ class ValueParser
 private:
     string m_value;
 }
-

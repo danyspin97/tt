@@ -37,7 +37,7 @@ public:
             setParamByKey(key, value);
             return;
         }
-        
+
         if (valuesParser.startParsing(line))
         {
             if (!valuesParser.isParsing())
@@ -66,4 +66,3 @@ protected:
 private:
     MultilineValueParser valuesParser = new MultilineValueParser();
 }
-

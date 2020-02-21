@@ -11,4 +11,3 @@ enum Signal
     SIGKILL = 9,
     SIGTERM = 15
 }
-

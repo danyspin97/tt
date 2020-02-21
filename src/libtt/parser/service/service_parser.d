@@ -14,7 +14,10 @@ import libtt.data : Service;
 class ServiceParser
 {
 public:
-    @property Service service() { return m_service; }
+    @property Service service()
+    {
+        return m_service;
+    }
 
     this(string path)
     {
@@ -29,6 +32,7 @@ public:
     unittest
     {
         import std.exception : assertThrown;
+
         assertThrown!Exception(new ServiceParser("src/libtt/test/noSection"));
     }
 
@@ -36,7 +40,7 @@ protected:
     DList!string generateListFrom(File file)
     {
         auto list = DList!string();
-        foreach (line ; file.byLine())
+        foreach (line; file.byLine())
         {
             list.insertBack(line.idup);
         }
@@ -61,15 +65,14 @@ private:
             }
         }
 
-        auto errorMessage = "No type data could be found for service "
-                ~ path;
+        auto errorMessage = "No type data could be found for service " ~ path;
         throw new Exception(errorMessage);
     }
 
     int getMainSectionIndex(DList!string service)
     {
         ushort i = 0;
-        foreach (line ; service[])
+        foreach (line; service[])
         {
             auto sectionLineParser = new SectionLineParser(line);
             auto const currentSection = sectionLineParser.getSectionOrDefault("");
@@ -80,12 +83,10 @@ private:
             i++;
         }
 
-        auto errorMessage = "No main section could be found for service "
-                ~ path;
+        auto errorMessage = "No main section could be found for service " ~ path;
         throw new Exception(errorMessage);
     }
 
     Service m_service;
     string path;
 }
-

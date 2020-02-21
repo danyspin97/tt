@@ -7,7 +7,10 @@ import std.uni : isWhite;
 
 class KeyParser
 {
-    @property string key() { return m_key; }
+    @property string key()
+    {
+        return m_key;
+    }
 
     /**
      * Returns: The rest of the line.
@@ -67,4 +70,3 @@ class KeyParser
 private:
     string m_key;
 }
-

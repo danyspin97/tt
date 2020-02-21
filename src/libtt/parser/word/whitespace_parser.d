@@ -43,7 +43,7 @@ class WhitespaceParser
     {
         auto parser = new WhitespaceParser();
         import std.exception : assertThrown;
+
         assertThrown!WordNotValidException(parser.parse(" foo"));
     }
 }
-

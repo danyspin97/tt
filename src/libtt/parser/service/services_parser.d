@@ -53,8 +53,8 @@ private:
             string instanceName;
             splitServiceNameFromInstance(serviceName, instanceName);
             auto path = getPathForServiceName(serviceName);
-            serviceSet[serviceName ~ instanceName] =
-                    new InstanceServiceParser(path, instanceName).service;
+            serviceSet[serviceName ~ instanceName] = new InstanceServiceParser(path, instanceName)
+                .service;
             return;
         }
 
@@ -104,8 +104,8 @@ private:
             }
         }
 
-        auto msg = "Service " ~ name ~ suffix ~ " could not be found in" ~
-                "directories " ~ paths.join(',');
+        auto msg = "Service " ~ name ~ suffix ~ " could not be found in"
+            ~ "directories " ~ paths.join(',');
         throw new ServiceNotFoundParserException(msg);
     }
 
@@ -116,4 +116,3 @@ protected:
 private:
     Service[string] serviceSet;
 }
-

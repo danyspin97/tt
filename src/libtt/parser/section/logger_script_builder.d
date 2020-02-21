@@ -21,18 +21,11 @@ public:
 
         if (execute == "")
         {
-            script = new LoggerScript(
-                shebang,
-                environment
-            );
+            script = new LoggerScript(shebang, environment);
         }
         else
         {
-            script = new LoggerScript(
-                executeParser.code,
-                shebang,
-                environment
-            );
+            script = new LoggerScript(executeParser.code, shebang, environment);
         }
 
         if (user != "")
@@ -50,12 +43,12 @@ public:
     {
         switch (key)
         {
-            case "destination":
-                return &destination;
-            case "maxsize":
-                return &maxsize;
-            default:
-                return super.getParamByKey(key);
+        case "destination":
+            return &destination;
+        case "maxsize":
+            return &maxsize;
+        default:
+            return super.getParamByKey(key);
         }
     }
 
@@ -65,4 +58,3 @@ private:
     string destination;
     string maxsize;
 }
-

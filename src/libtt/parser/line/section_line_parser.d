@@ -9,8 +9,15 @@ import libtt.parser.word : SectionWordParser, WhitespaceParser;
 class SectionLineParser
 {
 public:
-    @property string section() { return m_section; }
-    @property bool lineValid() { return m_valid; }
+    @property string section()
+    {
+        return m_section;
+    }
+
+    @property bool lineValid()
+    {
+        return m_valid;
+    }
 
     this(string line)
     {
@@ -64,7 +71,7 @@ private:
     void parseLine()
     {
         try
-       {
+        {
             tryParseLine();
         }
         catch (WordNotValidException e)
@@ -74,8 +81,10 @@ private:
 
     void tryParseLine()
     {
-        scope(success) m_valid = true;
-        scope(failure) m_valid = false;
+        scope (success)
+            m_valid = true;
+        scope (failure)
+            m_valid = false;
 
         auto sectionParser = new SectionWordParser();
         line = sectionParser.parse(line);
@@ -89,6 +98,7 @@ private:
         auto parser = new SectionLineParser();
         parser.line = "[foo]";
         import std.exception : assertNotThrown;
+
         assertNotThrown!WordNotValidException(parser.tryParseLine());
         assert(parser.section == "foo");
     }
@@ -98,6 +108,7 @@ private:
         auto parser = new SectionLineParser();
         parser.line = "foo";
         import std.exception : assertThrown;
+
         assertThrown!WordNotValidException(parser.tryParseLine());
     }
 
@@ -105,4 +116,3 @@ private:
     string m_section;
     bool m_valid;
 }
-

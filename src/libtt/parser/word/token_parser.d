@@ -9,9 +9,9 @@ import libtt.exception : WordNotValidException;
 
 class TokenParser
 {
-    this (char token)
+    this(char token)
     {
-       this.token = token;
+        this.token = token;
     }
 
     /**
@@ -20,7 +20,7 @@ class TokenParser
     string parse(string line)
     {
         auto i = getIndexOfTokenInLine(line);
-        return line[i+1 .. $];
+        return line[i + 1 .. $];
     }
 
     unittest
@@ -33,7 +33,8 @@ class TokenParser
     unittest
     {
         auto parser = new TokenParser('=');
-        import std.exception: assertThrown;
+        import std.exception : assertThrown;
+
         assertThrown!WordNotValidException(parser.parse(""));
         assertThrown!WordNotValidException(parser.parse("foo bar"));
     }
@@ -67,4 +68,3 @@ protected:
 
     char token;
 }
-

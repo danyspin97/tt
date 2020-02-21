@@ -4,22 +4,22 @@
 module libtt.parser.service.dependency_reader;
 
 import libtt.data : Bundle, BundleOptions, Longrun, LongrunOptions, Oneshot,
-                    OneshotOptions, Service;
+    OneshotOptions, Service;
 
 class DependencyReader
 {
 public:
     static const(string[]) getDependenciesForService(Service service)
     {
-        if (auto bundle = cast(Bundle)service)
+        if (auto bundle = cast(Bundle) service)
         {
             return getDependenciesForBundle(bundle);
         }
-        if (auto longrun = cast(Longrun)service)
+        if (auto longrun = cast(Longrun) service)
         {
             return getDependenciesForLongrun(longrun);
         }
-        if (auto oneshot = cast(Oneshot)service)
+        if (auto oneshot = cast(Oneshot) service)
         {
             return getDependenciesForOneshot(oneshot);
         }
@@ -30,20 +30,19 @@ public:
 private:
     static const(string[]) getDependenciesForBundle(Bundle bundle)
     {
-        auto options = cast(BundleOptions)bundle.options;
+        auto options = cast(BundleOptions) bundle.options;
         return options.contents;
     }
 
     static const(string[]) getDependenciesForLongrun(Longrun longrun)
     {
-        auto options = cast(LongrunOptions)longrun.options;
+        auto options = cast(LongrunOptions) longrun.options;
         return options.dependencies;
     }
 
     static const(string[]) getDependenciesForOneshot(Oneshot oneshot)
     {
-        auto options = cast(OneshotOptions)oneshot.options;
+        auto options = cast(OneshotOptions) oneshot.options;
         return options.dependencies;
     }
 }
-

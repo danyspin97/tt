@@ -9,7 +9,10 @@ import libtt.exception : WordNotValidException;
 
 class SectionWordParser
 {
-    @property string section() { return m_section; }
+    @property string section()
+    {
+        return m_section;
+    }
 
     /**
      * Returns: The rest of the line.
@@ -93,6 +96,7 @@ class SectionWordParser
     {
         auto parser = new SectionWordParser();
         import std.exception : assertThrown;
+
         assertThrown!WordNotValidException(parser.parse("foo"));
         assertThrown!WordNotValidException(parser.parse("[foo"));
     }
@@ -100,4 +104,3 @@ class SectionWordParser
 private:
     string m_section;
 }
-

@@ -4,15 +4,25 @@
 module libtt.parser.line.key_value_parser;
 
 import libtt.exception : WordNotValidException;
-import libtt.parser.word : KeyParser, TokenParser, ValueParser,
-                            WhitespaceParser;
+import libtt.parser.word : KeyParser, TokenParser, ValueParser, WhitespaceParser;
 
 class KeyValueParser
 {
 public:
-    @property string key() { return m_key; }
-    @property string value() { return m_value; }
-    @property bool lineValid() { return m_valid; }
+    @property string key()
+    {
+        return m_key;
+    }
+
+    @property string value()
+    {
+        return m_value;
+    }
+
+    @property bool lineValid()
+    {
+        return m_valid;
+    }
 
     this(string line)
     {
@@ -34,8 +44,10 @@ private:
 
     void tryParseLine()
     {
-        scope(success) m_valid = true;
-        scope(failure) m_valid = false;
+        scope (success)
+            m_valid = true;
+        scope (failure)
+            m_valid = false;
 
         auto keyParser = new KeyParser();
         line = keyParser.parse(line);

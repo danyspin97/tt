@@ -28,7 +28,7 @@ public:
         env[key] = value;
         return true;
     }
+
 private:
     string[string] env;
 }
-

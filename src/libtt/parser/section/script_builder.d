@@ -64,11 +64,7 @@ public:
         }
         setShebangPerType(type);
 
-        script = new Script(
-            execute,
-            shebang,
-            environment
-        );
+        script = new Script(execute, shebang, environment);
 
         if (user != "")
         {
@@ -83,25 +79,27 @@ public:
 
 protected:
     // Only used for unittest
-    this() {}
+    this()
+    {
+    }
 
     string* getParamByKey(string key)
     {
         switch (key)
         {
-            case "build":
-                return &type;
-            case "execute":
-                return &execute;
-            case "group":
-                return &group;
-            case "shebang":
-                return &shebang;
-            case "user":
-                return &user;
-            default:
-                auto errorMessage = `Camp named "` ~ key ~ `" is not allowed.`;
-                throw new Exception(errorMessage);
+        case "build":
+            return &type;
+        case "execute":
+            return &execute;
+        case "group":
+            return &group;
+        case "shebang":
+            return &shebang;
+        case "user":
+            return &user;
+        default:
+            auto errorMessage = `Camp named "` ~ key ~ `" is not allowed.`;
+            throw new Exception(errorMessage);
         }
     }
 
@@ -119,19 +117,19 @@ protected:
     {
         switch (type)
         {
-            case "auto":
-                goto case;
-            case "execline":
-                auto newShebang = "#!" ~ dirs.execlinePrefix ~ "execlineb";
-                setFailsIfNotEmpty(&shebang, newShebang);
-                break;
-            case "bash":
-                auto newShebang = "#!" ~ dirs.bin ~ "bash";
-                setFailsIfNotEmpty(&shebang, newShebang);
-                break;
-            default:
-                auto errorMessage = `Type "` ~ type ~ `" is not allowed.`;
-                throw new Exception(errorMessage);
+        case "auto":
+            goto case;
+        case "execline":
+            auto newShebang = "#!" ~ dirs.execlinePrefix ~ "execlineb";
+            setFailsIfNotEmpty(&shebang, newShebang);
+            break;
+        case "bash":
+            auto newShebang = "#!" ~ dirs.bin ~ "bash";
+            setFailsIfNotEmpty(&shebang, newShebang);
+            break;
+        default:
+            auto errorMessage = `Type "` ~ type ~ `" is not allowed.`;
+            throw new Exception(errorMessage);
         }
     }
 

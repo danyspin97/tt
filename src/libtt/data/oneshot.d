@@ -11,25 +11,25 @@ import libtt.data.service : Service;
 class Oneshot : Service
 {
 public:
-    @property ref Script start() { return m_start; }
-    @property ref Script stop() { return m_stop; }
-    @property void stop(Script stop) { m_stop = stop; }
+    @property ref Script start()
+    {
+        return m_start;
+    }
 
-    this(
-        string name,
-        string polishName,
-        string description,
-        string path,
-        ref OneshotOptions options,
-        ref Script start
-    ) {
-        super(
-            name,
-            polishName,
-            description,
-            path,
-            options
-        );
+    @property ref Script stop()
+    {
+        return m_stop;
+    }
+
+    @property void stop(Script stop)
+    {
+        m_stop = stop;
+    }
+
+    this(string name, string polishName, string description, string path,
+            ref OneshotOptions options, ref Script start)
+    {
+        super(name, polishName, description, path, options);
 
         m_start = start;
     }
