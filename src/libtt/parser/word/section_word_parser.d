@@ -43,7 +43,6 @@ class SectionWordParser
             break;
         }
 
-        i++;
         while (i != line.length)
         {
             if (end == -1 && line[i].isWhite)
