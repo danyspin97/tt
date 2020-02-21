@@ -4,7 +4,7 @@
 module libtt.parser.line.key_value_parser;
 
 import libtt.exception : WordNotValidException;
-import libtt.parser.word : AssignmentParser, KeyParser, ValueParser,
+import libtt.parser.word : KeyParser, TokenParser, ValueParser,
                             WhitespaceParser;
 
 class KeyValueParser
@@ -39,7 +39,7 @@ private:
 
         auto keyParser = new KeyParser();
         line = keyParser.parse(line);
-        line = (new AssignmentParser).parse(line);
+        line = (new TokenParser('=')).parse(line);
         auto valueParser = new ValueParser();
         line = valueParser.parse(line);
         (new WhitespaceParser).parse(line);

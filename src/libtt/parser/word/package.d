@@ -3,9 +3,9 @@
 
 module libtt.parser.word;
 
-package import libtt.parser.word.assignment_parser;
 package import libtt.parser.word.key_parser;
 package import libtt.parser.word.section_word_parser;
+package import libtt.parser.word.token_parser;
 package import libtt.parser.word.value_parser;
 package import libtt.parser.word.whitespace_parser;
 
