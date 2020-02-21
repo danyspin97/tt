@@ -3,8 +3,9 @@
 
 module libtt.parser.line.key_value_parser;
 
-import std.regex : ctRegex, matchAll;
-import std.string : chomp, chompPrefix, strip;
+import libtt.exception : WordNotValidException;
+import libtt.parser.word : AssignmentParser, KeyParser, ValueParser,
+                            WhitespaceParser;
 
 class KeyValueParser
 {
@@ -22,18 +23,29 @@ public:
 private:
     void parseLine()
     {
-        // Match
-        // key = value
-        // key = "value1 value2"
-        auto keyValueRegex = ctRegex!(`^ *(\w+) *= *(\".+\"|\w+)$`);
-        auto match = matchAll(line, keyValueRegex);
-        if (!match)
+        try
         {
-            m_valid = false;
-            return;
+            tryParseLine();
         }
-        m_key = match.captures[1];
-        m_value = match.captures[2].chomp(`"`).chompPrefix(`"`).strip;
+        catch (WordNotValidException e)
+        {
+        }
+    }
+
+    void tryParseLine()
+    {
+        scope(success) m_valid = true;
+        scope(failure) m_valid = false;
+
+        auto keyParser = new KeyParser();
+        line = keyParser.parse(line);
+        line = (new AssignmentParser).parse(line);
+        auto valueParser = new ValueParser();
+        line = valueParser.parse(line);
+        (new WhitespaceParser).parse(line);
+
+        m_key = keyParser.key;
+        m_value = valueParser.value;
         m_valid = true;
     }
 
