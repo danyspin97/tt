@@ -3,9 +3,8 @@
 
 module libtt.parser.line.section_line_parser;
 
-import std.exception : enforce;
-import std.format : FormatException, formattedRead;
-import std.string : strip;
+import libtt.exception : WordNotValidException;
+import libtt.parser.word : SectionWordParser, WhitespaceParser;
 
 class SectionLineParser
 {
@@ -68,7 +67,7 @@ private:
        {
             tryParseLine();
         }
-        catch (FormatException e)
+        catch (WordNotValidException e)
         {
         }
     }
@@ -78,9 +77,11 @@ private:
         scope(success) m_valid = true;
         scope(failure) m_valid = false;
 
-        line = strip(line);
-        line.formattedRead!"[%s]"(m_section);
-        enforce(m_section != "", "Section name cannot be empty.");
+        auto sectionParser = new SectionWordParser();
+        line = sectionParser.parse(line);
+        (new WhitespaceParser()).parse(line);
+
+        m_section = sectionParser.section;
     }
 
     unittest
@@ -88,7 +89,7 @@ private:
         auto parser = new SectionLineParser();
         parser.line = "[foo]";
         import std.exception : assertNotThrown;
-        assertNotThrown!FormatException(parser.tryParseLine());
+        assertNotThrown!WordNotValidException(parser.tryParseLine());
         assert(parser.section == "foo");
     }
 
@@ -97,7 +98,7 @@ private:
         auto parser = new SectionLineParser();
         parser.line = "foo";
         import std.exception : assertThrown;
-        assertThrown!FormatException(parser.tryParseLine());
+        assertThrown!WordNotValidException(parser.tryParseLine());
     }
 
     string line;
