@@ -53,6 +53,7 @@ libsrc = files(
     'parser/word/package.d',
     'parser/word/section_word_parser.d',
     'parser/word/token_parser.d',
+    'parser/word/until_token_parser.d',
     'parser/word/value_parser.d',
     'parser/word/whitespace_parser.d',
     'parser/utils.d',
