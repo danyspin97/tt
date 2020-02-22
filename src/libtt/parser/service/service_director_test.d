@@ -11,7 +11,7 @@ import libtt.parser.section : SectionBuilder;
 import libtt.parser.service.service_director : ServiceDirector;
 import libtt.data : Service;
 
-class ServiceDirectorTest : ServiceDirector
+private class ServiceDirectorTest : ServiceDirector
 {
     class BuilderTest : SectionBuilder
     {
@@ -45,7 +45,7 @@ protected:
     {
         auto director = new ServiceDirectorTest();
         auto s = DList!string("", "[foo]");
-        auto linesNumber = 10;
+        auto const linesNumber = 10;
         foreach (i; 0 .. linesNumber)
         {
             s.insertBack("");
