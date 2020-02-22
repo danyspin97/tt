@@ -61,6 +61,14 @@ public:
     unittest
     {
         auto parser = new MultilineValueParser();
+        assert(parser.startParsing("foo=("));
+        assert(parser.isParsing());
+        assert(parser.key == "foo");
+    }
+
+    unittest
+    {
+        auto parser = new MultilineValueParser();
         parser.m_isParsing = true;
         assertThrown!ParserIsStillParsingException(parser.startParsing(""));
     }
@@ -156,6 +164,8 @@ private:
         line = assignmentParser.parse(line);
         line = openParenthesisParser.parse(line);
         checkLineStartsWithWhitespace(line);
+
+        m_key = keyParser.key;
 
         auto res = !tryParseLine(line);
         checkParsedValuesNotEmpty();
