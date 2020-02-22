@@ -3,27 +3,30 @@
 
 module libtt.data.oneshot_options;
 
+@safe:
+nothrow:
+
 import libtt.data.service_options : ServiceOptions;
 
 class OneshotOptions : ServiceOptions
 {
 public:
-    @property bool optional()
+    @property bool optional() const
     {
         return m_optional;
     }
 
-    @property void optional(bool optional)
+    @property void optional(in bool optional)
     {
         m_optional = optional;
     }
 
-    @property bool writeMessage()
+    @property bool writeMessage() const
     {
         return m_writeMessage;
     }
 
-    @property void writeMessage(bool writeMessage)
+    @property void writeMessage(in bool writeMessage)
     {
         m_writeMessage = writeMessage;
     }

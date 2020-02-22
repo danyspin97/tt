@@ -3,6 +3,8 @@
 
 module libtt.parser.service.system_services_parser;
 
+@safe:
+
 import libtt.dirs : dirs;
 import libtt.parser.service.services_parser : ServicesParser;
 

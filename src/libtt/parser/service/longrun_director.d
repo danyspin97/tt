@@ -3,6 +3,8 @@
 
 module libtt.parser.service.longrun_director;
 
+@safe:
+
 import libtt.parser.section : EnvironmentBuilder, LoggerScriptBuilder,
     LongrunOptionsBuilder, MainSection, MainSectionBuilder, ScriptBuilder, SectionBuilder;
 import libtt.parser.service.service_director : ServiceDirector;
@@ -11,7 +13,7 @@ import libtt.data : Environment, LoggerScript, Longrun, LongrunOptions, Script, 
 class LongrunDirector : ServiceDirector
 {
 public:
-    override Service instanceService(string path)
+    override Service instanceService(in string path)
     {
         auto service = new Longrun(mainSection.name, mainSection.polishName,
                 mainSection.description, mainSection.path, options, run,);
@@ -28,7 +30,7 @@ public:
         return service;
     }
 
-    override SectionBuilder getBuilderForSection(string section)
+    override SectionBuilder getBuilderForSection(in string section)
     {
         switch (section)
         {
@@ -45,7 +47,7 @@ public:
         case "options":
             return new LongrunOptionsBuilder(options);
         default:
-            auto msg = `Section "` ~ section ~ `" is not supported.`;
+            immutable auto msg = `Section "` ~ section ~ `" is not supported.`;
             throw new Exception(msg);
         }
     }

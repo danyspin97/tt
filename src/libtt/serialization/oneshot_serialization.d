@@ -1,5 +1,7 @@
 module libtt.serialization.oneshot_serialization;
 
+@safe:
+
 import libtt.data;
 import libtt.serialization.oneshot_options_serialization : OneshotOptionsSerialization;
 import libtt.serialization.service_serialization : ServiceSerialization;
@@ -11,13 +13,13 @@ import std.json;
 class OneshotSerialization : ServiceSerialization
 {
 public:
-    this(Oneshot service)
+    this(Oneshot service) @system
     {
         super(service);
         m_service = service;
     }
 
-    @property override JSONValue json()
+    @property override JSONValue json() @system
     {
         JSONValue j = super.json;
 

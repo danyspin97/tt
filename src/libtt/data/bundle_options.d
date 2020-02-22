@@ -3,6 +3,9 @@
 
 module libtt.data.bundle_options;
 
+@safe:
+nothrow:
+
 import libtt.data.service_options : ServiceOptions;
 
 class BundleOptions : ServiceOptions

@@ -3,6 +3,8 @@
 
 module libtt.parser.service.oneshot_director;
 
+@safe:
+
 import libtt.parser.section : EnvironmentBuilder, MainSection,
     MainSectionBuilder, OneshotOptionsBuilder, ScriptBuilder, SectionBuilder;
 import libtt.parser.service.service_director : ServiceDirector;
@@ -11,7 +13,7 @@ import libtt.data : Environment, Oneshot, OneshotOptions, Script, Service;
 class OneshotDirector : ServiceDirector
 {
 public:
-    override Service instanceService(string path)
+    override Service instanceService(in string path)
     {
         auto service = new Oneshot(mainSection.name, mainSection.polishName,
                 mainSection.description, mainSection.path, options, start,);
@@ -24,7 +26,7 @@ public:
         return service;
     }
 
-    override SectionBuilder getBuilderForSection(string section)
+    override SectionBuilder getBuilderForSection(in string section)
     {
         switch (section)
         {
@@ -39,7 +41,7 @@ public:
         case "options":
             return new OneshotOptionsBuilder(options);
         default:
-            auto msg = `Section "` ~ section ~ `" is not supported.`;
+            immutable auto msg = `Section "` ~ section ~ `" is not supported.`;
             throw new Exception(msg);
         }
     }

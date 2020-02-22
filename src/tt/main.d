@@ -1,3 +1,6 @@
+@safe:
+nothrow:
+
 void main()
 {
 }

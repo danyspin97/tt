@@ -3,13 +3,16 @@
 
 module libtt.parser.section.longrun_options_builder;
 
+@safe:
+nothrow:
+
 import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.data : LongrunOptions;
 
 class LongrunOptionsBuilder : SectionBuilder
 {
 public:
-    this(LongrunOptions longrunOptions)
+    this(in LongrunOptions longrunOptions)
     {
         this.longrunOptions = longrunOptions;
     }
@@ -25,5 +28,5 @@ public:
     }
 
 private:
-    LongrunOptions longrunOptions;
+    const LongrunOptions longrunOptions;
 }

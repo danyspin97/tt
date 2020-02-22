@@ -3,6 +3,8 @@
 
 module libtt.parser.service.service_director;
 
+@safe:
+
 import std.ascii : newline;
 import std.container : DList;
 import std.format : FormatException;
@@ -25,7 +27,7 @@ public:
     {
     }
 
-    Service parseAndGetService(ref DList!string serviceLines, string path)
+    Service parseAndGetService(ref DList!string serviceLines, in string path)
     {
         this.serviceLines = serviceLines;
         parseSections();
@@ -33,8 +35,8 @@ public:
     }
 
 protected:
-    abstract Service instanceService(string path);
-    abstract SectionBuilder getBuilderForSection(string section);
+    abstract Service instanceService(in string path);
+    abstract SectionBuilder getBuilderForSection(in string section);
 
 private:
     void parseSections()

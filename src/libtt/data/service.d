@@ -3,6 +3,9 @@
 
 module libtt.data.service;
 
+@safe:
+nothrow:
+
 import std.exception : enforce;
 import std.path : baseName, stripExtension;
 
@@ -11,22 +14,22 @@ import libtt.data.service_options : ServiceOptions;
 abstract class Service
 {
 public:
-    @property string name()
+    @property string name() const
     {
         return m_name;
     }
 
-    @property string polishName()
+    @property string polishName() const
     {
         return m_polishName;
     }
 
-    @property string description()
+    @property string description() const
     {
         return m_description;
     }
 
-    @property string path()
+    @property string path() const
     {
         return m_path;
     }
@@ -37,7 +40,8 @@ public:
     }
 
 protected:
-    this(string name, string polishName, string description, string path, ServiceOptions options)
+    this(in string name, in string polishName, in string description, in string path,
+            ServiceOptions options)
     {
         m_name = name;
         m_polishName = polishName;
@@ -49,9 +53,9 @@ protected:
     }
 
 private:
-    void validatePath()
+    void validatePath() const
     {
-        auto nameFromPath = stripExtension(baseName(path));
+        immutable auto nameFromPath = stripExtension(baseName(path));
         auto enforceMessage = "The name camp must match the name of the file";
         enforce(name == nameFromPath, enforceMessage);
     }

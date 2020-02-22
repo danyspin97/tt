@@ -1,5 +1,8 @@
 module tt.tt_boot;
 
+@safe:
+nothrow:
+
 void boot_main()
 {
 

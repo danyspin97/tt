@@ -1,5 +1,8 @@
 module libtt.serialization.service_serialization;
 
+@safe:
+nothrow:
+
 import libtt.data;
 import libtt.serialization.service_options_serialization : ServiceOptionsSerialization;
 
@@ -14,7 +17,7 @@ public:
         m_service = service;
     }
 
-    @property JSONValue json()
+    @property JSONValue json() @system
     {
         JSONValue j = ["name" : m_service.name];
         j.object["polishName"] = JSONValue(m_service.polishName);

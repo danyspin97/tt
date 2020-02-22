@@ -3,6 +3,8 @@
 
 module libtt.parser.section.script_builder;
 
+@safe:
+
 import libtt.dirs : dirs;
 import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.parser.line : KeyValueParser, MultilineCodeParser;
@@ -18,7 +20,7 @@ public:
         this.environment = environment;
     }
 
-    override void parseLine(string line)
+    override void parseLine(in string line)
     {
         if (executeParser.isParsing())
         {

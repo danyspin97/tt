@@ -1,5 +1,8 @@
 module libtt.serialization.script_serialization;
 
+@safe:
+nothrow:
+
 import libtt.data;
 
 import std.conv : to;
@@ -13,7 +16,7 @@ public:
         m_script = script;
     }
 
-    @property JSONValue json()
+    @property JSONValue json() @system
     {
         JSONValue j = ["execute" : m_script.execute];
         j.object["shebang"] = m_script.shebang;

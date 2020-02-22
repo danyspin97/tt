@@ -3,6 +3,9 @@
 
 module libtt.parser.section.bundle_options_builder;
 
+@safe:
+nothrow:
+
 import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.data : BundleOptions;
 

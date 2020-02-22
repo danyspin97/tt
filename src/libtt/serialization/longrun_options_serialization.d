@@ -1,5 +1,7 @@
 module libtt.serialization.longrun_options_serialization;
 
+@safe:
+
 import libtt.data;
 import libtt.serialization.service_options_serialization;
 
@@ -17,7 +19,7 @@ public:
         this.longrunOptions = longrunOptions;
     }
 
-    @property override JSONValue json()
+    @property override JSONValue json() @system
     {
         auto j = super.json;
         j.object["notify"] = longrunOptions.notify;

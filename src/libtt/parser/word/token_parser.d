@@ -3,13 +3,15 @@
 
 module libtt.parser.word.token_parser;
 
+@safe:
+
 import std.uni : isWhite;
 
 import libtt.exception : WordNotValidException;
 
 class TokenParser
 {
-    this(char token)
+    this(char token) nothrow
     {
         this.token = token;
     }

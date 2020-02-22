@@ -3,6 +3,8 @@
 
 module libtt.parser.word.whitespace_parser;
 
+@safe:
+
 import std.uni : isWhite;
 
 import libtt.exception : WordNotValidException;
@@ -12,7 +14,7 @@ class WhitespaceParser
     /**
      * Returns: The rest of the line.
      */
-    string parse(string line)
+    string parse(in string line) const
     {
         auto i = 0;
         while (i != line.length)

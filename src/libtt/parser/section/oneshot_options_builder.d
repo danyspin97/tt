@@ -3,6 +3,9 @@
 
 module libtt.parser.section.oneshot_options_builder;
 
+@safe:
+nothrow:
+
 import libtt.exception : BooleanParseException, BuilderException;
 import libtt.parser.section.options_builder : OptionsBuilder;
 import libtt.parser.line : MultilineValueParser;
@@ -18,7 +21,7 @@ public:
     }
 
 protected:
-    override void setParamByKey(string key, string value)
+    override void setParamByKey(in string key, in string value)
     {
         try
         {
@@ -26,7 +29,7 @@ protected:
         }
         catch (BooleanParseException e)
         {
-            auto msg = e.msg ~ ` while parsing key "` ~ key ~ `"`;
+            const auto msg = e.msg ~ ` while parsing key "` ~ key ~ `"`;
             throw new BuilderException(msg);
         }
     }
@@ -39,14 +42,14 @@ protected:
             oneshotOptions.dependencies = parser.values;
             break;
         default:
-            auto errorMessage = `Camp named "` ~ parser.key
+            const auto errorMessage = `Camp named "` ~ parser.key
                 ~ `" is not allowed in section [options]`;
             throw new Exception(errorMessage);
         }
     }
 
 private:
-    void trySetParamByKey(string key, string value)
+    void trySetParamByKey(in string key, in string value) @safe
     {
         switch (key)
         {

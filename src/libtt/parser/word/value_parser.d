@@ -3,11 +3,14 @@
 
 module libtt.parser.word.value_parser;
 
+@safe:
+nothrow:
+
 import std.uni : isWhite;
 
 class ValueParser
 {
-    @property string value()
+    @property string value() nothrow
     {
         return m_value;
     }

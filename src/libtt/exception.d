@@ -4,9 +4,12 @@
 
 module libtt.exception;
 
+@safe:
+nothrow:
+
 class BooleanParseException : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }
@@ -14,7 +17,7 @@ class BooleanParseException : Exception
 
 class BuilderException : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }
@@ -22,7 +25,7 @@ class BuilderException : Exception
 
 class CodeParserNotFinishedException : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }
@@ -30,7 +33,7 @@ class CodeParserNotFinishedException : Exception
 
 class DummyBuilderException : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }
@@ -38,7 +41,7 @@ class DummyBuilderException : Exception
 
 class EmptyValueFoundWhileParsingException : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }
@@ -46,7 +49,7 @@ class EmptyValueFoundWhileParsingException : Exception
 
 class LineNotValidWhileParsingException : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }
@@ -54,7 +57,7 @@ class LineNotValidWhileParsingException : Exception
 
 class ParserHasNotBeenInitialized : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }
@@ -62,7 +65,7 @@ class ParserHasNotBeenInitialized : Exception
 
 class ParserIsStillParsingException : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }
@@ -70,7 +73,7 @@ class ParserIsStillParsingException : Exception
 
 class ServiceNotFoundParserException : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }
@@ -78,7 +81,7 @@ class ServiceNotFoundParserException : Exception
 
 class ValueNotValidWhileParsing : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }
@@ -86,7 +89,7 @@ class ValueNotValidWhileParsing : Exception
 
 class WordNotValidException : Exception
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
     {
         super(msg, file, line);
     }

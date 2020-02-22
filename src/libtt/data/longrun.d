@@ -3,6 +3,9 @@
 
 module libtt.data.longrun;
 
+@safe:
+nothrow:
+
 import libtt.data.logger_script : LoggerScript;
 import libtt.data.longrun_options : LongrunOptions;
 import libtt.data.script : Script;
@@ -41,8 +44,8 @@ public:
         m_logger = logger;
     }
 
-    this(string name, string polishName, string description, string path,
-            ref LongrunOptions options, ref Script run,)
+    this(in string name, in string polishName, in string description, in string path,
+            ref LongrunOptions options, ref Script run)
     {
         super(name, polishName, description, path, options);
 

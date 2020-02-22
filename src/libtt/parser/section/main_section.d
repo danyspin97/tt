@@ -3,6 +3,8 @@
 
 module libtt.parser.section.main_section;
 
+@safe:
+
 // Store Service attributes contained in the main section
 struct MainSection
 {
