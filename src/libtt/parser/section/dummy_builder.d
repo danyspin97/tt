@@ -3,13 +3,16 @@
 
 module libtt.parser.section.dummy_builder;
 
+@safe:
+nothrow:
+
 import libtt.exception : DummyBuilderException;
 import libtt.parser.section.section_builder : SectionBuilder;
 
 class DummyBuilder : SectionBuilder
 {
 public:
-    void parseLine(string line)
+    void parseLine(in string line)
     {
         if (line != "")
         {

@@ -3,28 +3,30 @@
 
 module libtt.parser.line.key_value_parser;
 
+@safe:
+
 import libtt.exception : WordNotValidException;
 import libtt.parser.word : KeyParser, TokenParser, ValueParser, WhitespaceParser;
 
 class KeyValueParser
 {
 public:
-    @property string key()
+    @property string key() const
     {
         return m_key;
     }
 
-    @property string value()
+    @property string value() const
     {
         return m_value;
     }
 
-    @property bool lineValid()
+    @property bool lineValid() const
     {
         return m_valid;
     }
 
-    this(string line)
+    this(in string line)
     {
         this.line = line;
         parseLine();

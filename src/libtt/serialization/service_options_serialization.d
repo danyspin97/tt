@@ -1,5 +1,8 @@
 module libtt.serialization.service_options_serialization;
 
+@safe:
+nothrow:
+
 import libtt.data;
 
 import std.conv : to;
@@ -15,7 +18,7 @@ public:
         m_serviceOptions = serviceOptions;
     }
 
-    @property JSONValue json()
+    @property JSONValue json() @system
     {
         JSONValue j = ["dependencies" : m_serviceOptions.dependencies];
 
@@ -28,7 +31,7 @@ public:
     }
 
 protected:
-    static void add_super_properties(ref ServiceOptions serviceOptions, JSONValue j)
+    static void add_super_properties(ref ServiceOptions serviceOptions, JSONValue j) @system
     {
         auto arr = array(map!(a => a.str)(j["dependencies"].array));
         serviceOptions.dependencies(arr);

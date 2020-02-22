@@ -3,6 +3,8 @@
 
 module libtt.parser.line.multiline_code_parser;
 
+@safe:
+
 import std.regex : ctRegex, matchFirst;
 import std.string : strip;
 
@@ -11,12 +13,12 @@ import libtt.exception : CodeParserNotFinishedException;
 class MultilineCodeParser
 {
 public:
-    @property bool isParsing()
+    @property bool isParsing() const
     {
         return m_isParsing;
     }
 
-    @property string code()
+    @property string code() const
     {
         if (isParsing())
         {

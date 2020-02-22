@@ -3,6 +3,8 @@
 
 module libtt.parser.section.options_builder;
 
+@safe:
+
 import libtt.parser.line : KeyValueParser, MultilineValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.data : OneshotOptions;
@@ -10,7 +12,7 @@ import libtt.data : OneshotOptions;
 abstract class OptionsBuilder : SectionBuilder
 {
 public:
-    override void parseLine(string line)
+    override void parseLine(in string line)
     {
         if (line == "")
         {

@@ -3,6 +3,9 @@
 
 module libtt.signal;
 
+@system:
+nothrow:
+
 enum Signal
 {
     SIGHUP = 1,

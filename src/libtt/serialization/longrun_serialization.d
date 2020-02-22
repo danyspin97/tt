@@ -1,5 +1,8 @@
 module libtt.serialization.longrun_serialization;
 
+@safe:
+nothrow:
+
 import libtt.data;
 import libtt.serialization.longrun_options_serialization : LongrunOptionsSerialization;
 import libtt.serialization.service_serialization : ServiceSerialization;
@@ -17,7 +20,7 @@ public:
         m_service = service;
     }
 
-    @property override JSONValue json()
+    @property override JSONValue json() @system
     {
         JSONValue j = super.json;
 

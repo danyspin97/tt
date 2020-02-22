@@ -3,6 +3,8 @@
 
 module libtt.parser.service.parser_factory;
 
+@safe:
+
 import libtt.parser.service.bundle_director : BundleDirector;
 import libtt.parser.service.longrun_director : LongrunDirector;
 import libtt.parser.service.oneshot_director : OneshotDirector;
@@ -11,7 +13,7 @@ import libtt.parser.service.service_director : ServiceDirector;
 class ParserFactory
 {
 public:
-    static ServiceDirector getDirectorPerType(string type)
+    static ServiceDirector getDirectorPerType(in string type)
     {
         switch (type)
         {
@@ -22,7 +24,7 @@ public:
         case "oneshot":
             return new OneshotDirector();
         default:
-            auto msg = `Type "` ~ type ~ `" is not supported.`;
+            immutable auto msg = `Type "` ~ type ~ `" is not supported.`;
             throw new Exception(msg);
         }
     }

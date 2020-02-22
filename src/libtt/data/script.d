@@ -5,58 +5,60 @@ module libtt.data.script;
 
 import libtt.data.environment : Environment;
 
+@safe:
+nothrow:
+
 class Script
 {
 public:
-    @property string execute()
+    @property string execute() const
     {
         return shebang ~ m_execute;
     }
 
-    @property string shebang()
+    @property string shebang() const
     {
         return m_shebang;
     }
 
-    @property string user()
+    @property string user() const
     {
         return m_user;
     }
 
-    @property void user(string user)
+    @property void user(in string user)
     {
         m_user = user;
     }
 
-    @property string group()
+    @property string group() const
     {
         return m_group;
     }
 
-    @property void group(string group)
+    @property void group(in string group)
     {
         m_group = group;
     }
 
-    @property ref const(Environment) environment()
+    @property ref const(Environment) environment() const
     {
         return m_env;
     }
 
-    this(string execute, string shebang, Environment environment,)
+    this(in string execute, in string shebang, Environment environment)
     {
         m_execute = execute;
         m_shebang = shebang;
         m_env = environment;
     }
 
-    void prependCode(string code)
+    void prependCode(in string code)
     {
-        code ~= m_execute;
-        m_execute = code;
+        m_execute = code ~ m_execute;
     }
 
-    void appendCode(string code)
+    void appendCode(in string code)
     {
         m_execute ~= code;
     }

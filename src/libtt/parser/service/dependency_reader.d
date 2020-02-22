@@ -3,6 +3,9 @@
 
 module libtt.parser.service.dependency_reader;
 
+@safe:
+nothrow:
+
 import libtt.data : Bundle, BundleOptions, Longrun, LongrunOptions, Oneshot,
     OneshotOptions, Service;
 

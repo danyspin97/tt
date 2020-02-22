@@ -3,8 +3,11 @@
 
 module libtt.parser.section.section_builder;
 
+@safe:
+nothrow:
+
 interface SectionBuilder
 {
-    void parseLine(string line);
+    void parseLine(in string line);
     void endParsing();
 }

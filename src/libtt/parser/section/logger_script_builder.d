@@ -3,6 +3,8 @@
 
 module libtt.parser.section.logger_script_builder;
 
+@safe:
+
 import libtt.parser.section.script_builder : ScriptBuilder;
 import libtt.data : Environment, LoggerScript;
 
@@ -39,7 +41,7 @@ public:
         }
     }
 
-    override string* getParamByKey(string key)
+    override string* getParamByKey(in string key)
     {
         switch (key)
         {

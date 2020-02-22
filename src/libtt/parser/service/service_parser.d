@@ -3,6 +3,8 @@
 
 module libtt.parser.service.service_parser;
 
+@safe:
+
 import std.container : DList;
 import std.range : drop;
 import std.stdio : File;
@@ -14,12 +16,12 @@ import libtt.data : Service;
 class ServiceParser
 {
 public:
-    @property Service service()
+    @property Service service() nothrow
     {
         return m_service;
     }
 
-    this(string path)
+    this(in string path) @system
     {
         this.path = path;
         auto file = openFile(path);
@@ -29,7 +31,7 @@ public:
         m_service = director.parseAndGetService(serviceLines, path);
     }
 
-    unittest
+    @system unittest
     {
         import std.exception : assertThrown;
 
@@ -37,7 +39,7 @@ public:
     }
 
 protected:
-    DList!string generateListFrom(File file)
+    DList!string generateListFrom(File file) @system
     {
         auto list = DList!string();
         foreach (line; file.byLine())
@@ -48,7 +50,7 @@ protected:
     }
 
 private:
-    File openFile(string path)
+    File openFile(in string path)
     {
         return File(path, "r");
     }

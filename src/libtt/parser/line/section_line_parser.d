@@ -3,23 +3,25 @@
 
 module libtt.parser.line.section_line_parser;
 
+@safe:
+
 import libtt.exception : WordNotValidException;
 import libtt.parser.word : SectionWordParser, WhitespaceParser;
 
 class SectionLineParser
 {
 public:
-    @property string section()
+    @property string section() const
     {
         return m_section;
     }
 
-    @property bool lineValid()
+    @property bool lineValid() const
     {
         return m_valid;
     }
 
-    this(string line)
+    this(in string line)
     {
         this.line = line;
         parseLine();
@@ -37,7 +39,7 @@ public:
         assert(!parser.lineValid);
     }
 
-    string getSectionOrDefault(string _default)
+    string getSectionOrDefault(in string _default) const
     {
         if (lineValid())
         {

@@ -3,6 +3,8 @@
 
 module libtt.parser.line.multiline_value_parser;
 
+@safe:
+
 import std.algorithm : each, endsWith, filter, startsWith;
 import std.array : split;
 import std.exception : assertNotThrown, assertThrown;
@@ -18,12 +20,12 @@ import libtt.exception : EmptyValueFoundWhileParsingException, WordNotValidExcep
 class MultilineValueParser
 {
 public:
-    @property bool isParsing()
+    @property bool isParsing() const
     {
         return m_isParsing;
     }
 
-    @property string key()
+    @property string key() const
     {
         return m_key;
     }
@@ -38,7 +40,7 @@ public:
 
     }
 
-    bool startParsing(string line)
+    bool startParsing(in string line)
     {
         if (isParsing())
         {
@@ -94,7 +96,7 @@ public:
         }
     }
 
-    void parseLine(string line)
+    void parseLine(in string line)
     {
         if (!isParsing())
         {
@@ -160,7 +162,7 @@ private:
         return res;
     }
 
-    bool tryParseLine(string line)
+    bool tryParseLine(in string line)
     {
         try
         {
@@ -174,7 +176,7 @@ private:
         return true;
     }
 
-    void tryParseValuesInLine(string line)
+    void tryParseValuesInLine(in string line)
     {
         scope (failure)
             addValuesFromLine(line);
@@ -184,13 +186,13 @@ private:
             m_isParsing = false;
 
         auto endingParenthesisParser = new UntilTokenParser(')');
-        line = endingParenthesisParser.parseUntilToken(line);
+        endingParenthesisParser.parseUntilToken(line);
         auto parsedLine = endingParenthesisParser.parsedLine;
         checkLineEndsWithWhitespace(parsedLine);
         addValuesFromLine(parsedLine);
     }
 
-    static void checkLineStartsWithWhitespace(string line)
+    static void checkLineStartsWithWhitespace(in string line)
     {
         // A space is needed before the parenthesis
         if (line.length != 0 && !line[0].isWhite())
@@ -209,7 +211,7 @@ private:
         assertThrown!LineNotValidWhileParsingException(checkLineStartsWithWhitespace("foo"));
     }
 
-    static void checkLineEndsWithWhitespace(string line)
+    static void checkLineEndsWithWhitespace(in string line)
     {
         // A space is needed after the parenthesis
         if (line.length == 0 || !line[$ - 1].isWhite())
@@ -228,7 +230,7 @@ private:
         assertNotThrown!LineNotValidWhileParsingException(checkLineStartsWithWhitespace("        "));
     }
 
-    void addValuesFromLine(string line)
+    void addValuesFromLine(in string line)
     {
         line.split!isWhite
             .filter!(s => s != "")

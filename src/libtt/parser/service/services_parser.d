@@ -3,6 +3,8 @@
 
 module libtt.parser.service.services_parser;
 
+@safe:
+
 import std.algorithm : each;
 import std.array : join, split;
 import std.file : dirEntries, exists, isFile, SpanMode;
@@ -27,7 +29,7 @@ public:
         return services;
     }
 
-    void parseServices(string[] serviceNames)
+    void parseServices(string[] serviceNames) @system
     {
         foreach (name; serviceNames)
         {
@@ -41,7 +43,7 @@ public:
     }
 
 private:
-    void parseService(string serviceName)
+    void parseService(string serviceName) @system
     {
         if (serviceName in serviceSet)
         {
@@ -62,7 +64,7 @@ private:
         serviceSet[serviceName] = new ServiceParser(path).service;
     }
 
-    void parseDependenciesOfService(string name, Service service)
+    void parseDependenciesOfService(string name, Service service) @system
     {
         auto const deps = DependencyReader.getDependenciesForService(service);
         try
@@ -76,7 +78,7 @@ private:
         }
     }
 
-    bool isInstancedService(string serviceName)
+    bool isInstancedService(in string serviceName)
     {
         auto regex = ctRegex!r"[\w-]+@[\w-]+";
         if (matchFirst(serviceName, regex))
@@ -93,7 +95,7 @@ private:
         instance = splitted[1];
     }
 
-    string getPathForServiceName(string name)
+    string getPathForServiceName(in string name)
     {
         foreach_reverse (dirPath; paths)
         {

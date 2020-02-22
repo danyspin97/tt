@@ -6,41 +6,44 @@ module libtt.data.logger_script;
 import libtt.data.environment : Environment;
 import libtt.data.script : Script;
 
+@safe:
+nothrow:
+
 class LoggerScript : Script
 {
 public:
-    @property string destination()
+    @property string destination() const
     {
         return m_destination;
     }
 
-    @property void destination(string destination)
+    @property void destination(in string destination)
     {
         m_destination = destination;
     }
 
-    @property uint maxsize()
+    @property uint maxsize() const
     {
         return m_maxsize;
     }
 
-    @property void maxsize(uint maxsize)
+    @property void maxsize(in uint maxsize)
     {
         m_maxsize = maxsize;
     }
 
-    this(string execute, string shebang, Environment environment)
+    this(in string execute, in string shebang, Environment environment)
     {
         super(execute, shebang, environment);
     }
 
-    this(string shebang, Environment environment)
+    this(in string shebang, Environment environment)
     {
         super(defaultExecute, shebang, environment);
     }
 
 private:
-    string defaultExecute()
+    string defaultExecute() const
     {
         // TODO add default logger script
         return "";

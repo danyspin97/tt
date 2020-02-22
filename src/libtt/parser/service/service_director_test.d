@@ -3,6 +3,8 @@
 
 module libtt.parser.service.service_director_test;
 
+@safe:
+
 import std.container : DList;
 
 import libtt.parser.section : SectionBuilder;
@@ -13,7 +15,7 @@ class ServiceDirectorTest : ServiceDirector
 {
     class BuilderTest : SectionBuilder
     {
-        void parseLine(string line)
+        void parseLine(in string line)
         {
             timesParsed++;
         }
@@ -28,12 +30,12 @@ class ServiceDirectorTest : ServiceDirector
     }
 
 protected:
-    override Service instanceService(string path)
+    override Service instanceService(in string path)
     {
         return null;
     }
 
-    override SectionBuilder getBuilderForSection(string section)
+    override SectionBuilder getBuilderForSection(in string section)
     {
         builder = new BuilderTest();
         return builder;

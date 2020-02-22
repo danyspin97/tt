@@ -3,6 +3,9 @@
 
 module libtt.parser.word.key_parser;
 
+@safe:
+nothrow:
+
 import std.uni : isWhite;
 
 class KeyParser

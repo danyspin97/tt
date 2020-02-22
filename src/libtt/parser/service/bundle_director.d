@@ -3,6 +3,8 @@
 
 module libtt.parser.service.bundle_director;
 
+@safe:
+
 import libtt.parser.section : BundleOptionsBuilder, MainSection,
     MainSectionBuilder, SectionBuilder;
 import libtt.parser.service.service_director : ServiceDirector;
@@ -11,13 +13,13 @@ import libtt.data : Bundle, BundleOptions, Service;
 class BundleDirector : ServiceDirector
 {
 public:
-    override Service instanceService(string path)
+    override Service instanceService(in string path)
     {
         return new Bundle(mainSection.name, mainSection.polishName,
                 mainSection.description, mainSection.path, options);
     }
 
-    override SectionBuilder getBuilderForSection(string section)
+    override SectionBuilder getBuilderForSection(in string section)
     {
         switch (section)
         {
@@ -26,7 +28,7 @@ public:
         case "options":
             return new BundleOptionsBuilder(options);
         default:
-            auto msg = `Section "` ~ section ~ `" is not supported.`;
+            immutable auto msg = `Section "` ~ section ~ `" is not supported.`;
             throw new Exception(msg);
         }
     }

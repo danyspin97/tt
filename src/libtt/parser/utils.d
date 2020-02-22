@@ -3,9 +3,11 @@
 
 module libtt.parser.utils;
 
+@safe:
+
 import libtt.exception : BooleanParseException;
 
-void setFailsIfNotEmpty(string* param, string newValue)
+void setFailsIfNotEmpty(string* param, in string newValue)
 {
     if (*param != "")
     {
@@ -15,7 +17,7 @@ void setFailsIfNotEmpty(string* param, string newValue)
     *param = newValue;
 }
 
-unittest
+@system unittest
 {
     auto mystring = "oldValue";
     string* param = &mystring;
@@ -24,7 +26,7 @@ unittest
     assertThrown!Exception(setFailsIfNotEmpty(param, "newValue"));
 }
 
-unittest
+@system unittest
 {
     string mystring;
     string* param = &mystring;
@@ -33,7 +35,7 @@ unittest
     assert(*param == newValue);
 }
 
-bool parseBoolean(string value)
+bool parseBoolean(in string value)
 {
     if (value == "yes")
     {

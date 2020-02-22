@@ -3,6 +3,9 @@
 
 module libtt.data.oneshot;
 
+@safe:
+nothrow:
+
 import libtt.data.environment : Environment;
 import libtt.data.oneshot_options : OneshotOptions;
 import libtt.data.script : Script;
@@ -26,7 +29,7 @@ public:
         m_stop = stop;
     }
 
-    this(string name, string polishName, string description, string path,
+    this(in string name, in string polishName, in string description, in string path,
             ref OneshotOptions options, ref Script start)
     {
         super(name, polishName, description, path, options);

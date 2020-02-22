@@ -5,6 +5,9 @@ module libtt.data.service_options;
 
 import libtt.data.service : Service;
 
+@safe:
+nothrow:
+
 abstract class ServiceOptions
 {
 public:

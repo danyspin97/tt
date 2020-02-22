@@ -3,6 +3,9 @@
 
 module libtt.data.longrun_options;
 
+@safe:
+nothrow:
+
 import std.exception : enforce;
 
 import libtt.data.service_options : ServiceOptions;
@@ -11,27 +14,27 @@ import libtt.signal : Signal;
 class LongrunOptions : ServiceOptions
 {
 public:
-    @property uint notify()
+    @property uint notify() const
     {
         return m_notify;
     }
 
-    @property void notify(uint notify)
+    @property void notify(in uint notify)
     {
         m_notify = notify;
     }
 
-    @property uint timeoutFinish()
+    @property uint timeoutFinish() const
     {
         return m_timeoutFinish;
     }
 
-    @property void timeoutFinish(uint timeoutFinish)
+    @property void timeoutFinish(in uint timeoutFinish)
     {
         m_timeoutFinish = timeoutFinish;
     }
 
-    @property uint timeoutKill()
+    @property uint timeoutKill() const
     {
         return m_timeoutKill;
     }
@@ -51,34 +54,34 @@ public:
         m_downSignal = downSignal;
     }
 
-    @property ushort maxDeath()
+    @property ushort maxDeath() const
     {
         return m_maxDeath;
     }
 
-    @property void maxDeath(ushort maxDeath)
+    @property void maxDeath(in ushort maxDeath)
     {
-        auto msg = "max_death property cannot be greater than 4096";
+        immutable auto msg = "max_death property cannot be greater than 4096";
         enforce(maxDeath < 4096, msg);
         m_maxDeath = maxDeath;
     }
 
-    @property bool writeMessage()
+    @property bool writeMessage() const
     {
         return m_writeMessage;
     }
 
-    @property void writeMessage(bool writeMessage)
+    @property void writeMessage(in bool writeMessage)
     {
         m_writeMessage = writeMessage;
     }
 
-    @property bool optional()
+    @property bool optional() const
     {
         return m_optional;
     }
 
-    @property void optional(bool optional)
+    @property void optional(in bool optional)
     {
         m_optional = optional;
     }

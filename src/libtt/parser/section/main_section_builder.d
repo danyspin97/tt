@@ -3,6 +3,8 @@
 
 module libtt.parser.section.main_section_builder;
 
+@safe:
+
 import libtt.parser.line : KeyValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.parser.section.main_section : MainSection;
@@ -15,7 +17,7 @@ public:
         this.mainSection = mainSection;
     }
 
-    override void parseLine(string line)
+    override void parseLine(in string line)
     {
         if (line == "")
         {
@@ -35,7 +37,7 @@ public:
         fillServiceDataWith(key, value);
     }
 
-    void fillServiceDataWith(string key, string value)
+    void fillServiceDataWith(in string key, in string value)
     {
         switch (key)
         {

@@ -1,5 +1,8 @@
 module libtt.dirs;
 
+@safe:
+nothrow:
+
 enum Version = "@version@";
 
 struct Dirs

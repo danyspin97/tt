@@ -3,6 +3,9 @@
 
 module libtt.parser.section.environment_builder;
 
+@safe:
+nothrow:
+
 import std.regex : ctRegex, matchAll;
 
 import libtt.parser.section.section_builder : SectionBuilder;
@@ -16,7 +19,7 @@ public:
         this.environment = environment;
     }
 
-    override void parseLine(string line)
+    override void parseLine(in string line)
     {
         // Use a specialized regex instead of using KeyValueParser
         // The latter can parse values without quotes, and this shouldn't be

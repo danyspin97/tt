@@ -3,6 +3,8 @@
 
 module libtt.parser.service.instance_service_parser;
 
+@safe:
+
 import std.container : DList;
 import std.stdio : File;
 import std.string : tr;
@@ -14,14 +16,14 @@ enum InstanceToken = "@I";
 class InstanceServiceParser : ServiceParser
 {
 public:
-    this(string path, string instanceName)
+    this(in string path, in string instanceName) @system
     {
         this.instanceName = instanceName;
         super(path);
     }
 
 protected:
-    override DList!string generateListFrom(File file)
+    override DList!string generateListFrom(File file) @system
     {
         auto list = DList!string();
         foreach (line; file.byLine())

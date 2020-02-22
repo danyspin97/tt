@@ -3,18 +3,20 @@
 
 module libtt.parser.word.until_token_parser;
 
+@safe:
+
 import std.uni : isWhite;
 
 import libtt.exception : WordNotValidException;
 
 class UntilTokenParser
 {
-    @property string parsedLine()
+    @property string parsedLine() nothrow
     {
         return value;
     }
 
-    this(char token)
+    this(char token) nothrow
     {
         this.token = token;
     }

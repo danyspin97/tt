@@ -3,13 +3,15 @@
 
 module libtt.parser.word.section_word_parser;
 
+@safe:
+
 import std.uni : isWhite;
 
 import libtt.exception : WordNotValidException;
 
 class SectionWordParser
 {
-    @property string section()
+    @property string section() const nothrow
     {
         return m_section;
     }
@@ -17,7 +19,7 @@ class SectionWordParser
     /**
      * Returns: The rest of the line.
      */
-    string parse(string line)
+    string parse(in string line)
     {
         auto start = -1, end = -1;
         bool bracketsOpened = false;
