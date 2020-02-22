@@ -5,10 +5,10 @@ module libtt.parser.line.multiline_code_parser;
 
 @safe:
 
-import std.regex : ctRegex, matchFirst;
 import std.string : strip;
 
-import libtt.exception : CodeParserNotFinishedException;
+import libtt.exception : CodeParserNotFinishedException, WordNotValidException;
+import libtt.parser.word : KeyParser, TokenParser, WhitespaceParser;
 
 class MultilineCodeParser
 {
@@ -56,14 +56,17 @@ public:
         {
             throw new CodeParserNotFinishedException("");
         }
-        auto regex = ctRegex!r"^ *execute ?= ?\( *$";
-        if (matchFirst(line, regex))
+
+        try
         {
-            m_isParsing = true;
-            return true;
+            tryStartParsing(line);
+        }
+        catch (WordNotValidException e)
+        {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     unittest
@@ -115,7 +118,7 @@ public:
         assertThrown!CodeParserNotFinishedException(parser.startParsing(token));
     }
 
-    void parseLine(string line)
+    void parseLine(string line) nothrow
     {
         if (strip(line) == ")")
         {
@@ -145,6 +148,20 @@ public:
     }
 
 private:
+    void tryStartParsing(string line)
+    {
+        scope(success) m_isParsing = true;
+        scope(failure) m_isParsing = false;
+
+        auto keyParser = new KeyParser();
+        auto assignmentParser = new TokenParser('=');
+        auto openParenthesisParser = new TokenParser('(');
+        line = keyParser.parse(line);
+        line = assignmentParser.parse(line);
+        line = openParenthesisParser.parse(line);
+        (new WhitespaceParser()).parse(line);
+    }
+
     string m_code;
     bool m_isParsing = false;
 }
