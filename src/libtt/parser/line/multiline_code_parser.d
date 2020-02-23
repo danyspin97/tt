@@ -52,7 +52,7 @@ public:
 
     bool startParsing(string line)
     {
-        if (isParsing() || m_code != "")
+        if (isParsing())
         {
             throw new CodeParserNotFinishedException("");
         }
@@ -97,25 +97,27 @@ public:
         auto code = "foo";
         parser.parseLine(code);
         assert(parser.m_code == code);
-
-        // End parsing
-        parser.parseLine(")");
-        assert(parser.m_code == code);
+        assert(parser.isParsing());
 
         // Start parsing again
         import std.exception : assertThrown;
 
         assertThrown!CodeParserNotFinishedException(parser.startParsing(token));
+
+        // End parsing
+        parser.parseLine(")");
+        assert(parser.m_code == code);
+        assert(!parser.isParsing());
     }
 
     unittest
     {
         auto parser = new MultilineCodeParser();
-        auto token = "execute=(";
+        parser.m_isParsing = true;
         parser.m_code = "foo";
         import std.exception : assertThrown;
 
-        assertThrown!CodeParserNotFinishedException(parser.startParsing(token));
+        assertThrown!CodeParserNotFinishedException(parser.code);
     }
 
     void parseLine(string line) nothrow
