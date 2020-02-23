@@ -1,6 +1,7 @@
 test_files = [
     'mainSection',
-    'noSection'
+    'noSection',
+    'script_section'
 ]
 
 foreach file : test_files

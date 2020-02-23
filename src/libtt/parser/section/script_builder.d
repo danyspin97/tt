@@ -20,6 +20,23 @@ public:
         this.environment = environment;
     }
 
+    @system unittest
+    {
+        Script s;
+        Environment e = new Environment();
+        auto builder = new ScriptBuilder(s, e);
+        import std.stdio : File;
+
+        auto file = File("src/libtt/test/script_section", "r");
+
+        auto range = file.byLineCopy();
+        foreach (line; range)
+        {
+            builder.parseLine(line);
+        }
+        builder.endParsing();
+    }
+
     override void parseLine(in string line)
     {
         if (executeParser.isParsing())
@@ -38,6 +55,11 @@ public:
             return;
         }
 
+        if (executeParser.startParsing(line))
+        {
+            return;
+        }
+
         string key, value;
         auto keyValueParser = new KeyValueParser(line);
         if (keyValueParser.lineValid())
@@ -46,11 +68,6 @@ public:
             value = keyValueParser.value;
             auto param = getParamByKey(key);
             setFailsIfNotEmpty(param, value);
-            return;
-        }
-
-        if (executeParser.startParsing(line))
-        {
             return;
         }
 
@@ -182,21 +199,21 @@ protected:
             assert(expectedShebang == builder.shebang, msg);
         }
     }
-    
+
     unittest
     {
         auto builder = new ScriptBuilder();
         builder.type = "";
         import std.exception : assertThrown;
+
         assertThrown!Exception(builder.setShebangPerType());
     }
-
 
     Script script;
     Environment environment;
     MultilineCodeParser executeParser = new MultilineCodeParser();
 
-    string type = "auto";
+    string type;
     string shebang;
     string user;
     string group;
