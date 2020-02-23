@@ -19,7 +19,7 @@ public:
 
     override void endParsing()
     {
-        setShebangPerType(type);
+        setShebangPerType();
 
         if (execute == "")
         {

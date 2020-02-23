@@ -64,7 +64,7 @@ public:
             // TODO: should this be caught by a ServiceDirector class?
             throw new Exception("");
         }
-        setShebangPerType(type);
+        setShebangPerType();
 
         script = new Script(execute, shebang, environment);
 
@@ -115,10 +115,11 @@ protected:
         assert(builder.type == "longrun");
     }
 
-    void setShebangPerType(string type)
+    void setShebangPerType()
     {
         switch (type)
         {
+            // TODO: add "path" type
         case "auto":
             goto case;
         case "execline":
@@ -134,6 +135,38 @@ protected:
             throw new Exception(errorMessage);
         }
     }
+
+    unittest
+    {
+        dirs.bin = "/usr/bin/";
+        dirs.execlinePrefix = dirs.bin;
+
+        auto types = ["auto", "execline", "bash"];
+        string[string] executablePerType;
+        executablePerType["execline"] = "execlineb";
+        executablePerType["auto"] = executablePerType["execline"];
+        executablePerType["bash"] = "bash";
+        foreach (type; types)
+        {
+            auto builder = new ScriptBuilder();
+            builder.type = type;
+            builder.setShebangPerType();
+
+            auto expectedShebang = "#!" ~ dirs.bin ~ executablePerType[type];
+            auto msg = "`" ~ expectedShebang ~ "` was expected but instead `"
+                ~ builder.shebang ~ "` was found";
+            assert(expectedShebang == builder.shebang, msg);
+        }
+    }
+    
+    unittest
+    {
+        auto builder = new ScriptBuilder();
+        builder.type = "";
+        import std.exception : assertThrown;
+        assertThrown!Exception(builder.setShebangPerType());
+    }
+
 
     Script script;
     Environment environment;
