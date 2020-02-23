@@ -79,6 +79,14 @@ public:
         }
     }
 
+    unittest
+    {
+        auto builder = new ScriptBuilder();
+        import std.exception : assertThrown;
+
+        assertThrown!Exception(builder.endParsing());
+    }
+
 protected:
     // Only used for unittest
     this()
@@ -113,6 +121,22 @@ protected:
         assert(*param == "oneshot");
         *param = "longrun";
         assert(builder.type == "longrun");
+        builder.execute = "echo $MYCODE";
+        assert(*builder.getParamByKey("execute") == builder.execute);
+        builder.group = "nginx";
+        assert(*builder.getParamByKey("group") == builder.group);
+        builder.shebang = "!#/usr/bin/bash";
+        assert(*builder.getParamByKey("shebang") == builder.shebang);
+        builder.user = "nginx";
+        assert(*builder.getParamByKey("user") == builder.user);
+    }
+
+    unittest
+    {
+        auto builder = new ScriptBuilder();
+        import std.exception : assertThrown;
+
+        assertThrown!Exception(builder.getParamByKey("foo"));
     }
 
     void setShebangPerType()
