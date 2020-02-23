@@ -150,8 +150,10 @@ public:
 private:
     void tryStartParsing(string line)
     {
-        scope(success) m_isParsing = true;
-        scope(failure) m_isParsing = false;
+        scope (success)
+            m_isParsing = true;
+        scope (failure)
+            m_isParsing = false;
 
         auto keyParser = new KeyParser();
         auto assignmentParser = new TokenParser('=');
