@@ -14,7 +14,7 @@ import libtt.data : Environment, Script;
 class ScriptBuilder : SectionBuilder
 {
 public:
-    this(ref Script script, ref Environment environment)
+    this(Script* script, ref Environment environment)
     {
         this.script = script;
         this.environment = environment;
@@ -24,7 +24,7 @@ public:
     {
         Script s;
         Environment e = new Environment();
-        auto builder = new ScriptBuilder(s, e);
+        auto builder = new ScriptBuilder(&s, e);
         import std.stdio : File;
 
         auto file = File("src/libtt/test/script_section", "r");
@@ -35,6 +35,9 @@ public:
             builder.parseLine(line);
         }
         builder.endParsing();
+
+        assert(s.user == "dbus");
+        assert(s.group == "dbus");
     }
 
     override void parseLine(in string line)
@@ -83,7 +86,7 @@ public:
         }
         setShebangPerType();
 
-        script = new Script(execute, shebang, environment);
+        *script = new Script(execute, shebang, environment);
 
         if (user != "")
         {
@@ -209,7 +212,7 @@ protected:
         assertThrown!Exception(builder.setShebangPerType());
     }
 
-    Script script;
+    Script* script;
     Environment environment;
     MultilineCodeParser executeParser = new MultilineCodeParser();
 

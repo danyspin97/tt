@@ -33,9 +33,9 @@ public:
         case "main":
             return new MainSectionBuilder(mainSection);
         case "start":
-            return new ScriptBuilder(start, environment);
+            return new ScriptBuilder(&start, environment);
         case "stop":
-            return new ScriptBuilder(stop, environment);
+            return new ScriptBuilder(&stop, environment);
         case "config":
             return new EnvironmentBuilder(environment);
         case "options":

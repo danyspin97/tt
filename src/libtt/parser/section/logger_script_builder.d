@@ -11,7 +11,7 @@ import libtt.data : Environment, LoggerScript;
 class LoggerScriptBuilder : ScriptBuilder
 {
 public:
-    this(LoggerScript loggerScript, ref Environment environment)
+    this(LoggerScript* loggerScript, ref Environment environment)
     {
         this.loggerScript = loggerScript;
         this.environment = environment;
@@ -23,11 +23,11 @@ public:
 
         if (execute == "")
         {
-            script = new LoggerScript(shebang, environment);
+            *script = new LoggerScript(shebang, environment);
         }
         else
         {
-            script = new LoggerScript(executeParser.code, shebang, environment);
+            *script = new LoggerScript(executeParser.code, shebang, environment);
         }
 
         if (user != "")
@@ -55,7 +55,7 @@ public:
     }
 
 private:
-    LoggerScript loggerScript;
+    LoggerScript* loggerScript;
 
     string destination;
     string maxsize;

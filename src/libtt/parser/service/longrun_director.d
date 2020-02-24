@@ -37,11 +37,11 @@ public:
         case "main":
             return new MainSectionBuilder(mainSection);
         case "run":
-            return new ScriptBuilder(run, environment);
+            return new ScriptBuilder(&run, environment);
         case "finish":
-            return new ScriptBuilder(finish, environment);
+            return new ScriptBuilder(&finish, environment);
         case "logger":
-            return new LoggerScriptBuilder(logger, environment);
+            return new LoggerScriptBuilder(&logger, environment);
         case "config":
             return new EnvironmentBuilder(environment);
         case "options":
