@@ -40,6 +40,14 @@ public:
         assert(s.group == "dbus");
     }
 
+    unittest
+    {
+        auto builder = new ScriptBuilder();
+        import std.exception : assertThrown;
+
+        assertThrown!Exception(builder.parseLine("invalid"));
+    }
+
     override void parseLine(in string line)
     {
         if (executeParser.isParsing())
