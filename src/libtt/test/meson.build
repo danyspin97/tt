@@ -1,6 +1,6 @@
 test_files = [
-    'mainSection',
-    'noSection',
+    'invalid',
+    'main_section',
     'script_section'
 ]
 
