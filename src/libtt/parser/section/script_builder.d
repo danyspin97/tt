@@ -26,16 +26,7 @@ public:
         Script s;
         Environment e = new Environment();
         auto builder = new ScriptBuilder(&s, e);
-        import std.stdio : File;
-
-        auto file = File("src/libtt/test/script_section", "r");
-
-        auto range = file.byLineCopy();
-        foreach (line; range)
-        {
-            builder.parseLine(line);
-        }
-        builder.endParsing();
+        testBuilderWithFile(builder, "src/libtt/test/script_section");
 
         assert(s.user == "dbus");
         assert(s.group == "dbus");
