@@ -26,6 +26,7 @@ libsrc = files(
     'parser/line/package.d',
     'parser/line/section_line_parser.d',
     'parser/section/bundle_options_builder.d',
+    'parser/section/code_section_builder.d',
     'parser/section/dummy_builder.d',
     'parser/section/environment_builder.d',
     'parser/section/logger_script_builder.d',
