@@ -41,7 +41,7 @@ public:
         }
     }
 
-    override string* getParamByKey(in string key)
+    override string* getAttributeForKey(in string key)
     {
         switch (key)
         {
@@ -50,7 +50,7 @@ public:
         case "maxsize":
             return &maxsize;
         default:
-            return super.getParamByKey(key);
+            return super.getAttributeForKey(key);
         }
     }
 

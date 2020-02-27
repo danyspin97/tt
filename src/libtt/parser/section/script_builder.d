@@ -7,11 +7,12 @@ module libtt.parser.section.script_builder;
 
 import libtt.dirs : dirs;
 import libtt.parser.section.section_builder : SectionBuilder;
+import libtt.parser.section.code_section_builder : CodeSectionBuilder;
 import libtt.parser.line : KeyValueParser, MultilineCodeParser;
 import libtt.parser.utils : setFailsIfNotEmpty;
 import libtt.data : Environment, Script;
 
-class ScriptBuilder : SectionBuilder
+class ScriptBuilder : CodeSectionBuilder
 {
 public:
     this(Script* script, ref Environment environment)
@@ -48,44 +49,8 @@ public:
         assertThrown!Exception(builder.parseLine("invalid"));
     }
 
-    override void parseLine(in string line)
-    {
-        if (executeParser.isParsing())
-        {
-            // Continue parsing execute parameter
-            executeParser.parseLine(line);
-            if (!executeParser.isParsing())
-            {
-                setFailsIfNotEmpty(&execute, executeParser.code);
-            }
-            return;
-        }
 
-        if (line == "")
-        {
-            return;
-        }
-
-        if (executeParser.startParsing(line))
-        {
-            return;
-        }
-
-        string key, value;
-        auto keyValueParser = new KeyValueParser(line);
-        if (keyValueParser.lineValid())
-        {
-            key = keyValueParser.key;
-            value = keyValueParser.value;
-            auto param = getParamByKey(key);
-            setFailsIfNotEmpty(param, value);
-            return;
-        }
-
-        throw new Exception(`Line "` ~ line ~ `" is not valid`);
-    }
-
-    override void endParsing()
+    void endParsing()
     {
         if (execute == "")
         {
@@ -121,7 +86,7 @@ protected:
     {
     }
 
-    string* getParamByKey(string key)
+    override string* getAttributeForKey(string key)
     {
         switch (key)
         {
@@ -145,18 +110,18 @@ protected:
     {
         auto builder = new ScriptBuilder();
         builder.type = "oneshot";
-        auto param = builder.getParamByKey("build");
+        auto param = builder.getAttributeForKey("build");
         assert(*param == "oneshot");
         *param = "longrun";
         assert(builder.type == "longrun");
         builder.execute = "echo $MYCODE";
-        assert(*builder.getParamByKey("execute") == builder.execute);
+        assert(*builder.getAttributeForKey("execute") == builder.execute);
         builder.group = "nginx";
-        assert(*builder.getParamByKey("group") == builder.group);
+        assert(*builder.getAttributeForKey("group") == builder.group);
         builder.shebang = "!#/usr/bin/bash";
-        assert(*builder.getParamByKey("shebang") == builder.shebang);
+        assert(*builder.getAttributeForKey("shebang") == builder.shebang);
         builder.user = "nginx";
-        assert(*builder.getParamByKey("user") == builder.user);
+        assert(*builder.getAttributeForKey("user") == builder.user);
     }
 
     unittest
@@ -164,8 +129,36 @@ protected:
         auto builder = new ScriptBuilder();
         import std.exception : assertThrown;
 
-        assertThrown!Exception(builder.getParamByKey("foo"));
+        assertThrown!Exception(builder.getAttributeForKey("foo"));
     }
+
+    override string* getCodeAttributeForKey(string key)
+    {
+        switch (key)
+        {
+        case "execute":
+            return &execute;
+        default:
+            auto errorMessage = `Camp named "` ~ key ~ `" is not allowed.`;
+            throw new Exception(errorMessage);
+        }
+    }
+
+    unittest
+    {
+        auto builder = new ScriptBuilder();
+        builder.execute = "echo";
+        assert(*builder.getCodeAttributeForKey("execute") == builder.execute);
+    }
+
+    unittest
+    {
+        auto builder = new ScriptBuilder();
+        import std.exception : assertThrown;
+
+        assertThrown!Exception(builder.getCodeAttributeForKey("foo"));
+    }
+
 
     void setShebangPerType()
     {
