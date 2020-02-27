@@ -28,6 +28,11 @@ public:
         return m_code;
     }
 
+    @property string key() const
+    {
+        return m_key;
+    }
+
     unittest
     {
         auto parser = new MultilineCodeParser();
@@ -92,6 +97,7 @@ public:
         auto token = "execute = (";
         assert(parser.startParsing(token));
         assert(parser.isParsing());
+        assert(parser.key == "execute");
 
         // Continue parsing
         auto code = "foo";
@@ -164,8 +170,11 @@ private:
         line = assignmentParser.parse(line);
         line = openParenthesisParser.parse(line);
         (new WhitespaceParser()).parse(line);
+
+        m_key = keyParser.key;
     }
 
     string m_code;
+    string m_key;
     bool m_isParsing = false;
 }
