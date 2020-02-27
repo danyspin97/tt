@@ -7,7 +7,6 @@ module libtt.parser.section.options_builder;
 
 import libtt.parser.line : KeyValueParser, MultilineValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.data : OneshotOptions;
 
 abstract class OptionsBuilder : SectionBuilder
 {
@@ -22,11 +21,7 @@ public:
         if (valuesParser.isParsing())
         {
             valuesParser.parseLine(line);
-            if (!valuesParser.isParsing())
-            {
-                saveValuesOfParser(valuesParser);
-                valuesParser.reset();
-            }
+            checkParserHasFinished();
             return;
         }
 
@@ -42,11 +37,7 @@ public:
 
         if (valuesParser.startParsing(line))
         {
-            if (!valuesParser.isParsing())
-            {
-                saveValuesOfParser(valuesParser);
-                valuesParser.reset();
-            }
+            checkParserHasFinished();
             return;
         }
 
@@ -59,6 +50,16 @@ public:
         {
             // TODO: should this be caught by a ServiceDirector class?
             throw new Exception("");
+        }
+    }
+
+private:
+    void checkParserHasFinished()
+    {
+        if (!valuesParser.isParsing())
+        {
+            saveValuesOfParser(valuesParser);
+            valuesParser.reset();
         }
     }
 
