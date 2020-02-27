@@ -54,7 +54,22 @@ public:
         }
     }
 
+    unittest
+    {
+        auto builder = new LoggerScriptBuilder();
+        builder.destination = "/var/log/newdestination";
+        assert(*builder.getAttributeForKey("destination") == builder.destination);
+        builder.maxsize = "15000";
+        assert(*builder.getAttributeForKey("maxsize") == builder.maxsize);
+    }
+
 private:
+    // only used for unittest
+    this()
+    {
+
+    }
+
     LoggerScript* loggerScript;
 
     string destination;
