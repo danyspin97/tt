@@ -3,6 +3,8 @@
 
 module libtt.data.script;
 
+import std.ascii : newline;
+
 import libtt.data.environment : Environment;
 
 @safe:
@@ -13,7 +15,7 @@ class Script
 public:
     @property string execute() const
     {
-        return shebang ~ m_execute;
+        return shebang ~ newline ~ m_execute;
     }
 
     @property string shebang() const

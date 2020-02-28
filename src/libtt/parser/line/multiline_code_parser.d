@@ -5,6 +5,7 @@ module libtt.parser.line.multiline_code_parser;
 
 @safe:
 
+import std.ascii : newline;
 import std.string : strip;
 
 import libtt.exception : CodeParserNotFinishedException, WordNotValidException;
@@ -25,7 +26,7 @@ public:
             throw new CodeParserNotFinishedException("");
         }
 
-        return m_code;
+        return m_code[0 .. $-1].idup;
     }
 
     @property string key() const
@@ -36,8 +37,8 @@ public:
     unittest
     {
         auto parser = new MultilineCodeParser();
-        auto code = "foo";
-        parser.m_code = code;
+        auto code = "foo".dup;
+        parser.m_code = code ~ newline;
         assert(parser.code == code);
     }
 
@@ -100,9 +101,13 @@ public:
         assert(parser.key == "execute");
 
         // Continue parsing
-        auto code = "foo";
-        parser.parseLine(code);
-        assert(parser.m_code == code);
+        auto line1 = "foo";
+        parser.parseLine(line1);
+        assert(parser.m_code == line1 ~ newline);
+        assert(parser.isParsing());
+
+        auto line2 = "bar";
+        parser.parseLine(line2);
         assert(parser.isParsing());
 
         // Start parsing again
@@ -112,7 +117,7 @@ public:
 
         // End parsing
         parser.parseLine(")");
-        assert(parser.m_code == code);
+        assert(parser.code == line1 ~ newline ~ line2);
         assert(!parser.isParsing());
     }
 
@@ -120,7 +125,7 @@ public:
     {
         auto parser = new MultilineCodeParser();
         parser.m_isParsing = true;
-        parser.m_code = "foo";
+        parser.m_code = "foo".dup;
         import std.exception : assertThrown;
 
         assertThrown!CodeParserNotFinishedException(parser.code);
@@ -134,7 +139,7 @@ public:
             return;
         }
 
-        m_code ~= line;
+        m_code ~= line.dup ~ newline;
     }
 
     unittest
@@ -144,7 +149,9 @@ public:
         auto code = "foo";
         parser.parseLine(code);
         assert(parser.isParsing());
-        assert(parser.m_code == code);
+        // Otherwise CodeParserNotFinishedException will be thrown
+        parser.m_isParsing = false;
+        assert(parser.code == code);
     }
 
     unittest
@@ -174,7 +181,7 @@ private:
         m_key = keyParser.key;
     }
 
-    string m_code;
+    char[] m_code;
     string m_key;
     bool m_isParsing = false;
 }
