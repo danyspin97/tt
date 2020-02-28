@@ -31,6 +31,7 @@ public:
 
     override void endParsing()
     {
+        checkParsedValues();
         setDefaultForOptionalValues();
         setShebangPerType();
 
@@ -66,6 +67,54 @@ private:
     this()
     {
 
+    }
+
+    void checkParsedValues()
+    {
+        auto executeSet = execute != "";
+        auto typeSet = type != "";
+        // A XOR B
+        if (executeSet != typeSet)
+        {
+            auto msg = "Both execute and type attributes needs to set";
+            throw new Exception(msg);
+        }
+
+        auto destinationSet = destination != "";
+        auto maxsizeSet = maxsize != "";
+        if ((executeSet || typeSet) && (destinationSet || maxsizeSet))
+        {
+            auto msg = "destination and maxsize attributes cannot be set when setting execute";
+            throw new Exception(msg);
+        }
+    }
+
+    unittest
+    {
+        auto builder = new LoggerScriptBuilder();
+        builder.execute = "s6-log";
+        import std.exception : assertThrown;
+
+        assertThrown!Exception(builder.checkParsedValues);
+
+        builder.execute = "";
+        builder.type = "auto";
+        assertThrown!Exception(builder.checkParsedValues);
+    }
+
+    unittest
+    {
+        auto builder = new LoggerScriptBuilder();
+        builder.execute = "s6-log";
+        builder.type = "auto";
+        builder.maxsize = "500";
+        import std.exception : assertThrown;
+
+        assertThrown!Exception(builder.checkParsedValues);
+
+        builder.maxsize = "";
+        builder.destination = "/var/log/foo";
+        assertThrown!Exception(builder.checkParsedValues);
     }
 
     void setDefaultForOptionalValues()
