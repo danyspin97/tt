@@ -12,43 +12,17 @@ nothrow:
 class LoggerScript : Script
 {
 public:
-    @property string destination() const
+    @property string serviceToLog() const
     {
-        return m_destination;
+        return m_serviceToLog;
     }
 
-    @property void destination(in string destination)
-    {
-        m_destination = destination;
-    }
-
-    @property uint maxsize() const
-    {
-        return m_maxsize;
-    }
-
-    @property void maxsize(in uint maxsize)
-    {
-        m_maxsize = maxsize;
-    }
-
-    this(in string execute, in string shebang, Environment environment)
+    this(in string execute, in string shebang, Environment environment, string serviceToLog)
     {
         super(execute, shebang, environment);
-    }
-
-    this(in string shebang, Environment environment)
-    {
-        super(defaultExecute, shebang, environment);
+        m_serviceToLog = serviceToLog;
     }
 
 private:
-    string defaultExecute() const
-    {
-        // TODO add default logger script
-        return "";
-    }
-
-    string m_destination;
-    uint m_maxsize;
+    string m_serviceToLog;
 }
