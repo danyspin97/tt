@@ -3,7 +3,7 @@
 
 module libtt.parser.section.code_section_builder;
 
-import libtt.parser.utils  : setFailsIfNotEmpty;
+import libtt.parser.utils : setFailsIfNotEmpty;
 import libtt.parser.line : KeyValueParser, MultilineCodeParser;
 import libtt.parser.section.section_builder : SectionBuilder;
 
@@ -49,10 +49,10 @@ abstract class CodeSectionBuilder : SectionBuilder
 
         throw new Exception(`Line "` ~ line ~ `" is not valid`);
     }
+
 protected:
     string* getCodeAttributeForKey(string key);
     string* getAttributeForKey(string key);
 private:
     MultilineCodeParser codeParser = new MultilineCodeParser();
 }
-

@@ -40,7 +40,6 @@ public:
         assertThrown!Exception(builder.parseLine("invalid"));
     }
 
-
     void endParsing()
     {
         if (execute == "")
@@ -149,7 +148,6 @@ protected:
 
         assertThrown!Exception(builder.getCodeAttributeForKey("foo"));
     }
-
 
     void setShebangPerType()
     {
