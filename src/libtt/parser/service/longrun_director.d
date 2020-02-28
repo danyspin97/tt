@@ -41,7 +41,7 @@ public:
         case "finish":
             return new ScriptBuilder(&finish, environment);
         case "logger":
-            return new LoggerScriptBuilder(&logger, environment);
+            return new LoggerScriptBuilder(&logger, environment, mainSection.name);
         case "config":
             return new EnvironmentBuilder(environment);
         case "options":

@@ -5,40 +5,37 @@ module libtt.parser.section.logger_script_builder;
 
 @safe:
 
-import libtt.parser.section.script_builder : ScriptBuilder;
 import libtt.data : Environment, LoggerScript;
+import libtt.dirs : dirs;
+import libtt.parser.section.script_builder : ScriptBuilder;
 
 class LoggerScriptBuilder : ScriptBuilder
 {
 public:
-    this(LoggerScript* loggerScript, ref Environment environment)
+    this(LoggerScript* loggerScript, ref Environment environment, string serviceName)
     {
         this.loggerScript = loggerScript;
         this.environment = environment;
+        this.serviceName = serviceName;
+    }
+
+    @system unittest
+    {
+        LoggerScript s;
+        Environment e = new Environment();
+        auto builder = new LoggerScriptBuilder(&s, e, "foo");
+        testBuilderWithFile(builder, "src/libtt/test/logger_script_no_execute");
+        assert(s.serviceToLog == "foo");
     }
 
     override void endParsing()
     {
+        setDefaultForOptionalValues();
         setShebangPerType();
 
-        if (execute == "")
-        {
-            *script = new LoggerScript(shebang, environment);
-        }
-        else
-        {
-            *script = new LoggerScript(executeParser.code, shebang, environment);
-        }
+        *loggerScript = new LoggerScript(execute, shebang, environment, serviceName);
 
-        if (user != "")
-        {
-            script.user = user;
-        }
-
-        if (group != "")
-        {
-            script.group = group;
-        }
+        setValuesForScript();
     }
 
     override string* getAttributeForKey(in string key)
@@ -70,8 +67,55 @@ private:
 
     }
 
+    void setDefaultForOptionalValues()
+    {
+        if (type == "")
+        {
+            type = "auto";
+        }
+
+        if (maxsize == "")
+        {
+            maxsize = "8000000"; // 8MB
+        }
+
+        if (destination == "")
+        {
+            destination = getDefaultDestination();
+        }
+
+        if (execute == "")
+        {
+            execute = getDefaultExecute();
+        }
+    }
+
+    void setValuesForScript()
+    {
+        if (user != "")
+        {
+            loggerScript.user = user;
+        }
+
+        if (group != "")
+        {
+            loggerScript.group = group;
+        }
+    }
+
+    string getDefaultExecute()
+    {
+        return "s6-setuidgid log exec -c s6-log -- s" ~ maxsize ~ " n20 t " ~ destination;
+    }
+
+    string getDefaultDestination()
+    {
+        return dirs.log ~ "/" ~ serviceName;
+    }
+
     LoggerScript* loggerScript;
 
     string destination;
     string maxsize;
+    string serviceName;
 }
