@@ -1,0 +1,2 @@
+maxsize = 1500
+destination = /var/log/foo

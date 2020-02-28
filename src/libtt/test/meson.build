@@ -1,5 +1,6 @@
 test_files = [
     'invalid',
+    'logger_script_no_execute',
     'main_section',
     'script_section'
 ]
