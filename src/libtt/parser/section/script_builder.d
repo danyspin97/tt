@@ -27,7 +27,7 @@ public:
         Script s;
         Environment e = new Environment();
         auto builder = new ScriptBuilder(&s, e);
-        testBuilderWithFile(builder, "src/libtt/test/script_section");
+        builder.testBuilderWithFile("src/libtt/test/script_section");
 
         assert(s.user == "dbus");
         assert(s.group == "dbus");
@@ -158,11 +158,11 @@ protected:
         case "auto":
             goto case;
         case "execline":
-            auto newShebang = "#!" ~ dirs.execlinePrefix ~ "execlineb";
+            auto newShebang = "#!" ~ dirs.execlinePrefix ~ "/execlineb";
             setFailsIfNotEmpty(&shebang, newShebang);
             break;
         case "bash":
-            auto newShebang = "#!" ~ dirs.bin ~ "bash";
+            auto newShebang = "#!" ~ dirs.bin ~ "/bash";
             setFailsIfNotEmpty(&shebang, newShebang);
             break;
         default:
@@ -173,7 +173,7 @@ protected:
 
     unittest
     {
-        dirs.bin = "/usr/bin/";
+        dirs.bin = "/usr/bin";
         dirs.execlinePrefix = dirs.bin;
 
         auto types = ["auto", "execline", "bash"];
@@ -187,7 +187,7 @@ protected:
             builder.type = type;
             builder.setShebangPerType();
 
-            auto expectedShebang = "#!" ~ dirs.bin ~ executablePerType[type];
+            auto expectedShebang = "#!" ~ dirs.bin ~ "/" ~ executablePerType[type];
             auto msg = "`" ~ expectedShebang ~ "` was expected but instead `"
                 ~ builder.shebang ~ "` was found";
             assert(expectedShebang == builder.shebang, msg);

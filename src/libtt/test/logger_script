@@ -1,0 +1,5 @@
+build = auto
+execute = (
+s6-log /var/log/tt/foo
+)
+

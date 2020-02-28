@@ -25,8 +25,21 @@ public:
         LoggerScript s;
         Environment e = new Environment();
         auto builder = new LoggerScriptBuilder(&s, e, "foo");
-        testBuilderWithFile(builder, "src/libtt/test/logger_script_no_execute");
+        builder.testBuilderWithFile("src/libtt/test/logger_script");
         assert(s.serviceToLog == "foo");
+        import std.ascii : newline;
+        auto expectedExecute = "#!/usr/local/bin/execlineb" ~ newline ~ "s6-log /var/log/tt/foo";
+
+        assert(s.execute == expectedExecute);
+    }
+
+    @system unittest
+    {
+        LoggerScript s;
+        Environment e = new Environment();
+        auto builder = new LoggerScriptBuilder(&s, e, "bar");
+        builder.testBuilderWithFile("src/libtt/test/logger_script_no_execute");
+        assert(s.serviceToLog == "bar");
     }
 
     override void endParsing()
@@ -40,6 +53,7 @@ public:
         setValuesForScript();
     }
 
+protected:
     override string* getAttributeForKey(in string key)
     {
         switch (key)
