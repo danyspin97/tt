@@ -18,6 +18,7 @@ public:
     this(Script* script, ref Environment environment)
     {
         this.script = script;
+        assert(environment);
         this.environment = environment;
     }
 

@@ -15,6 +15,7 @@ public:
     this(LoggerScript* loggerScript, ref Environment environment, string serviceName)
     {
         this.loggerScript = loggerScript;
+        assert(environment);
         this.environment = environment;
         this.serviceName = serviceName;
     }
