@@ -162,6 +162,25 @@ public:
         assert(!parser.isParsing());
     }
 
+    void reset()
+    {
+        m_code = [];
+        m_isParsing = false;
+        m_key = "";
+    }
+
+    unittest
+    {
+        auto parser = new MultilineCodeParser();
+        parser.m_isParsing = true;
+        parser.m_key = "execute";
+        parser.m_code = "echo".dup;
+        parser.reset();
+        assert(!parser.isParsing());
+        assert(parser.key == "");
+        assert(parser.m_code == "");
+    }
+
 private:
     void tryStartParsing(string line)
     {

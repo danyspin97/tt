@@ -22,6 +22,7 @@ abstract class CodeSectionBuilder : SectionBuilder
             {
                 auto param = getCodeAttributeForKey(codeParser.key);
                 setFailsIfNotEmpty(param, codeParser.code);
+                codeParser.reset();
             }
             return;
         }
