@@ -50,7 +50,8 @@ public:
         }
         setShebangPerType();
 
-        *script = new Script(execute, shebang, environment);
+        Script.Type scriptType = getParsedType();
+        *script = new Script(scriptType, execute, shebang, environment);
 
         if (user != "")
         {
@@ -201,6 +202,41 @@ protected:
         import std.exception : assertThrown;
 
         assertThrown!Exception(builder.setShebangPerType());
+    }
+
+    Script.Type getParsedType()
+    {
+        switch (type)
+        {
+            // TODO: add "path" type
+        case "auto":
+            goto case;
+        case "execline":
+            return Script.Type.Execline;
+        case "bash":
+            return Script.Type.Bash;
+        default:
+            auto errorMessage = `Type "` ~ type~ `" is not allowed.`;
+            throw new Exception(errorMessage);
+        }
+    }
+
+    unittest
+    {
+        auto builder = new ScriptBuilder();
+        builder.type = "auto";
+        assert(builder.getParsedType() == Script.Type.Execline);
+        builder.type = "execline";
+        assert(builder.getParsedType() == Script.Type.Execline);
+        builder.type = "bash";
+        assert(builder.getParsedType() == Script.Type.Bash);
+    }
+
+    unittest
+    {
+        auto builder = new ScriptBuilder();
+        import std.exception : assertThrown;
+        assertThrown!Exception(builder.getParsedType());
     }
 
     Script* script;

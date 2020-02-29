@@ -5,7 +5,7 @@ module libtt.parser.section.logger_script_builder;
 
 @safe:
 
-import libtt.data : Environment, LoggerScript;
+import libtt.data : Environment, LoggerScript, Script;
 import libtt.define : DefaultLogGroup, DefaultLogUser;
 import libtt.dirs : dirs;
 import libtt.format : formatAssertMessage;
@@ -24,7 +24,6 @@ public:
 
     @system unittest
     {
-        dirs.execlinePrefix = "/usr/bin";
         LoggerScript s;
         Environment e = new Environment();
         auto builder = new LoggerScriptBuilder(&s, e, "foo");
@@ -32,8 +31,7 @@ public:
         assert(s.serviceToLog == "foo");
         import std.ascii : newline;
 
-        auto expectedExecute = "#!" ~ dirs.execlinePrefix ~ "/execlineb"
-            ~ newline ~ "s6-log /var/log/tt/foo";
+        auto expectedExecute = "s6-log /var/log/tt/foo";
 
         auto msg = formatAssertMessage("LoggerScript execute script", expectedExecute, s.execute);
         assert(s.execute == expectedExecute, msg);
@@ -64,7 +62,8 @@ public:
         setDefaultForOptionalValues();
         setShebangPerType();
 
-        *loggerScript = new LoggerScript(execute, shebang, environment, serviceName, user, group);
+        Script.Type scriptType = getParsedType();
+        *loggerScript = new LoggerScript(scriptType, execute, shebang, environment, serviceName, user, group);
     }
 
 protected:

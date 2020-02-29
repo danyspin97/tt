@@ -13,9 +13,20 @@ nothrow:
 class Script
 {
 public:
+    enum Type
+    {
+        Bash,
+        Execline,
+    }
+
+    @property Type type() const
+    {
+        return m_type;
+    }
+
     @property string execute() const
     {
-        return shebang ~ newline ~ m_execute;
+        return m_execute;
     }
 
     @property string shebang() const
@@ -48,8 +59,9 @@ public:
         return m_env;
     }
 
-    this(in string execute, in string shebang, Environment environment)
+    this(in Type type, in string execute, in string shebang, Environment environment)
     {
+        m_type = type;
         m_execute = execute;
         m_shebang = shebang;
         m_env = environment;
@@ -57,7 +69,7 @@ public:
 
     void prependCode(in string code)
     {
-        m_execute = code ~ m_execute;
+        m_execute = code ~ newline ~ m_execute;
     }
 
     void appendCode(in string code)
@@ -68,6 +80,7 @@ public:
 protected:
     string m_execute;
 private:
+    Type m_type;
     string m_shebang;
     string m_user;
     string m_group;
