@@ -37,6 +37,11 @@ public:
 
         auto msg = formatAssertMessage("LoggerScript execute script", expectedExecute, s.execute);
         assert(s.execute == expectedExecute, msg);
+
+        msg = formatAssertMessage("LoggerScript user", s.user, "tt_log");
+        assert(s.user == "tt_log", msg);
+        msg = formatAssertMessage("LoggerScript group", s.group, "tt_log");
+        assert(s.group == "tt_log", msg);
     }
 
     @system unittest
@@ -46,6 +51,11 @@ public:
         auto builder = new LoggerScriptBuilder(&s, e, "bar");
         builder.testBuilderWithFile("src/libtt/test/logger_script_no_execute");
         assert(s.serviceToLog == "bar");
+
+        auto msg = formatAssertMessage("LoggerScript default user", s.user, DefaultLogUser);
+        assert(s.user == DefaultLogUser, msg);
+        msg = formatAssertMessage("LoggerScript default group", s.group, DefaultLogGroup);
+        assert(s.group == DefaultLogGroup, msg);
     }
 
     override void endParsing()
