@@ -20,6 +20,7 @@ dirs_d = configure_file(
 
 libsrc = files(
     'exception.d',
+    'format.d',
     'parser/line/key_value_parser.d',
     'parser/line/multiline_code_parser.d',
     'parser/line/multiline_value_parser.d',
