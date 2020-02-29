@@ -54,6 +54,12 @@ if servicedir == 'datadir/tt/service'
     servicedir =  datadir / 'tt/service'
 endif
 
+default_log_user = get_option('default_log_user')
+default_log_group = get_option('default_log_group')
+if default_log_group == 'default_log_user'
+    default_log_group = default_log_user
+endif
+
 compiler_id = meson.get_compiler('d').get_id()
 
 link_runtime_shared_arg = []

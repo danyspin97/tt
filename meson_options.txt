@@ -7,3 +7,7 @@ option('servicedir', type: 'string', value: 'datadir/tt/service', description: '
 
 option('execline_prefix', type: 'string', value: 'bindir', description: 'Prefix for execline executables if different than bindir')
 
+option('default_log_user', type: 'string', value: 'log', description: 'User that will write longrun logs if none is selected')
+
+option('default_log_group', type: 'string', value: 'default_log_user', description: 'User that will write longrun logs if none is selected')
+

@@ -1,3 +1,16 @@
+define_config = configuration_data({
+    'default_log_user': default_log_user,
+    'default_log_group': default_log_group
+})
+
+define_d = configure_file(
+    input: 'define.d',
+    output: 'define.d',
+    configuration: define_config,
+    install: true,
+    install_dir: get_option('includedir') / 'd/libtt'
+)
+
 dirs_config = configuration_data({
     'version': meson.project_version(),
     'livedir': livedir,
@@ -79,7 +92,7 @@ libsrc = files(
     'serialization/service_options_serialization.d',
     'serialization/service_serialization.d',
     'signal.d',
-) + [dirs_d]
+) + [define_d, dirs_d]
 
 libtt_soversion = 0
 
