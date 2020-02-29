@@ -26,7 +26,7 @@ public:
             throw new CodeParserNotFinishedException("");
         }
 
-        return m_code[0 .. $-1].idup;
+        return m_code[0 .. $ - 1].idup;
     }
 
     @property string key() const
