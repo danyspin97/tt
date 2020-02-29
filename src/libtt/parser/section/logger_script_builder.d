@@ -7,6 +7,7 @@ module libtt.parser.section.logger_script_builder;
 
 import libtt.data : Environment, LoggerScript;
 import libtt.dirs : dirs;
+import libtt.format : formatAssertMessage;
 import libtt.parser.section.script_builder : ScriptBuilder;
 
 class LoggerScriptBuilder : ScriptBuilder
@@ -22,15 +23,19 @@ public:
 
     @system unittest
     {
+        dirs.execlinePrefix = "/usr/bin";
         LoggerScript s;
         Environment e = new Environment();
         auto builder = new LoggerScriptBuilder(&s, e, "foo");
         builder.testBuilderWithFile("src/libtt/test/logger_script");
         assert(s.serviceToLog == "foo");
         import std.ascii : newline;
-        auto expectedExecute = "#!/usr/local/bin/execlineb" ~ newline ~ "s6-log /var/log/tt/foo";
 
-        assert(s.execute == expectedExecute);
+        auto expectedExecute = "#!" ~ dirs.execlinePrefix ~ "/execlineb"
+            ~ newline ~ "s6-log /var/log/tt/foo";
+
+        auto msg = formatAssertMessage("LoggerScript execute script", expectedExecute, s.execute);
+        assert(s.execute == expectedExecute, msg);
     }
 
     @system unittest
