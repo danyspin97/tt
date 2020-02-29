@@ -6,6 +6,7 @@ module libtt.parser.section.logger_script_builder;
 @safe:
 
 import libtt.data : Environment, LoggerScript;
+import libtt.define : DefaultLogGroup, DefaultLogUser;
 import libtt.dirs : dirs;
 import libtt.format : formatAssertMessage;
 import libtt.parser.section.script_builder : ScriptBuilder;
@@ -54,8 +55,8 @@ public:
         setShebangPerType();
 
         *loggerScript = new LoggerScript(execute, shebang, environment, serviceName);
-
-        setValuesForScript();
+        loggerScript.user = user;
+        loggerScript.group = group;
     }
 
 protected:
@@ -157,24 +158,21 @@ private:
         {
             execute = getDefaultExecute();
         }
-    }
 
-    void setValuesForScript()
-    {
-        if (user != "")
+        if (user == "")
         {
-            loggerScript.user = user;
+            user = DefaultLogUser;
         }
 
-        if (group != "")
+        if (group == "")
         {
-            loggerScript.group = group;
+            group = DefaultLogGroup;
         }
     }
 
     string getDefaultExecute()
     {
-        return "s6-setuidgid log exec -c s6-log -- s" ~ maxsize ~ " n20 t " ~ destination;
+        return "exec -c s6-log -- s" ~ maxsize ~ " n20 t " ~ destination;
     }
 
     string getDefaultDestination()
