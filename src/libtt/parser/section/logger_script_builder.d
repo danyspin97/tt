@@ -64,9 +64,7 @@ public:
         setDefaultForOptionalValues();
         setShebangPerType();
 
-        *loggerScript = new LoggerScript(execute, shebang, environment, serviceName);
-        loggerScript.user = user;
-        loggerScript.group = group;
+        *loggerScript = new LoggerScript(execute, shebang, environment, serviceName, user, group);
     }
 
 protected:
