@@ -30,6 +30,10 @@ public:
     {
         this.line = line;
         this.throwOnErrors = throwOnErrors;
+        keyParser = new KeyParser();
+        valueParser = new ValueParser();
+        tokenParser = new TokenParser('=');
+        whitespaceParser = new WhitespaceParser();
         parseLine();
     }
 
@@ -94,17 +98,15 @@ private:
         scope (failure)
             m_valid = false;
 
-        auto keyParser = new KeyParser();
         line = keyParser.parse(line);
         m_key = keyParser.key;
 
-        line = (new TokenParser('=')).parse(line);
+        line = tokenParser.parse(line);
 
-        auto valueParser = new ValueParser();
         line = valueParser.parse(line);
         m_value = valueParser.value;
 
-        (new WhitespaceParser).parse(line);
+        whitespaceParser.parse(line);
 
         m_valid = true;
     }
@@ -114,4 +116,9 @@ private:
     string m_value;
     bool m_valid;
     bool throwOnErrors;
+
+    KeyParser keyParser;
+    TokenParser tokenParser;
+    ValueParser valueParser;
+    WhitespaceParser whitespaceParser;
 }
