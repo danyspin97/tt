@@ -5,7 +5,7 @@ module libtt.parser.line.key_value_parser;
 
 @safe:
 
-import libtt.exception : WordNotValidException;
+import libtt.exception : LineNotValidWhileParsingException, WordNotValidException;
 import libtt.parser.word : KeyParser, TokenParser, ValueParser, WhitespaceParser;
 
 class KeyValueParser
@@ -26,9 +26,10 @@ public:
         return m_valid;
     }
 
-    this(in string line)
+    this(in string line, bool throwOnErrors = false)
     {
         this.line = line;
+        this.throwOnErrors = throwOnErrors;
         parseLine();
     }
 
@@ -41,6 +42,11 @@ private:
         }
         catch (WordNotValidException e)
         {
+            if (throwOnErrors)
+            {
+                const auto msg = e.msg ~ ` in line "` ~ line ~ `"`;
+                throw new LineNotValidWhileParsingException(msg);
+            }
         }
     }
 
@@ -97,4 +103,5 @@ private:
     string m_key;
     string m_value;
     bool m_valid;
+    bool throwOnErrors;
 }
