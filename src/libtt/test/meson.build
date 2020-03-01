@@ -1,4 +1,5 @@
 test_files = [
+    'environment_section',
     'invalid',
     'logger_script',
     'logger_script_no_execute',

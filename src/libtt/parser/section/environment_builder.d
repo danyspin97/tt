@@ -6,33 +6,43 @@ module libtt.parser.section.environment_builder;
 @safe:
 nothrow:
 
-import std.regex : ctRegex, matchAll;
-
-import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.data : Environment;
+import libtt.format : formatAssertMessage;
+import libtt.parser.line : KeyValueParser;
+import libtt.parser.section.section_builder : SectionBuilder;
 
 class EnvironmentBuilder : SectionBuilder
 {
 public:
-    this(Environment environment)
+    this(ref Environment environment)
     {
+        assert(environment, "Environment needs to be initialized.");
         this.environment = environment;
+    }
+
+    @system unittest
+    {
+        Environment e = new Environment();
+        auto builder = new EnvironmentBuilder(e);
+        builder.testBuilderWithFile("src/libtt/test/environment_section");
+        const auto expected = ["CMDARGS": "-d --nofork", "LOGLEVEL": "0"];
+        static foreach (key, value; expected)
+        {
+            assert(e.get(key) == value, formatAssertMessage(key, e.get(key), value));
+        }
     }
 
     override void parseLine(in string line)
     {
-        // Use a specialized regex instead of using KeyValueParser
-        // The latter can parse values without quotes, and this shouldn't be
-        // allowed when parsing the environment.
-        // Environment keys are also more strict rules
-        auto regex = ctRegex!` *(\w+) *= *"(.*)" *`;
-        auto match = matchAll(line, regex);
-        if (!match)
+        auto keyValueParser = new KeyValueParser(line);
+        if (!keyValueParser.lineValid())
         {
-            throw new Exception(`Line "` ~ line ~ `" is not valid`);
+            throw new Exception("");
         }
+        const string key = keyValueParser.key;
+        const string value = keyValueParser.value;
 
-        environment.set(match.front[1], match.front[2]);
+        environment.set(key, value);
     }
 
     override void endParsing()
