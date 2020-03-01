@@ -81,6 +81,14 @@ private:
 
     unittest
     {
+        auto parser = new KeyValueParser(`foo= bar foobar`);
+        assert(parser.lineValid);
+        assert(parser.key == "foo");
+        assert(parser.value == "bar foobar");
+    }
+
+    unittest
+    {
         auto parser = new KeyValueParser(`foobar`);
         assert(!parser.lineValid);
     }

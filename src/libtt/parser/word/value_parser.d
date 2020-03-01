@@ -45,11 +45,6 @@ class ValueParser
         i++;
         while (i != line.length)
         {
-            if (!isQuoted && line[i].isWhite)
-            {
-                break;
-            }
-
             if (isQuoted && line[i] == '"')
             {
                 break;
@@ -69,8 +64,8 @@ class ValueParser
     unittest
     {
         auto parser = new ValueParser();
-        assert(parser.parse("foo  ") == "  ");
-        assert(parser.value == "foo");
+        assert(parser.parse("foo  ") == "");
+        assert(parser.value == "foo  ");
     }
 
     unittest
