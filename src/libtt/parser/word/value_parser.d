@@ -43,7 +43,7 @@ class ValueParser
         }
 
         i++;
-        while (i != line.length)
+        while (isQuoted && i != line.length)
         {
             if (isQuoted && line[i] == '"')
             {
@@ -53,12 +53,16 @@ class ValueParser
             i++;
         }
 
-        m_value = line[start .. i];
         if (isQuoted)
         {
-            i++;
+            m_value = line[start .. i];
+            return line[i + 1 .. $];
         }
-        return line[i .. $];
+        else
+        {
+            m_value = line[start .. $];
+            return "";
+        }
     }
 
     unittest
