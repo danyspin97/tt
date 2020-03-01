@@ -33,6 +33,13 @@ public:
         parseLine();
     }
 
+    unittest
+    {
+        import std.exception : assertThrown;
+
+        assertThrown!LineNotValidWhileParsingException(new KeyValueParser("foo", true));
+    }
+
 private:
     void parseLine()
     {
