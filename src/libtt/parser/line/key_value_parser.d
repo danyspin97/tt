@@ -35,6 +35,36 @@ public:
 
     unittest
     {
+        auto parser = new KeyValueParser(`foo="bar"`);
+        assert(parser.lineValid);
+        assert(parser.key == "foo");
+        assert(parser.value == "bar");
+    }
+
+    unittest
+    {
+        auto parser = new KeyValueParser(`foo=bar`);
+        assert(parser.lineValid);
+        assert(parser.key == "foo");
+        assert(parser.value == "bar");
+    }
+
+    unittest
+    {
+        auto parser = new KeyValueParser(`foo= bar foobar`);
+        assert(parser.lineValid);
+        assert(parser.key == "foo");
+        assert(parser.value == "bar foobar");
+    }
+
+    unittest
+    {
+        auto parser = new KeyValueParser(`foobar`);
+        assert(!parser.lineValid);
+    }
+
+    unittest
+    {
         import std.exception : assertThrown;
 
         assertThrown!LineNotValidWhileParsingException(new KeyValueParser("foo", true));
@@ -74,36 +104,6 @@ private:
         m_key = keyParser.key;
         m_value = valueParser.value;
         m_valid = true;
-    }
-
-    unittest
-    {
-        auto parser = new KeyValueParser(`foo="bar"`);
-        assert(parser.lineValid);
-        assert(parser.key == "foo");
-        assert(parser.value == "bar");
-    }
-
-    unittest
-    {
-        auto parser = new KeyValueParser(`foo=bar`);
-        assert(parser.lineValid);
-        assert(parser.key == "foo");
-        assert(parser.value == "bar");
-    }
-
-    unittest
-    {
-        auto parser = new KeyValueParser(`foo= bar foobar`);
-        assert(parser.lineValid);
-        assert(parser.key == "foo");
-        assert(parser.value == "bar foobar");
-    }
-
-    unittest
-    {
-        auto parser = new KeyValueParser(`foobar`);
-        assert(!parser.lineValid);
     }
 
     string line;
