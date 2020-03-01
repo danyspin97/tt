@@ -9,7 +9,7 @@ nothrow:
 import std.ascii : isAlphaNum, isDigit;
 
 import libtt.data : Environment;
-import libtt.exception : LineNotValidWhileParsingException;
+import libtt.exception : LineNotValidWhileParsingException, SectionNotValidException;
 import libtt.format : formatAssertMessage;
 import libtt.parser.line : KeyValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
@@ -35,18 +35,25 @@ public:
         }
     }
 
+    @system unittest
+    {
+        Environment e = new Environment();
+        auto builder = new EnvironmentBuilder(e);
+        import std.exception : assertThrown;
+
+        assertThrown!SectionNotValidException(builder.testBuilderWithFile("src/libtt/test/invalid"));
+    }
+
     override void parseLine(in string line)
     {
-        auto keyValueParser = new KeyValueParser(line);
-        if (!keyValueParser.lineValid())
+        try
         {
-            throw new Exception("");
+            tryParseLine(line);
         }
-        const string key = keyValueParser.key;
-        checkKeyIsValid(key);
-        const string value = keyValueParser.value;
-
-        environment.set(key, value);
+        catch (LineNotValidWhileParsingException e)
+        {
+            throw new SectionNotValidException(e.msg ~ " of environment section");
+        }
     }
 
     override void endParsing()
@@ -55,6 +62,16 @@ public:
     }
 
 private:
+    void tryParseLine(in string line)
+    {
+        auto keyValueParser = new KeyValueParser(line, true);
+        const string key = keyValueParser.key;
+        checkKeyIsValid(key);
+        const string value = keyValueParser.value;
+
+        environment.set(key, value);
+    }
+
     static void checkKeyIsValid(in string key)
     {
         if (key[0].isDigit())
