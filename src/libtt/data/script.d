@@ -29,11 +29,6 @@ public:
         return m_execute;
     }
 
-    @property string shebang() const
-    {
-        return m_shebang;
-    }
-
     @property string user() const
     {
         return m_user;
@@ -59,11 +54,10 @@ public:
         return m_env;
     }
 
-    this(in Type type, in string execute, in string shebang, Environment environment)
+    this(in Type type, in string execute, Environment environment)
     {
         m_type = type;
         m_execute = execute;
-        m_shebang = shebang;
         m_env = environment;
     }
 
@@ -81,7 +75,6 @@ protected:
     string m_execute;
 private:
     Type m_type;
-    string m_shebang;
     string m_user;
     string m_group;
     Environment m_env;

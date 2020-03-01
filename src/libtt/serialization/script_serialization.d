@@ -19,7 +19,6 @@ public:
     @property JSONValue json() @system
     {
         JSONValue j = ["execute" : m_script.execute];
-        j.object["shebang"] = m_script.shebang;
         j.object["user"] = m_script.user;
 
         return j;

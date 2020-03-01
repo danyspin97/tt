@@ -60,10 +60,10 @@ public:
     {
         checkParsedValues();
         setDefaultForOptionalValues();
-        setShebangPerType();
 
         Script.Type scriptType = getParsedType();
-        *loggerScript = new LoggerScript(scriptType, execute, shebang, environment, serviceName, user, group);
+        *loggerScript = new LoggerScript(scriptType, execute, environment,
+                serviceName, user, group);
     }
 
 protected:

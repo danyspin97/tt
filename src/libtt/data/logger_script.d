@@ -17,9 +17,10 @@ public:
         return m_serviceToLog;
     }
 
-    this(in Type type, in string execute, in string shebang, Environment environment, in string serviceToLog, in string user, in string group)
+    this(in Type type, in string execute, Environment environment,
+            in string serviceToLog, in string user, in string group)
     {
-        super(type, execute, shebang, environment);
+        super(type, execute, environment);
         m_serviceToLog = serviceToLog;
         this.user = user;
         this.group = group;

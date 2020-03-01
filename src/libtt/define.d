@@ -5,4 +5,3 @@ module libtt.define;
 
 enum DefaultLogUser = "@default_log_user@";
 enum DefaultLogGroup = "@default_log_group@";
-
