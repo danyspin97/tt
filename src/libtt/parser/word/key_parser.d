@@ -4,9 +4,11 @@
 module libtt.parser.word.key_parser;
 
 @safe:
-nothrow:
 
+import std.exception : enforce;
 import std.uni : isWhite;
+
+import libtt.exception : WordNotValidException;
 
 class KeyParser
 {
@@ -34,7 +36,6 @@ class KeyParser
             break;
         }
 
-        i++;
         while (i != line.length)
         {
             if (line[i].isWhite || line[i] == '=')
@@ -44,6 +45,8 @@ class KeyParser
 
             i++;
         }
+
+        enforce!WordNotValidException(start != i, "Key cannot be empty");
 
         m_key = line[start .. i];
         return line[i .. $];
@@ -68,6 +71,14 @@ class KeyParser
         auto parser = new KeyParser();
         assert(parser.parse(" foo bar") == " bar");
         assert(parser.key == "foo");
+    }
+
+    unittest
+    {
+        auto parser = new KeyParser();
+        import std.exception : assertThrown;
+        assertThrown!WordNotValidException(parser.parse("=bar"));
+        assertThrown!WordNotValidException(parser.parse(" =bar"));
     }
 
 private:

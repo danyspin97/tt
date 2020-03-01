@@ -4,9 +4,12 @@
 module libtt.parser.word.value_parser;
 
 @safe:
-nothrow:
 
+import std.exception : enforce;
+import std.string : strip, stripRight;
 import std.uni : isWhite;
+
+import libtt.exception : WordNotValidException;
 
 class ValueParser
 {
@@ -42,7 +45,6 @@ class ValueParser
             break;
         }
 
-        i++;
         while (isQuoted && i != line.length)
         {
             if (isQuoted && line[i] == '"')
@@ -53,23 +55,27 @@ class ValueParser
             i++;
         }
 
+        string ret;
         if (isQuoted)
         {
             m_value = line[start .. i];
-            return line[i + 1 .. $];
+            ret = line[i + 1 .. $];
         }
         else
         {
-            m_value = line[start .. $];
-            return "";
+            enforce!WordNotValidException(start < line.length, "No value found");
+            m_value = line[start .. $].stripRight;
+            ret = "";
         }
+        enforce!WordNotValidException(m_value.strip != "", "Value cannot be empty");
+        return ret;
     }
 
     unittest
     {
         auto parser = new ValueParser();
         assert(parser.parse("foo  ") == "");
-        assert(parser.value == "foo  ");
+        assert(parser.value == "foo");
     }
 
     unittest
@@ -77,6 +83,16 @@ class ValueParser
         auto parser = new ValueParser();
         assert(parser.parse(` " foo " bar`) == " bar");
         assert(parser.value == " foo ");
+    }
+
+    unittest
+    {
+        auto parser = new ValueParser();
+        import std.exception : assertThrown;
+
+        assertThrown!WordNotValidException(parser.parse(`""`));
+        assertThrown!WordNotValidException(parser.parse(`" "`));
+        assertThrown!WordNotValidException(parser.parse(`    `));
     }
 
 private:

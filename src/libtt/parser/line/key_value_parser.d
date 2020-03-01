@@ -96,13 +96,16 @@ private:
 
         auto keyParser = new KeyParser();
         line = keyParser.parse(line);
+        m_key = keyParser.key;
+
         line = (new TokenParser('=')).parse(line);
+
         auto valueParser = new ValueParser();
         line = valueParser.parse(line);
+        m_value = valueParser.value;
+
         (new WhitespaceParser).parse(line);
 
-        m_key = keyParser.key;
-        m_value = valueParser.value;
         m_valid = true;
     }
 
