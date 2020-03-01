@@ -58,12 +58,15 @@ protected:
                 break;
             }
 
-            throw new WordNotValidException("");
+            const auto msg = "Not valid `" ~ line[i]
+                ~ "` character found while searching for token `" ~ token ~ "`";
+            throw new WordNotValidException(msg);
         }
 
         if (i == line.length)
         {
-            throw new WordNotValidException("");
+            const auto msg = "Token `" ~ token ~ "` not found";
+            throw new WordNotValidException(msg);
         }
         return i;
     }
