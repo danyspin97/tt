@@ -79,6 +79,14 @@ class SectionNotValidException : Exception
     }
 }
 
+class SignalNotValidException : Exception
+{
+    this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
+    {
+        super(msg, file, line);
+    }
+}
+
 class ServiceNotFoundParserException : Exception
 {
     this(in string msg, in string file = __FILE__, in size_t line = __LINE__) @safe
