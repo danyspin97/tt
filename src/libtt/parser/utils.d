@@ -5,6 +5,8 @@ module libtt.parser.utils;
 
 @safe:
 
+import std.typecons : Nullable;
+
 import libtt.exception : BooleanParseException;
 
 void setFailsIfNotEmpty(string* param, in string newValue)
@@ -33,6 +35,40 @@ void setFailsIfNotEmpty(string* param, in string newValue)
     auto newValue = "newValue";
     setFailsIfNotEmpty(param, newValue);
     assert(*param == newValue);
+}
+
+void setFailsIfNotNull(T)(ref Nullable!T value, T newValue)
+{
+    if (!value.isNull)
+    {
+        throw new Exception("");
+    }
+
+    value = Nullable!T(newValue);
+}
+
+@system unittest
+{
+    Nullable!string attribute = Nullable!string("FOO");
+    import std.exception : assertThrown;
+
+    assertThrown!Exception(setFailsIfNotNull(attribute, "BAR"));
+}
+
+@system unittest
+{
+    Nullable!string attribute = Nullable!string();
+    const newValue = "FOO";
+    setFailsIfNotNull(attribute, newValue);
+    assert(attribute.get == newValue);
+}
+
+@system unittest
+{
+    Nullable!uint attribute = Nullable!uint();
+    const newValue = 0;
+    setFailsIfNotNull(attribute, newValue);
+    assert(attribute.get == newValue);
 }
 
 bool parseBoolean(in string value)
