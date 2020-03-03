@@ -110,10 +110,6 @@ private:
         {
             throw new BuilderException(key ~ " value is not valid" ~ sectionErrMsg);
         }
-        catch (LineNotValidWhileParsingException e)
-        {
-            throw new BuilderException(e.msg ~ sectionErrMsg);
-        }
     }
 
 protected:
