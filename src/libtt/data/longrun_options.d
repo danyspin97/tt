@@ -39,9 +39,9 @@ public:
         return m_timeoutKill;
     }
 
-    @property void timeoutKill(uint m_timeoutKill)
+    @property void timeoutKill(uint timeoutKill)
     {
-        m_timeoutKill = m_timeoutKill;
+        m_timeoutKill = timeoutKill;
     }
 
     @property Signal downSignal()
