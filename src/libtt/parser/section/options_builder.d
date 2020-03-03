@@ -7,8 +7,8 @@ module libtt.parser.section.options_builder;
 
 import std.conv : ConvException;
 
-import libtt.exception : BooleanParseException, BuilderException, EmptyValueFoundWhileParsingException,
-    LineNotValidWhileParsingException, ParserIsStillParsingException;
+import libtt.exception : BooleanParseException, BuilderException,
+    EmptyValueFoundWhileParsingException, LineNotValidWhileParsingException;
 import libtt.parser.line : KeyValueParser, MultilineValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
 
@@ -49,7 +49,8 @@ public:
     {
         if (valuesParser.isParsing())
         {
-            throw new ParserIsStillParsingException("");
+            throw new BuilderException(
+                    valuesParser.key ~ " has not been closed in section [options]");
         }
     }
 
