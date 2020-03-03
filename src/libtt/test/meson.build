@@ -3,6 +3,7 @@ test_files = [
     'invalid',
     'invalid_environment',
     'invalid_int_value',
+    'invalid_multiline_value',
     'logger_script',
     'logger_script_no_execute',
     'longrun_options_section',

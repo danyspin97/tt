@@ -1,8 +1,11 @@
+depends = ( foo
+  bar
+   )
 notify = 3
 timeout_finish = 5000
-timeout_kill = 3
+timeout_kill = 10
 down_signal = SIGKILL
 maxdeath = 250
-write_message = yes
-optional = no
+write_message = no
+optional = yes
 

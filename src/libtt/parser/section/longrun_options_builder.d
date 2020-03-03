@@ -30,6 +30,15 @@ public:
         LongrunOptions o = new LongrunOptions();
         auto builder = new LongrunOptionsBuilder(o);
         builder.testBuilderWithFile("src/libtt/test/longrun_options_section");
+
+        assert(o.dependencies == ["foo", "bar"]);
+        assert(o.notify == 3);
+        assert(o.timeoutFinish == 5000);
+        assert(o.timeoutKill == 10);
+        assert(o.downSignal == Signal.SIGKILL);
+        assert(o.maxDeath == 250);
+        assert(o.writeMessage == false);
+        assert(o.optional == true);
     }
 
     @system unittest
@@ -40,6 +49,12 @@ public:
 
         assertThrown!BuilderException(
                 builder.testBuilderWithFile("src/libtt/test/invalid_int_value"));
+
+        assertThrown!BuilderException(
+                builder.testBuilderWithFile("src/libtt/test/invalid"));
+
+        assertThrown!BuilderException(
+                builder.testBuilderWithFile("src/libtt/test/invalid_multiline_value"));
     }
 
     override void saveValuesOfParser(ref MultilineValueParser parser)
