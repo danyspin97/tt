@@ -47,14 +47,16 @@ public:
         auto builder = new LongrunOptionsBuilder(o);
         import std.exception : assertThrown;
 
-        assertThrown!BuilderException(
-                builder.testBuilderWithFile("src/libtt/test/invalid_int_value"));
+        const auto testFiles = [
+            "invalid", "invalid_int_value", "invalid_multiline_value",
+            "invalid_quotes", "unclosed_quotes", "unknown_key",
+            "unknown_multiline_value"
+        ];
+        static foreach (test; testFiles)
+        {
+            assertThrown!BuilderException(builder.testBuilderWithFile("src/libtt/test/" ~ test));
+        }
 
-        assertThrown!BuilderException(
-                builder.testBuilderWithFile("src/libtt/test/invalid"));
-
-        assertThrown!BuilderException(
-                builder.testBuilderWithFile("src/libtt/test/invalid_multiline_value"));
     }
 
     override void saveValuesOfParser(ref MultilineValueParser parser)
