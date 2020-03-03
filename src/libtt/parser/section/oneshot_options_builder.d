@@ -17,6 +17,7 @@ class OneshotOptionsBuilder : OptionsBuilder
 public:
     this(OneshotOptions oneshotOptions)
     {
+        super();
         this.oneshotOptions = oneshotOptions;
     }
 

@@ -21,6 +21,7 @@ class LongrunOptionsBuilder : OptionsBuilder
 public:
     this(LongrunOptions longrunOptions)
     {
+        super();
         this.longrunOptions = longrunOptions;
     }
 

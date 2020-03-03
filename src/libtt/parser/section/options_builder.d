@@ -15,6 +15,11 @@ import libtt.parser.section.section_builder : SectionBuilder;
 abstract class OptionsBuilder : SectionBuilder
 {
 public:
+    this ()
+    {
+        valuesParser = new MultilineValueParser();
+    }
+
     override void parseLine(in string line)
     {
         if (line == "")
@@ -92,5 +97,5 @@ protected:
     abstract void saveValuesOfParser(ref MultilineValueParser parser);
     abstract void trySetAttributeForKey(string key, string value);
 private:
-    MultilineValueParser valuesParser = new MultilineValueParser();
+    MultilineValueParser valuesParser;
 }
