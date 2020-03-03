@@ -42,6 +42,7 @@ public:
         import std.exception : assertThrown;
 
         assertThrown!SectionNotValidException(builder.testBuilderWithFile("src/libtt/test/invalid"));
+        assertThrown!SectionNotValidException(builder.testBuilderWithFile("src/libtt/test/invalid_environment"));
     }
 
     override void parseLine(in string line)
