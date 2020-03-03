@@ -35,7 +35,7 @@ public:
         {
             key = keyValueParser.key;
             value = keyValueParser.value;
-            setParamByKey(key, value);
+            setAttributeForKey(key, value);
             return;
         }
 
@@ -66,9 +66,31 @@ private:
         }
     }
 
+    void setAttributeForKey(string key, string value)
+    {
+        const auto sectionErrMsg = " in section [options]";
+        try
+        {
+            trySetAttributeForKey(key, value);
+        }
+        catch (BooleanParseException e)
+        {
+            const auto msg = e.msg ~ ` while parsing key "` ~ key ~ `"`;
+            throw new BuilderException(msg);
+        }
+        catch (ConvException e)
+        {
+            throw new BuilderException(key ~ " value is not valid" ~ sectionErrMsg);
+        }
+        catch (LineNotValidWhileParsingException e)
+        {
+            throw new BuilderException(e.msg ~ sectionErrMsg);
+        }
+    }
+
 protected:
     abstract void saveValuesOfParser(ref MultilineValueParser parser);
-    abstract void setParamByKey(string key, string value);
+    abstract void trySetAttributeForKey(string key, string value);
 private:
     MultilineValueParser valuesParser = new MultilineValueParser();
 }
