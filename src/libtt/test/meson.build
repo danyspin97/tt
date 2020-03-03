@@ -1,4 +1,5 @@
 test_files = [
+    'empty_multiline_value',
     'environment_section',
     'invalid',
     'invalid_environment',
@@ -10,6 +11,7 @@ test_files = [
     'longrun_options_section',
     'main_section',
     'script_section',
+    'unclosed_multiline_value',
     'unclosed_quotes',
     'unknown_key',
     'unknown_multiline_value',
