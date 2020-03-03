@@ -9,6 +9,7 @@ test_files = [
     'logger_script',
     'logger_script_no_execute',
     'longrun_options_section',
+    'longrun_options_invalid_boolean',
     'main_section',
     'script_section',
     'unclosed_multiline_value',
