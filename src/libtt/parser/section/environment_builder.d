@@ -9,7 +9,7 @@ nothrow:
 import std.ascii : isAlphaNum, isDigit;
 
 import libtt.data : Environment;
-import libtt.exception : LineNotValidWhileParsingException, SectionNotValidException;
+import libtt.exception : BuilderException, LineNotValidWhileParsingException;
 import libtt.format : formatAssertMessage;
 import libtt.parser.line : KeyValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
@@ -42,8 +42,9 @@ public:
         auto builder = new EnvironmentBuilder(e);
         import std.exception : assertThrown;
 
-        assertThrown!SectionNotValidException(builder.testBuilderWithFile("src/libtt/test/invalid"));
-        assertThrown!SectionNotValidException(builder.testBuilderWithFile("src/libtt/test/invalid_environment"));
+        assertThrown!BuilderException(builder.testBuilderWithFile("src/libtt/test/invalid"));
+        assertThrown!BuilderException(
+                builder.testBuilderWithFile("src/libtt/test/invalid_environment"));
     }
 
     override void parseLine(in string line)
@@ -54,7 +55,7 @@ public:
         }
         catch (LineNotValidWhileParsingException e)
         {
-            throw new SectionNotValidException(e.msg ~ " of environment section");
+            throw new BuilderException(e.msg ~ " of environment section");
         }
     }
 
@@ -76,17 +77,20 @@ private:
 
     static void checkKeyIsValid(in string key)
     {
+        const auto sectionErrMsg = " in section [environment]";
         if (key[0].isDigit())
         {
-            auto msg = "Key " ~ key ~ " is not valid as it cannot start with a digit";
-            throw new LineNotValidWhileParsingException(msg);
+            const auto msg = "Key " ~ key
+                ~ " is not valid as it cannot start with a digit" ~ sectionErrMsg;
+            throw new BuilderException(msg);
         }
         foreach (c; key)
         {
             if (!c.isAlphaNum() && c != '_')
             {
-                auto msg = "Key " ~ key ~ " is not valid as it contains `" ~ c ~ "` character";
-                throw new LineNotValidWhileParsingException(msg);
+                const auto msg = "Key " ~ key ~ " is not valid as it contains `"
+                    ~ c ~ "` character" ~ sectionErrMsg;
+                throw new BuilderException(msg);
             }
         }
     }
@@ -105,8 +109,8 @@ private:
     {
         import std.exception : assertThrown;
 
-        assertThrown!LineNotValidWhileParsingException(checkKeyIsValid("FOO-BAR"));
-        assertThrown!LineNotValidWhileParsingException(checkKeyIsValid("1FOO"));
+        assertThrown!BuilderException(checkKeyIsValid("FOO-BAR"));
+        assertThrown!BuilderException(checkKeyIsValid("1FOO"));
     }
 
     Environment environment;

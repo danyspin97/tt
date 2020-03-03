@@ -5,6 +5,10 @@ module libtt.parser.section.options_builder;
 
 @safe:
 
+import std.conv : ConvException;
+
+import libtt.exception : BooleanParseException, BuilderException,
+    LineNotValidWhileParsingException, ParserIsStillParsingException;
 import libtt.parser.line : KeyValueParser, MultilineValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
 
@@ -41,15 +45,14 @@ public:
             return;
         }
 
-        throw new Exception(`Line "` ~ line ~ `" is not valid`);
+        throw new BuilderException(`Line "` ~ line ~ `" is not valid`);
     }
 
     override void endParsing()
     {
         if (valuesParser.isParsing())
         {
-            // TODO: should this be caught by a ServiceDirector class?
-            throw new Exception("");
+            throw new ParserIsStillParsingException("");
         }
     }
 
