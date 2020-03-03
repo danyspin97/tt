@@ -29,6 +29,12 @@ public:
             return;
         }
 
+        if (valuesParser.startParsing(line))
+        {
+            checkParserHasFinished();
+            return;
+        }
+
         string key, value;
         auto keyValueParser = new KeyValueParser(line);
         if (keyValueParser.lineValid())
@@ -36,12 +42,6 @@ public:
             key = keyValueParser.key;
             value = keyValueParser.value;
             setAttributeForKey(key, value);
-            return;
-        }
-
-        if (valuesParser.startParsing(line))
-        {
-            checkParserHasFinished();
             return;
         }
 
