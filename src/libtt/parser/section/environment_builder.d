@@ -13,6 +13,7 @@ import libtt.exception : LineNotValidWhileParsingException, SectionNotValidExcep
 import libtt.format : formatAssertMessage;
 import libtt.parser.line : KeyValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
+import libtt.parser.section.utils : testBuilderWithFile;
 
 class EnvironmentBuilder : SectionBuilder
 {

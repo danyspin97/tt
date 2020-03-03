@@ -26,3 +26,5 @@ package import libtt.parser.section.options_builder;
 package import libtt.parser.section.script_builder;
 
 package import libtt.parser.section.section_builder;
+
+package import libtt.parser.section.utils;

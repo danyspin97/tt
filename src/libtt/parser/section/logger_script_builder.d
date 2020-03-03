@@ -10,6 +10,7 @@ import libtt.define : DefaultLogGroup, DefaultLogUser;
 import libtt.dirs : dirs;
 import libtt.format : formatAssertMessage;
 import libtt.parser.section.script_builder : ScriptBuilder;
+import libtt.parser.section.utils : testBuilderWithFile;
 
 class LoggerScriptBuilder : ScriptBuilder
 {

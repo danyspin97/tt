@@ -64,6 +64,7 @@ libsrc = files(
     'parser/section/package.d',
     'parser/section/script_builder.d',
     'parser/section/section_builder.d',
+    'parser/section/utils.d',
     'parser/service/bundle_director.d',
     'parser/service/dependency_reader.d',
     'parser/service/instance_service_parser.d',
