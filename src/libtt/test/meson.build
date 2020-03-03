@@ -2,8 +2,10 @@ test_files = [
     'environment_section',
     'invalid',
     'invalid_environment',
+    'invalid_int_value',
     'logger_script',
     'logger_script_no_execute',
+    'longrun_options_section',
     'main_section',
     'script_section'
 ]
