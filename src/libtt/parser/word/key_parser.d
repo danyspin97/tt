@@ -77,6 +77,7 @@ class KeyParser
     {
         auto parser = new KeyParser();
         import std.exception : assertThrown;
+
         assertThrown!WordNotValidException(parser.parse("=bar"));
         assertThrown!WordNotValidException(parser.parse(" =bar"));
     }

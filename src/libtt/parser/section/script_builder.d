@@ -6,10 +6,10 @@ module libtt.parser.section.script_builder;
 @safe:
 
 import libtt.dirs : dirs;
-import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.parser.section.code_section_builder : CodeSectionBuilder;
 import libtt.parser.line : KeyValueParser, MultilineCodeParser;
 import libtt.parser.utils : setFailsIfNotEmpty;
+import libtt.parser.section.section_builder : SectionBuilder;
+import libtt.parser.section.code_section_builder : CodeSectionBuilder;
 import libtt.parser.section.utils : testBuilderWithFile;
 import libtt.data : Environment, Script;
 
