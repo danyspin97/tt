@@ -7,7 +7,7 @@ module libtt.parser.section.options_builder;
 
 import std.conv : ConvException;
 
-import libtt.exception : BooleanParseException, BuilderException,
+import libtt.exception : BooleanParseException, BuilderException, EmptyValueFoundWhileParsingException,
     LineNotValidWhileParsingException, ParserIsStillParsingException;
 import libtt.parser.line : KeyValueParser, MultilineValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
@@ -15,7 +15,7 @@ import libtt.parser.section.section_builder : SectionBuilder;
 abstract class OptionsBuilder : SectionBuilder
 {
 public:
-    this ()
+    this()
     {
         valuesParser = new MultilineValueParser();
     }
@@ -27,16 +27,8 @@ public:
             return;
         }
 
-        if (valuesParser.isParsing())
+        if (parseMultilineValue(line))
         {
-            valuesParser.parseLine(line);
-            checkParserHasFinished();
-            return;
-        }
-
-        if (valuesParser.startParsing(line))
-        {
-            checkParserHasFinished();
             return;
         }
 
@@ -62,6 +54,36 @@ public:
     }
 
 private:
+    bool parseMultilineValue(in string line)
+    {
+        try
+        {
+            return tryParseMultilineValue(line);
+        }
+        catch (EmptyValueFoundWhileParsingException e)
+        {
+            throw new BuilderException(valuesParser.key ~ " is empty in section [options]");
+        }
+    }
+
+    bool tryParseMultilineValue(in string line)
+    {
+        if (valuesParser.isParsing())
+        {
+            valuesParser.parseLine(line);
+            checkParserHasFinished();
+            return true;
+        }
+
+        if (valuesParser.startParsing(line))
+        {
+            checkParserHasFinished();
+            return true;
+        }
+
+        return false;
+    }
+
     void checkParserHasFinished()
     {
         if (!valuesParser.isParsing())
