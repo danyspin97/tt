@@ -58,6 +58,7 @@ class ValueParser
         string ret;
         if (isQuoted)
         {
+            enforce!WordNotValidException(i < line.length, "Double quotes have not been closed");
             m_value = line[start .. i];
             ret = line[i + 1 .. $];
         }
