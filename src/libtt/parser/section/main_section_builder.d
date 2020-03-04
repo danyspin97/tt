@@ -6,8 +6,9 @@ module libtt.parser.section.main_section_builder;
 @safe:
 
 import libtt.parser.line : KeyValueParser;
-import libtt.parser.section.section_builder : SectionBuilder;
 import libtt.parser.section.main_section : MainSection;
+import libtt.parser.section.section_builder : SectionBuilder;
+import libtt.parser.section.utils : testBuilderWithFile;
 
 class MainSectionBuilder : SectionBuilder
 {
@@ -15,6 +16,18 @@ public:
     this(MainSection* mainSection)
     {
         this.mainSection = mainSection;
+    }
+
+    @system unittest
+    {
+        auto m = new MainSection();
+        auto builder = new MainSectionBuilder(m);
+        builder.testBuilderWithFile("src/libtt/test/main_section");
+
+        assert(m.name == "nginx");
+        assert(m.polishName == "Nginx Service");
+        assert(m.description == "Run nginx server");
+        assert(m.type == "longrun");
     }
 
     override void parseLine(in string line)
