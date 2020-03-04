@@ -5,10 +5,11 @@ module libtt.parser.section.main_section_builder;
 
 @safe:
 
+import libtt.exception : BuilderException, LineNotValidWhileParsingException;
 import libtt.parser.line : KeyValueParser;
 import libtt.parser.section.main_section : MainSection;
 import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.parser.section.utils : testBuilderWithFile;
+import libtt.parser.section.utils : attributeNotFound, testBuilderWithFile;
 
 class MainSectionBuilder : SectionBuilder
 {
@@ -20,8 +21,8 @@ public:
 
     @system unittest
     {
-        auto m = new MainSection();
-        auto builder = new MainSectionBuilder(m);
+        MainSection m;
+        auto builder = new MainSectionBuilder(&m);
         builder.testBuilderWithFile("src/libtt/test/main_section");
 
         assert(m.name == "nginx");
@@ -30,7 +31,42 @@ public:
         assert(m.type == "longrun");
     }
 
+    @system unittest
+    {
+        auto m = new MainSection();
+        auto builder = new MainSectionBuilder(m);
+        import std.exception : assertThrown;
+        import libtt.exception : BuilderException;
+
+        const auto testFiles = [
+            "invalid", "invalid_quotes", "unclosed_quotes",
+            "unknown_key",
+        ];
+        static foreach (test; testFiles)
+        {
+            assertThrown!BuilderException(builder.testBuilderWithFile("src/libtt/test/" ~ test));
+        }
+    }
+
     override void parseLine(in string line)
+    {
+        try
+        {
+            tryParseLine(line);
+        }
+        catch (LineNotValidWhileParsingException e)
+        {
+            throw new BuilderException(`Line "` ~ line ~ `" is not valid`);
+        }
+    }
+
+    override void endParsing()
+    {
+
+    }
+
+private:
+    void tryParseLine(in string line)
     {
         if (line == "")
         {
@@ -61,16 +97,9 @@ public:
             mainSection.type = value;
             break;
         default:
-            auto errorMessage = `Camp named "` ~ key ~ `" is not allowed.`;
-            throw new Exception(errorMessage);
+            attributeNotFound(key, "main");
         }
     }
 
-    override void endParsing()
-    {
-
-    }
-
-private:
     MainSection* mainSection;
 }
