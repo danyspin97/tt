@@ -1,0 +1,3 @@
+write_message = no
+optional = yes
+depends = ( foo bar )

@@ -6,11 +6,11 @@ module libtt.parser.section.oneshot_options_builder;
 @safe:
 nothrow:
 
-import libtt.parser.section.utils : attributeNotFound;
+import libtt.data : OneshotOptions;
+import libtt.parser.section.utils : attributeNotFound, testBuilderWithFile;
 import libtt.parser.section.options_builder : OptionsBuilder;
 import libtt.parser.line : MultilineValueParser;
 import libtt.parser.utils : parseBoolean;
-import libtt.data : OneshotOptions;
 
 class OneshotOptionsBuilder : OptionsBuilder
 {
@@ -19,6 +19,35 @@ public:
     {
         super();
         this.oneshotOptions = oneshotOptions;
+    }
+
+    @system unittest
+    {
+        OneshotOptions o = new OneshotOptions();
+        auto builder = new OneshotOptionsBuilder(o);
+        builder.testBuilderWithFile("src/libtt/test/oneshot_options_section");
+
+        assert(o.optional == true);
+        assert(o.writeMessage == false);
+        assert(o.dependencies == ["foo", "bar"]);
+    }
+
+    @system unittest
+    {
+        OneshotOptions o = new OneshotOptions();
+        auto builder = new OneshotOptionsBuilder(o);
+        import std.exception : assertThrown;
+        import libtt.exception : BuilderException;
+
+        const auto testFiles = [
+            "empty_multiline_value", "invalid",
+            "invalid_multiline_value", "invalid_quotes", "invalid_boolean", "unclosed_quotes",
+            "unclosed_multiline_value", "unknown_key", "unknown_multiline_value"
+        ];
+        static foreach (test; testFiles)
+        {
+            assertThrown!BuilderException(builder.testBuilderWithFile("src/libtt/test/" ~ test));
+        }
     }
 
 protected:
@@ -33,6 +62,7 @@ protected:
             oneshotOptions.writeMessage = parseBoolean(value);
             break;
         default:
+            attributeNotFound(key, "options");
         }
     }
 

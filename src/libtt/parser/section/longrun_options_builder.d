@@ -48,8 +48,8 @@ public:
         import std.exception : assertThrown;
 
         const auto testFiles = [
-            "empty_multiline_value", "invalid", "invalid_int_value",
-            "invalid_multiline_value", "invalid_quotes", "longrun_options_invalid_boolean", "unclosed_quotes",
+            "empty_multiline_value", "invalid", "invalid_boolean", "invalid_int_value",
+            "invalid_multiline_value", "invalid_quotes", "unclosed_quotes",
             "unclosed_multiline_value", "unknown_key", "unknown_multiline_value"
         ];
         static foreach (test; testFiles)
