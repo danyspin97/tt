@@ -41,7 +41,7 @@ public:
         switch (section)
         {
         case "main":
-            return new MainSectionBuilder(mainSection);
+            return new MainSectionBuilder(&mainSection);
         case "run":
             return new ScriptBuilder(&run, environment);
         case "finish":

@@ -38,7 +38,7 @@ public:
         switch (section)
         {
         case "main":
-            return new MainSectionBuilder(mainSection);
+            return new MainSectionBuilder(&mainSection);
         case "start":
             return new ScriptBuilder(&start, environment);
         case "stop":

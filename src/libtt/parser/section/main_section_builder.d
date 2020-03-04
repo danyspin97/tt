@@ -12,7 +12,7 @@ import libtt.parser.section.main_section : MainSection;
 class MainSectionBuilder : SectionBuilder
 {
 public:
-    this(MainSection mainSection)
+    this(MainSection* mainSection)
     {
         this.mainSection = mainSection;
     }
@@ -65,5 +65,5 @@ public:
     }
 
 private:
-    MainSection mainSection;
+    MainSection* mainSection;
 }

@@ -29,7 +29,7 @@ public:
         switch (section)
         {
         case "main":
-            return new MainSectionBuilder(mainSection);
+            return new MainSectionBuilder(&mainSection);
         case "options":
             return new BundleOptionsBuilder(options);
         default:
