@@ -24,15 +24,9 @@ public:
             return;
         }
 
-        string key, value;
-        auto keyValueParser = new KeyValueParser(line);
-        if (keyValueParser.lineValid())
-        {
-            key = keyValueParser.key;
-            value = keyValueParser.value;
-        }
-
-        // TODO: Handle multiline values here
+        const auto keyValueParser = new KeyValueParser(line, true);
+        const auto key = keyValueParser.key;
+        const auto value = keyValueParser.value;
 
         fillServiceDataWith(key, value);
     }
