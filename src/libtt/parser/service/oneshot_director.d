@@ -13,6 +13,13 @@ import libtt.data : Environment, Oneshot, OneshotOptions, Script, Service;
 class OneshotDirector : ServiceDirector
 {
 public:
+    this ()
+    {
+        super();
+        options = new OneshotOptions();
+        environment = new Environment();
+    }
+
     override Service instanceService(in string path)
     {
         auto service = new Oneshot(mainSection.name, mainSection.polishName,
@@ -50,6 +57,6 @@ private:
     MainSection mainSection;
     Script start;
     Script stop;
-    Environment environment = new Environment();
-    OneshotOptions options = new OneshotOptions();
+    Environment environment;
+    OneshotOptions options;
 }
