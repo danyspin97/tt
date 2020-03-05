@@ -1,4 +1,5 @@
 test_files = [
+    'bundle_options_section',
     'empty_multiline_value',
     'environment_section',
     'invalid',
