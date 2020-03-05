@@ -6,6 +6,7 @@ module libtt.parser.section.code_section_builder;
 import libtt.parser.utils : setFailsIfNotEmpty;
 import libtt.parser.line : KeyValueParser, MultilineCodeParser;
 import libtt.parser.section.section_builder : SectionBuilder;
+import libtt.parser.section.utils : isEmptyLine;
 
 @safe:
 nothrow:
@@ -27,7 +28,7 @@ abstract class CodeSectionBuilder : SectionBuilder
             return;
         }
 
-        if (line == "")
+        if (isEmptyLine(line))
         {
             return;
         }

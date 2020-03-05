@@ -13,7 +13,7 @@ import libtt.exception : BuilderException, LineNotValidWhileParsingException;
 import libtt.format : formatAssertMessage;
 import libtt.parser.line : KeyValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.parser.section.utils : testBuilderWithFile;
+import libtt.parser.section.utils : isEmptyLine, testBuilderWithFile;
 
 class EnvironmentBuilder : SectionBuilder
 {
@@ -67,6 +67,11 @@ public:
 private:
     void tryParseLine(in string line)
     {
+        if (isEmptyLine(line))
+        {
+            return;
+        }
+
         auto keyValueParser = new KeyValueParser(line, true);
         const string key = keyValueParser.key;
         checkKeyIsValid(key);

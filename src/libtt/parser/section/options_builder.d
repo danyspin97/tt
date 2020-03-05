@@ -11,6 +11,7 @@ import libtt.exception : BooleanParseException, BuilderException,
     EmptyValueFoundWhileParsingException, LineNotValidWhileParsingException;
 import libtt.parser.line : KeyValueParser, MultilineValueParser;
 import libtt.parser.section.section_builder : SectionBuilder;
+import libtt.parser.section.utils : isEmptyLine;
 
 abstract class OptionsBuilder : SectionBuilder
 {
@@ -22,7 +23,7 @@ public:
 
     override void parseLine(in string line)
     {
-        if (line == "")
+        if (isEmptyLine(line))
         {
             return;
         }

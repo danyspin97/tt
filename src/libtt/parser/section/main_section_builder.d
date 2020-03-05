@@ -9,7 +9,7 @@ import libtt.exception : BuilderException, LineNotValidWhileParsingException;
 import libtt.parser.line : KeyValueParser;
 import libtt.parser.section.main_section : MainSection;
 import libtt.parser.section.section_builder : SectionBuilder;
-import libtt.parser.section.utils : attributeNotFound, testBuilderWithFile;
+import libtt.parser.section.utils : attributeNotFound, isEmptyLine, testBuilderWithFile;
 
 class MainSectionBuilder : SectionBuilder
 {
@@ -68,7 +68,7 @@ public:
 private:
     void tryParseLine(in string line)
     {
-        if (line == "")
+        if (isEmptyLine(line))
         {
             return;
         }
