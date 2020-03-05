@@ -55,7 +55,7 @@ public:
         }
     }
 
-private:
+protected:
     bool parseMultilineValue(in string line)
     {
         try
@@ -68,6 +68,7 @@ private:
         }
     }
 
+private:
     bool tryParseMultilineValue(in string line)
     {
         if (valuesParser.isParsing())
