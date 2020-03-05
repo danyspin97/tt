@@ -56,7 +56,7 @@ private:
     void validatePath() const
     {
         immutable auto nameFromPath = stripExtension(baseName(path));
-        auto enforceMessage = "The name camp must match the name of the file";
+        const auto enforceMessage = `The attribute "name" must match the name of the file`;
         enforce(name == nameFromPath, enforceMessage);
     }
 
