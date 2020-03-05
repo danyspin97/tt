@@ -189,13 +189,15 @@ private:
     void tryParseValuesInLine(in string line)
     {
         scope (failure)
+        {
             addValuesFromLine(line);
-        scope (failure)
             m_isParsing = true;
+        }
         scope (success)
             m_isParsing = false;
 
         auto endingParenthesisParser = new UntilTokenParser(')');
+        // Throw if the token is not found
         endingParenthesisParser.parseUntilToken(line);
         auto parsedLine = endingParenthesisParser.parsedLine;
         checkLineEndsWithWhitespace(parsedLine);
@@ -204,7 +206,7 @@ private:
 
     static void checkLineStartsWithWhitespace(in string line)
     {
-        // A space is needed before the parenthesis
+        // A space is needed after the parenthesis
         if (line.length != 0 && !line[0].isWhite())
         {
             throw new LineNotValidWhileParsingException("");
@@ -223,7 +225,7 @@ private:
 
     static void checkLineEndsWithWhitespace(in string line)
     {
-        // A space is needed after the parenthesis
+        // A space is needed before the parenthesis
         if (line.length != 0 && !line[$ - 1].isWhite())
         {
             throw new LineNotValidWhileParsingException("");
