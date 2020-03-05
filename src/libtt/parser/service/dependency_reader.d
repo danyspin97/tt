@@ -27,6 +27,7 @@ public:
             return getDependenciesForOneshot(oneshot);
         }
 
+        // Should never get here
         throw new Exception("");
     }
 
