@@ -22,7 +22,7 @@ public:
     override Service instanceService(in string path)
     {
         return new Bundle(mainSection.name, mainSection.polishName,
-                mainSection.description, mainSection.path, options);
+                mainSection.description, path, options);
     }
 
     override SectionBuilder getBuilderForSection(in string section)

@@ -23,7 +23,7 @@ public:
     override Service instanceService(in string path)
     {
         auto service = new Longrun(mainSection.name, mainSection.polishName,
-                mainSection.description, mainSection.path, options, run,);
+                mainSection.description, path, options, run,);
 
         if (finish !is null)
         {
