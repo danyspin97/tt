@@ -5,7 +5,7 @@ module libtt.parser.service.service_parser;
 
 @safe:
 
-import std.container : DList;
+import std.array : array;
 import std.range : drop;
 import std.stdio : File;
 
@@ -39,14 +39,9 @@ public:
     }
 
 protected:
-    DList!string generateListFrom(File file) @system
+    string[] generateListFrom(File file) @system
     {
-        auto list = DList!string();
-        foreach (line; file.byLine())
-        {
-            list.insertBack(line.idup);
-        }
-        return list;
+        return file.byLineCopy().array();
     }
 
 private:
@@ -55,7 +50,7 @@ private:
         return File(path, "r");
     }
 
-    string getTypeFromService(DList!string service)
+    string getTypeFromService(string[] service)
     {
         auto mainSectionIndex = getMainSectionIndex(service);
         foreach (line; service[].drop(mainSectionIndex))
@@ -71,10 +66,10 @@ private:
         throw new Exception(errorMessage);
     }
 
-    int getMainSectionIndex(DList!string service)
+    int getMainSectionIndex(string[] service)
     {
         ushort i = 0;
-        foreach (line; service[])
+        foreach (line; service)
         {
             auto sectionLineParser = new SectionLineParser(line);
             auto const currentSection = sectionLineParser.getSectionOrDefault("");

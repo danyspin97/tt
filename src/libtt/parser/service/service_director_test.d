@@ -5,8 +5,6 @@ module libtt.parser.service.service_director_test;
 
 @safe:
 
-import std.container : DList;
-
 import libtt.parser.section : SectionBuilder;
 import libtt.parser.service.service_director : ServiceDirector;
 import libtt.data : Service;
@@ -44,11 +42,11 @@ protected:
     unittest
     {
         auto director = new ServiceDirectorTest();
-        auto s = DList!string("", "[foo]");
+        auto s = ["", "[foo]"];
         auto const linesNumber = 10;
         foreach (i; 0 .. linesNumber)
         {
-            s.insertBack("");
+            s ~= "";
         }
 
         director.parseAndGetService(s, "");
@@ -59,7 +57,7 @@ protected:
     unittest
     {
         auto director = new ServiceDirectorTest();
-        auto s = DList!string("foo", "");
+        auto s = ["foo", ""];
         import std.exception : assertThrown;
 
         assertThrown!Exception(director.parseAndGetService(s, ""));

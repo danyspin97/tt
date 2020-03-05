@@ -5,7 +5,8 @@ module libtt.parser.service.instance_service_parser;
 
 @safe:
 
-import std.container : DList;
+import std.array : array;
+import std.algorithm : each;
 import std.stdio : File;
 import std.string : tr;
 
@@ -23,21 +24,17 @@ public:
     }
 
 protected:
-    override DList!string generateListFrom(File file) @system
+    override string[] generateListFrom(File file) @system
     {
-        auto list = DList!string();
-        foreach (line; file.byLine())
-        {
-            auto parsedLine = replaceTokenInLine(line);
-            list.insertBack(parsedLine.idup);
-        }
+        string[] list = file.byLineCopy().array();
+        list.each!((ref s) => replaceTokenInLine(s));
         return list;
     }
 
 private:
-    char[] replaceTokenInLine(char[] line)
+    void replaceTokenInLine(ref string line)
     {
-        return tr(line, InstanceToken, instanceName);
+        line = tr(line, InstanceToken, instanceName);
     }
 
     string instanceName;
