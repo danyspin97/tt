@@ -23,7 +23,7 @@ public:
     override Service instanceService(in string path)
     {
         auto service = new Oneshot(mainSection.name, mainSection.polishName,
-                mainSection.description, mainSection.path, options, start,);
+                mainSection.description, path, options, start,);
 
         if (stop !is null)
         {
