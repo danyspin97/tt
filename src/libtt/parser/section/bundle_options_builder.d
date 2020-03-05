@@ -22,11 +22,27 @@ public:
 
     @system unittest
     {
-        auto o = new BundleOptions;
+        auto o = new BundleOptions();
         auto builder = new BundleOptionsBuilder(o);
         builder.testBuilderWithFile("src/libtt/test/bundle_options_section");
 
         assert(o.contents == ["foo", "bar"]);
+    }
+
+    @system unittest
+    {
+        auto o = new BundleOptions();
+        auto builder = new BundleOptionsBuilder(o);
+        import std.exception : assertThrown;
+
+        const auto testFiles = [
+            "empty_multiline_value", "invalid", "invalid_multiline_value",
+            "unclosed_multiline_value", "unknown_multiline_value"
+        ];
+        static foreach (test; testFiles)
+        {
+            assertThrown!BuilderException(builder.testBuilderWithFile("src/libtt/test/" ~ test));
+        }
     }
 
     override void parseLine(string line)
