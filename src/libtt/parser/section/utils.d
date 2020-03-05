@@ -11,7 +11,7 @@ import std.string : strip;
 import libtt.exception : BuilderException;
 import libtt.parser.section.section_builder : SectionBuilder;
 
-@system final void testBuilderWithFile(SectionBuilder builder, string path)
+@system final void testBuilderWithFile(SectionBuilder builder, in string path)
 {
     auto file = File(path, "r");
     auto range = file.byLineCopy();
