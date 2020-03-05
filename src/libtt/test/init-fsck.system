@@ -1,0 +1,15 @@
+[main]
+name = init-fsck
+polish_name = Run fsck
+description = Check the filesystem integrity
+type = oneshot
+
+[start]
+build = auto
+execute = (
+    fsck ${CMDARGS}
+)
+
+[config]
+CMDARGS = -d
+

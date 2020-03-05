@@ -2,6 +2,7 @@ test_files = [
     'bundle_options_section',
     'empty_multiline_value',
     'environment_section',
+    'init-fsck.system',
     'invalid',
     'invalid_boolean',
     'invalid_environment',
