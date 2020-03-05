@@ -224,7 +224,7 @@ private:
     static void checkLineEndsWithWhitespace(in string line)
     {
         // A space is needed after the parenthesis
-        if (line.length == 0 || !line[$ - 1].isWhite())
+        if (line.length != 0 && !line[$ - 1].isWhite())
         {
             throw new LineNotValidWhileParsingException("");
         }
@@ -232,12 +232,13 @@ private:
 
     unittest
     {
-        assertThrown!LineNotValidWhileParsingException(checkLineEndsWithWhitespace(""));
+        assertThrown!LineNotValidWhileParsingException(checkLineEndsWithWhitespace("foo"));
     }
 
     unittest
     {
-        assertNotThrown!LineNotValidWhileParsingException(checkLineStartsWithWhitespace("        "));
+        assertNotThrown!LineNotValidWhileParsingException(checkLineEndsWithWhitespace(""));
+        assertNotThrown!LineNotValidWhileParsingException(checkLineEndsWithWhitespace("foo "));
     }
 
     void addValuesFromLine(in string line)
