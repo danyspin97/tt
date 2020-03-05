@@ -13,12 +13,13 @@ import libtt.data : Environment, LoggerScript, Longrun, LongrunOptions, Script, 
 class LongrunDirector : ServiceDirector
 {
 public:
-    this ()
+    this()
     {
-        super ();
+        super();
         options = new LongrunOptions();
         environment = new Environment();
     }
+
     override Service instanceService(in string path)
     {
         auto service = new Longrun(mainSection.name, mainSection.polishName,

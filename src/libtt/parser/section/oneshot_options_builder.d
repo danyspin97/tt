@@ -40,8 +40,8 @@ public:
         import libtt.exception : BuilderException;
 
         const auto testFiles = [
-            "empty_multiline_value", "invalid",
-            "invalid_multiline_value", "invalid_quotes", "invalid_boolean", "unclosed_quotes",
+            "empty_multiline_value", "invalid", "invalid_multiline_value",
+            "invalid_quotes", "invalid_boolean", "unclosed_quotes",
             "unclosed_multiline_value", "unknown_key", "unknown_multiline_value"
         ];
         static foreach (test; testFiles)

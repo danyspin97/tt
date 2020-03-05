@@ -48,15 +48,15 @@ public:
         import std.exception : assertThrown;
 
         const auto testFiles = [
-            "empty_multiline_value", "invalid", "invalid_boolean", "invalid_int_value",
-            "invalid_multiline_value", "invalid_quotes", "unclosed_quotes",
-            "unclosed_multiline_value", "unknown_key", "unknown_multiline_value"
+            "empty_multiline_value", "invalid", "invalid_boolean",
+            "invalid_int_value", "invalid_multiline_value", "invalid_quotes",
+            "unclosed_quotes", "unclosed_multiline_value", "unknown_key",
+            "unknown_multiline_value"
         ];
         static foreach (test; testFiles)
         {
             assertThrown!BuilderException(builder.testBuilderWithFile("src/libtt/test/" ~ test));
         }
-
     }
 
     override void saveValuesOfParser(ref MultilineValueParser parser)

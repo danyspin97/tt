@@ -13,11 +13,12 @@ import libtt.data : Bundle, BundleOptions, Service;
 class BundleDirector : ServiceDirector
 {
 public:
-    this ()
+    this()
     {
         super();
         options = new BundleOptions();
     }
+
     override Service instanceService(in string path)
     {
         return new Bundle(mainSection.name, mainSection.polishName,

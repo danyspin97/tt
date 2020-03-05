@@ -13,7 +13,7 @@ import libtt.data : Environment, Oneshot, OneshotOptions, Script, Service;
 class OneshotDirector : ServiceDirector
 {
 public:
-    this ()
+    this()
     {
         super();
         options = new OneshotOptions();

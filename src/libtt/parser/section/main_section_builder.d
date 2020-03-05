@@ -39,8 +39,7 @@ public:
         import libtt.exception : BuilderException;
 
         const auto testFiles = [
-            "invalid", "invalid_quotes", "unclosed_quotes",
-            "unknown_key",
+            "invalid", "invalid_quotes", "unclosed_quotes", "unknown_key",
         ];
         static foreach (test; testFiles)
         {
