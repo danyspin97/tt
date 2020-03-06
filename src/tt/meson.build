@@ -1,6 +1,9 @@
 tt_exe_src = [
     'exception.d',
-    'options.d',
+    'options/common_options.d',
+    'options/debug_level.d',
+    'options/options.d',
+    'options/options_factory.d',
 ]
 
 tt_exe = executable(
