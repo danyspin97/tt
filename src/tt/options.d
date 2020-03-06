@@ -12,6 +12,8 @@ import std.getopt;
 import std.stdio;
 import std.typecons : tuple;
 
+import tt.exception;
+
 immutable helpText = "
 Usage:
   tt <subcommand> [OPTION...]
@@ -37,37 +39,6 @@ Application Options:
   -v, --version      - Print program version.
   -d, --debug [0-4]  - Specify the debug level.";
 
-class InsufficientArgLengthException : Exception
-{
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
-    {
-        super(msg, file, line);
-    }
-}
-
-class UnexpectedArgumentException : Exception
-{
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
-    {
-        super(msg, file, line);
-    }
-}
-
-class UnknownArgumentException : Exception
-{
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
-    {
-        super(msg, file, line);
-    }
-}
-
-class BadDebugLevelException : Exception
-{
-    this(string msg, string file = __FILE__, size_t line = __LINE__) @safe
-    {
-        super(msg, file, line);
-    }
-}
 
 /// The debug level to run the `tt` binary in
 enum DebugLevel

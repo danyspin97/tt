@@ -1,4 +1,5 @@
 tt_exe_src = [
+    'exception.d',
     'options.d',
 ]
 
