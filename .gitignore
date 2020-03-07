@@ -23,5 +23,6 @@ docs/
 # Code coverage
 *.lst
 
-# tt executable from DUB
+# tt executables from DUB
 src/tt/tt
+src/tt/tt-test-application
