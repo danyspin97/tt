@@ -4,6 +4,7 @@ tt_exe_src = [
     'options/debug_level.d',
     'options/options.d',
     'options/options_factory.d',
+    'options/options_test.d',
 ]
 
 tt_exe = executable(
