@@ -16,4 +16,3 @@ struct CommonOptions
     /// What subcommand to run
     string subcommand;
 }
-

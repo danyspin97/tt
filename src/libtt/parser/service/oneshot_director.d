@@ -27,14 +27,13 @@ public:
         import std.stdio : File;
 
         auto lines = new File("src/libtt/test/init-fsck.system").byLineCopy().array();
-        Oneshot o = cast(Oneshot)director.parseAndGetService(lines, "/tmp/init-fsck");
+        Oneshot o = cast(Oneshot) director.parseAndGetService(lines, "/tmp/init-fsck");
 
         assert(o);
         assert(o.name == "init-fsck");
         assert(o.start);
         assert(o.start.environment.get("CMDARGS") == "-d");
     }
-
 
     override Service instanceService(in string path)
     {

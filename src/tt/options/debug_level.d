@@ -10,4 +10,3 @@ enum DebugLevel
     Debug,
     Trace,
 }
-

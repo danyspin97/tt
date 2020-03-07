@@ -24,7 +24,7 @@ class OptionsFactory
     }
 
 private:
-    version ( unittest )
+    version (unittest)
     {
         this()
         {
@@ -89,10 +89,11 @@ private:
 
     Options getOptionsForSubcommand()
     {
-        switch(commonOptions.subcommand)
+        switch (commonOptions.subcommand)
         {
         default:
-            throw new UnknownArgumentException(format("Unknown subcommand %s", commonOptions.subcommand));
+            throw new UnknownArgumentException(format("Unknown subcommand %s",
+                    commonOptions.subcommand));
         }
     }
 
@@ -105,9 +106,7 @@ private:
         assertThrown!UnknownArgumentException(factory.getOptionsForSubcommand());
     }
 
-
     CommonOptions commonOptions;
     Options m_options;
     string[] args;
 }
-

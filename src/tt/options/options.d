@@ -14,12 +14,27 @@ import tt.options.common_options : CommonOptions;
 class Options
 {
 public:
-    @property bool showHelp() { return commonOptions.showHelp; }
-    @property bool showVersion() { return commonOptions.showVersion; }
-    @property DebugLevel debugLevel() { return commonOptions.debugLevel; }
-    @property string subcommand() { return commonOptions.subcommand; }
+    @property bool showHelp()
+    {
+        return commonOptions.showHelp;
+    }
 
-    this(const CommonOptions commonOptions)
+    @property bool showVersion()
+    {
+        return commonOptions.showVersion;
+    }
+
+    @property DebugLevel debugLevel()
+    {
+        return commonOptions.debugLevel;
+    }
+
+    @property string subcommand()
+    {
+        return commonOptions.subcommand;
+    }
+
+    this(in CommonOptions commonOptions)
     {
         this.commonOptions = commonOptions;
     }
@@ -34,11 +49,10 @@ protected:
     void checkExactlyNArgs(in ushort n, in string[] args)
     {
         enforce!UnexpectedArgumentException(args.length == n,
-                format("Didn't expect the additional arguments %s to subcommand '%s'", args[3 .. $].join(),
-                subcommand));
+                format("Didn't expect the additional arguments %s to subcommand '%s'",
+                    args[3 .. $].join(), subcommand));
     }
 
 private:
     const CommonOptions commonOptions;
 }
-

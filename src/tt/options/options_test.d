@@ -34,6 +34,7 @@ private class OptionsTest : Options
     {
         import std.exception : assertThrown;
         import tt.exception : InsufficientArgLengthException, UnexpectedArgumentException;
+
         CommonOptions commonOptions;
         auto optionsTest = new OptionsTest(commonOptions);
 
