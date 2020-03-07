@@ -3,6 +3,11 @@
 
 module tt.options.options;
 
+import std.array : join;
+import std.exception : enforce;
+import std.format : format;
+
+import tt.exception : InsufficientArgLengthException, UnexpectedArgumentException;
 import tt.options.debug_level : DebugLevel;
 import tt.options.common_options : CommonOptions;
 
@@ -17,6 +22,20 @@ public:
     this(const CommonOptions commonOptions)
     {
         this.commonOptions = commonOptions;
+    }
+
+protected:
+    void checkAtLeastNArgs(in ushort n, in string[] args)
+    {
+        enforce!InsufficientArgLengthException(args.length >= n,
+                format("Expected a servicename after the subcommand '%s'", subcommand));
+    }
+
+    void checkExactlyNArgs(in ushort n, in string[] args)
+    {
+        enforce!UnexpectedArgumentException(args.length == n,
+                format("Didn't expect the additional arguments %s to subcommand '%s'", args[3 .. $].join(),
+                subcommand));
     }
 
 private:
