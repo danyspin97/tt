@@ -26,7 +26,7 @@ jobs:
       - name: Install meson
         run: pip3 install meson
 
-      - name: Test meson build
+      - name: Build using meson
         run: meson build && ninja -C build
 
       - name: Run meson tests
