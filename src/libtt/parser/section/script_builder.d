@@ -73,12 +73,12 @@ public:
     }
 
 protected:
-    version (unittest)
-    {
+    //version (unittest)
+    //{
         this()
         {
         }
-    }
+    //}
 
     override string* getAttributeForKey(string key)
     {
