@@ -63,11 +63,11 @@ public:
     }
 
 private:
-
-    // Only used for unit testing
-    this()
+    version (unittest)
     {
-
+        this()
+        {
+        }
     }
 
     void parseLine()
