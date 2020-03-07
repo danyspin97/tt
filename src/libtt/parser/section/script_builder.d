@@ -73,11 +73,9 @@ public:
     }
 
 protected:
-    version (unittest)
+    // Only used for unittest
+    this()
     {
-        this()
-        {
-        }
     }
 
     override string* getAttributeForKey(string key)

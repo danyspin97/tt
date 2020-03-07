@@ -17,9 +17,9 @@ class LoggerScriptBuilder : ScriptBuilder
 public:
     this(LoggerScript* loggerScript, ref Environment environment, string serviceName)
     {
-        Script* s;
-        super(s, environment);
         this.loggerScript = loggerScript;
+        assert(environment);
+        this.environment = environment;
         this.serviceName = serviceName;
     }
 
@@ -91,11 +91,10 @@ protected:
     }
 
 private:
-    version (unittest)
+    // only used for unittest
+    this()
     {
-        this()
-        {
-        }
+
     }
 
     void checkParsedValues()

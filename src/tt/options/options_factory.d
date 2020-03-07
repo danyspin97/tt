@@ -24,11 +24,9 @@ class OptionsFactory
     }
 
 private:
-    version (unittest)
+    // Only used for unit testing
+    this ()
     {
-        this()
-        {
-        }
     }
 
     void parseCommonOptions()
