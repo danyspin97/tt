@@ -1,6 +1,9 @@
 // Copyright 2020 Rasmus Thomsen <oss@cogitri.dev>
 // Distributed under the terms of the GNU General Public License v2
 
+@safe:
+nothrow:
+
 immutable helpText = "
 Usage:
   tt <subcommand> [OPTION...]
