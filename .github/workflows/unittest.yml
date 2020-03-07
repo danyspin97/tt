@@ -35,6 +35,7 @@ jobs:
       - name: Run dub tests
         run: |
           sed '/importPaths/a "\/usr\/local\/include\/d",' -i src/libtt/dub.json
+          dub test -b unittest-cov tt
           dub test -b unittest-cov libtt
 
       - name: Upload Codecoverage
