@@ -3,7 +3,7 @@
 
 module tt.options.common_options;
 
-import tt.options.debug_level;
+import tt.options.debug_level : DebugLevel;
 
 struct CommonOptions
 {
