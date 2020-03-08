@@ -44,6 +44,7 @@ void executeTT(string[] args, ref DebugLevel debugLevel)
     commonOptParser.parseCommonOptions();
     debugLevel = commonOpt.debugLevel;
     commonOptParser.checkAndSetSubcommand();
+    args = commonOptParser.args;
     auto optionsFactory = new OptionsFactory(commonOpt, args);
     auto opt = optionsFactory.options;
     debugLevel = opt.debugLevel;

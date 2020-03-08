@@ -17,9 +17,14 @@ import tt.options.debug_level : DebugLevel;
 
 class CommonOptionsParser
 {
+    @property ref string[] args()
+    {
+        return m_args;
+    }
+
     this(CommonOptions* options, ref string[] args)
     {
-        this.args = args;
+        this.m_args = args;
         assert(options);
         this.options = options;
     }
@@ -142,7 +147,7 @@ private:
     }
 
     CommonOptions* options;
-    string[] args;
+    string[] m_args;
 
     uint debugLevelInt;
 }
