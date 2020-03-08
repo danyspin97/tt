@@ -56,4 +56,3 @@ private class OptionsTest : Options
         assertThrown!UnexpectedArgumentException(optionsTest.checkExactlyNArgs(3));
     }
 }
-

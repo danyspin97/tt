@@ -13,8 +13,15 @@ import tt.options.services_options : ServicesOptions;
 class ParseOptions : ServicesOptions
 {
 public:
-    @property bool quiet() { return m_quiet; }
-    @property bool isFile() { return m_isFile; }
+    @property bool quiet()
+    {
+        return m_quiet;
+    }
+
+    @property bool isFile()
+    {
+        return m_isFile;
+    }
 
     this(in CommonOptions commonOptions, string[] args)
     {
@@ -28,6 +35,7 @@ protected:
         checkAtLeastNArgs(3);
         parseServices();
     }
+
 private:
     bool m_isFile;
     bool m_quiet;

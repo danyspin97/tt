@@ -12,7 +12,10 @@ nothrow:
 abstract class ServicesOptions : Options
 {
 public:
-    @property string[] services() { return m_services; }
+    @property string[] services()
+    {
+        return m_services;
+    }
 
     this(in CommonOptions commonOptions, string[] args)
     {
@@ -28,4 +31,3 @@ protected:
 private:
     string[] m_services;
 }
-

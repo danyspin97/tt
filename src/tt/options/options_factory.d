@@ -26,7 +26,7 @@ class OptionsFactory
 
 private:
     // Only used for unit testing
-    this ()
+    this()
     {
     }
 
