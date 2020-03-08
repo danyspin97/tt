@@ -6,13 +6,12 @@ module tt.action.parse_action;
 import tt.action.action : Action;
 import tt.options : ParseOptions;
 
-@safe:
-nothrow:
+@system:
 
 class ParseAction : Action
 {
 public:
-    this(ParseOptions options)
+    this(ParseOptions options) @safe
     {
         this.options = options;
     }
