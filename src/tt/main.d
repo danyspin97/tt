@@ -1,8 +1,13 @@
 // Copyright 2020 Rasmus Thomsen <oss@cogitri.dev>
 // Distributed under the terms of the GNU General Public License v2
 
-@safe:
-nothrow:
+module tt.main;
+
+import std.exception : collectException;
+
+import tt.action : Action, ActionFactory;
+import tt.exception_handler : ExceptionHandler;
+import tt.options : CommonOptions, CommonOptionsParser, DebugLevel, OptionsFactory;
 
 immutable helpText = "
 Usage:
@@ -32,7 +37,29 @@ Application Options:
   -v, --version      - Print program version.
   -d, --debug [0-4]  - Specify the debug level.";
 
-void main()
+void executeTT(string[] args, ref DebugLevel debugLevel)
 {
+    CommonOptions commonOpt;
+    auto commonOptParser = new CommonOptionsParser(&commonOpt, args);
+    commonOptParser.parseCommonOptions();
+    debugLevel = commonOpt.debugLevel;
+    commonOptParser.checkAndSetSubcommand();
+    auto optionsFactory = new OptionsFactory(commonOpt, args);
+    auto opt = optionsFactory.options;
+    debugLevel = opt.debugLevel;
+    auto action = ActionFactory.getActionForOptions(opt);
+    action.execute;
+}
 
+int main(string[] args)
+{
+    DebugLevel debugLevel;
+    auto e = collectException(executeTT(args, debugLevel));
+    if (e)
+    {
+        ExceptionHandler.writeExceptionMessage(e, debugLevel);
+        return 1;
+    }
+
+    return 0;
 }
