@@ -6,6 +6,9 @@ module tt.action.parse_action;
 import tt.action.action : Action;
 import tt.options : ParseOptions;
 
+@safe:
+nothrow:
+
 class ParseAction : Action
 {
 public:

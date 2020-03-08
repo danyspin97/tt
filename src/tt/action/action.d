@@ -3,6 +3,9 @@
 
 module tt.action.action;
 
+@safe:
+nothrow:
+
 abstract class Action
 {
 public:

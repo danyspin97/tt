@@ -10,6 +10,8 @@ import tt.action.parse_action : ParseAction;
 import tt.exception : UnknownArgumentException;
 import tt.options : Options, ParseOptions;
 
+@safe:
+
 class ActionFactory
 {
 public:
