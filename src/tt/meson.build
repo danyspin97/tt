@@ -5,6 +5,7 @@ tt_exe_src = [
     'action/parse_action.d',
     'exception.d',
     'options/common_options.d',
+    'options/common_options_parser.d',
     'options/debug_level.d',
     'options/options.d',
     'options/options_factory.d',
