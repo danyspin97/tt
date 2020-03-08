@@ -40,7 +40,7 @@ private:
             enforce!InsufficientArgLengthException(args.length >= 2, "Please specify a subcommand.");
         }
 
-        if (commonOptions.showHelp)
+        if (commonOptions.showHelp && args.length == 1)
         {
             commonOptions.subcommand = "help";
             return;
