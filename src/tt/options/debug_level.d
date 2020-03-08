@@ -6,9 +6,9 @@ module tt.options.debug_level;
 /// The debug level to run the `tt` binary in
 enum DebugLevel
 {
-    Error,
-    Warn,
-    Info,
-    Debug,
-    Trace,
+    Error = 0,
+    Warn = 1,
+    Info = 2,
+    Debug = 3,
+    Trace = 4,
 }
