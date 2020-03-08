@@ -4,6 +4,7 @@ tt_exe_src = [
     'action/package.d',
     'action/parse_action.d',
     'exception.d',
+    'exception_handler.d',
     'options/common_options.d',
     'options/common_options_parser.d',
     'options/debug_level.d',
