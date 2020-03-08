@@ -36,7 +36,7 @@ public:
 
     void parseFiles()
     {
-        foreach (s ; options.services)
+        foreach (s; options.services)
         {
             auto parser = new ServiceParser(s);
             //parser.service.toString();
@@ -48,7 +48,7 @@ public:
     {
         auto dirs = [dirs.service, dirs.adminService];
         // TODO: Check for UID != 0 and add xdg.userservice
-        foreach (s ; options.services)
+        foreach (s; options.services)
         {
             bool found;
             auto possibleNames = [s];
@@ -56,7 +56,7 @@ public:
             {
                 possibleNames ~= [s ~ ".system", s ~ ".user"];
             }
-            services: foreach (name ; possibleNames)
+            services: foreach (name; possibleNames)
             {
                 foreach_reverse (dir; dirs)
                 {
