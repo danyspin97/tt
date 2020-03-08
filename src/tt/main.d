@@ -22,6 +22,9 @@ Querying Service Information:
   show-config [SERVICENAME] ... - Show the configuration of one or more services identified by SERVICENAME.
   status                        - Show the status of the system.
 
+Testing services:
+  parse [SERVICENAME] ...       - Parse one or more services, check if they are valid and print their informations.
+
 Help Options:
   -h, --help         - Show help options.
 
