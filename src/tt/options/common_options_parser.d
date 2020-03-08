@@ -7,7 +7,7 @@ module tt.options.common_options_parser;
 import std.conv : ConvException, to;
 import std.exception : enforce;
 import std.format : format;
-import std.getopt : getopt;
+import std.getopt;
 
 import tt.exception : BadDebugLevelException, InsufficientArgLengthException;
 import tt.options.common_options : CommonOptions;
@@ -26,8 +26,11 @@ class CommonOptionsParser
 
     void parseCommonOptions()
     {
-        getopt(args, "help|h", &options.showHelp, "version|v",
-                &options.showVersion, "debug|d", &debugLevelInt);
+        getopt(args,
+               std.getopt.config.passThrough,
+               "help|h", &options.showHelp,
+               "version|v", &options.showVersion,
+               "debug|d", &debugLevelInt);
 
         convertDebugLevel();
     }
@@ -50,6 +53,17 @@ class CommonOptionsParser
         parser.parseCommonOptions();
         assert(parser.options.showVersion);
         assert(parser.args.length == 1);
+    }
+
+    unittest
+    {
+        auto parser = new CommonOptionsParser();
+        parser.options = new CommonOptions();
+        parser.args = ["tt", "--version", "--foo"];
+        parser.parseCommonOptions();
+        assert(parser.options.showVersion);
+        assert(parser.args.length == 2);
+        assert(parser.args == ["tt", "--foo"]);
     }
 
     void checkAndSetSubcommand()
