@@ -5,6 +5,7 @@ tt_exe_src = [
     'options/options.d',
     'options/options_factory.d',
     'options/options_test.d',
+    'options/package.d',
     'options/parse_options.d',
     'options/services_options.d',
 ]
