@@ -23,7 +23,7 @@ public:
         return m_isFile;
     }
 
-    this(in CommonOptions commonOptions, string[] args)
+    this(in CommonOptions commonOptions, ref string[] args)
     {
         super(commonOptions, args);
     }

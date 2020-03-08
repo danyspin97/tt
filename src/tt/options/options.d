@@ -36,7 +36,7 @@ public:
         return commonOptions.subcommand;
     }
 
-    this(in CommonOptions commonOptions, string[] args)
+    this(in CommonOptions commonOptions, ref string[] args)
     {
         this.commonOptions = commonOptions;
         this.args = args;

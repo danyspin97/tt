@@ -16,7 +16,8 @@ private class OptionsTest : Options
 
     this(in CommonOptions commonOptions)
     {
-        super(commonOptions, []);
+        string[] args;
+        super(commonOptions, args);
     }
 
     unittest
