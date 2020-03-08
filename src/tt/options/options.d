@@ -11,7 +11,9 @@ import tt.exception : InsufficientArgLengthException, UnexpectedArgumentExceptio
 import tt.options.debug_level : DebugLevel;
 import tt.options.common_options : CommonOptions;
 
-class Options
+@safe:
+
+abstract class Options
 {
 public:
     @property bool showHelp()
@@ -34,25 +36,30 @@ public:
         return commonOptions.subcommand;
     }
 
-    this(in CommonOptions commonOptions)
+    this(in CommonOptions commonOptions, string[] args)
     {
         this.commonOptions = commonOptions;
+        this.args = args;
+        parseArgs();
     }
 
 protected:
-    void checkAtLeastNArgs(in ushort n, in string[] args)
+    void checkAtLeastNArgs(in ushort n)
     {
         enforce!InsufficientArgLengthException(args.length >= n,
                 format("Expected a servicename after the subcommand '%s'", subcommand));
     }
 
-    void checkExactlyNArgs(in ushort n, in string[] args)
+    void checkExactlyNArgs(in ushort n)
     {
         enforce!UnexpectedArgumentException(args.length == n,
                 format("Didn't expect the additional arguments %s to subcommand '%s'",
                     args[3 .. $].join(), subcommand));
     }
 
+    abstract void parseArgs();
+
+    string[] args;
 private:
-    const CommonOptions commonOptions;
+    CommonOptions commonOptions;
 }

@@ -10,9 +10,13 @@ import tt.options.debug_level : DebugLevel;
 
 private class OptionsTest : Options
 {
+    override void parseArgs()
+    {
+    }
+
     this(in CommonOptions commonOptions)
     {
-        super(commonOptions);
+        super(commonOptions, []);
     }
 
     unittest
@@ -39,14 +43,17 @@ private class OptionsTest : Options
         auto optionsTest = new OptionsTest(commonOptions);
 
         auto args = ["tt", "edit-config"];
-        assertThrown!InsufficientArgLengthException(optionsTest.checkAtLeastNArgs(3, args));
+        optionsTest.args = args;
+        assertThrown!InsufficientArgLengthException(optionsTest.checkAtLeastNArgs(3));
 
         args ~= ["test-service"];
-        optionsTest.checkAtLeastNArgs(3, args);
+        optionsTest.args = args;
+        optionsTest.checkAtLeastNArgs(3);
 
         args ~= ["unexpectedarg"];
-        optionsTest.checkAtLeastNArgs(3, args);
-        assertThrown!UnexpectedArgumentException(optionsTest.checkExactlyNArgs(3, args));
+        optionsTest.args = args;
+        optionsTest.checkAtLeastNArgs(3);
+        assertThrown!UnexpectedArgumentException(optionsTest.checkExactlyNArgs(3));
     }
-
 }
+
