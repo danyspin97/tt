@@ -15,6 +15,12 @@ import tt.options.parse_options : ParseOptions;
 /// Common CLI `Options` of `tt`
 class OptionsFactory
 {
+public:
+    @property Options options()
+    {
+        return m_options;
+    }
+
     this(CommonOptions commonOptions, ref string[] args)
     {
         this.args = args;
