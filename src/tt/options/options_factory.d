@@ -10,6 +10,7 @@ import std.getopt : getopt;
 import tt.exception;
 import tt.options.common_options : CommonOptions;
 import tt.options.options : Options;
+import tt.options.parse_options : ParseOptions;
 
 @safe:
 
@@ -89,6 +90,8 @@ private:
     {
         switch (commonOptions.subcommand)
         {
+        case "parse":
+            return new ParseOptions(commonOptions, args);
         default:
             throw new UnknownArgumentException(format("Unknown subcommand %s",
                     commonOptions.subcommand));
