@@ -52,6 +52,25 @@ public:
         m_run = run;
     }
 
+    override string toString()
+    {
+        import std.format : format;
+
+        auto ret = format("[main]\n%s\ntype = longrun", super.toString());
+        ret ~= format("\n\n[run]\n%s", run.toString());
+        if (finish)
+        {
+            ret ~= format("\n\n[finish]\n%s", finish.toString());
+        }
+        ret ~= format("\n\n[logger]\n%s", logger.toString());
+        ret ~= format("\n\n[options]\n%s", options.toString());
+        if (run.environment.getAll().length != 0)
+        {
+            ret ~= format("\n\n[config]\n%s", run.environment.toString());
+        }
+        return ret;
+    }
+
 private:
     LoggerScript defaultLogger()
     {

@@ -31,6 +31,19 @@ public:
         m_writeMessage = writeMessage;
     }
 
+    override string toString()
+    {
+        import std.format : format;
+
+        auto ret = super.toString();
+        if (ret != "")
+        {
+            ret ~= "\n";
+        }
+        ret ~= format("write_message = %b\noptional = %b", writeMessage, optional);
+        return ret;
+    }
+
 private:
     bool m_optional = false;
     bool m_writeMessage = true;

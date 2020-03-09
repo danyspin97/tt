@@ -86,6 +86,21 @@ public:
         m_optional = optional;
     }
 
+    override string toString()
+    {
+        import std.format : format;
+
+        auto ret = super.toString();
+        ret = format("\ntimeout_finish = %u\ntimeout_kill = %u", timeoutFinish, timeoutKill);
+        ret ~= format("\ndown_signal = %s\nmax_death = %u", downSignal, maxDeath);
+        ret ~= format("\nwrite_message = %b\noptional = %b", writeMessage, optional);
+        if (notify != 0)
+        {
+            ret ~= format("\nnotify = %u", notify);
+        }
+        return ret;
+    }
+
 private:
     uint m_notify;
     uint m_timeoutFinish = 5000;

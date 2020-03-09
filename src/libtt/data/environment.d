@@ -35,6 +35,18 @@ public:
         return true;
     }
 
+    override string toString() const
+    {
+        import std.format : format;
+
+        string ret;
+        foreach (key, value ; env)
+        {
+            ret ~= format(`\n%s = "%s"`, key, value);
+        }
+        return ret[1 .. $];
+    }
+
 private:
     string[string] env;
 }

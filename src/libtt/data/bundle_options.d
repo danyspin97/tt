@@ -21,6 +21,15 @@ public:
         m_contents = contents;
     }
 
+    override string toString()
+    {
+        import std.array : join;
+        import std.format : format;
+
+        auto ret = format("contents = ( %s )", contents.join(" "));
+        return ret;
+    }
+
 private:
     string[] m_contents;
 }

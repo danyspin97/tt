@@ -21,6 +21,20 @@ public:
         m_depends = depends;
     }
 
+    override string toString()
+    {
+        if (dependencies.length != 0)
+        {
+            import std.array : join;
+            import std.format : format;
+
+            auto ret = format("depends = ( %s )", dependencies.join(" "));
+            return ret;
+        }
+
+        return "";
+    }
+
 private:
     string[] m_depends;
 }

@@ -39,6 +39,22 @@ public:
         return m_options;
     }
 
+    override string toString()
+    {
+        import std.format : format;
+
+        auto ret = format("name = %s", name);
+        if (polishName.length != 0)
+        {
+            ret ~= format("\npolish_name = %s", polishName);
+        }
+        if (description.length != 0)
+        {
+            ret ~= format("\ndescription = %s", description);
+        }
+        return ret;
+    }
+
 protected:
     this(in string name, in string polishName, in string description, in string path,
             ServiceOptions options)

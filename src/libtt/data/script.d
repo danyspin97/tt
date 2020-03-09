@@ -71,6 +71,22 @@ public:
         m_execute ~= code;
     }
 
+    override string toString()
+    {
+        import std.format : format;
+
+        auto ret = format("type = %s\nexecute = (\n%s\n)", type, execute);
+        if (user.length != 0)
+        {
+            ret ~= format("\nuser = %s", user);
+        }
+        if (group.length != 0)
+        {
+            ret ~= format("\ngroup = %s", group);
+        }
+        return ret;
+    }
+
 protected:
     string m_execute;
 private:

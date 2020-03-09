@@ -26,6 +26,15 @@ public:
         this.group = group;
     }
 
+    override string toString()
+    {
+        import std.format : format;
+
+        auto ret = super.toString();
+        ret ~= format("\nservice_to_log = %s", serviceToLog);
+        return ret;
+    }
+
 private:
     string m_serviceToLog;
 }

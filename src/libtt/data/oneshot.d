@@ -37,6 +37,24 @@ public:
         m_start = start;
     }
 
+    override string toString()
+    {
+        import std.format : format;
+
+        auto ret = format("[main]\n%s\ntype = oneshot", super.toString());
+        ret ~= format("\n\n[start]\n%s", start.toString());
+        if (stop)
+        {
+            ret ~= format("\n\n[stop]\n%s", stop.toString());
+        }
+        ret ~= format("\n\n[options]\n%s", options.toString());
+        if (start.environment.getAll().length != 0)
+        {
+            ret ~= format("\n\n[config]\n%s", start.environment.toString());
+        }
+        return ret;
+    }
+
 private:
     Script m_start;
     Script m_stop;

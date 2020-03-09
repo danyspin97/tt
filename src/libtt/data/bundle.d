@@ -17,4 +17,13 @@ public:
     {
         super(name, polishName, description, path, options);
     }
+
+    override string toString()
+    {
+        import std.format : format;
+
+        auto ret = format("[main]\n%s\ntype = bundle", super.toString());
+        ret ~= format("\n\n[options]\n%s", options.toString());
+        return ret;
+    }
 }
