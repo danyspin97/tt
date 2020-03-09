@@ -3,13 +3,15 @@
 
 module libtt.data.longrun;
 
-@safe:
-nothrow:
+import std.exception : enforce;
 
 import libtt.data.logger_script : LoggerScript;
 import libtt.data.longrun_options : LongrunOptions;
 import libtt.data.script : Script;
 import libtt.data.service : Service;
+
+@safe:
+nothrow:
 
 class Longrun : Service
 {
@@ -49,6 +51,7 @@ public:
     {
         super(name, polishName, description, path, options);
 
+        enforce(run, "[run] section cannot be null");
         m_run = run;
     }
 
