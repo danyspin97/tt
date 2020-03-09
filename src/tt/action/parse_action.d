@@ -5,6 +5,7 @@ module tt.action.parse_action;
 
 import std.file : exists, isFile;
 import std.format : format;
+import std.stdio : writeln;
 import std.string : chomp;
 
 import libtt.dirs : dirs;
@@ -39,34 +40,26 @@ public:
         foreach (s; options.services)
         {
             auto parser = new ServiceParser(s);
-            //parser.service.toString();
+            if (!options.quiet)
+            {
+                writeln(parser.service.toString());
+            }
             continue;
         }
     }
 
     void parseUserSystemServices()
     {
-        auto dirs = [dirs.service, dirs.adminService];
         // TODO: Check for UID != 0 and add xdg.userservice
         foreach (s; options.services)
         {
             bool found;
-            auto possibleNames = [s];
-            if (s.chomp(".system") != s && s.chomp(".user") != s)
+            foreach (name; getPossibleNameForService(s))
             {
-                possibleNames ~= [s ~ ".system", s ~ ".user"];
-            }
-            services: foreach (name; possibleNames)
-            {
-                foreach_reverse (dir; dirs)
+                found = checkForFileInDefaultDirs(name);
+                if (found)
                 {
-                    auto file = dir ~ "/" ~ name;
-                    if (name.exists() && name.isFile())
-                    {
-                        auto parser = new ServiceParser(s);
-                        found = true;
-                        break services;
-                    }
+                    break;
                 }
             }
 
@@ -75,6 +68,35 @@ public:
                 throw new Exception(format("Service %s could not be found", s));
             }
         }
+    }
+
+    bool checkForFileInDefaultDirs(string name)
+    {
+        auto defaultDirs = [dirs.service, dirs.adminService];
+        foreach_reverse (dir; defaultDirs)
+        {
+            auto file = dir ~ "/" ~ name;
+            if (file.exists() && file.isFile())
+            {
+                auto parser = new ServiceParser(name);
+                if (!options.quiet)
+                {
+                    writeln(parser.service.toString());
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    string[] getPossibleNameForService(string service)
+    {
+        auto possibleNames = [service];
+        if (service.chomp(".system") != service && service.chomp(".user") != service)
+        {
+            possibleNames ~= [service ~ ".system", service ~ ".user"];
+        }
+        return possibleNames;
     }
 
 private:
