@@ -3,13 +3,15 @@
 
 module libtt.data.oneshot;
 
-@safe:
-nothrow:
+import std.exception : enforce;
 
 import libtt.data.environment : Environment;
 import libtt.data.oneshot_options : OneshotOptions;
 import libtt.data.script : Script;
 import libtt.data.service : Service;
+
+@safe:
+nothrow:
 
 class Oneshot : Service
 {
@@ -34,6 +36,7 @@ public:
     {
         super(name, polishName, description, path, options);
 
+        enforce(start, "[start] section cannot be null");
         m_start = start;
     }
 
