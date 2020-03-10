@@ -35,6 +35,7 @@ public:
         parseUserSystemServices();
     }
 
+private:
     void parseFiles()
     {
         foreach (s; options.services)
@@ -99,6 +100,5 @@ public:
         return possibleNames;
     }
 
-private:
     ParseOptions options;
 }
