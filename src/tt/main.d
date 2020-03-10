@@ -48,6 +48,11 @@ void executeTT(string[] args, ref DebugLevel debugLevel)
     auto optionsFactory = new OptionsFactory(commonOpt, args);
     auto opt = optionsFactory.options;
     debugLevel = opt.debugLevel;
+    if (opt.showHelp)
+    {
+        opt.printHelpInformation();
+        return;
+    }
     auto action = ActionFactory.getActionForOptions(opt);
     action.execute;
 }
