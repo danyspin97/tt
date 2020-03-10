@@ -14,7 +14,7 @@ private class OptionsTest : Options
     {
     }
 
-    this(in CommonOptions commonOptions)
+    this(CommonOptions commonOptions)
     {
         string[] args;
         super(commonOptions, args);
@@ -55,5 +55,10 @@ private class OptionsTest : Options
         optionsTest.args = args;
         optionsTest.checkAtLeastNArgs(3);
         assertThrown!UnexpectedArgumentException(optionsTest.checkExactlyNArgs(3));
+    }
+
+    override const string usageText()
+    {
+        return "";
     }
 }

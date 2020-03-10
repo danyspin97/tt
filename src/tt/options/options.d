@@ -5,6 +5,7 @@ module tt.options.options;
 
 import std.array : join;
 import std.exception : enforce;
+import std.getopt : GetoptResult, defaultGetoptPrinter;
 import std.format : format;
 
 import tt.exception : InsufficientArgLengthException, UnexpectedArgumentException;
@@ -36,14 +37,24 @@ public:
         return commonOptions.subcommand;
     }
 
-    this(in CommonOptions commonOptions, ref string[] args)
+    this(CommonOptions commonOptions, ref string[] args)
     {
         this.commonOptions = commonOptions;
         this.args = args;
         parseArgs();
     }
 
+    void printHelpInformation() @system
+    {
+        assert(showHelp);
+        // The last element of helpInformation.options is the help option
+        // Let commonOptions.getoptOptions print it
+        defaultGetoptPrinter(usageText, helpInformation.options[0 .. $ - 1]);
+        defaultGetoptPrinter("Default options:", commonOptions.getoptOptions);
+    }
+
 protected:
+
     void checkAtLeastNArgs(in ushort n)
     {
         enforce!InsufficientArgLengthException(args.length >= n,
@@ -58,8 +69,10 @@ protected:
     }
 
     abstract void parseArgs();
+    abstract const string usageText();
 
     string[] args;
+    GetoptResult helpInformation;
 private:
     CommonOptions commonOptions;
 }

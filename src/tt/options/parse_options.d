@@ -23,7 +23,7 @@ public:
         return m_isFile;
     }
 
-    this(in CommonOptions commonOptions, ref string[] args)
+    this(CommonOptions commonOptions, ref string[] args)
     {
         super(commonOptions, args);
     }
@@ -31,9 +31,21 @@ public:
 protected:
     override void parseArgs()
     {
-        getopt(args, "quiet|q", &m_quiet, "file|f", &m_isFile);
-        checkAtLeastNArgs(3);
-        parseServices();
+        helpInformation = getopt(args, "quiet|q", "Do not print services information on screen.", &m_quiet,
+                "file|f", "Treat <services...> as file instead of services name.", &m_isFile);
+
+        if (!showHelp)
+        {
+            checkAtLeastNArgs(3);
+            parseServices();
+        }
+    }
+
+    override const string usageText()
+    {
+        return "Usage:
+  tt parse [options] <services...>
+Options:";
     }
 
 private:

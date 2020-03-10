@@ -17,7 +17,7 @@ public:
         return m_services;
     }
 
-    this(in CommonOptions commonOptions, string[] args)
+    this(CommonOptions commonOptions, string[] args)
     {
         super(commonOptions, args);
     }

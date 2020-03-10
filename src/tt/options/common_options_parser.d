@@ -31,8 +31,12 @@ class CommonOptionsParser
 
     void parseCommonOptions()
     {
-        getopt(args, std.getopt.config.passThrough, "help|h", &options.showHelp,
-                "version|v", &options.showVersion, "debug|d", &debugLevelInt);
+        auto getoptResult = getopt(args, std.getopt.config.passThrough,
+                "version|v", "Print version and exit.", &options.showVersion,
+                "debug|d", "Set the debug level from 0 (Error) to 4 (Trace).", &debugLevelInt);
+
+        options.getoptOptions = getoptResult.options;
+        options.showHelp = getoptResult.helpWanted;
 
         convertDebugLevel();
     }

@@ -3,7 +3,12 @@
 
 module tt.options.common_options;
 
+import std.getopt : Option;
+
 import tt.options.debug_level : DebugLevel;
+
+@safe:
+nothrow:
 
 struct CommonOptions
 {
@@ -15,4 +20,6 @@ struct CommonOptions
     DebugLevel debugLevel;
     /// What subcommand to run
     string subcommand;
+    /// Common options get from getopt
+    Option[] getoptOptions;
 }
