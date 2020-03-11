@@ -1,0 +1,19 @@
+[main]
+name = mount-fstab
+polish_name = Mount partitions
+description = "Parse and mount all the devices listed in /etc/fstab"
+type = oneshot
+
+[start]
+build = auto
+execute = (
+    foreground { s6-echo -- “Starting oneshot: mount-fstab” }
+    
+    foreground { mount --all }
+    
+    s6-echo -- “Done oneshot: mount-fstab”
+)
+
+[options]
+depends = ( fsck mount-rwfs )
+
