@@ -4,7 +4,7 @@ define_config = configuration_data({
 })
 
 define_h = configure_file(
-    input: 'define.h',
+    input: 'define.h.in',
     output: 'define.h',
     configuration: define_config,
     install: true,
@@ -24,7 +24,7 @@ dirs_config = configuration_data({
 })
 
 dirs_h = configure_file(
-    input: 'dirs.h',
+    input: 'dirs.h.in',
     output: 'dirs.h',
     configuration: dirs_config,
     install: true,

@@ -7,7 +7,7 @@ namespace tt {
 
 static constexpr const char* = "@version@";
 
-struct Dirs
+static struct Dirs
 {
     static constexpr char* bin = "@bindir@";
     static constexpr char* conf = "@confdir@";
