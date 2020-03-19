@@ -44,7 +44,7 @@ You can install them using your package manager.
 
 ### Building
 
-To build tt a working D compiler is required. Meson will take care of the rest:
+To build tt a working C++ compiler is required. Meson will take care of the rest:
 
 ```bash
 $ meson build
