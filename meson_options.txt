@@ -11,3 +11,4 @@ option('default_log_user', type: 'string', value: 'log', description: 'User that
 
 option('default_log_group', type: 'string', value: 'default_log_user', description: 'User that will write longrun logs if none is selected')
 
+option('tests', type: 'feature', value: 'disabled', description: 'Build test suite')

@@ -1,7 +1,15 @@
-project('tt', 'd',
-    version: '0.0.1')
+project('tt', 'cpp',
+    version: '0.0.1',
+    default_options: [
+        'cpp_std=c++14',
+        'warning_level=3',
+        'werror=true',
+    ],
+)
 
 pkg = import('pkgconfig')
+
+catch2_dep = dependency('catch2', required: get_option('tests'), fallback: ['catch2', 'catch2_dep'])
 
 prefix = get_option('prefix')
 bindir = get_option('bindir')
@@ -60,19 +68,10 @@ if default_log_group == 'default_log_user'
     default_log_group = default_log_user
 endif
 
-compiler_id = meson.get_compiler('d').get_id()
-
-link_runtime_shared_arg = []
-
-if compiler_id == 'llvm'
-    link_runtime_shared_arg = ['-link-defaultlib-shared']
-elif compiler_id == 'dmd'
-#    link_runtime_shared_arg = ['-defaultlib=phobos2', '-debuglib=phobos2']
-elif compiler_id == 'gcc'
-    link_runtime_shared_arg = ['-shared-libphobos']
-endif
-
-tt_inc = include_directories('src')
-
+subdir('include')
 subdir('src')
+
+if catch2_dep.found()
+    subdir('test')
+endif
 

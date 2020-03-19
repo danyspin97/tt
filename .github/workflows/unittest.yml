@@ -5,12 +5,10 @@ jobs:
   test:
     name: Tests
     strategy:
-      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        dc: [dmd-latest, ldc-latest]
-        libconfini_ver: [1.12.0]
-    runs-on: ${{ matrix.os }}
+        compiler: [clang++, g++]
+      fail-fast: false
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-python@v1
@@ -18,25 +16,16 @@ jobs:
           python-version: "3.x"
       - uses: seanmiddleditch/gha-setup-ninja@master
 
-      - name: Install D compiler
-        uses: mihails-strasuns/setup-dlang@v0.5.0
-        with:
-          compiler: ${{ matrix.dc }}
-
       - name: Install meson
         run: pip3 install meson
 
       - name: Build using meson
-        run: meson build && ninja -C build
+        env:
+          CXX: ${{ matrix.compiler }}
+        run: meson -Dtests=enabled build && ninja -C build
 
       - name: Run meson tests
         run: ninja -C build test
-
-      - name: Run dub tests
-        run: |
-          sed '/importPaths/a "\/usr\/local\/include\/d",' -i src/libtt/dub.json
-          dub test -b unittest-cov tt
-          dub test -b unittest-cov libtt
 
       - name: Upload Codecoverage
         uses: codecov/codecov-action@v1
