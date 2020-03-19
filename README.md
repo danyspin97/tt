@@ -51,6 +51,17 @@ $ meson build
 $ ninja -C build
 ```
 
+## Testing
+
+tt test suite uses catch2 header-only library. If this dependency is not found
+on the system, meson will download a copy to use in the local repository.
+To run the tt test suite, execute the following commands:
+
+```
+$ meson -Dtests=enabled build
+$ ninja -C build test
+```
+
 ## Contributing
 
 Feel free to contribute by opening a Pull Request! Have a look at Github Issues
