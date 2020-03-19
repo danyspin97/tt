@@ -16,16 +16,19 @@ jobs:
           python-version: "3.x"
       - uses: seanmiddleditch/gha-setup-ninja@master
 
-      - name: Install meson
-        run: pip3 install meson
+      - name: Install meson and gcovr
+        run: pip3 install meson gcovr
 
       - name: Build using meson
         env:
           CXX: ${{ matrix.compiler }}
-        run: meson -Dtests=enabled build && ninja -C build
+        run: meson -Dtests=enabled -Db_coverage=true build && ninja -C build
 
       - name: Run meson tests
         run: ninja -C build test
+
+      - name: Generate Coverage
+        run: ninja -C build coverage-xml
 
       - name: Upload Codecoverage
         uses: codecov/codecov-action@v1
