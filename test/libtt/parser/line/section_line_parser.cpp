@@ -20,6 +20,16 @@ TEST_CASE("SectionLineParser") {
         REQUIRE(!parser.line_valid());
     }
 
+    SECTION("parse section not closed") {
+        auto parser = SectionLineParser("[foo");
+        REQUIRE(!parser.line_valid());
+    }
+
+    SECTION("garbage after the section is no allowed") {
+        auto parser = SectionLineParser("[foo] bar");
+        REQUIRE(!parser.line_valid());
+    }
+
     SECTION("GetSectionOrDefault returns the valid section") {
         auto parser = SectionLineParser("[foo]");
         REQUIRE(parser.GetSectionOrDefault("bar") == "foo");
