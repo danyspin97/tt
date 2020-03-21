@@ -10,25 +10,24 @@
 using tt::SectionLineParser;
 
 TEST_CASE("SectionLineParser") {
-    SECTION ("parse valid section") {
+    SECTION("parse valid section") {
         auto parser = SectionLineParser("[foo]");
         REQUIRE(parser.line_valid());
     }
 
-    SECTION ("parse invalid section") {
+    SECTION("parse invalid section") {
         auto parser = SectionLineParser("foo");
         REQUIRE(!parser.line_valid());
     }
 
-    SECTION ("GetSectionOrDefault returns the valid section") {
+    SECTION("GetSectionOrDefault returns the valid section") {
         auto parser = SectionLineParser("[foo]");
         REQUIRE(parser.GetSectionOrDefault("bar") == "foo");
     }
 
-    SECTION ("GetSectionOrDefault returns the default section") {
+    SECTION("GetSectionOrDefault returns the default section") {
         auto parser = SectionLineParser("foo");
         auto _default = "bar";
         REQUIRE(parser.GetSectionOrDefault(_default) == _default);
     }
 }
-

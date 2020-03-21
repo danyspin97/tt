@@ -10,9 +10,12 @@ namespace tt {
 
 class SectionLineParser {
 public:
-    const std::string section() const { 
-        if (valid_) { return section_; } 
-        throw new std::exception(); }
+    const std::string section() const {
+        if (valid_) {
+            return section_;
+        }
+        throw new std::exception();
+    }
 
     bool line_valid() const { return valid_; }
 

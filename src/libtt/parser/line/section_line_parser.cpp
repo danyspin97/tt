@@ -8,24 +8,20 @@
 using std::string;
 using tt::SectionLineParser;
 
-void SectionLineParser::ParseLine()
-{
+void SectionLineParser::ParseLine() {
     valid_ = false;
     trim(line_);
-    if (line_[0] != '[')
-    {
+    if (line_[0] != '[') {
         return;
     }
 
     auto end_token_pos = line_.find(']');
-    if (end_token_pos == string::npos)
-    {
+    if (end_token_pos == string::npos) {
         return;
     }
 
     // No characters are allowed after the end of ']' token
-    if (end_token_pos + 1 != line_.size())
-    {
+    if (end_token_pos + 1 != line_.size()) {
         return;
     }
 
@@ -33,4 +29,3 @@ void SectionLineParser::ParseLine()
     trim(section_);
     valid_ = true;
 }
-
