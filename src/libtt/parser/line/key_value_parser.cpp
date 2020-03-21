@@ -1,9 +1,9 @@
 // Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
 // Distributed under the terms of the GNU General Public License v2
 
-#include "parser/line/key_value_parser.hpp"
+#include "libtt/parser/line/key_value_parser.hpp"
 
-#include "parser/utils.hpp"
+#include "libtt/parser/utils.hpp"
 
 using std::string;
 

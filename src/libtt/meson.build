@@ -7,7 +7,7 @@ libtt_soversion = 0
 
 libtt = library('tt',
     libtt_src,
-    include_directories: libtt_inc,
+    include_directories: tt_inc,
     install: true,
     version: meson.project_version(),
     soversion: libtt_soversion,
@@ -15,7 +15,7 @@ libtt = library('tt',
 
 libtt_dep = declare_dependency(
     link_with: libtt,
-    include_directories: libtt_inc,
+    include_directories: tt_inc,
 )
 
 pkg.generate(name: 'libtt',

@@ -31,4 +31,3 @@ dirs_h = configure_file(
     install_dir: get_option('includedir') / 'libtt'
 )
 
-libtt_inc = include_directories('.')
