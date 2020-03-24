@@ -21,6 +21,7 @@
 #include "libtt/parser/line/array_parser.hpp"
 
 #include <algorithm>
+#include <assert.h>
 #include <iostream>
 #include <iterator>
 #include <sstream>
