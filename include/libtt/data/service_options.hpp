@@ -36,7 +36,6 @@ public:
     virtual ~ServiceOptions() {}
 
     virtual std::ostream &dump(std::ostream &oss) const {
-
         if (depends_.size() != 0) {
             return oss << "depends = ( "
                        << std::string{depends_.begin(), depends_.end()} << " )";

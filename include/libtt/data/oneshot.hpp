@@ -46,7 +46,6 @@ public:
           start_(start) {}
 
     std::ostream &dump(std::ostream &oss) const {
-
         oss << "[main]\n";
         Service::dump(oss);
         oss << "\ntype = oneshot";
