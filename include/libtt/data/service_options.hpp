@@ -27,36 +27,31 @@
 
 namespace tt {
 
-class ServiceOptions
-{
+class ServiceOptions {
 public:
-    std::vector<std::string> dependencies()
-    {
-        return depends_;
-    }
+    std::vector<std::string> dependencies() { return depends_; }
 
-    void dependencies(std::vector<std::string> depends)
-    {
-        depends_ = depends;
-    }
+    void dependencies(std::vector<std::string> depends) { depends_ = depends; }
 
     virtual ~ServiceOptions() {}
 
     virtual std::ostream &dump(std::ostream &oss) const {
 
-        if (depends_.size() != 0)
-        {
-            return oss << "depends = ( " << std::string{depends_.begin(), depends_.end()} << " )";
+        if (depends_.size() != 0) {
+            return oss << "depends = ( "
+                       << std::string{depends_.begin(), depends_.end()} << " )";
         }
 
         return oss;
     }
 
 private:
-        std::vector<std::string> depends_;
+    std::vector<std::string> depends_;
 };
 
-std::ostream &operator<<(std::ostream &oss, const ServiceOptions &options) { return options.dump(oss); }
+std::ostream &operator<<(std::ostream &oss, const ServiceOptions &options) {
+    return options.dump(oss);
+}
 
 } // namespace tt
 

@@ -29,32 +29,21 @@
 
 namespace tt {
 
-class Oneshot : public Service
-{
+class Oneshot : public Service {
 public:
-    Script start() const noexcept
-    {
-        return start_;
-    }
+    Script start() const noexcept { return start_; }
 
     // set method for start_ as it is required
 
-    std::optional<Script> stop() const noexcept
-    {
-        return stop_;
-    }
+    std::optional<Script> stop() const noexcept { return stop_; }
 
-    void stop(Script stop)
-    {
-        stop_ = stop;
-    }
+    void stop(Script stop) { stop_ = stop; }
 
-    Oneshot(const std::string name, const std::string polish_name, const std::string description, const std::string path,
-            OneshotOptions options, Script start):
-        Service(name, polish_name, description, path, options),
-        start_(start)
-    {
-    }
+    Oneshot(const std::string name, const std::string polish_name,
+            const std::string description, const std::string path,
+            OneshotOptions options, Script start)
+        : Service(name, polish_name, description, path, options),
+          start_(start) {}
 
     std::ostream &dump(std::ostream &oss) const {
 
@@ -62,13 +51,11 @@ public:
         Service::dump(oss);
         oss << "\ntype = oneshot";
         oss << "\n\n[start]\n" << start_;
-        if (stop_)
-        {
-            oss<< "\n\n[stop]\n" << stop().value();
+        if (stop_) {
+            oss << "\n\n[stop]\n" << stop().value();
         }
         oss << "\n\n[options]\n" << options();
-        if (start_.environment().getAll().size() != 0)
-        {
+        if (start_.environment().getAll().size() != 0) {
             oss << "\n\n[config]\n" << start_.environment();
         }
         return oss;
@@ -79,6 +66,6 @@ private:
     std::optional<Script> stop_;
 };
 
-} //namespace tt
+} // namespace tt
 
 #endif // LIBTT_ONESHOT_HPP_

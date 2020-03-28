@@ -23,63 +23,43 @@
 #ifndef LIBTT_LONGRUN_HPP_
 #define LIBTT_LONGRUN_HPP_
 
-#include <optional>
-#include <string>
 #include "libtt/data/logger_script.hpp"
 #include "libtt/data/longrun_options.hpp"
 #include "libtt/data/script.hpp"
 #include "libtt/data/service.hpp"
+#include <optional>
+#include <string>
 
 namespace tt {
 
-class Longrun : public Service
-{
+class Longrun : public Service {
 public:
-    Script run() const noexcept
-    {
-        return run_;
-    }
+    Script run() const noexcept { return run_; }
 
-    std::optional<Script> finish() const noexcept
-    {
-        return finish_;
-    }
+    std::optional<Script> finish() const noexcept { return finish_; }
 
-    void finish(Script finish) noexcept
-    {
-        finish_ = finish;
-    }
+    void finish(Script finish) noexcept { finish_ = finish; }
 
-    std::optional<LoggerScript> logger() const noexcept
-    {
-        return logger_;
-    }
+    std::optional<LoggerScript> logger() const noexcept { return logger_; }
 
-    void logger(LoggerScript logger) noexcept
-    {
-        logger_ = logger;
-    }
+    void logger(LoggerScript logger) noexcept { logger_ = logger; }
 
-    Longrun(const std::string name, const std::string polish_name, const std::string description, const std::string path,
+    Longrun(const std::string name, const std::string polish_name,
+            const std::string description, const std::string path,
             LongrunOptions options, Script run)
-        : Service(name, polish_name, description, path, options),
-        run_(run)
-    {
-    }
+        : Service(name, polish_name, description, path, options), run_(run) {}
 
     virtual std::ostream &dump(std::ostream &oss) const {
         oss << "[main]\n";
         Service::dump(oss);
         oss << "\ntype = longrun";
         oss << "\n\n[run]\n" << run();
-        if (finish())
-        {
+        if (finish()) {
             oss << "\n\n[finish]\n" << finish().value();
         }
         oss << "\n\n[logger]\n" << logger().value();
         oss << "\n\n[options]\n" << options();
-        if (run().environment().getAll().size() != 0)
-        {
+        if (run().environment().getAll().size() != 0) {
             oss << "\n\n[config]\n" << run().environment();
         }
         return oss;

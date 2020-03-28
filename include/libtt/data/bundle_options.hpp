@@ -21,29 +21,23 @@
 #ifndef LIBTT_BUNDLE_OPTIONS_HPP_
 #define LIBTT_BUNDLE_OPTIONS_HPP_
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "libtt/data/service_options.hpp"
 
 namespace tt {
 
-class BundleOptions : public ServiceOptions
-{
+class BundleOptions : public ServiceOptions {
 public:
-    std::vector<std::string> contents()
-    {
-        return contents_;
-    }
+    std::vector<std::string> contents() { return contents_; }
 
-    void contents(std::vector<std::string> contents)
-    {
-        contents_ = contents;
-    }
+    void contents(std::vector<std::string> contents) { contents_ = contents; }
 
-    std::ostream & dump(std::ostream &oss) const {
-        oss<<"contents = ( ";
-        std::copy(contents_.begin(), contents_.end(), std::ostream_iterator<std::string>(oss, " "));
+    std::ostream &dump(std::ostream &oss) const {
+        oss << "contents = ( ";
+        std::copy(contents_.begin(), contents_.end(),
+                  std::ostream_iterator<std::string>(oss, " "));
         return oss << " )";
     }
 

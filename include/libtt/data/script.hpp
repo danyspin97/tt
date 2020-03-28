@@ -21,9 +21,9 @@
 #ifndef LIBTT_SCRIPT_HPP_
 #define LIBTT_SCRIPT_HPP_
 
+#include "libtt/data/environment.hpp"
 #include <optional>
 #include <string>
-#include "libtt/data/environment.hpp"
 
 namespace tt {
 
@@ -57,17 +57,16 @@ public:
     virtual ~Script() {}
 
     virtual std::ostream &dump(std::ostream &oss) const {
-    // TODO: Convert from Type to string
-    // o << "type = " << type() << "\n";
-    oss << "execute = (\n" << execute() << "\n)";
-    if (user() && user().value().size() != 0) {
-        oss << "\nuser = " << user().value();
-    }
-    if (group() && group().value().size() != 0) {
-        oss << "\ngroup = " << group().value();
-    }
-    return oss;
-
+        // TODO: Convert from Type to string
+        // o << "type = " << type() << "\n";
+        oss << "execute = (\n" << execute() << "\n)";
+        if (user() && user().value().size() != 0) {
+            oss << "\nuser = " << user().value();
+        }
+        if (group() && group().value().size() != 0) {
+            oss << "\ngroup = " << group().value();
+        }
+        return oss;
     }
 
 protected:
@@ -80,7 +79,9 @@ private:
     Environment env_;
 };
 
-std::ostream &operator<<(std::ostream &oss, const Script &script) { return script.dump(oss); }
+std::ostream &operator<<(std::ostream &oss, const Script &script) {
+    return script.dump(oss);
+}
 
 } // namespace tt
 

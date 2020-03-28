@@ -23,23 +23,22 @@
 
 #include <istream>
 
-#include "libtt/data/service.hpp"
 #include "libtt/data/bundle_options.hpp"
+#include "libtt/data/service.hpp"
 
 namespace tt {
 
-class Bundle : public Service
-{
+class Bundle : public Service {
 public:
-    Bundle(const std::string name, const std::string polish_name, const std::string description, const std::string path,
-            BundleOptions& options) :
-        Service(name, polish_name, description, path, options)
-    {
-    }
+    Bundle(const std::string name, const std::string polish_name,
+           const std::string description, const std::string path,
+           BundleOptions &options)
+        : Service(name, polish_name, description, path, options) {}
 
     std::ostream &dump(std::ostream &oss) const {
         Service::dump(oss);
-        oss << "[main]\n" << "\ntype = bundle";
+        oss << "[main]\n"
+            << "\ntype = bundle";
         return oss << "\n\n[options]\n" << options();
     }
 };

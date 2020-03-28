@@ -34,24 +34,23 @@ public:
         return service_to_log_;
     }
 
-    LoggerScript(Type type, const std::string execute,
-                 Environment environment, const std::string service_to_log,
-                 const std::string user, const std::string group)
+    LoggerScript(Type type, const std::string execute, Environment environment,
+                 const std::string service_to_log, const std::string user,
+                 const std::string group)
         : Script(type, execute, environment) {
         service_to_log_ = service_to_log;
         this->user(user);
         this->group(group);
     }
 
-    std::ostream& dump(std::ostream &oss) const
-        {
-            Script::dump(oss);
-            return oss << "\nservice_to_log = " << service_to_log();
-        }
+    std::ostream &dump(std::ostream &oss) const {
+        Script::dump(oss);
+        return oss << "\nservice_to_log = " << service_to_log();
+    }
 
-    private:
-        std::string service_to_log_;
-    };
+private:
+    std::string service_to_log_;
+};
 
 } // namespace tt
 

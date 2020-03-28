@@ -27,26 +27,17 @@
 
 namespace tt {
 
-class OneshotOptions : public ServiceOptions
-{
+class OneshotOptions : public ServiceOptions {
 public:
-    bool optional() const noexcept
-    {
-        return optional_;
-    }
+    bool optional() const noexcept { return optional_; }
 
-    void optional(bool optional)
-    {
-        optional_ = optional;
-    }
+    void optional(bool optional) { optional_ = optional; }
 
-    bool write_start_stop_messages() const noexcept
-    {
+    bool write_start_stop_messages() const noexcept {
         return write_start_stop_messages_;
     }
 
-    void write_start_stop_messages(bool new_value)
-    {
+    void write_start_stop_messages(bool new_value) {
         write_start_stop_messages_ = new_value;
     }
 
@@ -58,7 +49,7 @@ public:
 
 private:
     bool optional_ = false;
-    bool write_start_stop_messages_= true;
+    bool write_start_stop_messages_ = true;
 };
 
 } // namespace tt

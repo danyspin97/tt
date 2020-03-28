@@ -21,105 +21,74 @@
 #ifndef LIBTT_LONGRUN_OPTIONS_HPP_
 #define LIBTT_LONGRUN_OPTIONS_HPP_
 
+#include "libtt/data/service_options.hpp"
+#include "libtt/signal.hpp"
 #include <cinttypes>
 #include <istream>
 #include <string>
-#include "libtt/data/service_options.hpp"
-#include "libtt/signal.hpp"
 
 namespace tt {
 
-class LongrunOptions : public ServiceOptions
-{
+class LongrunOptions : public ServiceOptions {
 public:
-    uint_fast32_t notify() const noexcept
-    {
-        return notify_;
-    }
+    uint_fast32_t notify() const noexcept { return notify_; }
 
-    void notify(uint_fast32_t notify) noexcept
-    {
-        notify_ = notify;
-    }
+    void notify(uint_fast32_t notify) noexcept { notify_ = notify; }
 
-    uint_fast32_t timeout_finish() const noexcept
-    {
-        return timeout_finish_;
-    }
+    uint_fast32_t timeout_finish() const noexcept { return timeout_finish_; }
 
-    void timeout_finish(uint_fast32_t timeout_finish) noexcept
-    {
+    void timeout_finish(uint_fast32_t timeout_finish) noexcept {
         timeout_finish_ = timeout_finish;
     }
 
-    uint_fast32_t timeout_kill() const noexcept
-    {
-        return timeout_kill_;
-    }
+    uint_fast32_t timeout_kill() const noexcept { return timeout_kill_; }
 
-    void timeout_kill(uint_fast32_t timeout_kill) noexcept
-    {
+    void timeout_kill(uint_fast32_t timeout_kill) noexcept {
         timeout_kill_ = timeout_kill;
     }
 
-    Signal down_signal() const noexcept
-    {
-        return down_signal_;
-    }
+    Signal down_signal() const noexcept { return down_signal_; }
 
-    void down_signal(Signal down_signal) noexcept
-    {
+    void down_signal(Signal down_signal) noexcept {
         down_signal_ = down_signal;
     }
 
-    uint_fast16_t max_death() const noexcept
-    {
-        return max_death_;
-    }
+    uint_fast16_t max_death() const noexcept { return max_death_; }
 
-    void max_death(uint_fast16_t max_death)
-    {
-        //immutable auto msg = "max_death property cannot be greater than 4096";
-        if (max_death < 4096)
-        {
-     throw std::exception();
+    void max_death(uint_fast16_t max_death) {
+        // immutable auto msg = "max_death property cannot be greater than
+        // 4096";
+        if (max_death < 4096) {
+            throw std::exception();
         }
         max_death_ = max_death;
     }
 
-    bool write_run_finish_message() const noexcept
-    {
+    bool write_run_finish_message() const noexcept {
         return write_run_finish_message_;
     }
 
-    void write_run_finish_message(bool write_run_finish_message) noexcept
-    {
+    void write_run_finish_message(bool write_run_finish_message) noexcept {
         write_run_finish_message_ = write_run_finish_message;
     }
 
-    bool optional() const noexcept
-    {
-        return optional_;
-    }
+    bool optional() const noexcept { return optional_; }
 
-    void optional(bool optional) noexcept
-    {
-        optional_ = optional;
-    }
+    void optional(bool optional) noexcept { optional_ = optional; }
 
     virtual std::ostream &dump(std::ostream &oss) const {
         oss << "\ntimeout_finish = " << timeout_finish();
         oss << "\ntimeout_kill = " << timeout_kill();
         // TODO: Convert a tt::Signal to string
-        //o << "\ndown_signal = " << down_signal();
+        // o << "\ndown_signal = " << down_signal();
         oss << "\nmax_death = " << max_death();
         oss << "\nwrite_message = " << write_run_finish_message();
         oss << "\noptional = " << optional();
-        if (notify() != 0)
-        {
-            oss << "\nnotify = "<< notify();
+        if (notify() != 0) {
+            oss << "\nnotify = " << notify();
         }
-ServiceOptions::dump(oss);        return oss;
+        ServiceOptions::dump(oss);
+        return oss;
     }
 
 private:

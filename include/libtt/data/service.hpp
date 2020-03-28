@@ -28,47 +28,26 @@
 
 namespace tt {
 
-class Service
-{
+class Service {
 public:
-    const std::string name() const noexcept
-    {
-        return name_;
-    }
+    const std::string name() const noexcept { return name_; }
 
-    const std::string polish_name() const noexcept
-    {
-        return polish_name_;
-    }
+    const std::string polish_name() const noexcept { return polish_name_; }
 
-    const std::string description() const noexcept
-    {
-        return description_;
-    }
+    const std::string description() const noexcept { return description_; }
 
-    const std::string path() const noexcept
-    {
-        return path_;
-    }
+    const std::string path() const noexcept { return path_; }
 
-    ServiceOptions& options() noexcept
-    {
-        return options_;
-    }
+    ServiceOptions &options() noexcept { return options_; }
 
-    const ServiceOptions& options() const noexcept
-    {
-        return options_;
-    }
+    const ServiceOptions &options() const noexcept { return options_; }
 
-    virtual std::ostream & dump(std::ostream &o) const {
+    virtual std::ostream &dump(std::ostream &o) const {
         o << "name = " << name();
-        if (polish_name().size() != 0)
-        {
+        if (polish_name().size() != 0) {
             o << "\npolish_name = " << polish_name();
         }
-        if (description().size() != 0)
-        {
+        if (description().size() != 0) {
             o << "\ndescription = " << description();
         }
         return o;
@@ -77,9 +56,9 @@ public:
     virtual ~Service() {}
 
 protected:
-    Service(const std::string name, const std::string polish_name, const std::string description, const std::string path,
-            ServiceOptions& options)
-    {
+    Service(const std::string name, const std::string polish_name,
+            const std::string description, const std::string path,
+            ServiceOptions &options) {
         name_ = name;
         polish_name_ = polish_name;
         description_ = description;
@@ -90,11 +69,11 @@ protected:
     }
 
 private:
-    void validatePath() const
-    {
+    void validatePath() const {
         std::filesystem::path file(path());
         if (file.stem() != name()) {
-            //const auto msg = "The attribute \"name\" must match the name of the file";
+            // const auto msg = "The attribute \"name\" must match the name of
+            // the file";
             throw std::exception();
         }
     }
@@ -106,8 +85,10 @@ private:
     ServiceOptions options_;
 };
 
-std::ostream &operator<<(std::ostream &oss, const Service &service) { return service.dump(oss); }
+std::ostream &operator<<(std::ostream &oss, const Service &service) {
+    return service.dump(oss);
+}
 
-} //namespace tt
+} // namespace tt
 
 #endif // LIBTT_SERVICE_HPP_
