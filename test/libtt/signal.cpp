@@ -18,14 +18,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "catch2/catch.hpp"
 #include "libtt/signal.hpp"
+#include "catch2/catch.hpp"
 
 using std::string;
-using tt::Signal;
 using tt::parseSignalFromString;
+using tt::Signal;
 
-TEST_CASE("parseSignalFromString"){
+TEST_CASE("parseSignalFromString") {
     CHECK(parseSignalFromString("SIGHUP") == Signal::kSigHup);
     CHECK(parseSignalFromString("SIGINT") == Signal::kSigInt);
     CHECK(parseSignalFromString("SIGQUIT") == Signal::kSigQuit);
@@ -33,7 +33,6 @@ TEST_CASE("parseSignalFromString"){
     CHECK(parseSignalFromString("SIGTERM") == Signal::kSigTerm);
 }
 
-TEST_CASE("parseSignalFromString with exception"){
+TEST_CASE("parseSignalFromString with exception") {
     REQUIRE_THROWS(parseSignalFromString(""));
 }
-

@@ -26,8 +26,7 @@
 
 namespace tt {
 
-enum class Signal
-{
+enum class Signal {
     kSigHup = 1,
     kSigInt = 2,
     kSigQuit = 3,
@@ -35,14 +34,11 @@ enum class Signal
     kSigTerm = 15
 };
 
-Signal parseSignalFromString(const std::string signal)
-{
-    static const std::map<std::string, Signal> signalStrings {
-    { "SIGHUP", Signal::kSigHup },
-    { "SIGINT", Signal::kSigInt },
-    { "SIGQUIT", Signal::kSigQuit },
-    { "SIGKILL", Signal::kSigKill },
-    { "SIGTERM", Signal::kSigTerm },
+Signal parseSignalFromString(const std::string signal) {
+    static const std::map<std::string, Signal> signalStrings{
+        {"SIGHUP", Signal::kSigHup},   {"SIGINT", Signal::kSigInt},
+        {"SIGQUIT", Signal::kSigQuit}, {"SIGKILL", Signal::kSigKill},
+        {"SIGTERM", Signal::kSigTerm},
     };
     if (auto itr = signalStrings.find(signal); itr != signalStrings.end()) {
         return itr->second;
@@ -51,6 +47,6 @@ Signal parseSignalFromString(const std::string signal)
     throw std::exception();
 }
 
-} //namespace tt
+} // namespace tt
 
 #endif // LIBTT_SIGNAL_HPP_

@@ -2,7 +2,8 @@ libtt_test_src = files(
     'parser/line/array_parser.cpp',
     'parser/line/code_parser.cpp',
     'parser/line/key_value_parser.cpp',
-    'parser/line/section_line_parser.cpp'
+    'parser/line/section_line_parser.cpp',
+    'signal.cpp',
 )
 
 # Available from 0.53.0

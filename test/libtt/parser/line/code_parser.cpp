@@ -20,8 +20,8 @@
 
 #include "libtt/parser/line/code_parser.hpp"
 
-#include <string>
 #include "catch2/catch.hpp"
+#include <string>
 
 using std::string;
 using tt::CodeParser;

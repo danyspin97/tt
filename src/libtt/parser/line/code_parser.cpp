@@ -24,7 +24,7 @@
 
 #include "libtt/parser/utils.hpp"
 
-    #include <iostream>
+#include <iostream>
 using std::string;
 using tt::CodeParser;
 
@@ -44,8 +44,7 @@ bool CodeParser::StartParsing(const string line) {
     }
 
     // Are there other chars after '('?
-    if (equal_token_pos + 2 != trimmed_line.size())
-    {
+    if (equal_token_pos + 2 != trimmed_line.size()) {
         return false;
     }
 

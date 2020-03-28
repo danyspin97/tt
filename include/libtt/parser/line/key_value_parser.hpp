@@ -46,6 +46,6 @@ private:
     bool throw_on_error_;
 };
 
-}  // namespace tt
+} // namespace tt
 
-#endif  // LIBTT_KEY_VALUE_PARSER_HPP_
+#endif // LIBTT_KEY_VALUE_PARSER_HPP_
