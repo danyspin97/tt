@@ -68,6 +68,17 @@ $ ninja -C build test
 Feel free to contribute by opening a Pull Request! Have a look at Github Issues
 for the current development tasks.
 
+### Formatting your changes
+
+tt follows the [Google C++ Style
+Guide](https://google.github.io/styleguide/cppguide.html) and uses
+`clang-format` to apply this style. If you have `clang-format` installed, run
+the following command to format your changes:
+
+```
+$ ninja -C build clang-format
+```
+
 ## License
 
 tt is licensed under the [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) License - see [LICENSE](https://github.com/DanySpin97/tt/blob/master/LICENSE) file for more
