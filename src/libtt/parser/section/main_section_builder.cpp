@@ -37,7 +37,7 @@ void MainSectionBuilder::ParseLine(const string line) {
     try {
         TryParseLine(line);
     } catch (std::exception e) {
-        throw e;
+        throw std::exception(e);
     }
 }
 
