@@ -30,22 +30,22 @@ TEST_CASE("parse a value with no spaces") {
     std::string line = "foo=bar";
     auto parser = KeyValueParser(line, false);
     CHECK(parser.isLineValid());
-    CHECK(parser.getKey() == "foo");
-    CHECK(parser.getValue() == "bar");
+    CHECK(parser.key() == "foo");
+    CHECK(parser.value() == "bar");
 }
 
 TEST_CASE("parse a value with spaces in it") {
     auto parser = KeyValueParser("foo=bar foobar");
     CHECK(parser.isLineValid());
-    CHECK(parser.getKey() == "foo");
-    CHECK(parser.getValue() == "bar foobar");
+    CHECK(parser.key() == "foo");
+    CHECK(parser.value() == "bar foobar");
 }
 
 TEST_CASE("key and value have been trimmed") {
     auto parser = KeyValueParser(" foo = bar ");
     CHECK(parser.isLineValid());
-    CHECK(parser.getKey() == "foo");
-    CHECK(parser.getValue() == "bar");
+    CHECK(parser.key() == "foo");
+    CHECK(parser.value() == "bar");
 }
 
 TEST_CASE("parse a not valid line") {

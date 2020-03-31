@@ -27,11 +27,11 @@ namespace tt {
 
 class KeyValueParser {
 public:
-    const std::string getKey() { return key_; }
+    const std::string key() const noexcept { return key_; }
 
-    const std::string getValue() { return value_; }
+    const std::string value() const noexcept { return value_; }
 
-    bool isLineValid() { return valid_; }
+    bool isLineValid() const noexcept { return valid_; }
 
     KeyValueParser(std::string line, bool throw_on_error = false);
 
