@@ -6,7 +6,7 @@ jobs:
     name: Tests
     strategy:
       matrix:
-        compiler: [clang++, g++]
+        compiler: [clang++]#, g++]
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
