@@ -29,28 +29,28 @@ using tt::KeyValueParser;
 TEST_CASE("parse a value with no spaces") {
     std::string line = "foo=bar";
     auto parser = KeyValueParser(line, false);
-    CHECK(parser.isLineValid());
+    CHECK(parser.IsLineValid());
     CHECK(parser.key() == "foo");
     CHECK(parser.value() == "bar");
 }
 
 TEST_CASE("parse a value with spaces in it") {
     auto parser = KeyValueParser("foo=bar foobar");
-    CHECK(parser.isLineValid());
+    CHECK(parser.IsLineValid());
     CHECK(parser.key() == "foo");
     CHECK(parser.value() == "bar foobar");
 }
 
 TEST_CASE("key and value have been trimmed") {
     auto parser = KeyValueParser(" foo = bar ");
-    CHECK(parser.isLineValid());
+    CHECK(parser.IsLineValid());
     CHECK(parser.key() == "foo");
     CHECK(parser.value() == "bar");
 }
 
 TEST_CASE("parse a not valid line") {
     auto parser = KeyValueParser("foobar");
-    REQUIRE_FALSE(parser.isLineValid());
+    REQUIRE_FALSE(parser.IsLineValid());
 }
 
 TEST_CASE("parse a not valid line and throws an exception") {

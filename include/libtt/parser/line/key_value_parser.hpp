@@ -31,7 +31,7 @@ public:
 
     const std::string value() const noexcept { return value_; }
 
-    bool isLineValid() const noexcept { return valid_; }
+    bool IsLineValid() const noexcept { return valid_; }
 
     KeyValueParser(std::string line, bool throw_on_error = false);
 
