@@ -24,16 +24,14 @@
 
 using std::string;
 
-namespace tt {
-
-KeyValueParser::KeyValueParser(string line, bool throw_on_error) {
+tt::KeyValueParser::KeyValueParser(string line, bool throw_on_error) {
     line_ = line;
     throw_on_error_ = throw_on_error;
-    parseLine();
+    ParseLine();
 }
 
-void KeyValueParser::parseLine() {
-    if (tryParseLine()) {
+void tt::KeyValueParser::ParseLine() {
+    if (TryParseLine()) {
         valid_ = true;
     } else {
         if (throw_on_error_) {
@@ -45,7 +43,7 @@ void KeyValueParser::parseLine() {
     }
 }
 
-bool KeyValueParser::tryParseLine() {
+bool tt::KeyValueParser::TryParseLine() {
     auto token_pos = line_.find('=');
     if (token_pos == string::npos) {
         return false;
@@ -56,5 +54,3 @@ bool KeyValueParser::tryParseLine() {
     trim(value_);
     return true;
 }
-
-} // namespace tt

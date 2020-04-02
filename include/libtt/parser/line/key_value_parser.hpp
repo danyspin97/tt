@@ -36,8 +36,8 @@ public:
     KeyValueParser(std::string line, bool throw_on_error = false);
 
 private:
-    void parseLine();
-    bool tryParseLine();
+    void ParseLine();
+    bool TryParseLine();
 
     std::string line_;
     std::string key_;
