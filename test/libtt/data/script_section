@@ -1,5 +1,5 @@
 build = auto
-execute = (
+execute =(
     dbus-daemon
 )
 user = dbus
