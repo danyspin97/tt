@@ -27,14 +27,7 @@ namespace tt {
 
 class SectionLineParser {
 public:
-    const std::string section() const {
-        if (valid_) {
-            return section_;
-        }
-        throw new std::exception();
-    }
-
-    bool line_valid() const { return valid_; }
+    bool IsLineValid() const { return valid_; }
 
     SectionLineParser(const std::string line) {
         line_ = line;
@@ -42,7 +35,7 @@ public:
     }
 
     const std::string GetSectionOrDefault(std::string _default) const {
-        if (line_valid()) {
+        if (IsLineValid()) {
             return section_;
         }
 
@@ -59,4 +52,4 @@ private:
 
 } // namespace tt
 
-#endif // LIBTT_KEY_VALUE_PARSER_HPP_
+#endif // LIBTT_SECTION_LINE_PARSER_HPP_

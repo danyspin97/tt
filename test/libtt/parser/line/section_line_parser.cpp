@@ -29,22 +29,22 @@ using tt::SectionLineParser;
 TEST_CASE("SectionLineParser") {
     SECTION("parse valid section") {
         auto parser = SectionLineParser("[foo]");
-        REQUIRE(parser.line_valid());
+        REQUIRE(parser.IsLineValid());
     }
 
     SECTION("parse invalid section") {
         auto parser = SectionLineParser("foo");
-        REQUIRE(!parser.line_valid());
+        REQUIRE(!parser.IsLineValid());
     }
 
     SECTION("parse section not closed") {
         auto parser = SectionLineParser("[foo");
-        REQUIRE(!parser.line_valid());
+        REQUIRE(!parser.IsLineValid());
     }
 
     SECTION("garbage after the section is no allowed") {
         auto parser = SectionLineParser("[foo] bar");
-        REQUIRE(!parser.line_valid());
+        REQUIRE(!parser.IsLineValid());
     }
 
     SECTION("GetSectionOrDefault returns the valid section") {
