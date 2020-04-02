@@ -18,46 +18,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTT_CODE_PARSER_HPP_
-#define LIBTT_CODE_PARSER_HPP_
+#ifndef LIBTT_PARSER_LINE_EXCEPTION_HPP_
+#define LIBTT_PARSER_LINE_EXCEPTION_HPP_
 
-#include <sstream>
 #include <string>
 
-#include "libtt/parser/line/exception.hpp"
+#include "libtt/exception.hpp"
 
 namespace tt {
 
-class CodeParser {
+class KeyValueParserLineInvalidException : public Exception {
 public:
-    bool IsParsing() const { return is_parsing_; }
+    KeyValueParserLineInvalidException(const std::string &msg)
+        : Exception(msg) {}
+};
 
-    const std::string code() const {
-        if (IsParsing()) {
-            throw new CodeParserIsStillParsingException();
-        }
-
-        return code_.str();
-    }
-
-    const std::string key() const { return key_; }
-
-    bool StartParsing(const std::string line);
-
-    void ParseLine(const std::string line);
-
-    void Reset() {
-        code_ = std::stringstream();
-        is_parsing_ = false;
-        key_ = "";
-    }
-
-private:
-    std::stringstream code_;
-    std::string key_;
-    bool is_parsing_ = false;
+class CodeParserIsStillParsingException : public Exception {
+public:
+    CodeParserIsStillParsingException()
+        : Exception("Code parser is still parsing") {}
 };
 
 } // namespace tt
 
-#endif // LIBTT_CODE_PARSER_HPP_
+#endif // LIBTT_PARSER_LINE_EXCEPTION_HPP_

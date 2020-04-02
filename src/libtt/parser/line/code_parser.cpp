@@ -22,6 +22,7 @@
 
 #include <string>
 
+#include "libtt/parser/line/exception.hpp"
 #include "libtt/parser/utils.hpp"
 
 #include <iostream>
@@ -30,7 +31,7 @@ using tt::CodeParser;
 
 bool CodeParser::StartParsing(const string line) {
     if (IsParsing()) {
-        throw new std::exception();
+        throw new tt::CodeParserIsStillParsingException();
     }
     auto trimmed_line = trim_copy(line);
     auto equal_token_pos = trimmed_line.find('=');

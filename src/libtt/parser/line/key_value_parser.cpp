@@ -20,6 +20,7 @@
 
 #include "libtt/parser/line/key_value_parser.hpp"
 
+#include "libtt/parser/line/exception.hpp"
 #include "libtt/parser/utils.hpp"
 
 using std::string;
@@ -36,7 +37,7 @@ void tt::KeyValueParser::ParseLine() {
     } else {
         if (throw_on_error_) {
             const auto msg = "Could not find token '=' in line `" + line_ + "`";
-            throw new std::exception();
+            throw new tt::KeyValueParserLineInvalidException(msg);
         } else {
             valid_ = false;
         }
