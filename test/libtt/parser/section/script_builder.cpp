@@ -1,0 +1,46 @@
+/*
+ * Copyright (c) 2020 Danilo Spinella <danyspin97@protonmail.com>.
+ *
+ * This file is part of tt
+ * (see https://github.com/danyspin97/tt).
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "libtt/parser/section/script_builder.hpp"
+
+#include "catch2/catch.hpp"
+
+#include "libtt/parser/section/utils.hpp"
+
+using tt::Environment;
+using tt::Script;
+using tt::ScriptBuilder;
+using tt::TestBuilderWithFile;
+
+TEST_CASE("ScriptBuilder") {
+    Script *s = std::nullptr_t();
+    Environment e;
+    auto builder = ScriptBuilder(&s, e, "test");
+    SECTION("Parse valid script section") {
+        TestBuilderWithFile(builder, "../test/libtt/data/script_section");
+
+        CHECK(s->user().value() == "dbus");
+        CHECK(s->group().value() == "dbus");
+    }
+
+    SECTION("Parse invalid line") {
+        REQUIRE_THROWS(builder.ParseLine("invalid"));
+    }
+}
