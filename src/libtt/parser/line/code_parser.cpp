@@ -25,7 +25,6 @@
 #include "libtt/parser/line/exception.hpp"
 #include "libtt/parser/utils.hpp"
 
-#include <iostream>
 using std::string;
 using tt::CodeParser;
 
