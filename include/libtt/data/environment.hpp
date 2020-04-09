@@ -29,35 +29,20 @@ namespace tt {
 
 class Environment {
 public:
-    const std::string get(const std::string key) const { return env_.at(key); }
+    const std::string Get(const std::string key) const;
 
-    const std::map<std::string, std::string> getAll() const { return env_; }
+    const std::map<std::string, std::string> GetAll() const;
 
-    void set(const std::string key, const std::string value) {
-        env_[key] = value;
-    }
+    void Set(const std::string key, const std::string value);
 
-    bool setUnique(const std::string key, const std::string value) {
-        if (env_.find(key) == env_.end()) {
-            return false;
-        }
-
-        env_[key] = value;
-        return true;
-    }
+    bool SetUnique(const std::string key, const std::string value);
 
 private:
     std::map<std::string, std::string> env_;
 };
 
-std::ostream &operator<<(std::ostream &strm, const Environment &env) {
-    auto env_map = env.getAll();
-    for (const auto &pair : env_map) {
-        strm << pair.first << " = \"" << pair.second << "\"\n";
-    }
-    return strm;
-}
-
 } // namespace tt
+
+std::ostream &operator<<(std::ostream &strm, const tt::Environment &env);
 
 #endif // LIBTT_ENVINRONMENT_HPP_

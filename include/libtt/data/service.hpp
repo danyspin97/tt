@@ -21,7 +21,6 @@
 #ifndef LIBTT_SERVICE_HPP_
 #define LIBTT_SERVICE_HPP_
 
-#include <filesystem>
 #include <string>
 
 #include "libtt/data/service_options.hpp"
@@ -42,41 +41,17 @@ public:
 
     const ServiceOptions &options() const noexcept { return options_; }
 
-    virtual std::ostream &dump(std::ostream &o) const {
-        o << "name = " << name();
-        if (polish_name().size() != 0) {
-            o << "\npolish_name = " << polish_name();
-        }
-        if (description().size() != 0) {
-            o << "\ndescription = " << description();
-        }
-        return o;
-    }
+    virtual std::ostream &Dump(std::ostream &o) const;
 
-    virtual ~Service() {}
+    virtual ~Service() = default;
 
 protected:
     Service(const std::string name, const std::string polish_name,
             const std::string description, const std::string path,
-            ServiceOptions &options) {
-        name_ = name;
-        polish_name_ = polish_name;
-        description_ = description;
-        path_ = path;
-        options_ = options;
-
-        validatePath();
-    }
+            ServiceOptions &options);
 
 private:
-    void validatePath() const {
-        std::filesystem::path file(path());
-        if (file.stem() != name()) {
-            // const auto msg = "The attribute \"name\" must match the name of
-            // the file";
-            throw std::exception();
-        }
-    }
+    void ValidatePath() const;
 
     std::string name_;
     std::string polish_name_;
@@ -85,10 +60,8 @@ private:
     ServiceOptions options_;
 };
 
-std::ostream &operator<<(std::ostream &oss, const Service &service) {
-    return service.dump(oss);
-}
-
 } // namespace tt
+
+std::ostream &operator<<(std::ostream &oss, const tt::Service &service);
 
 #endif // LIBTT_SERVICE_HPP_

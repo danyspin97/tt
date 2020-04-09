@@ -18,28 +18,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTT_BUNDLE_OPTIONS_HPP_
-#define LIBTT_BUNDLE_OPTIONS_HPP_
+#include "libtt/data/bundle.hpp"
 
-#include <string>
-#include <vector>
+using std::ostream;
 
-#include "libtt/data/service_options.hpp"
+using tt::Bundle;
 
-namespace tt {
+Bundle::Bundle(const std::string name, const std::string polish_name,
+               const std::string description, const std::string path,
+               BundleOptions &options)
+    : Service(name, polish_name, description, path, options) {}
 
-class BundleOptions : public ServiceOptions {
-public:
-    std::vector<std::string> contents() { return contents_; }
-
-    void contents(std::vector<std::string> contents) { contents_ = contents; }
-
-    std::ostream &Dump(std::ostream &oss) const;
-
-private:
-    std::vector<std::string> contents_;
-};
-
-} // namespace tt
-
-#endif // LIBTT_BUNDLE_OPTIONS_HPP_
+ostream &Bundle::Dump(ostream &oss) const {
+    Service::Dump(oss);
+    oss << "[main]\n"
+        << "\ntype = bundle";
+    return oss << "\n\n[options]\n" << options();
+}

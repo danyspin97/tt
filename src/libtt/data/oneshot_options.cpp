@@ -18,28 +18,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTT_BUNDLE_OPTIONS_HPP_
-#define LIBTT_BUNDLE_OPTIONS_HPP_
+#include "libtt/data/oneshot_options.hpp"
 
-#include <string>
-#include <vector>
+using std::ostream;
 
-#include "libtt/data/service_options.hpp"
+using tt::OneshotOptions;
 
-namespace tt {
-
-class BundleOptions : public ServiceOptions {
-public:
-    std::vector<std::string> contents() { return contents_; }
-
-    void contents(std::vector<std::string> contents) { contents_ = contents; }
-
-    std::ostream &Dump(std::ostream &oss) const;
-
-private:
-    std::vector<std::string> contents_;
-};
-
-} // namespace tt
-
-#endif // LIBTT_BUNDLE_OPTIONS_HPP_
+ostream &OneshotOptions::Dump(ostream &oss) const {
+    ServiceOptions::Dump(oss) << "\n";
+    oss << "write_message = " << write_start_stop_messages();
+    return oss << "\noptional = " << optional();
+}

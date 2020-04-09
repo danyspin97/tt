@@ -41,11 +41,7 @@ public:
         write_start_stop_messages_ = new_value;
     }
 
-    std::ostream &dump(std::ostream &oss) const {
-        ServiceOptions::dump(oss) << "\n";
-        oss << "write_message = " << write_start_stop_messages();
-        return oss << "\noptional = " << optional();
-    }
+    std::ostream &Dump(std::ostream &oss) const;
 
 private:
     bool optional_ = false;

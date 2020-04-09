@@ -1,6 +1,7 @@
 libtt_src = []
 
 # Add sources
+subdir('data')
 subdir('parser')
 
 libtt_soversion = 0

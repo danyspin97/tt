@@ -49,26 +49,11 @@ public:
 
     const Environment environment() const noexcept { return env_; }
 
-    Script(Type type, std::string execute, Environment environment) {
-        type_ = type;
-        execute_ = execute;
-        env_ = environment;
-    }
+    Script(Type type, std::string execute, Environment environment);
 
-    virtual ~Script() {}
+    virtual ~Script() = default;
 
-    virtual std::ostream &dump(std::ostream &oss) const {
-        // TODO: Convert from Type to string
-        // o << "type = " << type() << "\n";
-        oss << "execute = (\n" << execute() << "\n)";
-        if (user() && user().value().size() != 0) {
-            oss << "\nuser = " << user().value();
-        }
-        if (group() && group().value().size() != 0) {
-            oss << "\ngroup = " << group().value();
-        }
-        return oss;
-    }
+    virtual std::ostream &Dump(std::ostream &oss) const;
 
 protected:
     std::string execute_;
@@ -80,10 +65,8 @@ private:
     Environment env_;
 };
 
-std::ostream &operator<<(std::ostream &oss, const Script &script) {
-    return script.dump(oss);
-}
-
 } // namespace tt
+
+std::ostream &operator<<(std::ostream &oss, const tt::Script &script);
 
 #endif // LIBTT_DATA_SCRIPT_HPP_

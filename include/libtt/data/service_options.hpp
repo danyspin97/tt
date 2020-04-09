@@ -33,25 +33,16 @@ public:
 
     void dependencies(std::vector<std::string> depends) { depends_ = depends; }
 
-    virtual ~ServiceOptions() {}
+    virtual ~ServiceOptions() = default;
 
-    virtual std::ostream &dump(std::ostream &oss) const {
-        if (depends_.size() != 0) {
-            return oss << "depends = ( "
-                       << std::string{depends_.begin(), depends_.end()} << " )";
-        }
-
-        return oss;
-    }
+    virtual std::ostream &Dump(std::ostream &oss) const;
 
 private:
     std::vector<std::string> depends_;
 };
 
-std::ostream &operator<<(std::ostream &oss, const ServiceOptions &options) {
-    return options.dump(oss);
-}
-
 } // namespace tt
+
+std::ostream &operator<<(std::ostream &oss, const tt::ServiceOptions &options);
 
 #endif // LIBTT_SERVICE_OPTIONS_HPP_

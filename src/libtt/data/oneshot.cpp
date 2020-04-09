@@ -18,28 +18,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTT_BUNDLE_OPTIONS_HPP_
-#define LIBTT_BUNDLE_OPTIONS_HPP_
+#include "libtt/data/oneshot.hpp"
 
-#include <string>
-#include <vector>
+using std::ostream;
 
-#include "libtt/data/service_options.hpp"
+using tt::Oneshot;
 
-namespace tt {
+Oneshot::Oneshot(const std::string name, const std::string polish_name,
+                 const std::string description, const std::string path,
+                 OneshotOptions options, Script start)
+    : Service(name, polish_name, description, path, options), start_(start) {}
 
-class BundleOptions : public ServiceOptions {
-public:
-    std::vector<std::string> contents() { return contents_; }
-
-    void contents(std::vector<std::string> contents) { contents_ = contents; }
-
-    std::ostream &Dump(std::ostream &oss) const;
-
-private:
-    std::vector<std::string> contents_;
-};
-
-} // namespace tt
-
-#endif // LIBTT_BUNDLE_OPTIONS_HPP_
+ostream &Oneshot::Dump(ostream &oss) const {
+    oss << "[main]\n";
+    Service::Dump(oss);
+    oss << "\ntype = oneshot";
+    oss << "\n\n[start]\n" << start_;
+    if (stop_) {
+        oss << "\n\n[stop]\n" << stop().value();
+    }
+    oss << "\n\n[options]\n" << options();
+    if (start_.environment().GetAll().size() != 0) {
+        oss << "\n\n[config]\n" << start_.environment();
+    }
+    return oss;
+}

@@ -18,28 +18,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTT_BUNDLE_OPTIONS_HPP_
-#define LIBTT_BUNDLE_OPTIONS_HPP_
+#include "libtt/data/script.hpp"
 
-#include <string>
-#include <vector>
+using std::ostream;
 
-#include "libtt/data/service_options.hpp"
+using tt::Script;
 
-namespace tt {
+Script::Script(Type type, std::string execute, Environment environment)
+    : execute_(execute), type_(type), env_(environment) {}
 
-class BundleOptions : public ServiceOptions {
-public:
-    std::vector<std::string> contents() { return contents_; }
+ostream &Script::Dump(ostream &oss) const {
+    // TODO: Convert from Type to string
+    // o << "type = " << type() << "\n";
+    oss << "execute = (\n" << execute() << "\n)";
+    if (user() && user().value().size() != 0) {
+        oss << "\nuser = " << user().value();
+    }
+    if (group() && group().value().size() != 0) {
+        oss << "\ngroup = " << group().value();
+    }
+    return oss;
+}
 
-    void contents(std::vector<std::string> contents) { contents_ = contents; }
-
-    std::ostream &Dump(std::ostream &oss) const;
-
-private:
-    std::vector<std::string> contents_;
-};
-
-} // namespace tt
-
-#endif // LIBTT_BUNDLE_OPTIONS_HPP_
+ostream &operator<<(ostream &oss, const Script &script) {
+    return script.Dump(oss);
+}

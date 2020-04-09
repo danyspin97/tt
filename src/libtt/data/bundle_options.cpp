@@ -18,28 +18,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTT_BUNDLE_OPTIONS_HPP_
-#define LIBTT_BUNDLE_OPTIONS_HPP_
+#include "libtt/data/bundle_options.hpp"
 
-#include <string>
-#include <vector>
+#include <algorithm>
+#include <iterator>
 
-#include "libtt/data/service_options.hpp"
+using std::copy;
+using std::ostream;
+using std::ostream_iterator;
+using std::string;
 
-namespace tt {
+using tt::BundleOptions;
 
-class BundleOptions : public ServiceOptions {
-public:
-    std::vector<std::string> contents() { return contents_; }
-
-    void contents(std::vector<std::string> contents) { contents_ = contents; }
-
-    std::ostream &Dump(std::ostream &oss) const;
-
-private:
-    std::vector<std::string> contents_;
-};
-
-} // namespace tt
-
-#endif // LIBTT_BUNDLE_OPTIONS_HPP_
+ostream &BundleOptions::Dump(ostream &oss) const {
+    oss << "contents = ( ";
+    copy(contents_.begin(), contents_.end(),
+         ostream_iterator<string>(oss, " "));
+    return oss << " )";
+}

@@ -18,28 +18,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTT_BUNDLE_OPTIONS_HPP_
-#define LIBTT_BUNDLE_OPTIONS_HPP_
+#include "libtt/data/logger_script.hpp"
 
-#include <string>
-#include <vector>
+using std::ostream;
 
-#include "libtt/data/service_options.hpp"
+using tt::LoggerScript;
 
-namespace tt {
+LoggerScript::LoggerScript(Type type, const std::string execute,
+                           Environment environment,
+                           const std::string service_to_log,
+                           const std::string user, const std::string group)
+    : Script(type, execute, environment), service_to_log_(service_to_log) {
+    this->user(user);
+    this->group(group);
+}
 
-class BundleOptions : public ServiceOptions {
-public:
-    std::vector<std::string> contents() { return contents_; }
-
-    void contents(std::vector<std::string> contents) { contents_ = contents; }
-
-    std::ostream &Dump(std::ostream &oss) const;
-
-private:
-    std::vector<std::string> contents_;
-};
-
-} // namespace tt
-
-#endif // LIBTT_BUNDLE_OPTIONS_HPP_
+ostream &LoggerScript::Dump(ostream &oss) const {
+    Script::Dump(oss);
+    return oss << "\nservice_to_log = " << service_to_log();
+}

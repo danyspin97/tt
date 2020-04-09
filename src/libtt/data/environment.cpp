@@ -18,28 +18,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTT_BUNDLE_OPTIONS_HPP_
-#define LIBTT_BUNDLE_OPTIONS_HPP_
+#include "libtt/data/environment.hpp"
 
-#include <string>
-#include <vector>
+using std::map;
+using std::ostream;
+using std::string;
 
-#include "libtt/data/service_options.hpp"
+using tt::Environment;
 
-namespace tt {
+const string Environment::Get(const string key) const { return env_.at(key); }
 
-class BundleOptions : public ServiceOptions {
-public:
-    std::vector<std::string> contents() { return contents_; }
+const map<string, string> Environment::GetAll() const { return env_; }
 
-    void contents(std::vector<std::string> contents) { contents_ = contents; }
+void Environment::Set(const string key, const string value) {
+    env_[key] = value;
+}
+bool Environment::SetUnique(const string key, const string value) {
+    if (env_.find(key) == env_.end()) {
+        return false;
+    }
 
-    std::ostream &Dump(std::ostream &oss) const;
+    env_[key] = value;
+    return true;
+}
 
-private:
-    std::vector<std::string> contents_;
-};
-
-} // namespace tt
-
-#endif // LIBTT_BUNDLE_OPTIONS_HPP_
+ostream &operator<<(ostream &strm, const Environment &env) {
+    auto env_map = env.GetAll();
+    for (const auto &pair : env_map) {
+        strm << pair.first << " = \"" << pair.second << "\"\n";
+    }
+    return strm;
+}

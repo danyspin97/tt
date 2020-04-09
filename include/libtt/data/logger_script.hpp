@@ -36,17 +36,9 @@ public:
 
     LoggerScript(Type type, const std::string execute, Environment environment,
                  const std::string service_to_log, const std::string user,
-                 const std::string group)
-        : Script(type, execute, environment) {
-        service_to_log_ = service_to_log;
-        this->user(user);
-        this->group(group);
-    }
+                 const std::string group);
 
-    std::ostream &dump(std::ostream &oss) const {
-        Script::dump(oss);
-        return oss << "\nservice_to_log = " << service_to_log();
-    }
+    std::ostream &Dump(std::ostream &oss) const;
 
 private:
     std::string service_to_log_;
