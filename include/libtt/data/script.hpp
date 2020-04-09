@@ -18,12 +18,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTT_SCRIPT_HPP_
-#define LIBTT_SCRIPT_HPP_
+#ifndef LIBTT_DATA_SCRIPT_HPP_
+#define LIBTT_DATA_SCRIPT_HPP_
 
-#include "libtt/data/environment.hpp"
 #include <optional>
 #include <string>
+
+#include "libtt/data/environment.hpp"
 
 namespace tt {
 
@@ -85,4 +86,4 @@ std::ostream &operator<<(std::ostream &oss, const Script &script) {
 
 } // namespace tt
 
-#endif // LIBTT_SCRIPT_HPP_
+#endif // LIBTT_DATA_SCRIPT_HPP_
