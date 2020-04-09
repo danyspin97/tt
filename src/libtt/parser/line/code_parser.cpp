@@ -30,7 +30,7 @@ using tt::CodeParser;
 
 bool CodeParser::StartParsing(const string line) {
     if (IsParsing()) {
-        throw new tt::CodeParserIsStillParsingException();
+        throw tt::CodeParserIsStillParsingException();
     }
     auto trimmed_line = trim_copy(line);
     auto equal_token_pos = trimmed_line.find('=');
