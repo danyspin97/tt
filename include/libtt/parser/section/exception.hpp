@@ -44,6 +44,11 @@ public:
         : Exception(msg) {}
 };
 
+class ParamIsNotEmptyException : public Exception {
+public:
+    ParamIsNotEmptyException() : Exception("") {}
+};
+
 class ScriptTypeNotValidException : public Exception {
 public:
     ScriptTypeNotValidException(const std::string &msg) : Exception(msg) {}

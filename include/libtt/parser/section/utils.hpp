@@ -21,9 +21,11 @@
 #ifndef LIBTT_PARSER_SECTION_UTILS_HPP_
 #define LIBTT_PARSER_SECTION_UTILS_HPP_
 
+#include <string>
+
+#include "libtt/parser/section/exception.hpp"
 #include "libtt/parser/section/section_builder.hpp"
 #include "libtt/parser/utils.hpp"
-#include <string>
 
 namespace tt {
 
@@ -42,7 +44,7 @@ inline bool IsEmptyLine(const std::string line) {
 inline void SetThrowsIfNotEmpty(std::string &param,
                                 const std::string newValue) {
     if (param != "") {
-        throw std::exception();
+        throw ParamIsNotEmptyException();
     }
 
     param.append(newValue);
