@@ -1,4 +1,6 @@
-libtt_src = []
+libtt_src = [
+    'signal.cpp'
+]
 
 # Add sources
 subdir('data')

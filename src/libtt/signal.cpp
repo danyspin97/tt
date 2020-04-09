@@ -18,24 +18,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBTT_SIGNAL_HPP_
-#define LIBTT_SIGNAL_HPP_
+#include "libtt/signal.hpp"
 
-#include <map>
-#include <string>
+#include "libtt/exception.hpp"
 
-namespace tt {
+using std::map;
+using std::string;
 
-enum class Signal {
-    kSigHup = 1,
-    kSigInt = 2,
-    kSigQuit = 3,
-    kSigKill = 9,
-    kSigTerm = 15
-};
+using tt::Signal;
+using tt::SignalNotValidExecption;
 
-Signal ParseSignalFromString(const std::string signal);
+Signal tt::ParseSignalFromString(const string signal) {
+    static const map<string, Signal> signalStrings{
+        {"SIGHUP", Signal::kSigHup},   {"SIGINT", Signal::kSigInt},
+        {"SIGQUIT", Signal::kSigQuit}, {"SIGKILL", Signal::kSigKill},
+        {"SIGTERM", Signal::kSigTerm},
+    };
+    if (auto itr = signalStrings.find(signal); itr != signalStrings.end()) {
+        return itr->second;
+    }
 
-} // namespace tt
-
-#endif // LIBTT_SIGNAL_HPP_
+    const auto error_msg = "Signal \"" + signal + "\" is not valid";
+    throw SignalNotValidExecption(error_msg);
+}
