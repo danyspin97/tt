@@ -22,9 +22,12 @@
 
 #include <filesystem>
 
+#include "libtt/data/exception.hpp"
+
 using std::ostream;
 
 using tt::Service;
+using tt::ServiceNameDoNotMatchFileExecption;
 using tt::ServiceOptions;
 
 Service::Service(const std::string name, const std::string polish_name,
@@ -38,9 +41,7 @@ Service::Service(const std::string name, const std::string polish_name,
 void Service::ValidatePath() const {
     std::filesystem::path file(path());
     if (file.stem() != name()) {
-        // const auto msg = "The attribute \"name\" must match the name of
-        // the file";
-        throw std::exception();
+        throw ServiceNameDoNotMatchFileExecption();
     }
 }
 

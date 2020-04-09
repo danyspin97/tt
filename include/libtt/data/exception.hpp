@@ -33,6 +33,12 @@ public:
         : Exception("max_death value cannot be bigger than 4096") {}
 };
 
+class ServiceNameDoNotMatchFileExecption : public Exception {
+public:
+    ServiceNameDoNotMatchFileExecption()
+        : Exception("The attribute \"name\" must match the name of the file") {}
+};
+
 } // namespace tt
 
 #endif // LIBTT_DATA_EXCEPTION_HPP_
