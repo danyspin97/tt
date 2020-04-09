@@ -38,6 +38,12 @@ public:
         : Exception(msg) {}
 };
 
+class LoggerScriptInvalidSettingsException : public Exception {
+public:
+    LoggerScriptInvalidSettingsException(const std::string &msg)
+        : Exception(msg) {}
+};
+
 class ScriptTypeNotValidException : public Exception {
 public:
     ScriptTypeNotValidException(const std::string &msg) : Exception(msg) {}
