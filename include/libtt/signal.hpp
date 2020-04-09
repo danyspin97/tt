@@ -24,6 +24,8 @@
 #include <map>
 #include <string>
 
+#include "libtt/exception.hpp"
+
 namespace tt {
 
 enum class Signal {
@@ -44,7 +46,8 @@ Signal parseSignalFromString(const std::string signal) {
         return itr->second;
     }
 
-    throw std::exception();
+    const auto error_msg = "Signal \"" + signal + "\" is not valid";
+    throw SignalNotValidExecption(error_msg);
 }
 
 } // namespace tt

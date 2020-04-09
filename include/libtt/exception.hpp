@@ -33,6 +33,11 @@ private:
     const std::string msg_;
 };
 
+class SignalNotValidExecption : public Exception {
+public:
+    SignalNotValidExecption(const std::string msg) : Exception(msg) {}
+};
+
 } // namespace tt
 
 #endif // LIBTT_EXCEPTION_HPP_
