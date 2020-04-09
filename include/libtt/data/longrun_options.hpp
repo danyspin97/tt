@@ -55,14 +55,7 @@ public:
 
     uint_fast16_t max_death() const noexcept { return max_death_; }
 
-    void max_death(uint_fast16_t max_death) {
-        // immutable auto msg = "max_death property cannot be greater than
-        // 4096";
-        if (max_death < 4096) {
-            throw std::exception();
-        }
-        max_death_ = max_death;
-    }
+    void max_death(uint_fast16_t max_death);
 
     bool write_run_finish_message() const noexcept {
         return write_run_finish_message_;
@@ -76,20 +69,7 @@ public:
 
     void optional(bool optional) noexcept { optional_ = optional; }
 
-    virtual std::ostream &dump(std::ostream &oss) const {
-        oss << "\ntimeout_finish = " << timeout_finish();
-        oss << "\ntimeout_kill = " << timeout_kill();
-        // TODO: Convert a tt::Signal to string
-        // o << "\ndown_signal = " << down_signal();
-        oss << "\nmax_death = " << max_death();
-        oss << "\nwrite_message = " << write_run_finish_message();
-        oss << "\noptional = " << optional();
-        if (notify() != 0) {
-            oss << "\nnotify = " << notify();
-        }
-        ServiceOptions::dump(oss);
-        return oss;
-    }
+    virtual std::ostream &Dump(std::ostream &oss) const;
 
 private:
     uint_fast32_t notify_;

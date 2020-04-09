@@ -46,24 +46,9 @@ public:
 
     Longrun(const std::string name, const std::string polish_name,
             const std::string description, const std::string path,
-            LongrunOptions options, Script run)
-        : Service(name, polish_name, description, path, options), run_(run) {}
+            LongrunOptions options, Script run);
 
-    virtual std::ostream &dump(std::ostream &oss) const {
-        oss << "[main]\n";
-        Service::dump(oss);
-        oss << "\ntype = longrun";
-        oss << "\n\n[run]\n" << run();
-        if (finish()) {
-            oss << "\n\n[finish]\n" << finish().value();
-        }
-        oss << "\n\n[logger]\n" << logger().value();
-        oss << "\n\n[options]\n" << options();
-        if (run().environment().getAll().size() != 0) {
-            oss << "\n\n[config]\n" << run().environment();
-        }
-        return oss;
-    }
+    virtual std::ostream &Dump(std::ostream &oss) const;
 
 private:
     Script run_;
