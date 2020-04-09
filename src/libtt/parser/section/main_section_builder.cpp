@@ -36,7 +36,7 @@ using tt::SetThrowsIfNotEmpty;
 void MainSectionBuilder::ParseLine(const string line) {
     try {
         TryParseLine(line);
-    } catch (std::exception e) {
+    } catch (const std::exception& e) {
         throw std::exception(e);
     }
 }
