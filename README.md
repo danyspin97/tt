@@ -2,6 +2,7 @@
 
 [![codecov](https://codecov.io/gh/DanySpin97/tt/branch/master/graph/badge.svg)](https://codecov.io/gh/DanySpin97/tt)
 [![CodeFactor](https://www.codefactor.io/repository/github/danyspin97/tt/badge)](https://www.codefactor.io/repository/github/danyspin97/tt)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/964fc2e2d7374cda979ac4b470e93561)](https://www.codacy.com/manual/danyspin97/tt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DanySpin97/tt&amp;utm_campaign=Badge_Grade)
 
 tt is a Work in Progress init and service manager inspired by [66](https://web.obarun.org/software/66) and based on
 the [s6](https://skarnet.org/software/s6/) suite.
