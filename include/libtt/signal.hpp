@@ -36,7 +36,7 @@ enum class Signal {
     kSigTerm = 15
 };
 
-Signal parseSignalFromString(const std::string signal) {
+Signal ParseSignalFromString(const std::string signal) {
     static const std::map<std::string, Signal> signalStrings{
         {"SIGHUP", Signal::kSigHup},   {"SIGINT", Signal::kSigInt},
         {"SIGQUIT", Signal::kSigQuit}, {"SIGKILL", Signal::kSigKill},

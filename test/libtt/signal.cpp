@@ -22,17 +22,17 @@
 #include "catch2/catch.hpp"
 
 using std::string;
-using tt::parseSignalFromString;
+using tt::ParseSignalFromString;
 using tt::Signal;
 
-TEST_CASE("parseSignalFromString") {
-    CHECK(parseSignalFromString("SIGHUP") == Signal::kSigHup);
-    CHECK(parseSignalFromString("SIGINT") == Signal::kSigInt);
-    CHECK(parseSignalFromString("SIGQUIT") == Signal::kSigQuit);
-    CHECK(parseSignalFromString("SIGKILL") == Signal::kSigKill);
-    CHECK(parseSignalFromString("SIGTERM") == Signal::kSigTerm);
+TEST_CASE("ParseSignalFromString") {
+    CHECK(ParseSignalFromString("SIGHUP") == Signal::kSigHup);
+    CHECK(ParseSignalFromString("SIGINT") == Signal::kSigInt);
+    CHECK(ParseSignalFromString("SIGQUIT") == Signal::kSigQuit);
+    CHECK(ParseSignalFromString("SIGKILL") == Signal::kSigKill);
+    CHECK(ParseSignalFromString("SIGTERM") == Signal::kSigTerm);
 }
 
-TEST_CASE("parseSignalFromString with exception") {
-    REQUIRE_THROWS(parseSignalFromString(""));
+TEST_CASE("ParseSignalFromString with exception") {
+    REQUIRE_THROWS(ParseSignalFromString(""));
 }
