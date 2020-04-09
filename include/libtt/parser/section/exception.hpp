@@ -27,6 +27,11 @@
 
 namespace tt {
 
+class AttributeIsAlreadySetException : public Exception {
+public:
+    AttributeIsAlreadySetException(const std::string &msg) : Exception(msg) {}
+};
+
 class AttributeNotFoundException : public Exception {
 public:
     AttributeNotFoundException(const std::string &msg) : Exception(msg) {}
@@ -52,6 +57,11 @@ public:
 class ScriptTypeNotValidException : public Exception {
 public:
     ScriptTypeNotValidException(const std::string &msg) : Exception(msg) {}
+};
+
+class SectionBuilderException : public Exception {
+public:
+    SectionBuilderException(const std::string &msg) : Exception(msg) {}
 };
 
 } // namespace tt

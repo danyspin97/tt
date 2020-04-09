@@ -23,20 +23,28 @@
 #include <string>
 
 #include "libtt/parser/line/key_value_parser.hpp"
+#include "libtt/parser/section/exception.hpp"
 #include "libtt/parser/section/utils.hpp"
 #include "libtt/parser/utils.hpp"
 
 using std::string;
+
+using tt::AttributeIsAlreadySetException;
 using tt::AttributeNotFound;
 using tt::KeyValueParser;
 using tt::MainSection;
 using tt::MainSectionBuilder;
+using tt::SectionBuilderException;
 using tt::SetThrowsIfNotEmpty;
 
 void MainSectionBuilder::ParseLine(const string line) {
     try {
         TryParseLine(line);
-    } catch (const std::exception& e) {
+    } catch (const AttributeIsAlreadySetException &e) {
+        const auto msg =
+            "\"" + key_ + "\" was already set while parsing [main] section";
+        throw SectionBuilderException(msg);
+    } catch (const std::exception &e) {
         throw std::exception(e);
     }
 }
@@ -47,10 +55,10 @@ void MainSectionBuilder::TryParseLine(const string line) {
     }
 
     const auto keyValueParser = KeyValueParser(line, true);
-    const auto key = keyValueParser.key();
-    const auto value = keyValueParser.value();
+    key_ = keyValueParser.key();
+    value_ = keyValueParser.value();
 
-    SetThrowsIfNotEmpty(GetAttributeForKey(key), value);
+    SetThrowsIfNotEmpty(GetAttributeForKey(key_), value_);
 }
 
 string &MainSectionBuilder::GetAttributeForKey(const std::string key) {

@@ -41,6 +41,8 @@ private:
     MainSection &main_section_;
 
     std::string ret_;
+    std::string key_;
+    std::string value_;
 };
 
 } // namespace tt
