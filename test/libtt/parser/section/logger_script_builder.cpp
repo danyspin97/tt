@@ -37,7 +37,7 @@ TEST_CASE("LoggerScriptBuilder") {
     auto builder = LoggerScriptBuilder(&s, e, "foo");
 
     SECTION("Parse valid section") {
-        TestBuilderWithFile(builder, "src/libtt/test/logger_script");
+        TestBuilderWithFile(builder, "../test/libtt/data/logger_script");
         CHECK(s->service_to_log() == "foo");
 
         const auto expected_execute = "s6-log /var/log/tt/foo";
@@ -48,7 +48,7 @@ TEST_CASE("LoggerScriptBuilder") {
     }
 
     SECTION("Paarse section without execute script") {
-        TestBuilderWithFile(builder, "src/libtt/test/logger_script_no_execute");
+        TestBuilderWithFile(builder, "../test/libtt/data/logger_script_no_execute");
         CHECK(s->service_to_log() == "bar");
         CHECK(s->user() == kDefaultLogUser);
         CHECK(s->group() == kDefaultLogGroup);
