@@ -28,10 +28,15 @@
 
 using std::string;
 using tt::CodeParser;
+using tt::CodeSectionBuilder;
 using tt::IsEmptyLine;
+using tt::SectionBuilder;
 using tt::SetThrowsIfNotEmpty;
 
-void tt::CodeSectionBuilder::ParseLine(const std::string line) {
+CodeSectionBuilder::CodeSectionBuilder(const std::string &section)
+    : section_(section) {}
+
+void CodeSectionBuilder::ParseLine(const std::string line) {
     if (code_parser_.IsParsing()) {
         // Continue parsing execute parameter
         code_parser_.ParseLine(line);
@@ -60,5 +65,7 @@ void tt::CodeSectionBuilder::ParseLine(const std::string line) {
         return;
     }
 
-    throw std::exception();
+    const auto msg =
+        line + "\n\tis not valid while parsing [" + section_ + "] section";
+    throw SectionBuilderException(msg);
 }

@@ -31,8 +31,7 @@ namespace tt {
 class ScriptBuilder : public CodeSectionBuilder {
 public:
     ScriptBuilder(Script **script, const Environment &environment,
-                  const std::string section)
-        : script_(script), environment_(environment), section_(section) {}
+                  const std::string section);
 
     void EndParsing();
 
@@ -50,7 +49,6 @@ protected:
     std::string user_;
     std::string group_;
     std::string execute_;
-    std::string section_;
 };
 
 } // namespace tt

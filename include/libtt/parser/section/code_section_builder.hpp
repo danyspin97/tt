@@ -32,8 +32,12 @@ public:
     void ParseLine(const std::string line);
 
 protected:
+    CodeSectionBuilder(const std::string &section);
+
     virtual std::string &GetCodeAttributeForKey(std::string key) = 0;
     virtual std::string &GetAttributeForKey(std::string key) = 0;
+
+    std::string section_;
 
 private:
     CodeParser code_parser_ = CodeParser();

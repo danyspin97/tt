@@ -27,9 +27,16 @@
 #include "libtt/parser/section/utils.hpp"
 
 using std::string;
-using tt::AttributeNotFound;
 
-void tt::ScriptBuilder::EndParsing() {
+using tt::AttributeNotFound;
+using tt::Script;
+using tt::ScriptBuilder;
+
+ScriptBuilder::ScriptBuilder(Script **script, const Environment &environment,
+                             const std::string section)
+    : CodeSectionBuilder(section), script_(script), environment_(environment) {}
+
+void ScriptBuilder::EndParsing() {
     if (execute_ == "") {
         const auto error_message =
             "Code was not supplied in section [" + section_ + "]";
@@ -48,7 +55,7 @@ void tt::ScriptBuilder::EndParsing() {
     }
 }
 
-string &tt::ScriptBuilder::GetAttributeForKey(const string key) {
+string &ScriptBuilder::GetAttributeForKey(const string key) {
     if (key == "build") {
         return type_;
     } else if (key == "execute") {
@@ -64,7 +71,7 @@ string &tt::ScriptBuilder::GetAttributeForKey(const string key) {
     return section_;
 }
 
-string &tt::ScriptBuilder::GetCodeAttributeForKey(const string key) {
+string &ScriptBuilder::GetCodeAttributeForKey(const string key) {
     if (key == "execute") {
         return execute_;
     }
@@ -74,7 +81,7 @@ string &tt::ScriptBuilder::GetCodeAttributeForKey(const string key) {
     return section_;
 }
 
-tt::Script::Type tt::ScriptBuilder::GetParsedType() {
+Script::Type tt::ScriptBuilder::GetParsedType() {
     // TODO: add "path" type
     if (type_ == "auto" || type_ == "execline") {
         return Script::Type::Execline;
