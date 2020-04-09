@@ -1,5 +1,5 @@
 build = auto
-execute = (
+execute =(
 s6-log /var/log/tt/foo
 )
 user = tt_log

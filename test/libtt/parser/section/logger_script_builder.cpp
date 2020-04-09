@@ -48,8 +48,9 @@ TEST_CASE("LoggerScriptBuilder") {
     }
 
     SECTION("Paarse section without execute script") {
-        TestBuilderWithFile(builder, "../test/libtt/data/logger_script_no_execute");
-        CHECK(s->service_to_log() == "bar");
+        TestBuilderWithFile(builder,
+                            "../test/libtt/data/logger_script_no_execute");
+        CHECK(s->service_to_log() == "foo");
         CHECK(s->user() == kDefaultLogUser);
         CHECK(s->group() == kDefaultLogGroup);
     }
