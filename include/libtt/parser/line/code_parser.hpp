@@ -24,23 +24,15 @@
 #include <sstream>
 #include <string>
 
-#include "libtt/parser/line/exception.hpp"
-
 namespace tt {
 
 class CodeParser {
 public:
     bool IsParsing() const { return is_parsing_; }
 
-    const std::string code() const {
-        if (IsParsing()) {
-            throw new CodeParserIsStillParsingException();
-        }
-
-        return code_.str();
-    }
-
     const std::string key() const { return key_; }
+
+    const std::string code() const;
 
     bool StartParsing(const std::string line);
 

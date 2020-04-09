@@ -51,7 +51,7 @@ TEST_CASE("CodeParser parse code") {
 
     // End parsing
     parser.ParseLine(")");
-    CHECK(parser.code() == line1 + newline + line2 + newline);
+    CHECK(parser.code() == line1 + newline + line2);
     CHECK_FALSE(parser.IsParsing());
 }
 

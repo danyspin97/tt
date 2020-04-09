@@ -63,3 +63,14 @@ void CodeParser::ParseLine(const string line) {
     code_ << line;
     code_ << "\n";
 }
+
+const string CodeParser::code() const {
+    if (IsParsing()) {
+        throw CodeParserIsStillParsingException();
+    }
+
+    auto code = code_.str();
+    // Remove last char which is a newline added by ParseLine
+    code.pop_back();
+    return code;
+}
