@@ -1,0 +1,50 @@
+/*
+ * Copyright (c) 2020 Danilo Spinella <danyspin97@protonmail.com>.
+ *
+ * This file is part of tt
+ * (see https://github.com/danyspin97/tt).
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef TT_DIRS_H_
+#define TT_DIRS_H_
+
+#ifdef __cplusplus
+namespace tt {
+#endif // __cplusplus
+
+const char* kVersion = "@version@";
+
+static struct Dirs
+{
+    const char* bin = "@bindir@";
+    const char* conf = "@confdir@";
+    const char* execlinePrefix = "@execline_prefix@";
+    const char* libexec = "@libexecdir@";
+    const char* live = "@livedir@";
+    const char* log = "@logdir@";
+    const char* service = "@servicedir@";
+    const char* system = "@systemdir@";
+
+    const char* customScripts = "@confdir@";
+    const char* adminService = "@confdir@/service";
+    const char* adminConf = "@confdir@/conf";
+} dirs;
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+
+#endif // TT_DIRS_H_
