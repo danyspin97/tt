@@ -45,15 +45,15 @@ void Service::ValidatePath() const {
     }
 }
 
-ostream &Service::Dump(ostream &o) const {
-    o << "name = " << name();
+ostream &Service::Dump(ostream &oss) const {
+    oss << "name = " << name();
     if (polish_name().size() != 0) {
-        o << "\npolish_name = " << polish_name();
+        oss << "\npolish_name = " << polish_name();
     }
     if (description().size() != 0) {
-        o << "\ndescription = " << description();
+        oss << "\ndescription = " << description();
     }
-    return o;
+    return oss;
 }
 
 ostream &operator<<(ostream &oss, const Service &service) {

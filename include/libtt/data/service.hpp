@@ -41,7 +41,7 @@ public:
 
     const ServiceOptions &options() const noexcept { return options_; }
 
-    virtual std::ostream &Dump(std::ostream &o) const;
+    virtual std::ostream &Dump(std::ostream &oss) const;
 
     virtual ~Service() = default;
 
