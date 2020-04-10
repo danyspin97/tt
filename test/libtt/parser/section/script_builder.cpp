@@ -24,20 +24,22 @@
 
 #include "libtt/parser/section/utils.hpp"
 
+using std::shared_ptr;
+
 using tt::Environment;
 using tt::Script;
 using tt::ScriptBuilder;
 using tt::TestBuilderWithFile;
 
 TEST_CASE("ScriptBuilder") {
-    Script *s = std::nullptr_t();
     Environment e;
-    auto builder = ScriptBuilder(&s, e, "test");
+    auto builder = ScriptBuilder(e, "test");
     SECTION("Parse valid script section") {
         TestBuilderWithFile(builder, "../test/libtt/data/script_section");
+        Script s = builder.script();
 
-        CHECK(s->user().value() == "dbus");
-        CHECK(s->group().value() == "dbus");
+        CHECK(s.user().value() == "dbus");
+        CHECK(s.group().value() == "dbus");
     }
 
     SECTION("Parse invalid line") {

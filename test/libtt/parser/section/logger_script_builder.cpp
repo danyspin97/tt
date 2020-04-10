@@ -32,26 +32,29 @@ using tt::LoggerScript;
 using tt::LoggerScriptBuilder;
 
 TEST_CASE("LoggerScriptBuilder") {
-    LoggerScript *s;
     Environment e = Environment();
-    auto builder = LoggerScriptBuilder(&s, e, "foo");
+    auto builder = LoggerScriptBuilder(e, "foo");
 
     SECTION("Parse valid section") {
         TestBuilderWithFile(builder, "../test/libtt/data/logger_script");
-        CHECK(s->service_to_log() == "foo");
+        LoggerScript s = builder.logger_script();
+
+        CHECK(s.service_to_log() == "foo");
 
         const auto expected_execute = "s6-log /var/log/tt/foo";
 
-        CHECK(s->execute() == expected_execute);
-        CHECK(s->user() == "tt_log");
-        CHECK(s->group() == "tt_log");
+        CHECK(s.execute() == expected_execute);
+        CHECK(s.user() == "tt_log");
+        CHECK(s.group() == "tt_log");
     }
 
     SECTION("Paarse section without execute script") {
         TestBuilderWithFile(builder,
                             "../test/libtt/data/logger_script_no_execute");
-        CHECK(s->service_to_log() == "foo");
-        CHECK(s->user() == kDefaultLogUser);
-        CHECK(s->group() == kDefaultLogGroup);
+        LoggerScript s = builder.logger_script();
+
+        CHECK(s.service_to_log() == "foo");
+        CHECK(s.user() == kDefaultLogUser);
+        CHECK(s.group() == kDefaultLogGroup);
     }
 }

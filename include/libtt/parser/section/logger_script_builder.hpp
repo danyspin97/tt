@@ -21,19 +21,19 @@
 #ifndef LIBTT_LOGGER_SCRIPT_BUILDER_HPP_
 #define LIBTT_LOGGER_SCRIPT_BUILDER_HPP_
 
+#include <string>
+
 #include "libtt/data/logger_script.hpp"
 #include "libtt/parser/section/script_builder.hpp"
-#include <string>
 
 namespace tt {
 
 class LoggerScriptBuilder : public ScriptBuilder {
 public:
-    LoggerScriptBuilder(LoggerScript **logger_script,
-                        const Environment &environment,
-                        const std::string service_name)
-        : ScriptBuilder(std::nullptr_t{}, environment, "log"),
-          logger_script_(logger_script), service_name_(service_name) {}
+    LoggerScriptBuilder(const Environment &environment,
+                        const std::string service_name);
+
+    LoggerScript logger_script() const;
 
     void EndParsing();
 
@@ -48,8 +48,6 @@ private:
     std::string GetDefaultExecute() const noexcept;
 
     std::string GetDefaultDestination() const noexcept;
-
-    LoggerScript **logger_script_;
 
     std::string destination_;
     std::string maxsize_;

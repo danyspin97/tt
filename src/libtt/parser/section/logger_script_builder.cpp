@@ -29,17 +29,18 @@ using std::string;
 using tt::dirs;
 using tt::kDefaultLogGroup;
 using tt::kDefaultLogUser;
+using tt::LoggerScript;
 using tt::LoggerScriptBuilder;
 using tt::LoggerScriptInvalidSettingsException;
 using tt::Script;
 
+LoggerScriptBuilder::LoggerScriptBuilder(const Environment &environment,
+                                         const std::string service_name)
+    : ScriptBuilder(environment, "log"), service_name_(service_name) {}
+
 void LoggerScriptBuilder::EndParsing() {
     CheckParsedValues();
     SetDefaultForOptionalValues();
-
-    Script::Type script_type = GetParsedType();
-    *logger_script_ = new LoggerScript(script_type, execute_, environment_,
-                                       service_name_, user_, group_);
 }
 
 void LoggerScriptBuilder::CheckParsedValues() {
@@ -103,4 +104,11 @@ std::string LoggerScriptBuilder::GetDefaultExecute() const noexcept {
 
 std::string LoggerScriptBuilder::GetDefaultDestination() const noexcept {
     return string{dirs.log} + "/" + service_name_;
+}
+
+LoggerScript LoggerScriptBuilder::logger_script() const {
+    LoggerScript logger_script = LoggerScript(
+        GetParsedType(), execute_, environment_, service_name_, user_, group_);
+    // TODO: Check if EndParsing has been called
+    return logger_script;
 }

@@ -32,26 +32,15 @@ using tt::AttributeNotFound;
 using tt::Script;
 using tt::ScriptBuilder;
 
-ScriptBuilder::ScriptBuilder(Script **script, const Environment &environment,
+ScriptBuilder::ScriptBuilder(const Environment &environment,
                              const std::string section)
-    : CodeSectionBuilder(section), script_(script), environment_(environment) {}
+    : CodeSectionBuilder(section), environment_(environment) {}
 
 void ScriptBuilder::EndParsing() {
     if (execute_ == "") {
         const auto error_message =
             "Code was not supplied in section [" + section_ + "]";
         throw tt::CodeNotSuppliedInScriptParserException(error_message);
-    }
-
-    auto scriptType = GetParsedType();
-    *script_ = new Script(scriptType, execute_, environment_);
-
-    if (user_ != "") {
-        (*script_)->user(user_);
-    }
-
-    if (group_ != "") {
-        (*script_)->group(group_);
     }
 }
 
@@ -81,7 +70,7 @@ string &ScriptBuilder::GetCodeAttributeForKey(const string key) {
     return section_;
 }
 
-Script::Type tt::ScriptBuilder::GetParsedType() {
+Script::Type tt::ScriptBuilder::GetParsedType() const {
     // TODO: add "path" type
     if (type_ == "auto" || type_ == "execline") {
         return Script::Type::Execline;
@@ -91,4 +80,18 @@ Script::Type tt::ScriptBuilder::GetParsedType() {
 
     auto error_message = "Type " + type_ + " is not allowed.";
     throw tt::ScriptTypeNotValidException(error_message);
+}
+
+Script ScriptBuilder::script() const {
+    Script script = Script(GetParsedType(), execute_, environment_);
+
+    if (user_ != "") {
+        script.user(user_);
+    }
+
+    if (group_ != "") {
+        script.group(group_);
+    }
+    // TODO: Check if EndParsing has been called
+    return script;
 }

@@ -21,17 +21,19 @@
 #ifndef LIBTT_SCRIPT_BUILDER_HPP_
 #define LIBTT_SCRIPT_BUILDER_HPP_
 
+#include <string>
+
 #include "libtt/data/environment.hpp"
 #include "libtt/data/script.hpp"
 #include "libtt/parser/section/code_section_builder.hpp"
-#include <string>
 
 namespace tt {
 
 class ScriptBuilder : public CodeSectionBuilder {
 public:
-    ScriptBuilder(Script **script, const Environment &environment,
-                  const std::string section);
+    ScriptBuilder(const Environment &environment, const std::string section);
+
+    Script script() const;
 
     void EndParsing();
 
@@ -40,9 +42,8 @@ protected:
 
     std::string &GetCodeAttributeForKey(const std::string key);
 
-    Script::Type GetParsedType();
+    Script::Type GetParsedType() const;
 
-    Script **script_;
     Environment environment_;
 
     std::string type_;
