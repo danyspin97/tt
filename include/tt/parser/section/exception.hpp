@@ -43,6 +43,17 @@ public:
         : Exception(msg) {}
 };
 
+class EnvironmentKeyNotValidException : public Exception {
+public:
+    EnvironmentKeyNotValidException(const std::string &msg) : Exception(msg) {}
+};
+
+class EnvironmentValueNotQuotedException : public Exception {
+public:
+    EnvironmentValueNotQuotedException()
+        : Exception("All environment value must be quoted") {}
+};
+
 class LoggerScriptInvalidSettingsException : public Exception {
 public:
     LoggerScriptInvalidSettingsException(const std::string &msg)

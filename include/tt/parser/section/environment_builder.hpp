@@ -18,27 +18,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TT_EXCEPTION_HPP_
-#define TT_EXCEPTION_HPP_
+#ifndef TT_ENVIRONMENT_BUILDER_HPP_
+#define TT_ENVIRONMENT_BUILDER_HPP_
+
+#include "tt/data/environment.hpp"
+#include "tt/parser/section/section_builder.hpp"
 
 namespace tt {
 
-class Exception : public std::exception {
+class EnvironmentBuilder : public SectionBuilder {
 public:
-    Exception(const std::string msg) : msg_(msg) {}
+    EnvironmentBuilder(Environment &environment);
 
-    const char *what() const noexcept { return msg_.c_str(); }
-    const std::string msg() const noexcept { return msg_; }
+    void ParseLine(const std::string line);
+
+    void EndParsing() {}
 
 private:
-    const std::string msg_;
-};
+    void TryParseLine(const std::string &line);
+    static void CheckKeyIsValid(const std::string &key);
+    const std::string StripQuotes(const std::string &value);
 
-class SignalNotValidExecption : public Exception {
-public:
-    SignalNotValidExecption(const std::string msg) : Exception(msg) {}
+    Environment &environment_;
 };
 
 } // namespace tt
 
-#endif // TT_EXCEPTION_HPP_
+#endif // TT_ENVIRONMENT_BUILDER_HPP_

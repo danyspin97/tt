@@ -1,2 +1,2 @@
-CMDARGS = -d --nofork
+CMDARGS = "-d --nofork"
 LOGLEVEL="0"
