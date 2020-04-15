@@ -30,6 +30,8 @@
 
 namespace tt {
 
+bool ParseBoolean(const std::string &value);
+
 // trim from start (in place)
 static inline void ltrim(std::string &s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(),
