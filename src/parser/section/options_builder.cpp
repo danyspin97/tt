@@ -68,13 +68,13 @@ void OptionsBuilder::EndParsing() {
 bool OptionsBuilder::ParseMultilineValue(const string &line) {
     try {
         return TryParseMultilineValue(line);
-    } catch (AttributeNotFoundException e) {
+    } catch (AttributeNotFoundException &e) {
         throw SectionBuilderException(e.msg());
-    } catch (EmptyArrayException e) {
+    } catch (EmptyArrayException &e) {
         throw SectionBuilderException(e.msg() + " in section [options]");
-    } catch (EmptyKeyException e) {
+    } catch (EmptyKeyException &e) {
         throw SectionBuilderException(e.msg() + " in section [options]");
-    } catch (ValuesAfterEndingTokenException e) {
+    } catch (ValuesAfterEndingTokenException &e) {
         throw SectionBuilderException(e.msg() + " in section [options]");
     }
 }
@@ -106,9 +106,9 @@ void OptionsBuilder::SetAttributeForKey(const string &key,
     static const auto section_err_msg = " in section [options]";
     try {
         TrySetAttributeForKey(key, value);
-    } catch (AttributeNotFoundException e) {
+    } catch (AttributeNotFoundException &e) {
         throw SectionBuilderException(e.msg());
-    } catch (BooleanParseException e) {
+    } catch (BooleanParseException &e) {
         const auto msg = e.msg() + " while parsing key '" + key + "'";
         throw SectionBuilderException(msg + section_err_msg);
     }
