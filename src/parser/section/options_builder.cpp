@@ -111,5 +111,8 @@ void OptionsBuilder::SetAttributeForKey(const string &key,
     } catch (BooleanParseException &e) {
         const auto msg = e.msg() + " while parsing key '" + key + "'";
         throw SectionBuilderException(msg + section_err_msg);
+    } catch (std::invalid_argument &e) {
+        throw SectionBuilderException("Invalid integer found in '" + key +
+                                      "' in section [options]");
     }
 }
