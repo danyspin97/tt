@@ -27,16 +27,31 @@
 
 namespace tt {
 
+class CodeParserIsStillParsingException : public Exception {
+public:
+    CodeParserIsStillParsingException()
+        : Exception("Code parser is still parsing") {}
+};
+
+class EmptyKeyException : public Exception {
+public:
+    EmptyKeyException() : Exception("Empty keys are not allowed") {}
+};
+
+class EmptyArrayException : public Exception {
+public:
+    EmptyArrayException(const std::string &msg) : Exception(msg) {}
+};
+
 class KeyValueParserLineInvalidException : public Exception {
 public:
     KeyValueParserLineInvalidException(const std::string &msg)
         : Exception(msg) {}
 };
 
-class CodeParserIsStillParsingException : public Exception {
+class ValuesAfterEndingTokenException : public Exception {
 public:
-    CodeParserIsStillParsingException()
-        : Exception("Code parser is still parsing") {}
+    ValuesAfterEndingTokenException(const std::string &msg) : Exception(msg) {}
 };
 
 } // namespace tt

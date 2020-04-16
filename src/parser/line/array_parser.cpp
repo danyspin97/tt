@@ -28,16 +28,20 @@
 #include <stdexcept>
 #include <string>
 
+#include "tt/parser/line/exception.hpp"
 #include "tt/parser/utils.hpp"
 
 using std::string;
+
 using tt::ArrayParser;
+using tt::EmptyArrayException;
+using tt::EmptyKeyException;
+using tt::ValuesAfterEndingTokenException;
 
 bool ArrayParser::StartParsing(const string line) {
     assert(!IsParsing());
 
     auto equal_token_pos = line.find('=');
-#include <iostream>
     if (equal_token_pos == string::npos) {
         return false;
     }
@@ -56,8 +60,7 @@ bool ArrayParser::StartParsing(const string line) {
     key_ = line.substr(0, equal_token_pos);
     trim(key_);
     if (key_.size() == 0) {
-        // Empty keys are not allowed
-        throw std::exception();
+        throw EmptyKeyException();
     }
 
     is_parsing_ = true;
@@ -80,16 +83,17 @@ void ArrayParser::UpdateStatus(const string line) {
     auto ending_token_pos = trimmed_line.find(')');
     if (ending_token_pos != string::npos) {
         is_parsing_ = false;
-        // There shall be on character after the ending token ')'
+        // There shall be no character after the ending token ')'
         if (ending_token_pos + 1 != trimmed_line.size()) {
-            throw std::exception();
+            const auto msg = key_ + ": No value allowed after ending token ')'";
+            throw ValuesAfterEndingTokenException(msg);
         }
     }
     AddValuesFromLine(trimmed_line.substr(0, ending_token_pos));
 
     if (!IsParsing() && values_.size() == 0) {
-        // Empty array
-        throw std::exception();
+        const auto msg = key_ + ": Empty array is not allowed";
+        throw EmptyArrayException(msg);
     }
 }
 
