@@ -23,16 +23,16 @@
 #include "catch2/catch.hpp"
 
 #include "tt/data/oneshot_options.hpp"
-#include "tt/parser/section/utils.hpp"
 #include "tt/parser/section/exception.hpp"
+#include "tt/parser/section/utils.hpp"
 
 using std::string;
 using std::vector;
 
-using tt::OneshotOptionsBuilder;
 using tt::OneshotOptions;
-using tt::TestBuilderWithFile;
+using tt::OneshotOptionsBuilder;
 using tt::SectionBuilderException;
+using tt::TestBuilderWithFile;
 
 TEST_CASE("OneshotOptionsBuilder") {
     auto options = OneshotOptions();
@@ -55,7 +55,9 @@ TEST_CASE("OneshotOptionsBuilder") {
                            "unclosed_multiline_value", "unknown_key",
                            "unknown_multiline_value"};
         for (auto &test : testFiles) {
-            CHECK_THROWS_AS(TestBuilderWithFile(builder, "../test/data/" + test), SectionBuilderException);
+            CHECK_THROWS_AS(
+                TestBuilderWithFile(builder, "../test/data/" + test),
+                SectionBuilderException);
         }
     }
 }

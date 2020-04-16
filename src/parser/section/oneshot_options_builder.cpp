@@ -36,7 +36,8 @@ using tt::ParseBoolean;
 OneshotOptionsBuilder::OneshotOptionsBuilder(OneshotOptions &options)
     : options_(options) {}
 
-void OneshotOptionsBuilder::TrySetAttributeForKey(const string &key, const string &value) {
+void OneshotOptionsBuilder::TrySetAttributeForKey(const string &key,
+                                                  const string &value) {
     if (key == "optional") {
         options_.optional(ParseBoolean(value));
         return;
