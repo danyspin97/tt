@@ -45,7 +45,7 @@ void tt::TestBuilderWithFile(tt::SectionBuilder &builder, const string path) {
 }
 
 void tt::AttributeNotFound(const string attribute, const string section) {
-    const auto error_message = "Camp named" + attribute +
-                               " is not allowed in section [" + section + "]";
+    const auto error_message =
+        "Key '" + attribute + "' is not allowed in section [" + section + "]";
     throw tt::AttributeNotFoundException(error_message);
 }
