@@ -20,8 +20,8 @@
 
 #include "catch2/catch.hpp"
 
-#include "tt/parser/utils.hpp"
 #include "tt/parser/exception.hpp"
+#include "tt/parser/utils.hpp"
 
 using tt::BooleanParseException;
 using tt::ParseBoolean;

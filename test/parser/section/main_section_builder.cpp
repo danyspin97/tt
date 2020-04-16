@@ -49,8 +49,7 @@ TEST_CASE("MainSectionBuilder") {
             "unknown_key",
         };
         for (const string &test : testFiles) {
-            CHECK_THROWS(
-                TestBuilderWithFile(builder, "../test/data/" + test));
+            CHECK_THROWS(TestBuilderWithFile(builder, "../test/data/" + test));
         }
     }
 }

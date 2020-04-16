@@ -49,8 +49,7 @@ TEST_CASE("LoggerScriptBuilder") {
     }
 
     SECTION("Paarse section without execute script") {
-        TestBuilderWithFile(builder,
-                            "../test/data/logger_script_no_execute");
+        TestBuilderWithFile(builder, "../test/data/logger_script_no_execute");
         LoggerScript s = builder.logger_script();
 
         CHECK(s.service_to_log() == "foo");
