@@ -4,5 +4,4 @@ tt_src += files(
     'oneshot_director.cpp',
     'parser_factory.cpp',
     'service_director.cpp',
-    'service_parser.cpp',
 )
