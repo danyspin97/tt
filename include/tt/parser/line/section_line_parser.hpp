@@ -27,6 +27,7 @@ namespace tt {
 
 class SectionLineParser {
 public:
+    std::string section() const { return section_; }
     bool IsLineValid() const { return valid_; }
 
     SectionLineParser(const std::string line) {
