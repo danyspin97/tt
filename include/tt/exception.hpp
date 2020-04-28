@@ -21,6 +21,8 @@
 #ifndef TT_EXCEPTION_HPP_
 #define TT_EXCEPTION_HPP_
 
+#include <string>
+
 namespace tt {
 
 class Exception : public std::exception {
