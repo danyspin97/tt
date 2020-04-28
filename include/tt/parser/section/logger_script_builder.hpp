@@ -30,7 +30,7 @@ namespace tt {
 
 class LoggerScriptBuilder : public ScriptBuilder {
 public:
-    LoggerScriptBuilder(const Environment &environment,
+    LoggerScriptBuilder(Environment &environment,
                         const std::string service_name);
 
     LoggerScript logger_script() const;

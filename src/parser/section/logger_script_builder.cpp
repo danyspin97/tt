@@ -34,7 +34,7 @@ using tt::LoggerScriptBuilder;
 using tt::LoggerScriptInvalidSettingsException;
 using tt::Script;
 
-LoggerScriptBuilder::LoggerScriptBuilder(const Environment &environment,
+LoggerScriptBuilder::LoggerScriptBuilder(Environment &environment,
                                          const std::string service_name)
     : ScriptBuilder(environment, "log"), service_name_(service_name) {}
 

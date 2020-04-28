@@ -32,7 +32,7 @@ using tt::AttributeNotFound;
 using tt::Script;
 using tt::ScriptBuilder;
 
-ScriptBuilder::ScriptBuilder(const Environment &environment,
+ScriptBuilder::ScriptBuilder(Environment &environment,
                              const std::string section)
     : CodeSectionBuilder(section), environment_(environment) {}
 

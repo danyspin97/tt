@@ -31,7 +31,7 @@ namespace tt {
 
 class ScriptBuilder : public CodeSectionBuilder {
 public:
-    ScriptBuilder(const Environment &environment, const std::string section);
+    ScriptBuilder(Environment &environment, const std::string section);
 
     Script script() const;
 
@@ -44,7 +44,7 @@ protected:
 
     Script::Type GetParsedType() const;
 
-    Environment environment_;
+    Environment &environment_;
 
     std::string type_;
     std::string user_;
