@@ -49,6 +49,7 @@ public:
             LongrunOptions options, Script run);
 
     virtual std::ostream &Dump(std::ostream &oss) const;
+    void Accept(ServiceVisitor &visitor);
 
 private:
     Script run_;

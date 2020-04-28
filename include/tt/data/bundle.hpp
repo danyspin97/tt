@@ -28,6 +28,8 @@
 
 namespace tt {
 
+class ServiceVisitor;
+
 class Bundle : public Service {
 public:
     Bundle(const std::string name, const std::string polish_name,
@@ -35,6 +37,7 @@ public:
            BundleOptions &options);
 
     std::ostream &Dump(std::ostream &oss) const;
+    void Accept(ServiceVisitor &visitor);
 };
 
 } // namespace tt

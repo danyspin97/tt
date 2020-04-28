@@ -26,6 +26,7 @@
 #include "tt/data/service_options.hpp"
 
 namespace tt {
+class ServiceVisitor;
 
 class Service {
 public:
@@ -44,6 +45,7 @@ public:
     virtual std::ostream &Dump(std::ostream &oss) const;
 
     virtual ~Service() = default;
+    virtual void Accept(ServiceVisitor &) = 0;
 
 protected:
     Service(const std::string name, const std::string polish_name,

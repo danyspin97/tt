@@ -29,6 +29,8 @@
 
 namespace tt {
 
+class ServiceVisitor;
+
 class Oneshot : public Service {
 public:
     Script start() const noexcept { return start_; }
@@ -44,6 +46,7 @@ public:
             OneshotOptions options, Script start);
 
     std::ostream &Dump(std::ostream &oss) const;
+    void Accept(ServiceVisitor &visitor);
 
 private:
     Script start_;

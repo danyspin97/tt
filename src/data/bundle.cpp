@@ -20,9 +20,12 @@
 
 #include "tt/data/bundle.hpp"
 
+#include "tt/service_visitor.hpp"
+
 using std::ostream;
 
 using tt::Bundle;
+using tt::ServiceVisitor;
 
 Bundle::Bundle(const std::string name, const std::string polish_name,
                const std::string description, const std::string path,
@@ -35,3 +38,5 @@ ostream &Bundle::Dump(ostream &oss) const {
         << "\ntype = bundle";
     return oss << "\n\n[options]\n" << options();
 }
+
+void Bundle::Accept(ServiceVisitor &visitor) { visitor.Visit(this); }

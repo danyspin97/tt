@@ -20,9 +20,12 @@
 
 #include "tt/data/longrun.hpp"
 
+#include "tt/service_visitor.hpp"
+
 using std::ostream;
 
 using tt::Longrun;
+using tt::ServiceVisitor;
 
 Longrun::Longrun(const std::string name, const std::string polish_name,
                  const std::string description, const std::string path,
@@ -44,3 +47,5 @@ ostream &Longrun::Dump(ostream &oss) const {
     }
     return oss;
 }
+
+void Longrun::Accept(ServiceVisitor &visitor) { visitor.Visit(this); }
