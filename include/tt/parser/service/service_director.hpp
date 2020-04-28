@@ -37,12 +37,12 @@ public:
 
     virtual ~ServiceDirector() = default;
 
-    std::unique_ptr<Service>
+    std::shared_ptr<Service>
     ParseAndGetService(std::vector<std::string> &service_lines,
                        const std::string path);
 
 protected:
-    virtual std::unique_ptr<Service>
+    virtual std::shared_ptr<Service>
     InstanceService(const std::string &path) = 0;
     virtual SectionBuilder *
     GetBuilderForSection(const std::string &section) = 0;

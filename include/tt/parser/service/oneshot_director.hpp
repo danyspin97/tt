@@ -38,7 +38,7 @@ public:
     OneshotDirector();
     ~OneshotDirector() = default;
 
-    std::unique_ptr<Service> InstanceService(const std::string &path);
+    std::shared_ptr<Service> InstanceService(const std::string &path);
     SectionBuilder *GetBuilderForSection(const std::string &section);
 
 private:

@@ -41,7 +41,7 @@ public:
 
 class ServiceDirectorTest : public ServiceDirector {
 public:
-    std::unique_ptr<Service> InstanceService(const std::string &path) {
+    std::shared_ptr<Service> InstanceService(const std::string &path) {
         auto msg = path;
         return std::unique_ptr<Service>{};
     }
