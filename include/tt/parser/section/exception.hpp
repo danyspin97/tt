@@ -43,6 +43,11 @@ public:
         : Exception(msg) {}
 };
 
+class DummyBuilderException : public Exception {
+public:
+    DummyBuilderException() : Exception("") {}
+};
+
 class EnvironmentKeyNotValidException : public Exception {
 public:
     EnvironmentKeyNotValidException(const std::string &msg) : Exception(msg) {}

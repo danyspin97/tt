@@ -21,6 +21,7 @@
 #ifndef TT_DUMMY_BUILDER_HPP_
 #define TT_DUMMY_BUILDER_HPP_
 
+#include "tt/parser/section/exception.hpp"
 #include "tt/parser/section/section_builder.hpp"
 #include <string>
 
@@ -30,7 +31,7 @@ class DummyBuilder : public SectionBuilder {
 public:
     void ParseLine(const std::string line) {
         if (line != "") {
-            throw std::exception();
+            throw DummyBuilderException();
         }
     }
 
