@@ -35,6 +35,7 @@ public:
 
     Script script() const;
 
+    bool HasScript();
     void EndParsing();
 
 protected:
@@ -50,6 +51,7 @@ protected:
     std::string user_;
     std::string group_;
     std::string execute_;
+    bool finished_ = false;
 };
 
 } // namespace tt

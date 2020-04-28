@@ -42,6 +42,8 @@ void ScriptBuilder::EndParsing() {
             "Code was not supplied in section [" + section_ + "]";
         throw tt::CodeNotSuppliedInScriptParserException(error_message);
     }
+
+    finished_ = true;
 }
 
 string &ScriptBuilder::GetAttributeForKey(const string key) {
@@ -92,6 +94,7 @@ Script ScriptBuilder::script() const {
     if (group_ != "") {
         script.group(group_);
     }
-    // TODO: Check if EndParsing has been called
     return script;
 }
+
+bool ScriptBuilder::HasScript() { return finished_; }
