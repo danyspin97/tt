@@ -37,7 +37,7 @@ void tt::KeyValueParser::ParseLine() {
     } else {
         if (throw_on_error_) {
             const auto msg = "Could not find token '=' in line `" + line_ + "`";
-            throw new tt::KeyValueParserLineInvalidException(msg);
+            throw tt::KeyValueParserLineInvalidException(msg);
         } else {
             valid_ = false;
         }

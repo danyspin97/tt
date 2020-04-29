@@ -46,10 +46,10 @@ void EnvironmentBuilder::ParseLine(const string line) {
         TryParseLine(line);
     } catch (KeyValueParserLineInvalidException &e) {
         const string msg = e.msg() + " in [config] section";
-        throw new SectionBuilderException(msg);
+        throw SectionBuilderException(msg);
     } catch (EnvironmentKeyNotValidException &e) {
         const string msg = e.msg() + " in [config] section";
-        throw new SectionBuilderException(msg);
+        throw SectionBuilderException(msg);
     }
 }
 
