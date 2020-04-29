@@ -17,8 +17,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-// Copyright 2020 Danilo Spinella <danyspin97@protonmail.com>
-// Distributed under the terms of the GNU General Public License v2
 
 #ifndef TT_LONGRUN_HPP_
 #define TT_LONGRUN_HPP_
