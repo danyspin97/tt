@@ -41,15 +41,15 @@ public:
     SectionBuilder *GetBuilderForSection(const std::string &section);
 
 private:
+    MainSection main_section_;
+    Environment environment_;
+    LongrunOptions options_;
     MainSectionBuilder main_section_builder_;
     ScriptBuilder run_script_builder_;
     ScriptBuilder finish_script_builder_;
     LoggerScriptBuilder logger_script_builder_;
     EnvironmentBuilder env_section_builder_;
     LongrunOptionsBuilder options_builder_;
-    Environment environment_;
-    MainSection main_section_;
-    LongrunOptions options_;
 };
 
 } // namespace tt
