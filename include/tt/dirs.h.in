@@ -25,22 +25,19 @@
 namespace tt {
 #endif // __cplusplus
 
-const char* kVersion = "@version@";
+static struct Dirs {
+    const char *bin = "@bindir@";
+    const char *conf = "@confdir@";
+    const char *execlinePrefix = "@execline_prefix@";
+    const char *libexec = "@libexecdir@";
+    const char *live = "@livedir@";
+    const char *log = "@logdir@";
+    const char *service = "@servicedir@";
+    const char *system = "@systemdir@";
 
-static struct Dirs
-{
-    const char* bin = "@bindir@";
-    const char* conf = "@confdir@";
-    const char* execlinePrefix = "@execline_prefix@";
-    const char* libexec = "@libexecdir@";
-    const char* live = "@livedir@";
-    const char* log = "@logdir@";
-    const char* service = "@servicedir@";
-    const char* system = "@systemdir@";
-
-    const char* customScripts = "@confdir@";
-    const char* adminService = "@confdir@/service";
-    const char* adminConf = "@confdir@/conf";
+    const char *customScripts = "@confdir@";
+    const char *adminService = "@confdir@/service";
+    const char *adminConf = "@confdir@/conf";
 } dirs;
 
 #ifdef __cplusplus

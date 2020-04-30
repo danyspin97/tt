@@ -1,6 +1,7 @@
 define_config = configuration_data({
     'default_log_user': default_log_user,
-    'default_log_group': default_log_group
+    'default_log_group': default_log_group,
+    'version': meson.project_version(),
 })
 
 define_h = configure_file(
@@ -12,7 +13,6 @@ define_h = configure_file(
 )
 
 dirs_config = configuration_data({
-    'version': meson.project_version(),
     'livedir': livedir,
     'systemdir': systemdir,
     'confdir': confdir,

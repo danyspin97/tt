@@ -24,8 +24,9 @@
 namespace tt {
 #endif // __cplusplus
 
-static constexpr const char* kDefaultLogUser = "@default_log_user@";
-static constexpr const char* kDefaultLogGroup = "@default_log_group@";
+static constexpr const char *kDefaultLogUser = "@default_log_user@";
+static constexpr const char *kDefaultLogGroup = "@default_log_group@";
+static constexpr const char *kVersion = "@version@";
 
 #ifdef __cplusplus
 }
