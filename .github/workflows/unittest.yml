@@ -22,7 +22,7 @@ jobs:
       - name: Build using meson
         env:
           CXX: ${{ matrix.compiler }}
-        run: meson --unity on -Dtests=enabled -Db_coverage=true build && ninja -C build
+        run: meson --unity on -Dtests=enabled -Db_lundef=false -Db_sanitize=address,undefined -Db_coverage=true build && ninja -C build
 
       - name: Run meson tests
         run: ninja -C build test
