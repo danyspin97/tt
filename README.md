@@ -24,6 +24,7 @@ then the use of s6 configured ad-hoc for that machine is recommended.
 
 - Support for different types of services: _oneshot_, _deamons_ and _bundles_
 - Predictable dependencies at build time
+- Configurable parameters for services (i.e. change CMDARGS without eding the service file)
 - Asynchrounus start of the services (no [run levels](https://en.wikipedia.org/wiki/Runlevel))
 - Log everything into files, no syslog needed for deamons
 - Low footprint
@@ -76,9 +77,33 @@ Guide](https://google.github.io/styleguide/cppguide.html) and uses
 `clang-format` to apply this style. If you have `clang-format` installed, run
 the following command to format your changes:
 
+### Continuous Integration
+
+tt uses Github Actions for CI, running and checking the test suite; in particular, the CI runs a meson [unity build](https://mesonbuild.com/Unity-builds.html) with `-Werror` enabled and `address`, `undefined` sanitizers enabled. All Pull Requests must pass the CI before being included.
+
 ```
 $ ninja -C build clang-format
 ```
+
+## Community
+
+- #tt IRC channel on freenode.
+
+## Develoment updates
+
+tt development updates are posted on @danyspin97 [blog](https://danyspin97.org/tags/tt/).
+
+## Credits
+
+tt is being developed by @danyspin97 and @Cogitri.
+
+Thanks to @pac85 for its contributions and to all the people that shared ideas for tt.
+
+Credits also to:
+
+- @Taywee for its [args](https://github.com/Taywee/args) library
+- @skarnet for its s6 supervision suite
+- [obarun](https://obarun.org) for his work on 66
 
 ## License
 
