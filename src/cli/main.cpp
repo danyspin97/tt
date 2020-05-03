@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2020 Rasmus Thomsen <oss@cogitri.dev>
  * Copyright (c) 2020 Danilo Spinella <danyspin97@protonmail.com>.
  *
  * This file is part of tt
