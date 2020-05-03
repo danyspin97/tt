@@ -5,6 +5,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/964fc2e2d7374cda979ac4b470e93561)](https://www.codacy.com/manual/danyspin97/tt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DanySpin97/tt&amp;utm_campaign=Badge_Grade)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/DanySpin97/tt.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/DanySpin97/tt/alerts/)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/DanySpin97/tt.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/DanySpin97/tt/context:cpp)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/3935/badge)](https://bestpractices.coreinfrastructure.org/projects/3935)
 
 tt is a Work in Progress init and service manager inspired by [66](https://web.obarun.org/software/66) and based on
 the [s6](https://skarnet.org/software/s6/) suite.
