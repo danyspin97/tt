@@ -82,5 +82,5 @@ SectionBuilder *OneshotDirector::GetBuilderForSection(const string &section) {
         return &options_builder_;
     }
     auto msg = "Section '" + section + "' is not supported.";
-    throw new Exception(msg);
+    throw Exception(msg);
 }
