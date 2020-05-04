@@ -4,7 +4,7 @@ path_classifiers:
     - test
     - exclude: test/data
   library:
-    - exclude: include/args.hxx
+    - include/args.hxx
 
 queries:
   # Start by hiding the results of all queries.
@@ -15,7 +15,7 @@ queries:
         - "correctness"
       severity: "error"
 
-extraction: 
+extraction:
   cpp:
     configure:
       command:
