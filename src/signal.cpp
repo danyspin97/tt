@@ -22,22 +22,16 @@
 
 #include "tt/exception.hpp"
 
-using std::map;
-using std::string;
-
-using tt::Signal;
-using tt::SignalNotValidExecption;
-
 tt::Signal tt::ParseSignalFromString(const std::string &signal) {
     static const std::map<std::string, Signal> signal_strings{
         {"SIGHUP", Signal::kSigHup},   {"SIGINT", Signal::kSigInt},
         {"SIGQUIT", Signal::kSigQuit}, {"SIGKILL", Signal::kSigKill},
         {"SIGTERM", Signal::kSigTerm},
     };
-    if (auto itr = signalStrings.find(signal); itr != signalStrings.end()) {
+    if (auto itr = signal_strings.find(signal); itr != signal_strings.end()) {
         return itr->second;
     }
 
     const auto error_msg = "Signal \"" + signal + "\" is not valid";
-    throw SignalNotValidExecption(error_msg);
+    throw tt::SignalNotValidExecption(error_msg);
 }

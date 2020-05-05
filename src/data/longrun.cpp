@@ -42,7 +42,7 @@ ostream &Longrun::Dump(ostream &oss) const {
     }
     oss << "\n\n[logger]\n" << logger().value();
     oss << "\n\n[options]\n" << options();
-    if (run().environment().GetAll().size() != 0) {
+    if (!run().environment().GetAll().empty()) {
         oss << "\n\n[config]\n" << run().environment();
     }
     return oss;

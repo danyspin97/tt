@@ -31,9 +31,7 @@ using std::string;
 
 using tt::Bundle;
 using tt::BundleDirector;
-using tt::BundleOptionsBuilder;
 using tt::Exception;
-using tt::MainSectionBuilder;
 using tt::SectionBuilder;
 using tt::Service;
 
@@ -49,7 +47,8 @@ SectionBuilder *
 BundleDirector::GetBuilderForSection(const std::string &section) {
     if (section == "main") {
         return &main_section_builder_;
-    } else if (section == "options") {
+    }
+    if (section == "options") {
         return &options_builder_;
     }
     auto msg = "Section '" + section + "' is not supported.";

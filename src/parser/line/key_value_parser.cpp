@@ -29,7 +29,7 @@ using std::string;
 using tt::kAssignmentToken;
 
 tt::KeyValueParser::KeyValueParser(string line, bool throw_on_error) {
-    line_ = line;
+    line_ = std::move(line);
     throw_on_error_ = throw_on_error;
     ParseLine();
 }
