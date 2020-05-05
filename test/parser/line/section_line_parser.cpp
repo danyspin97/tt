@@ -54,7 +54,7 @@ TEST_CASE("SectionLineParser") {
 
     SECTION("GetSectionOrDefault returns the default section") {
         auto parser = SectionLineParser("foo");
-        auto _default = "bar";
+        const auto *_default = "bar";
         REQUIRE(parser.GetSectionOrDefault(_default) == _default);
     }
 }

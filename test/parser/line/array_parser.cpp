@@ -44,8 +44,8 @@ TEST_CASE("ArrayParser") {
 
         parser.Reset();
         CHECK_FALSE(parser.IsParsing());
-        CHECK(parser.key() == "");
-        CHECK(parser.values().size() == 0);
+        CHECK(parser.key().empty());
+        CHECK(parser.values().empty());
 
         // Check values returned was a copy
         CHECK(values.size() == 1);

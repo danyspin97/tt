@@ -46,7 +46,7 @@ TEST_CASE("BundleOptionsBuilder") {
         const auto testFiles = {
             "empty_multiline_value", "invalid", "invalid_multiline_value",
             "unclosed_multiline_value", "unknown_multiline_value"};
-        for (auto &test : testFiles) {
+        for (const auto &test : testFiles) {
             CHECK_THROWS_AS(
                 TestBuilderWithFile(builder, string{"../test/data/"} + test),
                 SectionBuilderException);
