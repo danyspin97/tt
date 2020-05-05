@@ -43,9 +43,9 @@ void tt::KeyValueParser::ParseLine() {
                              string{kAssignmentToken} + "' in line `" + line_ +
                              "`";
             throw tt::KeyValueParserLineInvalidException(msg);
-        } else {
-            valid_ = false;
         }
+
+        valid_ = false;
     }
 }
 
