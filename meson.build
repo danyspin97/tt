@@ -11,6 +11,7 @@ project('tt', 'cpp',
 
 pkg = import('pkgconfig')
 
+spdlog_dep = dependency('spdlog', fallback: ['spdlog', 'spdlog_dep'])
 catch2_dep = dependency('catch2', required: get_option('tests'), fallback: ['catch2', 'catch2_dep'])
 
 prefix = get_option('prefix')
