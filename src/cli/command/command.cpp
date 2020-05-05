@@ -30,8 +30,8 @@ using tt::cli::Command;
 using tt::cli::GlobalOptions;
 
 Command::Command(args::Subparser &parser,
-                 shared_ptr<GlobalOptions> common_options)
-    : parser_(parser), common_options_(common_options) {}
+                 shared_ptr<GlobalOptions> global_options)
+    : parser_(parser), global_options_(global_options) {}
 
 int Command::InitAndExecute() {
     parser_.Parse();

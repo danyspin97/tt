@@ -67,7 +67,7 @@ int ParseCommand::Execute() {
 void ParseCommand::ParseFiles() {
     for (auto &&service : service_list_) {
         auto parser = ServiceParser(service);
-        if (!common_options_->quiet_) {
+        if (!global_options_->quiet_) {
             std::cout << *(parser.service());
         }
         continue;
@@ -99,7 +99,7 @@ bool ParseCommand::CheckForFileInDefaultDirs(const std::string &name) {
         struct stat buffer;
         if (stat(filename.c_str(), &buffer) == 0) {
             auto parser = ServiceParser(name);
-            if (!common_options_->quiet_) {
+            if (!global_options_->quiet_) {
                 cout << parser.service() << endl;
             }
             return true;
