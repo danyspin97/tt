@@ -15,5 +15,5 @@ execute =(
 )
 
 [options]
-depends = ( fsck mount-rwfs )
+depends = [ fsck mount-rwfs ]
 
