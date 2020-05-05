@@ -23,6 +23,8 @@
 #include <algorithm>
 #include <iterator>
 
+#include "tt/parser/define.hpp"
+
 using std::copy;
 using std::ostream;
 using std::ostream_iterator;
@@ -31,10 +33,11 @@ using std::string;
 using tt::ServiceOptions;
 
 ostream &ServiceOptions::Dump(ostream &oss) const {
-    if (depends_.size() != 0) {
-        oss << "depends = ( ";
-        copy(depends_.begin(), depends_.end(), ostream_iterator<string>(oss));
-        return oss << " )";
+    if (!depends_.empty()) {
+        oss << "depends = " << tt::kArrayOpenToken << " ";
+        copy(depends_.begin(), depends_.end(),
+             ostream_iterator<string>(oss, " "));
+        return oss << tt::kArrayCloseToken;
     }
 
     return oss;
