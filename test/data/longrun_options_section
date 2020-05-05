@@ -1,6 +1,6 @@
-depends = ( foo
+depends = [ foo
   bar
-   )
+   ]
 notify = 3
 timeout_finish = 5000
 timeout_kill = 10

@@ -3,8 +3,8 @@
 
 namespace tt {
 
-const char kArrayOpenToken = '(';
-const char kArrayCloseToken = ')';
+const char kArrayOpenToken = '[';
+const char kArrayCloseToken = ']';
 const char kAssignmentToken = '=';
 const char kCodeOpenToken = '(';
 const char kCodeCloseToken = ')';

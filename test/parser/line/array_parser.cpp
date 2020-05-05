@@ -22,15 +22,22 @@
 
 #include "catch2/catch.hpp"
 
+#include "tt/parser/define.hpp"
+
+using std::string;
+
+using tt::kArrayCloseToken;
+using tt::kArrayOpenToken;
+
 TEST_CASE("ArrayParser") {
     auto parser = tt::ArrayParser();
 
     SECTION("Parse valid values") {
-        REQUIRE(parser.StartParsing("foo=("));
+        REQUIRE(parser.StartParsing("foo=" + string{kArrayOpenToken}));
         CHECK(parser.IsParsing());
         CHECK(parser.key() == "foo");
 
-        parser.ParseLine("   bar)");
+        parser.ParseLine("   bar" + string{kArrayCloseToken});
         CHECK_FALSE(parser.IsParsing());
         auto values = parser.values();
         CHECK(values == std::vector<std::string>{"bar"});
@@ -43,17 +50,21 @@ TEST_CASE("ArrayParser") {
         // Check values returned was a copy
         CHECK(values.size() == 1);
     }
+
     SECTION("Parse a one-line") {
-        REQUIRE(parser.StartParsing("foo = (bar foobar)"));
+        const string line = "foo = " + string{kArrayOpenToken} + "bar foobar" +
+                            string{kArrayCloseToken};
+        REQUIRE(parser.StartParsing(line));
         CHECK_FALSE(parser.IsParsing());
         CHECK(parser.values() == std::vector<std::string>{"bar", "foobar"});
     }
 
     SECTION("Parse ending token with no values") {
-        REQUIRE(parser.StartParsing("foo = (bar"));
+        REQUIRE(
+            parser.StartParsing("foo = " + string{kArrayOpenToken} + "bar"));
         CHECK(parser.IsParsing());
 
-        parser.ParseLine(")");
+        parser.ParseLine(string{kArrayCloseToken});
         CHECK(parser.values() == std::vector<std::string>{"bar"});
         CHECK_FALSE(parser.IsParsing());
     }
@@ -62,10 +73,11 @@ TEST_CASE("ArrayParser") {
         CHECK_FALSE(parser.StartParsing("foo"));
         CHECK_FALSE(parser.IsParsing());
 
-        CHECK_FALSE(parser.StartParsing("foo = bar("));
+        CHECK_FALSE(parser.StartParsing("foo = bar" + string{kArrayOpenToken}));
     }
 
     SECTION("Parse line with ending token and now values") {
-        CHECK_THROWS(parser.StartParsing("foo = ()"));
+        CHECK_THROWS(parser.StartParsing("foo = " + string{kArrayOpenToken} +
+                                         string{kArrayCloseToken}));
     }
 }
