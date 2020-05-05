@@ -8,12 +8,7 @@ path_classifiers:
 
 queries:
   # Start by hiding the results of all queries.
-  - exclude: "*"
-  - include:
-      tags:
-        - "security"
-        - "correctness"
-      severity: "error"
+  - include: "*"
 
 extraction:
   cpp:
