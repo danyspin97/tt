@@ -34,9 +34,9 @@ public:
 
     const std::string code() const;
 
-    bool StartParsing(const std::string line);
+    bool StartParsing(const std::string &line);
 
-    void ParseLine(const std::string line);
+    void ParseLine(const std::string &line);
 
     void Reset() {
         code_ = std::stringstream();

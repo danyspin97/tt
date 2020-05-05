@@ -38,9 +38,9 @@ public:
 
     ArrayParser() : key_(""), values_({}), is_parsing_(false) {}
 
-    bool StartParsing(const std::string line);
+    bool StartParsing(const std::string &line);
 
-    void ParseLine(const std::string line);
+    void ParseLine(const std::string &line);
 
     void Reset() {
         values_.clear();

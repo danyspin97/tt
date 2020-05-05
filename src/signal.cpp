@@ -28,8 +28,8 @@ using std::string;
 using tt::Signal;
 using tt::SignalNotValidExecption;
 
-Signal tt::ParseSignalFromString(const string signal) {
-    static const map<string, Signal> signalStrings{
+tt::Signal tt::ParseSignalFromString(const std::string &signal) {
+    static const std::map<std::string, Signal> signal_strings{
         {"SIGHUP", Signal::kSigHup},   {"SIGINT", Signal::kSigInt},
         {"SIGQUIT", Signal::kSigQuit}, {"SIGKILL", Signal::kSigKill},
         {"SIGTERM", Signal::kSigTerm},

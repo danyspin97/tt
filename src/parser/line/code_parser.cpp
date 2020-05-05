@@ -33,7 +33,7 @@ using tt::kAssignmentToken;
 using tt::kCodeCloseToken;
 using tt::kCodeOpenToken;
 
-bool CodeParser::StartParsing(const string line) {
+bool CodeParser::StartParsing(const string &line) {
     if (IsParsing()) {
         throw tt::CodeParserIsStillParsingException();
     }
@@ -58,7 +58,7 @@ bool CodeParser::StartParsing(const string line) {
     return is_parsing_ = true;
 }
 
-void CodeParser::ParseLine(const string line) {
+void CodeParser::ParseLine(const string &line) {
     auto trimmed_line = trim_copy(line);
     if (trimmed_line == string{kCodeCloseToken}) {
         is_parsing_ = false;
