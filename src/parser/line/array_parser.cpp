@@ -28,6 +28,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "tt/parser/define.hpp"
 #include "tt/parser/line/exception.hpp"
 #include "tt/parser/utils.hpp"
 
@@ -38,14 +39,18 @@ using tt::EmptyArrayException;
 using tt::EmptyKeyException;
 using tt::ValuesAfterEndingTokenException;
 
+using tt::kArrayCloseToken;
+using tt::kArrayOpenToken;
+using tt::kAssignmentToken;
+
 bool ArrayParser::StartParsing(const string line) {
     assert(!IsParsing());
 
-    auto equal_token_pos = line.find('=');
+    auto equal_token_pos = line.find(kAssignmentToken);
     if (equal_token_pos == string::npos) {
         return false;
     }
-    auto parenthesis_pos = line.find('(', equal_token_pos + 1);
+    auto parenthesis_pos = line.find(kArrayOpenToken, equal_token_pos + 1);
     if (parenthesis_pos == string::npos) {
         return false;
     }
@@ -80,12 +85,13 @@ void ArrayParser::UpdateStatus(const string line) {
     if (line.size() == 0) {
         return;
     }
-    auto ending_token_pos = trimmed_line.find(')');
+    auto ending_token_pos = trimmed_line.find(kArrayCloseToken);
     if (ending_token_pos != string::npos) {
         is_parsing_ = false;
-        // There shall be no character after the ending token ')'
+        // There shall be no character after the kArrayCloseToken
         if (ending_token_pos + 1 != trimmed_line.size()) {
-            const auto msg = key_ + ": No value allowed after ending token ')'";
+            const auto msg = key_ + ": No value allowed after ending token '" +
+                             string{kArrayCloseToken} + "'";
             throw ValuesAfterEndingTokenException(msg);
         }
     }

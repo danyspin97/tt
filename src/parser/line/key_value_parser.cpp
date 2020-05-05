@@ -20,10 +20,13 @@
 
 #include "tt/parser/line/key_value_parser.hpp"
 
+#include "tt/parser/define.hpp"
 #include "tt/parser/line/exception.hpp"
 #include "tt/parser/utils.hpp"
 
 using std::string;
+
+using tt::kAssignmentToken;
 
 tt::KeyValueParser::KeyValueParser(string line, bool throw_on_error) {
     line_ = line;
@@ -36,7 +39,9 @@ void tt::KeyValueParser::ParseLine() {
         valid_ = true;
     } else {
         if (throw_on_error_) {
-            const auto msg = "Could not find token '=' in line `" + line_ + "`";
+            const auto msg = "Could not find token '" +
+                             string{kAssignmentToken} + "' in line `" + line_ +
+                             "`";
             throw tt::KeyValueParserLineInvalidException(msg);
         } else {
             valid_ = false;
@@ -45,7 +50,7 @@ void tt::KeyValueParser::ParseLine() {
 }
 
 bool tt::KeyValueParser::TryParseLine() {
-    auto token_pos = line_.find('=');
+    auto token_pos = line_.find(kAssignmentToken);
     if (token_pos == string::npos) {
         return false;
     }

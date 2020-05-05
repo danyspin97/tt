@@ -20,24 +20,27 @@
 
 #include "tt/parser/line/section_line_parser.hpp"
 
+#include "tt/parser/define.hpp"
 #include "tt/parser/utils.hpp"
 
 using std::string;
+
+using tt::kSectionOpenToken;
 using tt::SectionLineParser;
 
 void SectionLineParser::ParseLine() {
     valid_ = false;
     trim(line_);
-    if (line_[0] != '[') {
+    if (line_[0] != kSectionOpenToken) {
         return;
     }
 
-    auto end_token_pos = line_.find(']');
+    auto end_token_pos = line_.find(kSectionCloseToken);
     if (end_token_pos == string::npos) {
         return;
     }
 
-    // No characters are allowed after the end of ']' token
+    // No characters are allowed after the end of kSectionCloseToken
     if (end_token_pos + 1 != line_.size()) {
         return;
     }

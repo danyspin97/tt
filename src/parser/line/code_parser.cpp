@@ -22,28 +22,33 @@
 
 #include <string>
 
+#include "tt/parser/define.hpp"
 #include "tt/parser/line/exception.hpp"
 #include "tt/parser/utils.hpp"
 
 using std::string;
+
 using tt::CodeParser;
+using tt::kAssignmentToken;
+using tt::kCodeCloseToken;
+using tt::kCodeOpenToken;
 
 bool CodeParser::StartParsing(const string line) {
     if (IsParsing()) {
         throw tt::CodeParserIsStillParsingException();
     }
     auto trimmed_line = trim_copy(line);
-    auto equal_token_pos = trimmed_line.find('=');
+    auto equal_token_pos = trimmed_line.find(kAssignmentToken);
     if (equal_token_pos == string::npos) {
         return false;
     }
 
     if (equal_token_pos + 1 == trimmed_line.size() ||
-        trimmed_line[equal_token_pos + 1] != '(') {
+        trimmed_line[equal_token_pos + 1] != kCodeOpenToken) {
         return false;
     }
 
-    // Are there other chars after '('?
+    // Are there other chars after kCodeOpenToken?
     if (equal_token_pos + 2 != trimmed_line.size()) {
         return false;
     }
@@ -55,7 +60,7 @@ bool CodeParser::StartParsing(const string line) {
 
 void CodeParser::ParseLine(const string line) {
     auto trimmed_line = trim_copy(line);
-    if (trimmed_line == ")") {
+    if (trimmed_line == string{kCodeCloseToken}) {
         is_parsing_ = false;
         return;
     }
