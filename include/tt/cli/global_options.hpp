@@ -31,7 +31,7 @@ public:
 
     args::Group arguments_;
     args::HelpFlag help_;
-    args::ValueFlag<bool> quiet_;
+    args::Flag quiet_;
     args::ValueFlag<int> verbosity_;
 };
 
