@@ -41,9 +41,9 @@ public:
 
     void stop(Script stop) { stop_ = stop; }
 
-    Oneshot(const std::string name, const std::string polish_name,
-            const std::string description, const std::string path,
-            OneshotOptions options, Script start);
+    Oneshot(const std::string& name, const std::string& polish_name,
+            const std::string& description, const std::string& path,
+            OneshotOptions options, const Script& start);
 
     std::ostream &Dump(std::ostream &oss) const;
     void Accept(ServiceVisitor &visitor);

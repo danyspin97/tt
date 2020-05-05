@@ -42,9 +42,9 @@ public:
 
     void logger(LoggerScript logger) noexcept { logger_ = logger; }
 
-    Longrun(const std::string name, const std::string polish_name,
-            const std::string description, const std::string path,
-            LongrunOptions options, Script run);
+    Longrun(const std::string& name, const std::string& polish_name,
+            const std::string& description, const std::string& path,
+            LongrunOptions options, const Script& run);
 
     virtual std::ostream &Dump(std::ostream &oss) const;
     void Accept(ServiceVisitor &visitor);

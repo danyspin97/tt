@@ -48,8 +48,8 @@ public:
     virtual void Accept(ServiceVisitor &) = 0;
 
 protected:
-    Service(const std::string name, const std::string polish_name,
-            const std::string description, const std::string path,
+    Service(const std::string& name, const std::string& polish_name,
+            const std::string& description, const std::string& path,
             ServiceOptions &options);
 
 private:

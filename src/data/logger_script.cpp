@@ -18,16 +18,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <utility>
+
 #include "tt/data/logger_script.hpp"
 
 using std::ostream;
 
 using tt::LoggerScript;
 
-LoggerScript::LoggerScript(Type type, const std::string execute,
+LoggerScript::LoggerScript(Type type, const std::string& execute,
                            Environment environment,
-                           const std::string service_to_log,
-                           const std::string user, const std::string group)
+                           const std::string& service_to_log,
+                           const std::string& user, const std::string& group)
     : Script(type, execute, environment), service_to_log_(service_to_log) {
     this->user(user);
     this->group(group);

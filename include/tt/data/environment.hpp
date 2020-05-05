@@ -29,13 +29,13 @@ namespace tt {
 
 class Environment {
 public:
-    const std::string Get(const std::string key) const;
+    std::string Get(const std::string& key) const;
 
-    const std::map<std::string, std::string> GetAll() const;
+    std::map<std::string, std::string> GetAll() const;
 
-    void Set(const std::string key, const std::string value);
+    void Set(const std::string& key, const std::string& value);
 
-    bool SetUnique(const std::string key, const std::string value);
+    bool SetUnique(const std::string& key, const std::string& value);
 
 private:
     std::map<std::string, std::string> env_;

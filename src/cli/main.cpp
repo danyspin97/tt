@@ -32,7 +32,6 @@ using std::cerr;
 using std::endl;
 using std::make_shared;
 
-using tt::kVersion;
 
 using tt::cli::GlobalOptions;
 using tt::cli::ParseCommand;

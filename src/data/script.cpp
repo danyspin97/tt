@@ -31,10 +31,10 @@ ostream &Script::Dump(ostream &oss) const {
     // TODO: Convert from Type to string
     // o << "type = " << type() << "\n";
     oss << "execute = (\n" << execute() << "\n)";
-    if (user() && user().value().size() != 0) {
+    if (user() && !user().value().empty()) {
         oss << "\nuser = " << user().value();
     }
-    if (group() && group().value().size() != 0) {
+    if (group() && !group().value().empty()) {
         oss << "\ngroup = " << group().value();
     }
     return oss;

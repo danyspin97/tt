@@ -30,8 +30,8 @@ using tt::Service;
 using tt::ServiceNameDoNotMatchFileExecption;
 using tt::ServiceOptions;
 
-Service::Service(const std::string name, const std::string polish_name,
-                 const std::string description, const std::string path,
+Service::Service(const std::string& name, const std::string& polish_name,
+                 const std::string& description, const std::string& path,
                  ServiceOptions &options)
     : name_(name), polish_name_(polish_name), description_(description),
       path_(path), options_(options) {
@@ -47,10 +47,10 @@ void Service::ValidatePath() const {
 
 ostream &Service::Dump(ostream &oss) const {
     oss << "name = " << name();
-    if (polish_name().size() != 0) {
+    if (!polish_name().empty()) {
         oss << "\npolish_name = " << polish_name();
     }
-    if (description().size() != 0) {
+    if (!description().empty()) {
         oss << "\ndescription = " << description();
     }
     return oss;

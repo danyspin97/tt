@@ -27,9 +27,9 @@ using std::ostream;
 using tt::Oneshot;
 using tt::ServiceVisitor;
 
-Oneshot::Oneshot(const std::string name, const std::string polish_name,
-                 const std::string description, const std::string path,
-                 OneshotOptions options, Script start)
+Oneshot::Oneshot(const std::string& name, const std::string& polish_name,
+                 const std::string& description, const std::string& path,
+                 OneshotOptions options, const Script& start)
     : Service(name, polish_name, description, path, options), start_(start) {}
 
 ostream &Oneshot::Dump(ostream &oss) const {
@@ -41,7 +41,7 @@ ostream &Oneshot::Dump(ostream &oss) const {
         oss << "\n\n[stop]\n" << stop().value();
     }
     oss << "\n\n[options]\n" << options();
-    if (start_.environment().GetAll().size() != 0) {
+    if (!start_.environment().GetAll().empty()) {
         oss << "\n\n[config]\n" << start_.environment();
     }
     return oss;
