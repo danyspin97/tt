@@ -77,7 +77,7 @@ void ParseCommand::ParseFiles() {
 void ParseCommand::ParseUserSystemServices() {
     // TODO: Check for UID != 0 and add xdg.userservice
     for (auto &&service : service_list_) {
-        bool found;
+        bool found = false;
         for (auto &name : GetPossibleNameForService(service)) {
             found = CheckForFileInDefaultDirs(name);
             if (found) {
