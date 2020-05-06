@@ -44,19 +44,19 @@ void LoggerScriptBuilder::EndParsing() {
 }
 
 void LoggerScriptBuilder::CheckParsedValues() {
-    bool is_execute_set = execute_ != "";
-    bool is_type_set = type_ != "";
+    bool is_execute_set = !execute_.empty();
+    bool is_type_set = !type_.empty();
     // A XOR B
     if (is_execute_set != is_type_set) {
-        const auto msg = "Both execute and type attributes needs to set";
+        const auto *msg = "Both execute and type attributes needs to set";
         throw LoggerScriptInvalidSettingsException(msg);
     }
 
-    auto is_destination_set = destination_ != "";
-    auto is_maxsize_set = maxsize_ != "";
+    auto is_destination_set = !destination_.empty();
+    auto is_maxsize_set = !maxsize_.empty();
     if ((is_execute_set || is_type_set) &&
         (is_destination_set || is_maxsize_set)) {
-        const auto msg =
+        const auto *msg =
             "destination and maxsize attributes cannot be set when "
             "setting execute";
         throw LoggerScriptInvalidSettingsException(msg);
@@ -66,34 +66,35 @@ void LoggerScriptBuilder::CheckParsedValues() {
 string &LoggerScriptBuilder::GetAttributeForKey(const string &key) {
     if (key == "destination") {
         return destination_;
-    } else if (key == "maxsize") {
+    }
+    if (key == "maxsize") {
         return maxsize_;
     }
     return ScriptBuilder::GetAttributeForKey(key);
 }
 
 void LoggerScriptBuilder::SetDefaultForOptionalValues() noexcept {
-    if (type_ == "") {
+    if (type_.empty()) {
         type_ = "auto";
     }
 
-    if (maxsize_ == "") {
+    if (maxsize_.empty()) {
         maxsize_ = "8000000"; // 8MB
     }
 
-    if (destination_ == "") {
+    if (destination_.empty()) {
         destination_ = GetDefaultDestination();
     }
 
-    if (execute_ == "") {
+    if (execute_.empty()) {
         execute_ = GetDefaultExecute();
     }
 
-    if (user_ == "") {
+    if (user_.empty()) {
         user_ = kDefaultLogUser;
     }
 
-    if (group_ == "") {
+    if (group_.empty()) {
         group_ = kDefaultLogGroup;
     }
 }

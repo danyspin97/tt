@@ -36,19 +36,13 @@ public:
     };
 
     Type type() const noexcept { return type_; }
-
     std::string execute() const noexcept { return execute_; }
-
     std::optional<std::string> user() const noexcept { return user_; }
     void user(const std::string &user) noexcept { user_ = user; }
     std::optional<std::string> group() const noexcept { return group_; }
-
     void group(const std::string &group) noexcept { group_ = group; }
-
-    const Environment environment() const noexcept { return env_; }
-
+    Environment environment() const noexcept { return env_; }
     Script(Type type, const std::string &execute, Environment &environment);
-
     virtual ~Script() = default;
     virtual std::ostream &Dump(std::ostream &oss) const;
 

@@ -33,8 +33,7 @@ class ScriptBuilder : public CodeSectionBuilder {
 public:
     ScriptBuilder(Environment &environment, const std::string &section);
     Script script() const;
-
-    bool HasScript();
+    bool HasScript() const;
     void EndParsing();
 
 protected:

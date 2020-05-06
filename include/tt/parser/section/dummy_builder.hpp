@@ -30,7 +30,7 @@ namespace tt {
 class DummyBuilder : public SectionBuilder {
 public:
     void ParseLine(const std::string &line) {
-        if (line != "") {
+        if (!line.empty()) {
             throw DummyBuilderException();
         }
     }

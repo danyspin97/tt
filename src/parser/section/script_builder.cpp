@@ -37,7 +37,7 @@ ScriptBuilder::ScriptBuilder(Environment &environment,
     : CodeSectionBuilder(section), environment_(environment) {}
 
 void ScriptBuilder::EndParsing() {
-    if (execute_ == "") {
+    if (execute_.empty()) {
         const auto error_message =
             "Code was not supplied in section [" + section_ + "]";
         throw tt::CodeNotSuppliedInScriptParserException(error_message);
@@ -46,14 +46,17 @@ void ScriptBuilder::EndParsing() {
     finished_ = true;
 }
 
-string &ScriptBuilder::GetAttributeForKey(const string key) {
+string &ScriptBuilder::GetAttributeForKey(const string &key) {
     if (key == "build") {
         return type_;
-    } else if (key == "execute") {
+    }
+    if (key == "execute") {
         return execute_;
-    } else if (key == "group") {
+    }
+    if (key == "group") {
         return group_;
-    } else if (key == "user") {
+    }
+    if (key == "user") {
         return user_;
     }
 
@@ -76,7 +79,8 @@ Script::Type tt::ScriptBuilder::GetParsedType() const {
     // TODO: add "path" type
     if (type_ == "auto" || type_ == "execline") {
         return Script::Type::Execline;
-    } else if (type_ == "bash") {
+    }
+    if (type_ == "bash") {
         return Script::Type::Bash;
     }
 
@@ -87,14 +91,14 @@ Script::Type tt::ScriptBuilder::GetParsedType() const {
 Script ScriptBuilder::script() const {
     Script script = Script(GetParsedType(), execute_, environment_);
 
-    if (user_ != "") {
+    if (!user_.empty()) {
         script.user(user_);
     }
 
-    if (group_ != "") {
+    if (!group_.empty()) {
         script.group(group_);
     }
     return script;
 }
 
-bool ScriptBuilder::HasScript() { return finished_; }
+bool ScriptBuilder::HasScript() const { return finished_; }
