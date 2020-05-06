@@ -16,6 +16,9 @@ jobs:
           python-version: "3.x"
       - uses: seanmiddleditch/gha-setup-ninja@master
 
+      - name: Install llvm-cov
+        run: apt-get install llvm-9
+
       - name: Install meson and gcovr
         run: pip3 install meson gcovr
 
@@ -28,7 +31,7 @@ jobs:
         run: ninja -C build test
 
       - name: Generate Coverage
-        run: gcovr -r . --gcov-executable 'llvm-cov gcov' --object-directory build --xml > codecov.xml
+        run: gcovr -r . --gcov-executable '/usr/lib/llvm-9/bin/llvm-cov gcov' --object-directory build --xml > codecov.xml
 
       - name: Upload Codecoverage
         uses: codecov/codecov-action@v1
