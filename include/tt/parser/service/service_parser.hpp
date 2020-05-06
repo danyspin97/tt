@@ -45,7 +45,6 @@ private:
 
     std::string path_;
     std::shared_ptr<Service> service_;
-    ParserFactory parser_factory_;
 };
 
 } // namespace tt
