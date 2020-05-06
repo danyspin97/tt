@@ -55,9 +55,7 @@ void BundleOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
     }
 }
 
-void BundleOptionsBuilder::TrySetAttributeForKey(const string &key,
-                                                 const string &value) {
-    // Workaround for -Wunused-parameter
-    const auto msg = key + value;
+void BundleOptionsBuilder::TrySetAttributeForKey(const string & /*key*/,
+                                                 const string & /*value*/) {
     throw SectionBuilderException("No key is allowed in section [options]");
 }
