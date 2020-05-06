@@ -41,7 +41,7 @@ using tt::SectionBuilderException;
 EnvironmentBuilder::EnvironmentBuilder(Environment &environment)
     : environment_(environment) {}
 
-void EnvironmentBuilder::ParseLine(const string line) {
+void EnvironmentBuilder::ParseLine(const string &line) {
     try {
         TryParseLine(line);
     } catch (KeyValueParserLineInvalidException &e) {

@@ -33,7 +33,7 @@ using tt::Script;
 using tt::ScriptBuilder;
 
 ScriptBuilder::ScriptBuilder(Environment &environment,
-                             const std::string section)
+                             const std::string &section)
     : CodeSectionBuilder(section), environment_(environment) {}
 
 void ScriptBuilder::EndParsing() {
@@ -62,7 +62,7 @@ string &ScriptBuilder::GetAttributeForKey(const string key) {
     return section_;
 }
 
-string &ScriptBuilder::GetCodeAttributeForKey(const string key) {
+string &ScriptBuilder::GetCodeAttributeForKey(const string &key) {
     if (key == "execute") {
         return execute_;
     }

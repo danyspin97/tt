@@ -28,7 +28,7 @@ namespace tt {
 
 class BuilderTest : public SectionBuilder {
 public:
-    void ParseLine(const std::string line) {
+    void ParseLine(const std::string &line) {
         auto msg = line;
         time_parsed_++;
     }

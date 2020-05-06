@@ -31,18 +31,15 @@ namespace tt {
 
 class ScriptBuilder : public CodeSectionBuilder {
 public:
-    ScriptBuilder(Environment &environment, const std::string section);
-
+    ScriptBuilder(Environment &environment, const std::string &section);
     Script script() const;
 
     bool HasScript();
     void EndParsing();
 
 protected:
-    std::string &GetAttributeForKey(const std::string key);
-
-    std::string &GetCodeAttributeForKey(const std::string key);
-
+    std::string &GetAttributeForKey(const std::string &key);
+    std::string &GetCodeAttributeForKey(const std::string &key);
     Script::Type GetParsedType() const;
 
     Environment &environment_;

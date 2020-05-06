@@ -24,7 +24,7 @@ using std::ostream;
 
 using tt::Script;
 
-Script::Script(Type type, std::string execute, Environment environment)
+Script::Script(Type type, const std::string &execute, Environment &environment)
     : execute_(execute), type_(type), env_(environment) {}
 
 ostream &Script::Dump(ostream &oss) const {

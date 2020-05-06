@@ -29,13 +29,13 @@ namespace tt {
 
 class CodeSectionBuilder : public SectionBuilder {
 public:
-    void ParseLine(const std::string line);
+    void ParseLine(const std::string &line);
 
 protected:
     CodeSectionBuilder(const std::string &section);
 
-    virtual std::string &GetCodeAttributeForKey(std::string key) = 0;
-    virtual std::string &GetAttributeForKey(std::string key) = 0;
+    virtual std::string &GetCodeAttributeForKey(const std::string &key) = 0;
+    virtual std::string &GetAttributeForKey(const std::string &key) = 0;
 
     std::string section_;
 

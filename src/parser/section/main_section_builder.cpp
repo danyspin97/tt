@@ -37,7 +37,7 @@ using tt::MainSectionBuilder;
 using tt::SectionBuilderException;
 using tt::SetThrowsIfNotEmpty;
 
-void MainSectionBuilder::ParseLine(const string line) {
+void MainSectionBuilder::ParseLine(const string &line) {
     try {
         TryParseLine(line);
     } catch (const AttributeIsAlreadySetException &e) {

@@ -31,14 +31,13 @@ namespace tt {
 class LoggerScriptBuilder : public ScriptBuilder {
 public:
     LoggerScriptBuilder(Environment &environment,
-                        const std::string service_name);
-
+                        const std::string &service_name);
     LoggerScript logger_script() const;
 
     void EndParsing();
 
 protected:
-    std::string &GetAttributeForKey(const std::string key);
+    std::string &GetAttributeForKey(const std::string &key);
 
 private:
     void CheckParsedValues();

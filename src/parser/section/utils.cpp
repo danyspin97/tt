@@ -36,7 +36,7 @@ using std::stringstream;
 using tt::AttributeNotFoundException;
 using tt::SectionBuilder;
 
-void tt::TestBuilderWithFile(SectionBuilder &builder, const string path) {
+void tt::TestBuilderWithFile(SectionBuilder &builder, const string &path) {
     // https://stackoverflow.com/a/40903508
     ifstream f{path};
     const auto size = std::filesystem::file_size(path);
@@ -50,7 +50,7 @@ void tt::TestBuilderWithFile(SectionBuilder &builder, const string path) {
     builder.EndParsing();
 }
 
-void tt::AttributeNotFound(const string attribute, const string section) {
+void tt::AttributeNotFound(const string &attribute, const string &section) {
     const auto error_message =
         "Key '" + attribute + "' is not allowed in section [" + section + "]";
     throw AttributeNotFoundException(error_message);

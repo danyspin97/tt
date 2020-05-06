@@ -35,7 +35,7 @@ using tt::LoggerScriptInvalidSettingsException;
 using tt::Script;
 
 LoggerScriptBuilder::LoggerScriptBuilder(Environment &environment,
-                                         const std::string service_name)
+                                         const std::string &service_name)
     : ScriptBuilder(environment, "log"), service_name_(service_name) {}
 
 void LoggerScriptBuilder::EndParsing() {
@@ -63,7 +63,7 @@ void LoggerScriptBuilder::CheckParsedValues() {
     }
 }
 
-string &LoggerScriptBuilder::GetAttributeForKey(const string key) {
+string &LoggerScriptBuilder::GetAttributeForKey(const string &key) {
     if (key == "destination") {
         return destination_;
     } else if (key == "maxsize") {

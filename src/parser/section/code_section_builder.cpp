@@ -36,7 +36,7 @@ using tt::SetThrowsIfNotEmpty;
 CodeSectionBuilder::CodeSectionBuilder(const std::string &section)
     : section_(section) {}
 
-void CodeSectionBuilder::ParseLine(const std::string line) {
+void CodeSectionBuilder::ParseLine(const std::string &line) {
     if (code_parser_.IsParsing()) {
         // Continue parsing execute parameter
         code_parser_.ParseLine(line);
@@ -56,11 +56,10 @@ void CodeSectionBuilder::ParseLine(const std::string line) {
         return;
     }
 
-    string key, value;
     auto key_value_parser = KeyValueParser(line);
     if (key_value_parser.IsLineValid()) {
-        key = key_value_parser.key();
-        value = key_value_parser.value();
+        auto key = key_value_parser.key();
+        auto value = key_value_parser.value();
         SetThrowsIfNotEmpty(GetAttributeForKey(key), value);
         return;
     }

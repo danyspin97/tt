@@ -27,7 +27,7 @@ namespace tt {
 
 class SectionBuilder {
 public:
-    virtual void ParseLine(const std::string line) = 0;
+    virtual void ParseLine(const std::string &line) = 0;
     virtual void EndParsing() = 0;
 
     virtual ~SectionBuilder() = default;

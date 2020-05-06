@@ -28,7 +28,7 @@ namespace tt {
 
 class OptionsBuilder : public SectionBuilder {
 public:
-    void ParseLine(const std::string line);
+    void ParseLine(const std::string &line);
     void EndParsing();
 
 protected:

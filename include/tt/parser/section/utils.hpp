@@ -29,10 +29,11 @@
 
 namespace tt {
 
-void AttributeNotFound(const std::string attribute, const std::string section);
+void AttributeNotFound(const std::string &attribute,
+                       const std::string &section);
 
 // Is called many times during parsing, allow inlining
-inline bool IsEmptyLine(const std::string line) {
+inline bool IsEmptyLine(const std::string &line) {
     const auto strippedLine = trim_copy(line);
     if (strippedLine.size() == 0 || strippedLine[0] == '#') {
         return true;
@@ -42,15 +43,15 @@ inline bool IsEmptyLine(const std::string line) {
 }
 
 inline void SetThrowsIfNotEmpty(std::string &param,
-                                const std::string newValue) {
-    if (param != "") {
+                                const std::string &newValue) {
+    if (!param.empty()) {
         throw ParamIsNotEmptyException();
     }
 
     param.append(newValue);
 }
 
-void TestBuilderWithFile(SectionBuilder &builder, const std::string path);
+void TestBuilderWithFile(SectionBuilder &builder, const std::string &path);
 
 } // namespace tt
 

@@ -32,7 +32,7 @@ public:
     MainSectionBuilder(MainSection &main_section)
         : main_section_(main_section) {}
 
-    void ParseLine(const std::string line);
+    void ParseLine(const std::string &line);
     void EndParsing() {}
 
 private:

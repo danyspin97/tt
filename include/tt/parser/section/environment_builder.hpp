@@ -30,7 +30,7 @@ class EnvironmentBuilder : public SectionBuilder {
 public:
     EnvironmentBuilder(Environment &environment);
 
-    void ParseLine(const std::string line);
+    void ParseLine(const std::string &line);
 
     void EndParsing() {}
 

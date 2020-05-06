@@ -38,7 +38,7 @@ using tt::OptionsBuilder;
 using tt::SectionBuilderException;
 using tt::ValuesAfterEndingTokenException;
 
-void OptionsBuilder::ParseLine(const string line) {
+void OptionsBuilder::ParseLine(const string &line) {
     if (IsEmptyLine(line)) {
         return;
     }
