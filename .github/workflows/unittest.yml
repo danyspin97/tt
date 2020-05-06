@@ -31,7 +31,7 @@ jobs:
         run: ninja -C build test
 
       - name: Generate Coverage
-        run: gcovr -r . --gcov-executable '/usr/lib/llvm-9/bin/llvm-cov gcov' --object-directory build --xml > codecov.xml
+        run: gcovr -r . build --gcov-executable 'llvm-cov-9 gcov' --xml --print-summary --output coverage.xml
 
       - name: Upload Codecoverage
-        run: bash <(curl -s https://codecov.io/bash) -f codecov.xml
+        run: bash <(curl -s https://codecov.io/bash) -f coverage.xml
