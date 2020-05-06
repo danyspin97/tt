@@ -34,8 +34,4 @@ jobs:
         run: gcovr -r . --gcov-executable '/usr/lib/llvm-9/bin/llvm-cov gcov' --object-directory build --xml > codecov.xml
 
       - name: Upload Codecoverage
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: unittests
-          fail_ci_if_error: false
+        run: bash <(curl -s https://codecov.io/bash) -t codecov.xml
