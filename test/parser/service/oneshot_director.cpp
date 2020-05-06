@@ -43,7 +43,7 @@ TEST_CASE("OneshotDirector") {
         lines.push_back(line);
     }
     auto service = director.ParseAndGetService(lines, "/tmp/init-fsck");
-    auto *oneshot = static_cast<Oneshot *>(service.get());
+    auto *oneshot = dynamic_cast<Oneshot *>(service.get());
 
     CHECK(oneshot->name() == "init-fsck");
     CHECK(oneshot->start().environment().Get("CMDARGS") == "-d");

@@ -36,16 +36,16 @@ using tt::Oneshot;
 using tt::OneshotOptions;
 
 void DependencyReader::Visit(Bundle *bundle) {
-    auto &options_ = static_cast<BundleOptions &>(bundle->options());
+    auto &options_ = dynamic_cast<BundleOptions &>(bundle->options());
     dependencies_ = options_.contents();
 }
 
 void DependencyReader::Visit(Longrun *longrun) {
-    auto &options_ = static_cast<LongrunOptions &>(longrun->options());
+    auto &options_ = dynamic_cast<LongrunOptions &>(longrun->options());
     dependencies_ = options_.dependencies();
 }
 
 void DependencyReader::Visit(Oneshot *oneshot) {
-    auto &options_ = static_cast<OneshotOptions &>(oneshot->options());
+    auto &options_ = dynamic_cast<OneshotOptions &>(oneshot->options());
     dependencies_ = options_.dependencies();
 }

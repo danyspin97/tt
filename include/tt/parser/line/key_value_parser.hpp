@@ -42,7 +42,7 @@ private:
     std::string line_;
     std::string key_;
     std::string value_;
-    bool valid_;
+    bool valid_{};
     bool throw_on_error_;
 };
 

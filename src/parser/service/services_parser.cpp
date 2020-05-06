@@ -95,7 +95,7 @@ string ServicesParser::SplitServiceNameFromInstance(string &service_name,
 string ServicesParser::GetPathForServiceName(const string &name) {
     for (auto i = paths_.rbegin(); i != paths_.rend(); ++i) {
         string service_path = *i + "/" + name + suffix_;
-        struct stat buffer;
+        struct stat buffer{};
         if (stat(service_path.c_str(), &buffer) == 0) {
             return service_path;
         }

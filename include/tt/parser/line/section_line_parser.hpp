@@ -48,7 +48,7 @@ private:
 
     std::string line_;
     std::string section_;
-    bool valid_;
+    bool valid_{};
 };
 
 } // namespace tt
