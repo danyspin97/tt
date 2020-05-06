@@ -59,7 +59,7 @@ private:
     Type type_;
     std::optional<std::string> user_;
     std::optional<std::string> group_;
-    Environment env_;
+    Environment &env_;
 };
 
 } // namespace tt
