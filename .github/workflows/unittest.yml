@@ -27,8 +27,11 @@ jobs:
       - name: Run meson tests
         run: ninja -C build test
 
+      - name: Install grcov
+        run: curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
+
       - name: Generate Coverage
-        run: ninja -C build coverage-xml
+        run: cd build && grcov -s . -t lcov --llvm --branch --ignore-not-existing -o lcov.info .
 
       - name: Upload Codecoverage
         uses: codecov/codecov-action@v1
