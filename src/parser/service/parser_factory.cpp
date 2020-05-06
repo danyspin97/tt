@@ -43,7 +43,8 @@ ParserFactory::GetDirectorPerType(const string &type) {
     }
     if (type == "longrun") {
         return make_unique<LongrunDirector>();
-    } else if (type == "oneshot") {
+    }
+    if (type == "oneshot") {
         return make_unique<OneshotDirector>();
     }
 

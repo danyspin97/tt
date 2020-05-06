@@ -53,7 +53,7 @@ void ServicesParser::ParseServices(const vector<string> &service_names) {
 }
 
 void ServicesParser::ParseService(const std::string &service_name) {
-    if (service_map_.count(service_name) != 0u) {
+    if (service_map_.count(service_name) != 0U) {
         return;
     }
 

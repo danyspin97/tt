@@ -70,9 +70,11 @@ SectionBuilder *OneshotDirector::GetBuilderForSection(const string &section) {
     }
     if (section == "start") {
         return &start_script_builder_;
-    } else if (section == "stop") {
+    }
+    if (section == "stop") {
         return &stop_script_builder_;
-    } else if (section == "config") {
+    }
+    if (section == "config") {
         return &env_section_builder_;
     } else if (section == "options") {
         return &options_builder_;

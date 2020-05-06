@@ -62,7 +62,7 @@ ServiceParser::ServiceParser(const string &path) {
     path_ = path;
     auto service_lines = GenerateListFrom(path);
     const auto type = GetTypeFromService(service_lines);
-    auto director = parser_factory_.GetDirectorPerType(type);
+    auto director = tt::ParserFactory::GetDirectorPerType(type);
     service_ = director->ParseAndGetService(service_lines, path);
 }
 
