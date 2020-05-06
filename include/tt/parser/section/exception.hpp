@@ -29,17 +29,17 @@ namespace tt {
 
 class AttributeIsAlreadySetException : public Exception {
 public:
-    AttributeIsAlreadySetException(const std::string &msg) : Exception(msg) {}
+    explicit AttributeIsAlreadySetException(const std::string &msg) : Exception(msg) {}
 };
 
 class AttributeNotFoundException : public Exception {
 public:
-    AttributeNotFoundException(const std::string &msg) : Exception(msg) {}
+    explicit AttributeNotFoundException(const std::string &msg) : Exception(msg) {}
 };
 
 class CodeNotSuppliedInScriptParserException : public Exception {
 public:
-    CodeNotSuppliedInScriptParserException(const std::string &msg)
+    explicit CodeNotSuppliedInScriptParserException(const std::string &msg)
         : Exception(msg) {}
 };
 
@@ -50,7 +50,7 @@ public:
 
 class EnvironmentKeyNotValidException : public Exception {
 public:
-    EnvironmentKeyNotValidException(const std::string &msg) : Exception(msg) {}
+    explicit EnvironmentKeyNotValidException(const std::string &msg) : Exception(msg) {}
 };
 
 class EnvironmentValueNotQuotedException : public Exception {
@@ -61,7 +61,7 @@ public:
 
 class LoggerScriptInvalidSettingsException : public Exception {
 public:
-    LoggerScriptInvalidSettingsException(const std::string &msg)
+    explicit LoggerScriptInvalidSettingsException(const std::string &msg)
         : Exception(msg) {}
 };
 
@@ -72,12 +72,12 @@ public:
 
 class ScriptTypeNotValidException : public Exception {
 public:
-    ScriptTypeNotValidException(const std::string &msg) : Exception(msg) {}
+    explicit ScriptTypeNotValidException(const std::string &msg) : Exception(msg) {}
 };
 
 class SectionBuilderException : public Exception {
 public:
-    SectionBuilderException(const std::string &msg) : Exception(msg) {}
+    explicit SectionBuilderException(const std::string &msg) : Exception(msg) {}
 };
 
 } // namespace tt

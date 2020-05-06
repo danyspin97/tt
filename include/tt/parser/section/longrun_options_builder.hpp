@@ -29,7 +29,7 @@ namespace tt {
 
 class LongrunOptionsBuilder : public OptionsBuilder {
 public:
-    LongrunOptionsBuilder(LongrunOptions &options);
+    explicit LongrunOptionsBuilder(LongrunOptions &options);
 
     void SaveValuesOfParser(const ArrayParser &parser) override;
     void TrySetAttributeForKey(const std::string &key,

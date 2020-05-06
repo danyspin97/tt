@@ -29,7 +29,7 @@ namespace tt {
 
 class OneshotOptionsBuilder : public OptionsBuilder {
 public:
-    OneshotOptionsBuilder(OneshotOptions &oneshotOptions);
+    explicit OneshotOptionsBuilder(OneshotOptions &oneshotOptions);
 
 protected:
     void TrySetAttributeForKey(const std::string &key,

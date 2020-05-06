@@ -40,18 +40,18 @@ public:
 
 class EmptyArrayException : public Exception {
 public:
-    EmptyArrayException(const std::string &msg) : Exception(msg) {}
+    explicit EmptyArrayException(const std::string &msg) : Exception(msg) {}
 };
 
 class KeyValueParserLineInvalidException : public Exception {
 public:
-    KeyValueParserLineInvalidException(const std::string &msg)
+    explicit KeyValueParserLineInvalidException(const std::string &msg)
         : Exception(msg) {}
 };
 
 class ValuesAfterEndingTokenException : public Exception {
 public:
-    ValuesAfterEndingTokenException(const std::string &msg) : Exception(msg) {}
+    explicit ValuesAfterEndingTokenException(const std::string &msg) : Exception(msg) {}
 };
 
 } // namespace tt

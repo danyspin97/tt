@@ -31,7 +31,7 @@ namespace tt {
 class ServiceParser {
 public:
     std::shared_ptr<Service> &service();
-    ServiceParser(const std::string &path);
+    explicit ServiceParser(const std::string &path);
 
 protected:
     static std::vector<std::string> GenerateListFrom(const std::string &path);

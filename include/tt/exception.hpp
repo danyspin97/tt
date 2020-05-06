@@ -28,7 +28,7 @@ namespace tt {
 
 class Exception : public std::exception {
 public:
-    Exception(std::string msg) : msg_(std::move(msg)) {}
+    explicit Exception(std::string msg) : msg_(std::move(msg)) {}
 
     [[nodiscard]] const char *what() const noexcept override {
         return msg_.c_str();
@@ -41,7 +41,7 @@ private:
 
 class SignalNotValidExecption : public Exception {
 public:
-    SignalNotValidExecption(const std::string &msg) : Exception(msg) {}
+    explicit SignalNotValidExecption(const std::string &msg) : Exception(msg) {}
 };
 
 } // namespace tt

@@ -33,7 +33,7 @@ public:
 
     [[nodiscard]] bool IsLineValid() const noexcept { return valid_; }
 
-    KeyValueParser(std::string line, bool throw_on_error = false);
+    explicit KeyValueParser(std::string line, bool throw_on_error = false);
 
 private:
     void ParseLine();

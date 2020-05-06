@@ -29,7 +29,7 @@ namespace tt {
 
 class MainSectionBuilder : public SectionBuilder {
 public:
-    MainSectionBuilder(MainSection &main_section)
+    explicit MainSectionBuilder(MainSection &main_section)
         : main_section_(main_section) {}
 
     void ParseLine(const std::string &line) override;

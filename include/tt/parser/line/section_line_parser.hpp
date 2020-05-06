@@ -30,7 +30,7 @@ public:
     [[nodiscard]] std::string section() const { return section_; }
     [[nodiscard]] bool IsLineValid() const { return valid_; }
 
-    SectionLineParser(const std::string &line) {
+    explicit SectionLineParser(const std::string &line) {
         line_ = line;
         ParseLine();
     }

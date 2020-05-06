@@ -32,7 +32,7 @@ public:
     void ParseLine(const std::string &line) override;
 
 protected:
-    CodeSectionBuilder(std::string section);
+    explicit CodeSectionBuilder(std::string section);
 
     virtual std::string &GetCodeAttributeForKey(const std::string &key) = 0;
     virtual std::string &GetAttributeForKey(const std::string &key) = 0;

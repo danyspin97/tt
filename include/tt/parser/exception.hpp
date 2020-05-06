@@ -29,7 +29,7 @@ namespace tt {
 
 class BooleanParseException : public Exception {
 public:
-    BooleanParseException(const std::string &msg) : Exception(msg) {}
+    explicit BooleanParseException(const std::string &msg) : Exception(msg) {}
 };
 
 } // namespace tt

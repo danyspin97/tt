@@ -28,7 +28,7 @@ namespace tt {
 
 class EnvironmentBuilder : public SectionBuilder {
 public:
-    EnvironmentBuilder(Environment &environment);
+    explicit EnvironmentBuilder(Environment &environment);
 
     void ParseLine(const std::string &line) override;
 

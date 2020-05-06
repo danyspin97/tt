@@ -28,7 +28,7 @@ namespace tt {
 
 class BundleOptionsBuilder : public OptionsBuilder {
 public:
-    BundleOptionsBuilder(BundleOptions &options);
+    explicit BundleOptionsBuilder(BundleOptions &options);
     void ParseLine(const std::string &line) override;
 
 protected:
