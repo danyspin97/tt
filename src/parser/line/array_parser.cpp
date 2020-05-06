@@ -58,13 +58,13 @@ bool ArrayParser::StartParsing(const string &line) {
     auto tmp =
         line.substr(equal_token_pos + 1, parenthesis_pos - equal_token_pos - 1);
     trim(tmp);
-    if (tmp.size() != 0) {
+    if (!tmp.empty()) {
         return false;
     }
 
     key_ = line.substr(0, equal_token_pos);
     trim(key_);
-    if (key_.size() == 0) {
+    if (key_.empty()) {
         throw EmptyKeyException();
     }
 
@@ -80,9 +80,9 @@ void ArrayParser::ParseLine(const string &line) {
     UpdateStatus(line);
 }
 
-void ArrayParser::UpdateStatus(const string line) {
+void ArrayParser::UpdateStatus(const string &line) {
     auto trimmed_line = trim_copy(line);
-    if (line.size() == 0) {
+    if (line.empty()) {
         return;
     }
     auto ending_token_pos = trimmed_line.find(kArrayCloseToken);
@@ -97,13 +97,13 @@ void ArrayParser::UpdateStatus(const string line) {
     }
     AddValuesFromLine(trimmed_line.substr(0, ending_token_pos));
 
-    if (!IsParsing() && values_.size() == 0) {
+    if (!IsParsing() && values_.empty()) {
         const auto msg = key_ + ": Empty array is not allowed";
         throw EmptyArrayException(msg);
     }
 }
 
-void ArrayParser::AddValuesFromLine(const string line) {
+void ArrayParser::AddValuesFromLine(const string &line) {
     std::istringstream iss(line);
     auto old_end = std::end(values_);
     values_.insert(old_end, std::istream_iterator<string>{iss},

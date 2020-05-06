@@ -36,8 +36,8 @@ public:
     void EndParsing() {}
 
 private:
-    void TryParseLine(const std::string line);
-    std::string &GetAttributeForKey(const std::string key);
+    void TryParseLine(const std::string &line);
+    std::string &GetAttributeForKey(const std::string &key);
     MainSection &main_section_;
 
     std::string ret_;

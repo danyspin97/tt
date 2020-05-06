@@ -23,6 +23,7 @@
 #include <filesystem>
 #include <iostream>
 #include <sys/stat.h>
+#include <utility>
 
 #include "args.hxx"
 
@@ -45,13 +46,13 @@ using tt::cli::ParseCommand;
 
 ParseCommand::ParseCommand(args::Subparser &parser,
                            shared_ptr<GlobalOptions> common_options)
-    : Command(parser, common_options),
+    : Command(parser, std::move(common_options)),
       service_list_(parser, "services", "services to parse"),
       is_file_(parser, "file", "", {'f', "file"}) {}
 
 int ParseCommand::Dispatch(args::Subparser &parser,
                            shared_ptr<GlobalOptions> common_options) {
-    ParseCommand command = ParseCommand(parser, common_options);
+    ParseCommand command = ParseCommand(parser, std::move(common_options));
     return command.InitAndExecute();
 }
 
@@ -70,7 +71,6 @@ void ParseCommand::ParseFiles() {
         if (!global_options_->quiet_) {
             std::cout << *(parser.service());
         }
-        continue;
     }
 }
 

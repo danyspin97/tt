@@ -67,13 +67,13 @@ void EnvironmentBuilder::TryParseLine(const string &line) {
 }
 
 void EnvironmentBuilder::CheckKeyIsValid(const string &key) {
-    if (isdigit(key[0])) {
+    if (isdigit(key[0]) != 0) {
         const auto msg = "Key " + key + " cannot start with a digit";
         throw EnvironmentKeyNotValidException(msg);
     }
 
     for (char c : key) {
-        if (!isalnum(c) && c != '_') {
+        if ((isalnum(c) == 0) && c != '_') {
             const auto msg =
                 "Character " + string{c} + " not valid in key " + key;
             throw EnvironmentKeyNotValidException(msg);
@@ -81,7 +81,7 @@ void EnvironmentBuilder::CheckKeyIsValid(const string &key) {
     }
 }
 
-const string EnvironmentBuilder::StripQuotes(const string &value) {
+string EnvironmentBuilder::StripQuotes(const string &value) {
     const auto val_size = value.size();
     if (val_size < 2 || value[0] != '"' || value[val_size - 1] != '"') {
         throw EnvironmentValueNotQuotedException();

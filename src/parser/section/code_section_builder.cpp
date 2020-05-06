@@ -27,7 +27,6 @@
 #include "tt/parser/section/utils.hpp"
 
 using std::string;
-using tt::CodeParser;
 using tt::CodeSectionBuilder;
 using tt::IsEmptyLine;
 using tt::SectionBuilder;

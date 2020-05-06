@@ -32,7 +32,6 @@ using std::shared_ptr;
 using std::string;
 using std::vector;
 
-using tt::DummyBuilder;
 using tt::Exception;
 using tt::SectionBuilder;
 using tt::SectionLineParser;
@@ -41,7 +40,7 @@ using tt::ServiceDirector;
 
 shared_ptr<Service>
 ServiceDirector::ParseAndGetService(vector<string> &service_lines,
-                                    string path) {
+                                    const string &path) {
     service_lines_ = service_lines;
     ParseSections();
     return InstanceService(path);

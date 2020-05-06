@@ -39,7 +39,7 @@ public:
 
     std::optional<Script> stop() const noexcept { return stop_; }
 
-    void stop(Script stop) { stop_.emplace(stop); }
+    void stop(const Script &stop) { stop_.emplace(stop); }
 
     Oneshot(const std::string &name, const std::string &polish_name,
             const std::string &description, const std::string &path,

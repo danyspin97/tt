@@ -30,13 +30,13 @@ class ServiceVisitor;
 
 class Service {
 public:
-    const std::string name() const noexcept { return name_; }
+    std::string name() const noexcept { return name_; }
 
-    const std::string polish_name() const noexcept { return polish_name_; }
+    std::string polish_name() const noexcept { return polish_name_; }
 
-    const std::string description() const noexcept { return description_; }
+    std::string description() const noexcept { return description_; }
 
-    const std::string path() const noexcept { return path_; }
+    std::string path() const noexcept { return path_; }
 
     ServiceOptions &options() noexcept { return options_; }
 
@@ -48,8 +48,8 @@ public:
     virtual void Accept(ServiceVisitor &) = 0;
 
 protected:
-    Service(const std::string& name, const std::string& polish_name,
-            const std::string& description, const std::string& path,
+    Service(const std::string &name, const std::string &polish_name,
+            const std::string &description, const std::string &path,
             ServiceOptions &options);
 
 private:

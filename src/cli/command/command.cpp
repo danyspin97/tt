@@ -21,6 +21,7 @@
 #include "tt/cli/command/command.hpp"
 
 #include <memory>
+#include <utility>
 
 #include "args.hxx"
 
@@ -31,7 +32,7 @@ using tt::cli::GlobalOptions;
 
 Command::Command(args::Subparser &parser,
                  shared_ptr<GlobalOptions> global_options)
-    : parser_(parser), global_options_(global_options) {}
+    : parser_(parser), global_options_(std::move(global_options)) {}
 
 int Command::InitAndExecute() {
     parser_.Parse();

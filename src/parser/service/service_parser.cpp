@@ -39,7 +39,6 @@ using std::vector;
 
 using tt::Exception;
 using tt::KeyValueParser;
-using tt::ParserFactory;
 using tt::SectionLineParser;
 using tt::Service;
 using tt::ServiceParser;
@@ -64,11 +63,10 @@ ServiceParser::ServiceParser(const string &path) {
     auto service_lines = GenerateListFrom(path);
     const auto type = GetTypeFromService(service_lines);
     auto director = parser_factory_.GetDirectorPerType(type);
-    service_ = director.get()->ParseAndGetService(service_lines, path);
+    service_ = director->ParseAndGetService(service_lines, path);
 }
 
-const string
-ServiceParser::GetTypeFromService(const vector<string> &service_lines) {
+string ServiceParser::GetTypeFromService(const vector<string> &service_lines) {
     auto main_section_index = GetMainSectionIndex(service_lines);
     for (auto i = main_section_index; i < service_lines.size(); i++) {
         auto key_value_parser = KeyValueParser(service_lines.at(i));
@@ -84,7 +82,7 @@ ServiceParser::GetTypeFromService(const vector<string> &service_lines) {
 size_t
 ServiceParser::GetMainSectionIndex(const vector<string> &service_lines) const {
     size_t index = 0;
-    for (auto &line : service_lines) {
+    for (const auto &line : service_lines) {
         auto section_line_parser = SectionLineParser(line);
         auto const current_section =
             section_line_parser.GetSectionOrDefault("");

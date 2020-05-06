@@ -22,6 +22,7 @@
 #define TT_BUNDLE_OPTIONS_HPP_
 
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "tt/data/service_options.hpp"
@@ -32,7 +33,9 @@ class BundleOptions : public ServiceOptions {
 public:
     std::vector<std::string> contents() { return contents_; }
 
-    void contents(std::vector<std::string> contents) { contents_ = contents; }
+    void contents(std::vector<std::string> contents) {
+        contents_ = std::move(contents);
+    }
 
     std::ostream &Dump(std::ostream &oss) const;
 

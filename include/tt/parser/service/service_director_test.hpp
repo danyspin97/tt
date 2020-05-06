@@ -28,10 +28,7 @@ namespace tt {
 
 class BuilderTest : public SectionBuilder {
 public:
-    void ParseLine(const std::string &line) {
-        auto msg = line;
-        time_parsed_++;
-    }
+    void ParseLine(const std::string &) { time_parsed_++; }
 
     void EndParsing() { finished_ = true; }
 
@@ -41,13 +38,11 @@ public:
 
 class ServiceDirectorTest : public ServiceDirector {
 public:
-    std::shared_ptr<Service> InstanceService(const std::string &path) {
-        auto msg = path;
+    std::shared_ptr<Service> InstanceService(const std::string &) {
         return std::unique_ptr<Service>{};
     }
 
-    SectionBuilder *GetBuilderForSection(const std::string &section) {
-        auto msg = section;
+    SectionBuilder *GetBuilderForSection(const std::string &) {
         return &builder_test_;
     }
 

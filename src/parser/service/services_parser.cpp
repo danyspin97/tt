@@ -47,13 +47,13 @@ ServicesParser::ServicesParser(const std::string &suffix,
     : suffix_(suffix), paths_(paths) {}
 
 void ServicesParser::ParseServices(const vector<string> &service_names) {
-    for (auto &name : service_names) {
+    for (const auto &name : service_names) {
         ParseService(name);
     }
 }
 
 void ServicesParser::ParseService(const std::string &service_name) {
-    if (service_map_.count(service_name)) {
+    if (service_map_.count(service_name) != 0u) {
         return;
     }
 
@@ -105,8 +105,9 @@ string ServicesParser::GetPathForServiceName(const string &name) {
         "Service '" + name + suffix_ + "' could not be found in directories ";
     stringstream joined_paths;
     for (size_t i = 0; i < paths_.size(); ++i) {
-        if (i != 0)
+        if (i != 0) {
             joined_paths << ",";
+        }
         joined_paths << paths_[i];
     }
     msg += joined_paths.str();

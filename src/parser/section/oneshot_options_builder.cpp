@@ -41,7 +41,8 @@ void OneshotOptionsBuilder::TrySetAttributeForKey(const string &key,
     if (key == "optional") {
         options_.optional(ParseBoolean(value));
         return;
-    } else if (key == "write_message") {
+    }
+    if (key == "write_message") {
         options_.write_start_stop_messages(ParseBoolean(value));
         return;
     }

@@ -27,10 +27,10 @@ namespace tt {
 
 class Exception : public std::exception {
 public:
-    Exception(const std::string msg) : msg_(msg) {}
+    Exception(const std::string &msg) : msg_(msg) {}
 
     const char *what() const noexcept { return msg_.c_str(); }
-    const std::string msg() const noexcept { return msg_; }
+    std::string msg() const noexcept { return msg_; }
 
 private:
     const std::string msg_;
@@ -38,7 +38,7 @@ private:
 
 class SignalNotValidExecption : public Exception {
 public:
-    SignalNotValidExecption(const std::string msg) : Exception(msg) {}
+    SignalNotValidExecption(const std::string &msg) : Exception(msg) {}
 };
 
 } // namespace tt

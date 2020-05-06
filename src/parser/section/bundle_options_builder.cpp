@@ -35,7 +35,7 @@ using tt::SectionBuilderException;
 BundleOptionsBuilder::BundleOptionsBuilder(BundleOptions &options)
     : options_(options) {}
 
-void BundleOptionsBuilder::ParseLine(const string line) {
+void BundleOptionsBuilder::ParseLine(const string &line) {
     if (IsEmptyLine(line)) {
         return;
     }

@@ -35,11 +35,7 @@ void AttributeNotFound(const std::string &attribute,
 // Is called many times during parsing, allow inlining
 inline bool IsEmptyLine(const std::string &line) {
     const auto strippedLine = trim_copy(line);
-    if (strippedLine.empty() || strippedLine[0] == '#') {
-        return true;
-    }
-
-    return false;
+    return strippedLine.empty() || strippedLine[0] == '#';
 }
 
 inline void SetThrowsIfNotEmpty(std::string &param,

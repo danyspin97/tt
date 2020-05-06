@@ -32,7 +32,6 @@ using tt::kDefaultLogUser;
 using tt::LoggerScript;
 using tt::LoggerScriptBuilder;
 using tt::LoggerScriptInvalidSettingsException;
-using tt::Script;
 
 LoggerScriptBuilder::LoggerScriptBuilder(Environment &environment,
                                          const std::string &service_name)

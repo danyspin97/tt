@@ -103,7 +103,7 @@ void OptionsBuilder::CheckParserHasFinished() {
 
 void OptionsBuilder::SetAttributeForKey(const string &key,
                                         const string &value) {
-    static const auto section_err_msg = " in section [options]";
+    static const auto *const section_err_msg = " in section [options]";
     try {
         TrySetAttributeForKey(key, value);
     } catch (AttributeNotFoundException &e) {

@@ -30,12 +30,12 @@ public:
     std::string section() const { return section_; }
     bool IsLineValid() const { return valid_; }
 
-    SectionLineParser(const std::string line) {
+    SectionLineParser(const std::string &line) {
         line_ = line;
         ParseLine();
     }
 
-    const std::string GetSectionOrDefault(std::string _default) const {
+    std::string GetSectionOrDefault(std::string _default) const {
         if (IsLineValid()) {
             return section_;
         }

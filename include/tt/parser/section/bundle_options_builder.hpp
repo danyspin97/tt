@@ -29,7 +29,7 @@ namespace tt {
 class BundleOptionsBuilder : public OptionsBuilder {
 public:
     BundleOptionsBuilder(BundleOptions &options);
-    void ParseLine(const std::string line);
+    void ParseLine(const std::string &line);
 
 protected:
     void SaveValuesOfParser(const ArrayParser &parser);

@@ -27,8 +27,8 @@ using std::ostream;
 using tt::Bundle;
 using tt::ServiceVisitor;
 
-Bundle::Bundle(const std::string& name, const std::string& polish_name,
-               const std::string& description, const std::string& path,
+Bundle::Bundle(const std::string &name, const std::string &polish_name,
+               const std::string &description, const std::string &path,
                BundleOptions &options)
     : Service(name, polish_name, description, path, options) {}
 

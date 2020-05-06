@@ -61,10 +61,10 @@ shared_ptr<Service> LongrunDirector::InstanceService(const string &path) {
                              run_script_builder_.script());
 
     if (finish_script_builder_.HasScript()) {
-        service.get()->finish(finish_script_builder_.script());
+        service->finish(finish_script_builder_.script());
     }
     if (logger_script_builder_.HasScript()) {
-        service.get()->logger(logger_script_builder_.logger_script());
+        service->logger(logger_script_builder_.logger_script());
     }
 
     return service;
@@ -73,7 +73,8 @@ shared_ptr<Service> LongrunDirector::InstanceService(const string &path) {
 SectionBuilder *LongrunDirector::GetBuilderForSection(const string &section) {
     if (section == "main") {
         return &main_section_builder_;
-    } else if (section == "run") {
+    }
+    if (section == "run") {
         return &run_script_builder_;
     } else if (section == "finish") {
         return &finish_script_builder_;

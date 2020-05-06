@@ -32,7 +32,6 @@ using std::string;
 using tt::AttributeIsAlreadySetException;
 using tt::AttributeNotFound;
 using tt::KeyValueParser;
-using tt::MainSection;
 using tt::MainSectionBuilder;
 using tt::SectionBuilderException;
 using tt::SetThrowsIfNotEmpty;
@@ -49,7 +48,7 @@ void MainSectionBuilder::ParseLine(const string &line) {
     }
 }
 
-void MainSectionBuilder::TryParseLine(const string line) {
+void MainSectionBuilder::TryParseLine(const string &line) {
     if (IsEmptyLine(line)) {
         return;
     }
@@ -61,10 +60,11 @@ void MainSectionBuilder::TryParseLine(const string line) {
     SetThrowsIfNotEmpty(GetAttributeForKey(key_), value_);
 }
 
-string &MainSectionBuilder::GetAttributeForKey(const std::string key) {
+string &MainSectionBuilder::GetAttributeForKey(const std::string &key) {
     if (key == "name") {
         return main_section_.name;
-    } else if (key == "description") {
+    }
+    if (key == "description") {
         return main_section_.description;
     } else if (key == "polish_name") {
         return main_section_.polish_name;

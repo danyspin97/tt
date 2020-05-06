@@ -26,14 +26,14 @@ using std::string;
 
 using tt::Environment;
 
-string Environment::Get(const string& key) const { return env_.at(key); }
+string Environment::Get(const string &key) const { return env_.at(key); }
 
 map<string, string> Environment::GetAll() const { return env_; }
 
-void Environment::Set(const string& key, const string& value) {
+void Environment::Set(const string &key, const string &value) {
     env_[key] = value;
 }
-bool Environment::SetUnique(const string& key, const string& value) {
+bool Environment::SetUnique(const string &key, const string &value) {
     if (env_.find(key) == env_.end()) {
         return false;
     }

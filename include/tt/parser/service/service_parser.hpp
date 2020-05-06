@@ -34,10 +34,10 @@ public:
     ServiceParser(const std::string &path);
 
 protected:
-    std::vector<std::string> GenerateListFrom(const std::string &path);
+    static std::vector<std::string> GenerateListFrom(const std::string &path);
 
 private:
-    const std::string
+    std::string
     GetTypeFromService(const std::vector<std::string> &service_lines);
 
     size_t

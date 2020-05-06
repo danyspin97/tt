@@ -36,11 +36,13 @@ public:
 
     std::optional<Script> finish() const noexcept { return finish_; }
 
-    void finish(Script finish) noexcept { finish_.emplace(finish); }
+    void finish(const Script &finish) noexcept { finish_.emplace(finish); }
 
     std::optional<LoggerScript> logger() const noexcept { return logger_; }
 
-    void logger(LoggerScript logger) noexcept { logger_.emplace(logger); }
+    void logger(const LoggerScript &logger) noexcept {
+        logger_.emplace(logger);
+    }
 
     Longrun(const std::string &name, const std::string &polish_name,
             const std::string &description, const std::string &path,

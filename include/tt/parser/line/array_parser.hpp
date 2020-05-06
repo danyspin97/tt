@@ -30,9 +30,9 @@ class ArrayParser {
 public:
     bool IsParsing() const noexcept { return is_parsing_; }
 
-    const std::string key() const noexcept { return key_; }
+    std::string key() const noexcept { return key_; }
 
-    const std::vector<std::string> values() const noexcept {
+    std::vector<std::string> values() const noexcept {
         return std::vector<std::string>{values_};
     }
 
@@ -49,8 +49,8 @@ public:
     }
 
 private:
-    void AddValuesFromLine(const std::string line);
-    void UpdateStatus(const std::string line);
+    void AddValuesFromLine(const std::string &line);
+    void UpdateStatus(const std::string &line);
 
     // TODO(danyspin97): Make key an Optional
     std::string key_;

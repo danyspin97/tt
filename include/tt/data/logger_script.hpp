@@ -30,9 +30,7 @@ namespace tt {
 
 class LoggerScript : public Script {
 public:
-    const std::string service_to_log() const noexcept {
-        return service_to_log_;
-    }
+    std::string service_to_log() const noexcept { return service_to_log_; }
 
     LoggerScript(Type type, const std::string &execute,
                  Environment &environment, const std::string &service_to_log,

@@ -43,7 +43,7 @@ public:
 protected:
     virtual int Execute() = 0;
 
-protected:
+
     args::Subparser &parser_;
     std::shared_ptr<GlobalOptions> global_options_;
 };

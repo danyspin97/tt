@@ -39,7 +39,7 @@ public:
 
     std::shared_ptr<Service>
     ParseAndGetService(std::vector<std::string> &service_lines,
-                       const std::string path);
+                       const std::string &path);
 
 protected:
     virtual std::shared_ptr<Service>

@@ -47,7 +47,7 @@ private:
     void ParseFiles();
     void ParseUserSystemServices();
     bool CheckForFileInDefaultDirs(const ::std::string &name);
-    std::vector<std::string>
+    static std::vector<std::string>
     GetPossibleNameForService(const std::string &service);
 
     args::PositionalList<std::string> service_list_;

@@ -30,9 +30,9 @@ class CodeParser {
 public:
     bool IsParsing() const { return is_parsing_; }
 
-    const std::string key() const { return key_; }
+    std::string key() const { return key_; }
 
-    const std::string code() const;
+    std::string code() const;
 
     bool StartParsing(const std::string &line);
 

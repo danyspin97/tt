@@ -69,7 +69,7 @@ void CodeParser::ParseLine(const string &line) {
     code_ << "\n";
 }
 
-const string CodeParser::code() const {
+string CodeParser::code() const {
     if (IsParsing()) {
         throw CodeParserIsStillParsingException();
     }

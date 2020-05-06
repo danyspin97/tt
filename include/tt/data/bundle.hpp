@@ -32,8 +32,8 @@ class ServiceVisitor;
 
 class Bundle : public Service {
 public:
-    Bundle(const std::string& name, const std::string& polish_name,
-           const std::string& description, const std::string& path,
+    Bundle(const std::string &name, const std::string &polish_name,
+           const std::string &description, const std::string &path,
            BundleOptions &options);
 
     std::ostream &Dump(std::ostream &oss) const;

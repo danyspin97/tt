@@ -23,6 +23,7 @@
 
 #include <istream>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace tt {
@@ -31,7 +32,9 @@ class ServiceOptions {
 public:
     std::vector<std::string> dependencies() { return depends_; }
 
-    void dependencies(std::vector<std::string> depends) { depends_ = depends; }
+    void dependencies(std::vector<std::string> depends) {
+        depends_ = std::move(depends);
+    }
 
     virtual ~ServiceOptions() = default;
 

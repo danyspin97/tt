@@ -34,14 +34,9 @@ using std::make_shared;
 using std::shared_ptr;
 using std::string;
 
-using tt::Environment;
-using tt::EnvironmentBuilder;
 using tt::Exception;
-using tt::MainSectionBuilder;
 using tt::Oneshot;
 using tt::OneshotDirector;
-using tt::OneshotOptionsBuilder;
-using tt::ScriptBuilder;
 using tt::SectionBuilder;
 using tt::Service;
 
@@ -72,7 +67,8 @@ shared_ptr<Service> OneshotDirector::InstanceService(const string &path) {
 SectionBuilder *OneshotDirector::GetBuilderForSection(const string &section) {
     if (section == "main") {
         return &main_section_builder_;
-    } else if (section == "start") {
+    }
+    if (section == "start") {
         return &start_script_builder_;
     } else if (section == "stop") {
         return &stop_script_builder_;
