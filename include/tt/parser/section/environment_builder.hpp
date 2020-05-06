@@ -30,9 +30,9 @@ class EnvironmentBuilder : public SectionBuilder {
 public:
     EnvironmentBuilder(Environment &environment);
 
-    void ParseLine(const std::string &line);
+    void ParseLine(const std::string &line) override;
 
-    void EndParsing() {}
+    void EndParsing() override {}
 
 private:
     void TryParseLine(const std::string &line);

@@ -31,9 +31,9 @@ class LongrunOptionsBuilder : public OptionsBuilder {
 public:
     LongrunOptionsBuilder(LongrunOptions &options);
 
-    void SaveValuesOfParser(const ArrayParser &parser);
+    void SaveValuesOfParser(const ArrayParser &parser) override;
     void TrySetAttributeForKey(const std::string &key,
-                               const std::string &value);
+                               const std::string &value) override;
 
 private:
     LongrunOptions &options_;

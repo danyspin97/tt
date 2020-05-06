@@ -41,7 +41,7 @@ TEST_CASE("LoggerScriptBuilder") {
 
         CHECK(s.service_to_log() == "foo");
 
-        const auto expected_execute = "s6-log /var/log/tt/foo";
+        const auto *const expected_execute = "s6-log /var/log/tt/foo";
 
         CHECK(s.execute() == expected_execute);
         CHECK(s.user() == "tt_log");

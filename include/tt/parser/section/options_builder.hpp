@@ -28,8 +28,8 @@ namespace tt {
 
 class OptionsBuilder : public SectionBuilder {
 public:
-    void ParseLine(const std::string &line);
-    void EndParsing();
+    void ParseLine(const std::string &line) override;
+    void EndParsing() override;
 
 protected:
     bool ParseMultilineValue(const std::string &line);

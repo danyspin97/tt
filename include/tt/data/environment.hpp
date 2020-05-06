@@ -29,9 +29,9 @@ namespace tt {
 
 class Environment {
 public:
-    std::string Get(const std::string &key) const;
+    [[nodiscard]] std::string Get(const std::string &key) const;
 
-    std::map<std::string, std::string> GetAll() const;
+    [[nodiscard]] std::map<std::string, std::string> GetAll() const;
 
     void Set(const std::string &key, const std::string &value);
 

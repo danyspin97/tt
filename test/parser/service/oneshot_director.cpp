@@ -31,7 +31,6 @@ using std::vector;
 
 using tt::Oneshot;
 using tt::OneshotDirector;
-using tt::Service;
 
 TEST_CASE("OneshotDirector") {
     auto director = OneshotDirector();
@@ -44,7 +43,7 @@ TEST_CASE("OneshotDirector") {
         lines.push_back(line);
     }
     auto service = director.ParseAndGetService(lines, "/tmp/init-fsck");
-    Oneshot *oneshot = static_cast<Oneshot *>(service.get());
+    auto *oneshot = static_cast<Oneshot *>(service.get());
 
     CHECK(oneshot->name() == "init-fsck");
     CHECK(oneshot->start().environment().Get("CMDARGS") == "-d");

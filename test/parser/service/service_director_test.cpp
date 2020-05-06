@@ -37,7 +37,7 @@ TEST_CASE("ServiceDirector") {
         vector<string> lines = {"", "[foo]"};
         const int linesNumber = 10;
         for (int i = 0; i < linesNumber; i++) {
-            lines.push_back("");
+            lines.emplace_back("");
         }
 
         director.ParseAndGetService(lines, "");

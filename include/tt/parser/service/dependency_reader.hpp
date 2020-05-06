@@ -35,9 +35,9 @@ class DependencyReader : public ServiceVisitor {
 public:
     std::vector<std::string> dependencies() { return dependencies_; }
 
-    void Visit(Bundle *bundle);
-    void Visit(Longrun *longrun);
-    void Visit(Oneshot *oneshot);
+    void Visit(Bundle *bundle) override;
+    void Visit(Longrun *longrun) override;
+    void Visit(Oneshot *oneshot) override;
 
 private:
     std::vector<std::string> dependencies_;

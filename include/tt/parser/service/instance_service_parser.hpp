@@ -28,8 +28,7 @@ const std::string InstanceToken = "@I";
 
 class InstanceServiceParser : public ServiceParser {
 public:
-    InstanceServiceParser(const std::string &path,
-                          const std::string &instance_name);
+    InstanceServiceParser(const std::string &path, std::string instance_name);
 
 protected:
     std::vector<std::string> GenerateListFrom(const std::string &path);

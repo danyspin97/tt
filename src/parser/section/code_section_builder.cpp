@@ -21,6 +21,7 @@
 #include "tt/parser/section/code_section_builder.hpp"
 
 #include <string>
+#include <utility>
 
 #include "tt/parser/line/code_parser.hpp"
 #include "tt/parser/line/key_value_parser.hpp"
@@ -32,8 +33,8 @@ using tt::IsEmptyLine;
 using tt::SectionBuilder;
 using tt::SetThrowsIfNotEmpty;
 
-CodeSectionBuilder::CodeSectionBuilder(const std::string &section)
-    : section_(section) {}
+CodeSectionBuilder::CodeSectionBuilder(std::string section)
+    : section_(std::move(section)) {}
 
 void CodeSectionBuilder::ParseLine(const std::string &line) {
     if (code_parser_.IsParsing()) {

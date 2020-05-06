@@ -82,9 +82,11 @@ SectionBuilder *LongrunDirector::GetBuilderForSection(const string &section) {
     }
     if (section == "log") {
         return &logger_script_builder_;
-    } else if (section == "config") {
+    }
+    if (section == "config") {
         return &env_section_builder_;
-    } else if (section == "options") {
+    }
+    if (section == "options") {
         return &options_builder_;
     }
 

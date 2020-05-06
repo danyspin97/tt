@@ -35,8 +35,7 @@ public:
     void ParseServices(const std::vector<std::string> &service_names);
 
 protected:
-    ServicesParser(const std::string &suffix,
-                   const std::vector<std::string> &paths);
+    ServicesParser(std::string suffix, std::vector<std::string> paths);
 
 private:
     void ParseService(const std::string &service_name);

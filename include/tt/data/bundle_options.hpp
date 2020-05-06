@@ -37,7 +37,7 @@ public:
         contents_ = std::move(contents);
     }
 
-    std::ostream &Dump(std::ostream &oss) const;
+    std::ostream &Dump(std::ostream &oss) const override;
 
 private:
     std::vector<std::string> contents_;

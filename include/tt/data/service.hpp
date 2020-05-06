@@ -30,17 +30,23 @@ class ServiceVisitor;
 
 class Service {
 public:
-    std::string name() const noexcept { return name_; }
+    [[nodiscard]] std::string name() const noexcept { return name_; }
 
-    std::string polish_name() const noexcept { return polish_name_; }
+    [[nodiscard]] std::string polish_name() const noexcept {
+        return polish_name_;
+    }
 
-    std::string description() const noexcept { return description_; }
+    [[nodiscard]] std::string description() const noexcept {
+        return description_;
+    }
 
-    std::string path() const noexcept { return path_; }
+    [[nodiscard]] std::string path() const noexcept { return path_; }
 
     ServiceOptions &options() noexcept { return options_; }
 
-    const ServiceOptions &options() const noexcept { return options_; }
+    [[nodiscard]] const ServiceOptions &options() const noexcept {
+        return options_;
+    }
 
     virtual std::ostream &Dump(std::ostream &oss) const;
 
@@ -48,9 +54,8 @@ public:
     virtual void Accept(ServiceVisitor &) = 0;
 
 protected:
-    Service(const std::string &name, const std::string &polish_name,
-            const std::string &description, const std::string &path,
-            ServiceOptions &options);
+    Service(std::string name, std::string polish_name, std::string description,
+            std::string path, ServiceOptions &options);
 
 private:
     void ValidatePath() const;

@@ -22,8 +22,7 @@
 
 #include "args.hxx"
 
-namespace tt {
-namespace cli {
+namespace tt::cli {
 
 class GlobalOptions {
 public:
@@ -35,5 +34,4 @@ public:
     args::ValueFlag<int> verbosity_;
 };
 
-} // namespace cli
-} // namespace tt
+} // namespace tt::cli

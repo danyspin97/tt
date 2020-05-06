@@ -21,6 +21,7 @@
 #include "tt/data/service.hpp"
 
 #include <filesystem>
+#include <utility>
 
 #include "tt/data/exception.hpp"
 
@@ -30,11 +31,12 @@ using tt::Service;
 using tt::ServiceNameDoNotMatchFileExecption;
 using tt::ServiceOptions;
 
-Service::Service(const std::string &name, const std::string &polish_name,
-                 const std::string &description, const std::string &path,
+Service::Service(std::string name, std::string polish_name,
+                 std::string description, std::string path,
                  ServiceOptions &options)
-    : name_(name), polish_name_(polish_name), description_(description),
-      path_(path), options_(options) {
+    : name_(std::move(name)), polish_name_(std::move(polish_name)),
+      description_(std::move(description)), path_(std::move(path)),
+      options_(options) {
     ValidatePath();
 }
 

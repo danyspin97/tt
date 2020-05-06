@@ -36,10 +36,10 @@ namespace tt {
 class OneshotDirector : public ServiceDirector {
 public:
     OneshotDirector();
-    ~OneshotDirector() = default;
+    ~OneshotDirector() override = default;
 
-    std::shared_ptr<Service> InstanceService(const std::string &path);
-    SectionBuilder *GetBuilderForSection(const std::string &section);
+    std::shared_ptr<Service> InstanceService(const std::string &path) override;
+    SectionBuilder *GetBuilderForSection(const std::string &section) override;
 
 private:
     MainSection main_section_;

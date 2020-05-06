@@ -54,7 +54,7 @@ TEST_CASE("OneshotOptionsBuilder") {
                            "invalid_boolean",          "unclosed_quotes",
                            "unclosed_multiline_value", "unknown_key",
                            "unknown_multiline_value"};
-        for (auto &test : testFiles) {
+        for (const auto &test : testFiles) {
             CHECK_THROWS_AS(
                 TestBuilderWithFile(builder, "../test/data/" + test),
                 SectionBuilderException);

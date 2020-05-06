@@ -24,8 +24,6 @@
 
 #include "tt/parser/section/utils.hpp"
 
-using std::shared_ptr;
-
 using tt::Environment;
 using tt::Script;
 using tt::ScriptBuilder;

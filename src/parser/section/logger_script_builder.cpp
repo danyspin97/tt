@@ -18,6 +18,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <utility>
+
 #include "tt/parser/section/logger_script_builder.hpp"
 
 #include "tt/define.h"
@@ -34,8 +36,9 @@ using tt::LoggerScriptBuilder;
 using tt::LoggerScriptInvalidSettingsException;
 
 LoggerScriptBuilder::LoggerScriptBuilder(Environment &environment,
-                                         const std::string &service_name)
-    : ScriptBuilder(environment, "log"), service_name_(service_name) {}
+                                         std::string service_name)
+    : ScriptBuilder(environment, "log"),
+      service_name_(std::move(service_name)) {}
 
 void LoggerScriptBuilder::EndParsing() {
     CheckParsedValues();

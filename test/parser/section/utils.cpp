@@ -30,7 +30,7 @@ TEST_CASE("SetThrowsIfNotEmpty on a non empty string") {
 
 TEST_CASE("SetThrowsIfNotEmpty on a empty string") {
     std::string mystring;
-    auto newValue = "newValue";
+    const auto *newValue = "newValue";
     SetThrowsIfNotEmpty(mystring, newValue);
     REQUIRE(mystring == newValue);
 }

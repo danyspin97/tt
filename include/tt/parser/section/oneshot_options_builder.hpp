@@ -33,8 +33,8 @@ public:
 
 protected:
     void TrySetAttributeForKey(const std::string &key,
-                               const std::string &value);
-    void SaveValuesOfParser(const ArrayParser &parser);
+                               const std::string &value) override;
+    void SaveValuesOfParser(const ArrayParser &parser) override;
 
 private:
     OneshotOptions &options_;

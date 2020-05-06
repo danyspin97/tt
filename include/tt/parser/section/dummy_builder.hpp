@@ -29,13 +29,13 @@ namespace tt {
 
 class DummyBuilder : public SectionBuilder {
 public:
-    void ParseLine(const std::string &line) {
+    void ParseLine(const std::string &line) override {
         if (!line.empty()) {
             throw DummyBuilderException();
         }
     }
 
-    void EndParsing() {}
+    void EndParsing() override {}
 };
 
 } // namespace tt

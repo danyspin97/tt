@@ -32,13 +32,17 @@ namespace tt {
 
 class Longrun : public Service {
 public:
-    Script run() const noexcept { return run_; }
+    [[nodiscard]] Script run() const noexcept { return run_; }
 
-    std::optional<Script> finish() const noexcept { return finish_; }
+    [[nodiscard]] std::optional<Script> finish() const noexcept {
+        return finish_;
+    }
 
     void finish(const Script &finish) noexcept { finish_.emplace(finish); }
 
-    std::optional<LoggerScript> logger() const noexcept { return logger_; }
+    [[nodiscard]] std::optional<LoggerScript> logger() const noexcept {
+        return logger_;
+    }
 
     void logger(const LoggerScript &logger) noexcept {
         logger_.emplace(logger);
@@ -48,8 +52,8 @@ public:
             const std::string &description, const std::string &path,
             LongrunOptions options, const Script &run);
 
-    virtual std::ostream &Dump(std::ostream &oss) const;
-    void Accept(ServiceVisitor &visitor);
+    std::ostream &Dump(std::ostream &oss) const override;
+    void Accept(ServiceVisitor &visitor) override;
 
 private:
     Script run_;

@@ -64,7 +64,7 @@ TEST_CASE("LongrunOptionsBuilder") {
                                 "unclosed_multiline_value",
                                 "unknown_key",
                                 "unknown_multiline_value"};
-        for (auto &test : testFiles) {
+        for (const auto &test : testFiles) {
             CHECK_THROWS_AS(
                 TestBuilderWithFile(builder, string{"../test/data/"} + test),
                 SectionBuilderException);

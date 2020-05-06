@@ -28,9 +28,9 @@ namespace tt {
 
 class BuilderTest : public SectionBuilder {
 public:
-    void ParseLine(const std::string & /*line*/) { time_parsed_++; }
+    void ParseLine(const std::string & /*line*/) override { time_parsed_++; }
 
-    void EndParsing() { finished_ = true; }
+    void EndParsing() override { finished_ = true; }
 
     int time_parsed_;
     bool finished_ = false;
@@ -38,11 +38,13 @@ public:
 
 class ServiceDirectorTest : public ServiceDirector {
 public:
-    std::shared_ptr<Service> InstanceService(const std::string & /*path*/) {
+    std::shared_ptr<Service>
+    InstanceService(const std::string & /*path*/) override {
         return std::unique_ptr<Service>{};
     }
 
-    SectionBuilder *GetBuilderForSection(const std::string & /*section*/) {
+    SectionBuilder *
+    GetBuilderForSection(const std::string & /*section*/) override {
         return &builder_test_;
     }
 

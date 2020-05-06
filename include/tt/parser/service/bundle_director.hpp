@@ -30,10 +30,10 @@ namespace tt {
 class BundleDirector : public ServiceDirector {
 public:
     BundleDirector();
-    ~BundleDirector() = default;
+    ~BundleDirector() override = default;
 
-    std::shared_ptr<Service> InstanceService(const std::string &path);
-    SectionBuilder *GetBuilderForSection(const std::string &section);
+    std::shared_ptr<Service> InstanceService(const std::string &path) override;
+    SectionBuilder *GetBuilderForSection(const std::string &section) override;
 
 private:
     MainSectionBuilder main_section_builder_;

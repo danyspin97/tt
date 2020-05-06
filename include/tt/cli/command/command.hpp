@@ -28,9 +28,7 @@ namespace args {
 class Subparser;
 }
 
-namespace tt {
-
-namespace cli {
+namespace tt::cli {
 
 class Command {
 public:
@@ -43,10 +41,8 @@ public:
 protected:
     virtual int Execute() = 0;
 
-
     args::Subparser &parser_;
     std::shared_ptr<GlobalOptions> global_options_;
 };
 
-} // namespace cli
-} // namespace tt
+} // namespace tt::cli

@@ -28,20 +28,18 @@
 
 #include "tt/cli/command/command.hpp"
 
-namespace tt {
-
-namespace cli {
+namespace tt::cli {
 
 class ParseCommand : public Command {
 public:
     ParseCommand(args::Subparser &parser,
                  std::shared_ptr<GlobalOptions> common_options);
-    ~ParseCommand() = default;
+    ~ParseCommand() override = default;
     static int Dispatch(args::Subparser &parser,
                         std::shared_ptr<GlobalOptions> common_options);
 
 protected:
-    int Execute();
+    int Execute() override;
 
 private:
     void ParseFiles();
@@ -54,6 +52,4 @@ private:
     args::Flag is_file_;
 };
 
-} // namespace cli
-
-} // namespace tt
+} // namespace tt::cli

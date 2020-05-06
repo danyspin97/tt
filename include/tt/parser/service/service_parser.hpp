@@ -40,7 +40,7 @@ private:
     std::string
     GetTypeFromService(const std::vector<std::string> &service_lines);
 
-    size_t
+    [[nodiscard]] size_t
     GetMainSectionIndex(const std::vector<std::string> &service_lines) const;
 
     std::string path_;

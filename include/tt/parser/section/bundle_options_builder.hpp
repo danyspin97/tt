@@ -29,13 +29,13 @@ namespace tt {
 class BundleOptionsBuilder : public OptionsBuilder {
 public:
     BundleOptionsBuilder(BundleOptions &options);
-    void ParseLine(const std::string &line);
+    void ParseLine(const std::string &line) override;
 
 protected:
-    void SaveValuesOfParser(const ArrayParser &parser);
+    void SaveValuesOfParser(const ArrayParser &parser) override;
 
     void TrySetAttributeForKey(const std::string &key,
-                               const std::string &value);
+                               const std::string &value) override;
 
 private:
     BundleOptions &options_;

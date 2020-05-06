@@ -76,7 +76,8 @@ SectionBuilder *OneshotDirector::GetBuilderForSection(const string &section) {
     }
     if (section == "config") {
         return &env_section_builder_;
-    } else if (section == "options") {
+    }
+    if (section == "options") {
         return &options_builder_;
     }
     auto msg = "Section '" + section + "' is not supported.";

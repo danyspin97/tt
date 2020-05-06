@@ -36,8 +36,8 @@ public:
            const std::string &description, const std::string &path,
            BundleOptions &options);
 
-    std::ostream &Dump(std::ostream &oss) const;
-    void Accept(ServiceVisitor &visitor);
+    std::ostream &Dump(std::ostream &oss) const override;
+    void Accept(ServiceVisitor &visitor) override;
 };
 
 } // namespace tt

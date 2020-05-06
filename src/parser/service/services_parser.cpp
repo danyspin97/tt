@@ -26,6 +26,7 @@
 
 #include <iterator>
 #include <sstream>
+#include <utility>
 
 #include "tt/parser/service/dependency_reader.hpp"
 #include "tt/parser/service/exception.hpp"
@@ -42,9 +43,9 @@ using tt::ServiceNotFoundParserException;
 using tt::ServiceParser;
 using tt::ServicesParser;
 
-ServicesParser::ServicesParser(const std::string &suffix,
-                               const std::vector<std::string> &paths)
-    : suffix_(suffix), paths_(paths) {}
+ServicesParser::ServicesParser(std::string suffix,
+                               std::vector<std::string> paths)
+    : suffix_(std::move(suffix)), paths_(std::move(paths)) {}
 
 void ServicesParser::ParseServices(const vector<string> &service_names) {
     for (const auto &name : service_names) {
@@ -92,8 +93,7 @@ string ServicesParser::SplitServiceNameFromInstance(string &service_name,
 }
 
 string ServicesParser::GetPathForServiceName(const string &name) {
-    for (vector<string>::reverse_iterator i = paths_.rbegin();
-         i != paths_.rend(); ++i) {
+    for (auto i = paths_.rbegin(); i != paths_.rend(); ++i) {
         string service_path = *i + "/" + name + suffix_;
         struct stat buffer;
         if (stat(service_path.c_str(), &buffer) == 0) {

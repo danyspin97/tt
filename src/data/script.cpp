@@ -18,14 +18,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <utility>
+
 #include "tt/data/script.hpp"
 
 using std::ostream;
 
 using tt::Script;
 
-Script::Script(Type type, const std::string &execute, Environment &environment)
-    : execute_(execute), type_(type), env_(environment) {}
+Script::Script(Type type, std::string execute, Environment &environment)
+    : execute_(std::move(execute)), type_(type), env_(environment) {}
 
 ostream &Script::Dump(ostream &oss) const {
     // TODO: Convert from Type to string

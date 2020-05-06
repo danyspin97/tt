@@ -32,8 +32,8 @@ public:
     MainSectionBuilder(MainSection &main_section)
         : main_section_(main_section) {}
 
-    void ParseLine(const std::string &line);
-    void EndParsing() {}
+    void ParseLine(const std::string &line) override;
+    void EndParsing() override {}
 
 private:
     void TryParseLine(const std::string &line);

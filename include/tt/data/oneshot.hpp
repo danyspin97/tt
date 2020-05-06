@@ -33,11 +33,11 @@ class ServiceVisitor;
 
 class Oneshot : public Service {
 public:
-    Script start() const noexcept { return start_; }
+    [[nodiscard]] Script start() const noexcept { return start_; }
 
     // set method for start_ as it is required
 
-    std::optional<Script> stop() const noexcept { return stop_; }
+    [[nodiscard]] std::optional<Script> stop() const noexcept { return stop_; }
 
     void stop(const Script &stop) { stop_.emplace(stop); }
 
@@ -45,8 +45,8 @@ public:
             const std::string &description, const std::string &path,
             OneshotOptions options, const Script &start);
 
-    std::ostream &Dump(std::ostream &oss) const;
-    void Accept(ServiceVisitor &visitor);
+    std::ostream &Dump(std::ostream &oss) const override;
+    void Accept(ServiceVisitor &visitor) override;
 
 private:
     Script start_;

@@ -93,8 +93,7 @@ void ParseCommand::ParseUserSystemServices() {
 
 bool ParseCommand::CheckForFileInDefaultDirs(const std::string &name) {
     auto default_dirs = vector<string>{dirs.service, dirs.adminService};
-    for (vector<string>::reverse_iterator i = default_dirs.rbegin();
-         i != default_dirs.rend(); ++i) {
+    for (auto i = default_dirs.rbegin(); i != default_dirs.rend(); ++i) {
         auto filename = *i + "/" + name;
         struct stat buffer;
         if (stat(filename.c_str(), &buffer) == 0) {
