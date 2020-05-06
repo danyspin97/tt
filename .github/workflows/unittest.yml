@@ -31,7 +31,7 @@ jobs:
         run: curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
 
       - name: Generate Coverage
-        run: cd build && grcov -s . -t lcov --llvm --branch --ignore-not-existing -o lcov.info .
+        run: cd build && ../grcov -s . -t lcov --llvm --branch --ignore-not-existing -o lcov.info .
 
       - name: Upload Codecoverage
         uses: codecov/codecov-action@v1
