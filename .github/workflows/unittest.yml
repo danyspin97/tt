@@ -34,4 +34,4 @@ jobs:
         run: gcovr -r . --gcov-executable '/usr/lib/llvm-9/bin/llvm-cov gcov' --object-directory build --xml > codecov.xml
 
       - name: Upload Codecoverage
-        run: bash <(curl -s https://codecov.io/bash) -t codecov.xml
+        run: bash <(curl -s https://codecov.io/bash) -f codecov.xml
