@@ -40,6 +40,11 @@ then the use of s6 configured ad-hoc for that machine is recommended.
 
 ### Dependencies
 
+tt supports the following compilers:
+
+- gcc >= 9.0 (gcc-8 does not have a good support for `<filesystem>`)
+- clang >= 7.0
+
 tt depends on the following libraries:
 
 - [s6](https://skarnet.org/software/s6/)
@@ -50,7 +55,7 @@ You can install them using your package manager.
 
 ### Building
 
-To build tt a working C++ compiler is required. Meson will take care of the rest:
+To build tt run the following commands:
 
 ```bash
 $ meson build
