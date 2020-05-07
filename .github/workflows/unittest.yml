@@ -20,13 +20,15 @@ jobs:
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
           sudo apt-get update
-          compiler=${{ matrix.compiler }} sudo apt-get install --force-yes ${compiler/clang++/clang}
+          compiler=${{ matrix.compiler }}
+          compiler=${compiler/clang++/clang}
+          sudo apt-get install --force-yes ${compiler}
           pip3 install meson gcovr
 
       - name: Build using meson
-        env:
-          CXX: ${{ matrix.compiler }}
         run: |
+          compiler=${{ matrix.compiler }}
+          compiler=${compiler/clang++-7/clang++}
           meson --unity on -Dtests=enabled -Db_lundef=false \
           -Db_sanitize=address,undefined -Db_coverage=true build && \
           ninja -C build
