@@ -104,15 +104,16 @@ tt development updates are posted on @danyspin97 [blog](https://danyspin97.org/t
 
 ## Credits
 
-tt is being developed by @danyspin97 and @Cogitri.
+tt is being developed by [@danyspin97](https://github.com/danyspin97) and [@Cogitri](https://github.com/Cogitri).
 
-Thanks to @pac85 for its contributions and to all the people that shared ideas for tt.
+Thanks to [@pac85](https://github.com/pac85) for its contributions and to all the people that shared ideas for tt.
 
 Credits also to:
 
-- @Taywee for its [args](https://github.com/Taywee/args) library
-- @skarnet for its s6 supervision suite
-- [obarun](https://obarun.org) for his work on 66
+- [@Taywee](https://github.com/Taywee) for its
+  [args](https://github.com/Taywee/args) library
+- [@skarnet](https://github.com/skarnet) for its s6 supervision suite
+- [@obarun](https://obarun.org) for his work on 66
 
 ## License
 
