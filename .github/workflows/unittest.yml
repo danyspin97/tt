@@ -6,7 +6,7 @@ jobs:
     name: Tests
     strategy:
       matrix:
-        compiler: [clang++-7, clang++-8, clang++-9, g++-9]
+        compiler: [clang++-8, clang++-9, g++-9]
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
@@ -26,10 +26,10 @@ jobs:
           pip3 install meson gcovr
 
       - name: Build using meson
+        env:
+          CXX: ${{ matrix.compiler }}
         run: |
-          compiler=${{ matrix.compiler }}
-          compiler=${compiler/clang++-7/clang++}
-          CXX=${compiler} meson --unity on -Dtests=enabled -Db_lundef=false \
+          meson --unity on -Dtests=enabled -Db_lundef=false \
           -Db_sanitize=address,undefined -Db_coverage=true build && \
           ninja -C build
 

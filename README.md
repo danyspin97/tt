@@ -43,8 +43,8 @@ then the use of s6 configured ad-hoc for that machine is recommended.
 
 tt supports the following compilers:
 
-- gcc >= 9.0 (gcc-8 does not have a good support for `<filesystem>`)
-- clang >= 7.0
+- gcc >= 9.0 (gcc-8 does not have a good support for `<filesystem>`, despite including it)
+- clang >= 8.0
 
 tt depends on the following libraries:
 
