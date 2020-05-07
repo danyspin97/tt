@@ -29,7 +29,7 @@ jobs:
         run: |
           compiler=${{ matrix.compiler }}
           compiler=${compiler/clang++-7/clang++}
-          meson --unity on -Dtests=enabled -Db_lundef=false \
+          CXX=${compiler} meson --unity on -Dtests=enabled -Db_lundef=false \
           -Db_sanitize=address,undefined -Db_coverage=true build && \
           ninja -C build
 
