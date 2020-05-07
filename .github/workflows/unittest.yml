@@ -6,7 +6,8 @@ jobs:
     name: Tests
     strategy:
       matrix:
-        compiler: [clang++-8, clang++-9, g++-9]
+        # clang++ defaults to clang++-7 on ubuntu-18.04 (ubuntu-latest)
+        compiler: [clang++, clang++-8, clang++-9, g++-9]
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
