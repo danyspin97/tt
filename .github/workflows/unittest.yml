@@ -6,7 +6,7 @@ jobs:
     name: Tests
     strategy:
       matrix:
-        compiler: [clang++]#, g++]
+        compiler: [clang++-8, clang++-9, g++-8, g++-9]
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
@@ -16,22 +16,28 @@ jobs:
           python-version: "3.x"
       - uses: seanmiddleditch/gha-setup-ninja@master
 
-      - name: Install llvm-cov
-        run: sudo apt-get install llvm-9
-
-      - name: Install meson and gcovr
-        run: pip3 install meson gcovr
+      - name: Install compiler and dependencies
+        run: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          compiler=${{ matrix.compiler }} sudo apt-get install --force-yes ${compiler/clang++/clang}
+          pip3 install meson gcovr
 
       - name: Build using meson
         env:
           CXX: ${{ matrix.compiler }}
-        run: meson --unity on -Dtests=enabled -Db_lundef=false -Db_sanitize=address,undefined -Db_coverage=true build && ninja -C build
+        run: |
+          meson --unity on -Dtests=enabled -Db_lundef=false \
+          -Db_sanitize=address,undefined -Db_coverage=true build && \
+          ninja -C build
 
       - name: Run meson tests
         run: ninja -C build test
 
-      - name: Generate Coverage
-        run: gcovr -r . build --gcov-executable 'llvm-cov-9 gcov' --xml --print-summary --output coverage.xml
 
       - name: Upload Codecoverage
-        run: bash <(curl -s https://codecov.io/bash) -f coverage.xml
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests
+          fail_ci_if_error: false
