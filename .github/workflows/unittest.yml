@@ -34,6 +34,8 @@ jobs:
       - name: Run meson tests
         run: ninja -C build test
 
+      - name: Generate coverage
+        run: ninja -C build coverage-xml
 
       - name: Upload Codecoverage
         uses: codecov/codecov-action@v1
