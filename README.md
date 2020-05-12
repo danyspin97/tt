@@ -28,7 +28,7 @@ then the use of s6 configured ad-hoc for that machine is recommended.
 
 - Support for different types of services: _oneshot_, _deamons_ and _bundles_
 - Predictable dependencies at build time
-- Configurable parameters for services (i.e. change CMDARGS without eding the service file)
+- Configurable parameters for services (i.e. change CMDARGS without editing the service file)
 - Asynchrounus start of the services (no [run levels](https://en.wikipedia.org/wiki/Runlevel))
 - Log everything into files, no syslog needed for deamons
 - Low footprint
