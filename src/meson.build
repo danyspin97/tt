@@ -4,6 +4,7 @@ tt_src = [
 
 # Add sources
 subdir('data')
+subdir('dependency_graph')
 subdir('parser')
 
 tt_soversion = 0
