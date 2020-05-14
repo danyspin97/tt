@@ -2,6 +2,7 @@ tt_test_src = files(
     'signal.cpp',
 )
 
+subdir('dependency_graph')
 subdir('parser')
 
 # Available from 0.53.0
