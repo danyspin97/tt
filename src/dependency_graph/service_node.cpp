@@ -20,12 +20,11 @@
 
 #include "tt/dependency_graph/service_node.hpp"
 
-tt::ServiceNode::ServiceNode(std::shared_ptr<Service> service)
+tt::ServiceNode::ServiceNode(tt::Service service)
     : service_(std::move(service)) {}
 
-std::shared_ptr<tt::Service> tt::ServiceNode::service() { return service_; }
+tt::Service tt::ServiceNode::service() { return service_; }
 
-void tt::ServiceNode::AddDependant(
-    const std::shared_ptr<Service> &service_to_add) {
+void tt::ServiceNode::AddDependant(const tt::Service &service_to_add) {
     dependant_.push_back(service_to_add);
 }

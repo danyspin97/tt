@@ -43,6 +43,6 @@ ostream &ServiceOptions::Dump(ostream &oss) const {
     return oss;
 }
 
-ostream &operator<<(ostream &oss, const ServiceOptions &options) {
+ostream &operator<<(ostream &oss, ServiceOptions const &options) {
     return options.Dump(oss);
 }

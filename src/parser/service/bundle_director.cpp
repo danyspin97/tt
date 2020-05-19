@@ -20,27 +20,24 @@
 
 #include "tt/parser/service/bundle_director.hpp"
 
-#include "tt/data/bundle.hpp"
+#include "tt/data/service.hpp"
 #include "tt/exception.hpp"
 #include "tt/parser/section/bundle_options_builder.hpp"
 #include "tt/parser/section/main_section_builder.hpp"
 
-using std::make_shared;
-using std::shared_ptr;
 using std::string;
 
 using tt::Bundle;
 using tt::BundleDirector;
 using tt::Exception;
 using tt::SectionBuilder;
-using tt::Service;
 
 BundleDirector::BundleDirector()
     : main_section_builder_(main_section_), options_builder_(options_) {}
 
-shared_ptr<Service> BundleDirector::InstanceService(const string &path) {
-    return make_shared<Bundle>(main_section_.name, main_section_.polish_name,
-                               main_section_.description, path, options_);
+tt::Service BundleDirector::InstanceService(const string &path) {
+    return Bundle(main_section_.name, main_section_.polish_name,
+                  main_section_.description, path, options_);
 }
 
 SectionBuilder *

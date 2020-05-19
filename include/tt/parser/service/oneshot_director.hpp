@@ -25,6 +25,7 @@
 #include "tt/data/environment.hpp"
 #include "tt/data/oneshot_options.hpp"
 #include "tt/data/script.hpp"
+#include "tt/data/service.hpp"
 #include "tt/parser/section/environment_builder.hpp"
 #include "tt/parser/section/main_section_builder.hpp"
 #include "tt/parser/section/oneshot_options_builder.hpp"
@@ -38,7 +39,7 @@ public:
     OneshotDirector();
     ~OneshotDirector() override = default;
 
-    std::shared_ptr<Service> InstanceService(const std::string &path) override;
+    Service InstanceService(const std::string &path) override;
     SectionBuilder *GetBuilderForSection(const std::string &section) override;
 
 private:

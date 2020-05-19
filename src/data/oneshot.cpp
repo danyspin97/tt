@@ -25,7 +25,6 @@
 using std::ostream;
 
 using tt::Oneshot;
-using tt::ServiceVisitor;
 
 Oneshot::Oneshot(const std::string &name, const std::string &polish_name,
                  const std::string &description, const std::string &path,
@@ -48,4 +47,6 @@ ostream &Oneshot::Dump(ostream &oss) const {
     return oss;
 }
 
-void Oneshot::Accept(ServiceVisitor &visitor) { visitor.Visit(this); }
+std::ostream &operator<<(std::ostream &oss, const Oneshot &oneshot) {
+    return oneshot.Dump(oss);
+}

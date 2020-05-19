@@ -25,9 +25,10 @@
 #include <set>
 #include <vector>
 
+#include "tt/data/service.hpp"
+
 namespace tt {
 
-class Service;
 class ServiceNode;
 
 class DependencyGraph {
@@ -40,13 +41,13 @@ public:
     [[nodiscard]] const std::set<std::string> &enabled_services() const;
     [[nodiscard]] const std::vector<ServiceNode> &services() const;
 
-    size_t AddNodes(const std::vector<std::shared_ptr<Service>> &services);
+    size_t AddNodes(const std::vector<Service> &services);
     void AddEnabledServices(const std::vector<std::string> &services_to_enable);
     [[nodiscard]] const ServiceNode &
     GetServiceFromName(const std::string &name) const;
     [[nodiscard]] bool IsServiceActive(const std::string &service) const;
     [[nodiscard]] bool IsServiceEnabled(const std::string &service) const;
-    void PopulateDependant(const std::vector<std::string> &services);
+    void PopulateDependant(const std::vector<std::string> &services) const;
 };
 
 } // namespace tt

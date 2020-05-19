@@ -35,17 +35,17 @@ using tt::LongrunOptions;
 using tt::Oneshot;
 using tt::OneshotOptions;
 
-void DependencyReader::Visit(Bundle *bundle) {
-    auto &options_ = dynamic_cast<BundleOptions &>(bundle->options());
+void DependencyReader::operator()(const Bundle &bundle) {
+    const auto &options_ = dynamic_cast<const BundleOptions &>(bundle.options());
     dependencies_ = options_.contents();
 }
 
-void DependencyReader::Visit(Longrun *longrun) {
-    auto &options_ = dynamic_cast<LongrunOptions &>(longrun->options());
+void DependencyReader::operator()(const Longrun &longrun) {
+    const auto &options_ = dynamic_cast<const LongrunOptions &>(longrun.options());
     dependencies_ = options_.dependencies();
 }
 
-void DependencyReader::Visit(Oneshot *oneshot) {
-    auto &options_ = dynamic_cast<OneshotOptions &>(oneshot->options());
+void DependencyReader::operator()(const Oneshot &oneshot) {
+    const auto &options_ = dynamic_cast<const OneshotOptions &>(oneshot.options());
     dependencies_ = options_.dependencies();
 }

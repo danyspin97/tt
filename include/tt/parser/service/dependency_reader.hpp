@@ -23,21 +23,19 @@
 #include <string>
 #include <vector>
 
-#include "tt/service_visitor.hpp"
-
 namespace tt {
 
 class Bundle;
 class Longrun;
 class Oneshot;
 
-class DependencyReader : public ServiceVisitor {
+class DependencyReader {
 public:
     std::vector<std::string> dependencies() { return dependencies_; }
 
-    void Visit(Bundle *bundle) override;
-    void Visit(Longrun *longrun) override;
-    void Visit(Oneshot *oneshot) override;
+    void operator()(const Bundle &bundle);
+    void operator()(const Longrun &longrun);
+    void operator()(const Oneshot &oneshot);
 
 private:
     std::vector<std::string> dependencies_;

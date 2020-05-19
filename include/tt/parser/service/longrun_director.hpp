@@ -37,7 +37,7 @@ public:
     LongrunDirector();
     ~LongrunDirector() override = default;
 
-    std::shared_ptr<Service> InstanceService(const std::string &path) override;
+    Service InstanceService(const std::string &path) override;
     SectionBuilder *GetBuilderForSection(const std::string &section) override;
 
 private:

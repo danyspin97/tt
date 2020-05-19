@@ -37,9 +37,10 @@ public:
            BundleOptions &options);
 
     std::ostream &Dump(std::ostream &oss) const override;
-    void Accept(ServiceVisitor &visitor) override;
 };
 
 } // namespace tt
+
+std::ostream &operator<<(std::ostream &oss, const tt::Bundle &bundle);
 
 #endif // TT_BUNDLE_HPP_

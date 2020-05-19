@@ -31,7 +31,7 @@ namespace tt {
 
 class BundleOptions : public ServiceOptions {
 public:
-    std::vector<std::string> contents() { return contents_; }
+    [[nodiscard]] std::vector<std::string> contents() const { return contents_; }
 
     void contents(std::vector<std::string> contents) {
         contents_ = std::move(contents);

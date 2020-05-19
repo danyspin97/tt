@@ -8,6 +8,7 @@ tt_src += files(
     'oneshot.cpp',
     'oneshot_options.cpp',
     'script.cpp',
+    'service.cpp',
     'service_impl.cpp',
     'service_options.cpp'
 )

@@ -69,7 +69,7 @@ void ParseCommand::ParseFiles() {
     for (auto &&service : service_list_) {
         auto parser = ServiceParser(service);
         if (!global_options_->quiet_) {
-            std::cout << *(parser.service());
+            std::cout << parser.service();
         }
     }
 }
@@ -95,7 +95,7 @@ bool ParseCommand::CheckForFileInDefaultDirs(const std::string &name) {
     auto default_dirs = vector<string>{dirs.service, dirs.adminService};
     for (auto i = default_dirs.rbegin(); i != default_dirs.rend(); ++i) {
         auto filename = *i + "/" + name;
-        struct stat buffer{};
+        struct stat buffer {};
         if (stat(filename.c_str(), &buffer) == 0) {
             auto parser = ServiceParser(name);
             if (!global_options_->quiet_) {

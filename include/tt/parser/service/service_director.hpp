@@ -20,15 +20,14 @@
 
 #pragma once
 
-#include <memory>
 #include <string>
 #include <vector>
 
+#include "tt/data/service.hpp"
 #include "tt/parser/section/dummy_builder.hpp"
 
 namespace tt {
 
-class Service;
 class SectionBuilder;
 
 class ServiceDirector {
@@ -37,13 +36,11 @@ public:
 
     virtual ~ServiceDirector() = default;
 
-    std::shared_ptr<Service>
-    ParseAndGetService(std::vector<std::string> &service_lines,
-                       const std::string &path);
+    Service ParseAndGetService(std::vector<std::string> &service_lines,
+                               const std::string &path);
 
 protected:
-    virtual std::shared_ptr<Service>
-    InstanceService(const std::string &path) = 0;
+    virtual Service InstanceService(const std::string &path) = 0;
     virtual SectionBuilder *
     GetBuilderForSection(const std::string &section) = 0;
 

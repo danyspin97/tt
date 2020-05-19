@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "tt/data/bundle.hpp"
 #include "tt/data/service.hpp"
 #include "tt/parser/section/section_builder.hpp"
 #include "tt/parser/service/service_director.hpp"
@@ -38,9 +39,9 @@ public:
 
 class ServiceDirectorTest : public ServiceDirector {
 public:
-    std::shared_ptr<Service>
-    InstanceService(const std::string & /*path*/) override {
-        return std::unique_ptr<Service>{};
+    Service InstanceService(const std::string & /*path*/) override {
+        tt::BundleOptions options;
+        return tt::Bundle("mybundle", "MyBundle", "", "/mybundle", options);
     }
 
     SectionBuilder *

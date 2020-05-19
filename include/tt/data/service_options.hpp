@@ -30,7 +30,9 @@ namespace tt {
 
 class ServiceOptions {
 public:
-    std::vector<std::string> dependencies() { return depends_; }
+    [[nodiscard]] std::vector<std::string> dependencies() const {
+        return depends_;
+    }
 
     void dependencies(std::vector<std::string> depends) {
         depends_ = std::move(depends);
@@ -46,6 +48,6 @@ private:
 
 } // namespace tt
 
-std::ostream &operator<<(std::ostream &oss, const tt::ServiceOptions &options);
+std::ostream &operator<<(std::ostream &oss, tt::ServiceOptions const &options);
 
 #endif // TT_SERVICE_OPTIONS_HPP_

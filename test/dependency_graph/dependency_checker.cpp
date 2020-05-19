@@ -22,6 +22,7 @@
 
 #include "catch2/catch.hpp"
 
+#include "tt/data/service.hpp"
 #include "tt/dependency_graph/dependency_graph.hpp"
 #include "tt/dependency_graph/service_node.hpp"
 #include "tt/parser/service/service_parser.hpp"
@@ -33,7 +34,7 @@ TEST_CASE("DependencyChecker") {
     SECTION("mount-fstab with unresolved deps") {
         auto parser = tt::ServiceParser("../test/data/mount-fstab");
         auto service = parser.service();
-        auto services = std::vector<std::shared_ptr<tt::Service>>{service};
+        auto services = std::vector<tt::Service>{service};
         graph.AddNodes(services);
         REQUIRE_THROWS(tt::DependencyChecker::Validate(graph, 0));
     }
@@ -41,7 +42,7 @@ TEST_CASE("DependencyChecker") {
     SECTION("mount-fstab with unresolved deps") {
         auto files = {"../test/data/mount-fstab", "../test/data/init-fsck",
                       "../test/data/mount-rwfs"};
-        auto services = std::vector<std::shared_ptr<tt::Service>>{};
+        auto services = std::vector<tt::Service>{};
         for (const auto &file : files) {
             auto parser = tt::ServiceParser(file);
             auto service = parser.service();

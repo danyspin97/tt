@@ -53,7 +53,6 @@ public:
             LongrunOptions options, const Script &run);
 
     std::ostream &Dump(std::ostream &oss) const override;
-    void Accept(ServiceVisitor &visitor) override;
 
 private:
     Script run_;
@@ -62,5 +61,7 @@ private:
 };
 
 } // namespace tt
+
+std::ostream &operator<<(std::ostream &oss, const tt::Longrun &longrun);
 
 #endif // TT_LONGRUN_HPP_

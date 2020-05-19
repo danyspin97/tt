@@ -26,7 +26,7 @@
 
 void tt::DependencyGraphHandler::AddServices(
     const std::vector<std::string> &services_to_enable,
-    const std::vector<std::shared_ptr<Service>> &services) {
+    const std::vector<tt::Service> &services) {
     auto index = graph_.AddNodes(services);
     graph_.AddEnabledServices(services_to_enable);
     graph_.PopulateDependant(services_to_enable);

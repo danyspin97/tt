@@ -29,8 +29,6 @@
 
 namespace tt {
 
-class ServiceVisitor;
-
 class Oneshot : public ServiceImpl {
 public:
     [[nodiscard]] Script start() const noexcept { return start_; }
@@ -46,7 +44,6 @@ public:
             OneshotOptions options, const Script &start);
 
     std::ostream &Dump(std::ostream &oss) const override;
-    void Accept(ServiceVisitor &visitor) override;
 
 private:
     Script start_;
@@ -54,5 +51,7 @@ private:
 };
 
 } // namespace tt
+
+std::ostream &operator<<(std::ostream &oss, const tt::Oneshot &oneshot);
 
 #endif // TT_ONESHOT_HPP_

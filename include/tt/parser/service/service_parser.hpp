@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "tt/data/service.hpp"
 #include "tt/parser/service/parser_factory.hpp"
@@ -30,8 +31,8 @@ namespace tt {
 
 class ServiceParser {
 public:
-    std::shared_ptr<Service> &service();
-    explicit ServiceParser(const std::string &path);
+    Service &service();
+    explicit ServiceParser(std::string path);
 
 protected:
     static std::vector<std::string> GenerateListFrom(const std::string &path);
@@ -42,9 +43,10 @@ private:
 
     [[nodiscard]] size_t
     GetMainSectionIndex(const std::vector<std::string> &service_lines) const;
+    [[nodiscard]] Service ParseService();
 
     std::string path_;
-    std::shared_ptr<Service> service_;
+    Service service_;
 };
 
 } // namespace tt

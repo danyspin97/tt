@@ -28,6 +28,9 @@
 #include <sstream>
 #include <utility>
 
+#include "tt/data/bundle.hpp"
+#include "tt/data/longrun.hpp"
+#include "tt/data/oneshot.hpp"
 #include "tt/parser/service/dependency_reader.hpp"
 #include "tt/parser/service/exception.hpp"
 #include "tt/parser/service/instance_service_parser.hpp"
@@ -66,15 +69,15 @@ void ServicesParser::ParseService(const std::string &service_name) {
             SplitServiceNameFromInstance(new_service_name, token_index);
         auto path = GetPathForServiceName(new_service_name);
         auto service = InstanceServiceParser(path, instance_name).service();
-        service_map_[new_service_name + instance_name] = service;
+        auto service_name = new_service_name + instance_name;
+        service_map_.emplace(service_name, service);
         return;
     }
 
     auto path = GetPathForServiceName(service_name);
-    std::shared_ptr<Service> service = ServiceParser(path).service();
-    service_map_[service_name] = service;
-    DependencyReader dep_reader;
-    service->Accept(dep_reader);
+    service_map_.emplace(service_name, ServiceParser(path).service());
+    tt::DependencyReader dep_reader;
+    std::visit(dep_reader, service_map_.at(service_name));
     const auto deps = dep_reader.dependencies();
     ParseServices(deps);
 }
@@ -95,7 +98,7 @@ string ServicesParser::SplitServiceNameFromInstance(string &service_name,
 string ServicesParser::GetPathForServiceName(const string &name) {
     for (auto i = paths_.rbegin(); i != paths_.rend(); ++i) {
         string service_path = *i + "/" + name + suffix_;
-        struct stat buffer{};
+        struct stat buffer {};
         if (stat(service_path.c_str(), &buffer) == 0) {
             return service_path;
         }

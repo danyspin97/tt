@@ -27,9 +27,9 @@
 
 using std::ostream;
 
-tt::Service::Service(std::string name, std::string polish_name,
-                     std::string description, std::string path,
-                     tt::ServiceOptions &options)
+tt::ServiceImpl::ServiceImpl(std::string name, std::string polish_name,
+                             std::string description, std::string path,
+                             tt::ServiceOptions &options)
     : name_(std::move(name)), polish_name_(std::move(polish_name)),
       description_(std::move(description)), path_(std::move(path)),
       options_(options) {

@@ -31,7 +31,7 @@ namespace tt {
 
 class ServicesParser {
 public:
-    std::vector<std::unique_ptr<Service>> services();
+    std::vector<Service> services();
     void ParseServices(const std::vector<std::string> &service_names);
 
 protected:
@@ -50,6 +50,6 @@ protected:
     std::vector<std::string> paths_;
 
 private:
-    std::unordered_map<std::string, std::shared_ptr<Service>> service_map_;
+    std::unordered_map<std::string, Service> service_map_;
 };
 } // namespace tt

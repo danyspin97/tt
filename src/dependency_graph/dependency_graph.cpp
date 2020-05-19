@@ -24,13 +24,13 @@
 #include "tt/dependency_graph/service_node.hpp"
 #include "tt/parser/service/dependency_reader.hpp"
 
-size_t tt::DependencyGraph::AddNodes(
-    const std::vector<std::shared_ptr<Service>> &services) {
+size_t tt::DependencyGraph::AddNodes(const std::vector<tt::Service> &services) {
     size_t ret_index = nodes_.size();
     size_t current_index = ret_index;
     nodes_.reserve(services.size() + nodes_.size());
     for (auto &&service : services) {
-        const auto name = service->name();
+        auto get_name = [](auto &service) { return service.name(); };
+        const auto name = std::visit(get_name, service);
         if (!IsServiceEnabled(name)) {
             nodes_.emplace_back(service);
             name_to_index_[name] = current_index;
@@ -41,12 +41,12 @@ size_t tt::DependencyGraph::AddNodes(
 }
 
 void tt::DependencyGraph::PopulateDependant(
-    const std::vector<std::string> &services) {
+    const std::vector<std::string> &services) const {
     for (const auto &service_name : services) {
         auto node = GetServiceFromName(service_name);
         auto service = node.service();
         tt::DependencyReader dep_reader;
-        service->Accept(dep_reader);
+        std::visit(dep_reader, service);
         const auto deps = dep_reader.dependencies();
         for (auto &&dep : deps) {
             auto dep_node = GetServiceFromName(dep);

@@ -20,6 +20,9 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "tt/parser/service/service_parser.hpp"
 
 namespace tt {

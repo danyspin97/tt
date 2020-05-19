@@ -20,25 +20,21 @@
 
 #include "tt/parser/service/oneshot_director.hpp"
 
-#include <memory>
-
+#include "tt/data/bundle.hpp"
+#include "tt/data/longrun.hpp"
 #include "tt/data/oneshot.hpp"
-#include "tt/data/service.hpp"
 #include "tt/exception.hpp"
 #include "tt/parser/section/environment_builder.hpp"
 #include "tt/parser/section/main_section_builder.hpp"
 #include "tt/parser/section/oneshot_options_builder.hpp"
 #include "tt/parser/section/script_builder.hpp"
 
-using std::make_shared;
-using std::shared_ptr;
 using std::string;
 
 using tt::Exception;
 using tt::Oneshot;
 using tt::OneshotDirector;
 using tt::SectionBuilder;
-using tt::Service;
 
 OneshotDirector::OneshotDirector()
     : main_section_builder_(main_section_),
@@ -46,19 +42,18 @@ OneshotDirector::OneshotDirector()
       stop_script_builder_(environment_, "stop"),
       env_section_builder_(environment_), options_builder_(options_) {}
 
-shared_ptr<Service> OneshotDirector::InstanceService(const string &path) {
+tt::Service OneshotDirector::InstanceService(const string &path) {
     if (!start_script_builder_.HasScript()) {
         throw Exception("Service '" + main_section_.name +
                         "' does not have a [start] section");
     }
 
-    auto service =
-        make_shared<Oneshot>(main_section_.name, main_section_.polish_name,
-                             main_section_.description, path, options_,
-                             start_script_builder_.script());
+    auto service = Oneshot(main_section_.name, main_section_.polish_name,
+                           main_section_.description, path, options_,
+                           start_script_builder_.script());
 
     if (stop_script_builder_.HasScript()) {
-        service->stop(stop_script_builder_.script());
+        service.stop(stop_script_builder_.script());
     }
 
     return service;

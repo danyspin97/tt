@@ -50,7 +50,6 @@ public:
     virtual std::ostream &Dump(std::ostream &oss) const;
 
     virtual ~ServiceImpl() = default;
-    virtual void Accept(ServiceVisitor &) = 0;
 
 protected:
     ServiceImpl(std::string name, std::string polish_name,

@@ -24,7 +24,6 @@
 
 #include "tt/data/oneshot.hpp"
 
-using std::getline;
 using std::ifstream;
 using std::string;
 using std::vector;
@@ -43,8 +42,8 @@ TEST_CASE("OneshotDirector") {
         lines.push_back(line);
     }
     auto service = director.ParseAndGetService(lines, "/tmp/init-fsck");
-    auto *oneshot = dynamic_cast<Oneshot *>(service.get());
+    auto oneshot = std::get<Oneshot>(service);
 
-    CHECK(oneshot->name() == "init-fsck");
-    CHECK(oneshot->start().environment().Get("CMDARGS") == "-d");
+    CHECK(oneshot.name() == "init-fsck");
+    CHECK(oneshot.start().environment().Get("CMDARGS") == "-d");
 }

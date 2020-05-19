@@ -24,6 +24,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <utility>
 
 #include "tt/exception.hpp"
 #include "tt/parser/line/key_value_parser.hpp"
@@ -32,7 +33,6 @@
 #include "tt/parser/service/service_director.hpp"
 
 using std::ifstream;
-using std::shared_ptr;
 using std::string;
 using std::stringstream;
 using std::vector;
@@ -40,7 +40,6 @@ using std::vector;
 using tt::Exception;
 using tt::KeyValueParser;
 using tt::SectionLineParser;
-using tt::Service;
 using tt::ServiceParser;
 
 vector<string> ServiceParser::GenerateListFrom(const string &path) {
@@ -58,12 +57,14 @@ vector<string> ServiceParser::GenerateListFrom(const string &path) {
     return lines;
 }
 
-ServiceParser::ServiceParser(const string &path) {
-    path_ = path;
-    auto service_lines = GenerateListFrom(path);
+ServiceParser::ServiceParser(string path)
+    : path_(std::move(path)), service_(ParseService()) {}
+
+tt::Service tt::ServiceParser::ParseService() {
+    auto service_lines = GenerateListFrom(path_);
     const auto type = GetTypeFromService(service_lines);
     auto director = tt::ParserFactory::GetDirectorPerType(type);
-    service_ = director->ParseAndGetService(service_lines, path);
+    return director->ParseAndGetService(service_lines, path_);
 }
 
 string ServiceParser::GetTypeFromService(const vector<string> &service_lines) {
@@ -96,4 +97,4 @@ ServiceParser::GetMainSectionIndex(const vector<string> &service_lines) const {
     throw Exception(msg);
 }
 
-shared_ptr<Service> &ServiceParser::service() { return service_; }
+tt::Service &ServiceParser::service() { return service_; }

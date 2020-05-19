@@ -20,27 +20,17 @@
 
 #pragma once
 
-#include "tt/data/bundle_options.hpp"
-#include "tt/data/service.hpp"
-#include "tt/parser/section/bundle_options_builder.hpp"
-#include "tt/parser/section/main_section_builder.hpp"
-#include "tt/parser/service/service_director.hpp"
+#include <ostream>
+#include <variant>
+
+#include "tt/data/bundle.hpp"
+#include "tt/data/longrun.hpp"
+#include "tt/data/oneshot.hpp"
 
 namespace tt {
 
-class BundleDirector : public ServiceDirector {
-public:
-    BundleDirector();
-    ~BundleDirector() override = default;
+using Service = std::variant<Bundle, Longrun, Oneshot>;
 
-    Service InstanceService(const std::string &path) override;
-    SectionBuilder *GetBuilderForSection(const std::string &section) override;
-
-private:
-    MainSectionBuilder main_section_builder_;
-    BundleOptionsBuilder options_builder_;
-    MainSection main_section_;
-    BundleOptions options_;
-};
+std::ostream &operator<<(std::ostream &oss, Service const &service);
 
 } // namespace tt

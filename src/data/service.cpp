@@ -18,29 +18,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
-
-#include "tt/data/bundle_options.hpp"
 #include "tt/data/service.hpp"
-#include "tt/parser/section/bundle_options_builder.hpp"
-#include "tt/parser/section/main_section_builder.hpp"
-#include "tt/parser/service/service_director.hpp"
 
-namespace tt {
+#include <iostream>
 
-class BundleDirector : public ServiceDirector {
-public:
-    BundleDirector();
-    ~BundleDirector() override = default;
+std::ostream &tt::operator<<(std::ostream &oss, tt::Service const &service) {
+    std::cout << "HERE" << std::endl;
+    std::visit([&oss](auto &arg) { arg.Dump(oss); }, service);
 
-    Service InstanceService(const std::string &path) override;
-    SectionBuilder *GetBuilderForSection(const std::string &section) override;
-
-private:
-    MainSectionBuilder main_section_builder_;
-    BundleOptionsBuilder options_builder_;
-    MainSection main_section_;
-    BundleOptions options_;
-};
-
-} // namespace tt
+    return oss;
+}

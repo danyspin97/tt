@@ -23,21 +23,21 @@
 #include <memory>
 #include <vector>
 
-namespace tt {
+#include "tt/data/service.hpp"
 
-class Service;
+namespace tt {
 
 class ServiceNode {
 public:
-    explicit ServiceNode(std::shared_ptr<Service> service);
-    std::shared_ptr<Service> service();
+    explicit ServiceNode(Service service);
+    Service service();
 
-    void AddDependant(const std::shared_ptr<Service> &service_to_add);
+    void AddDependant(const Service &service_to_add);
 
 private:
-    std::shared_ptr<Service> service_;
-    std::vector<std::shared_ptr<Service>> dependant_;
-    std::vector<std::shared_ptr<Service>> optional_dependencies_;
+    Service service_;
+    std::vector<Service> dependant_;
+    std::vector<Service> optional_dependencies_;
 };
 
 } // namespace tt

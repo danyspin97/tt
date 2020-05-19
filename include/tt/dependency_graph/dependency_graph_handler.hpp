@@ -24,15 +24,14 @@
 #include <set>
 #include <vector>
 
+#include "tt/data/service.hpp"
 #include "tt/dependency_graph/dependency_graph.hpp"
 
 namespace tt {
 
-class Service;
-
 class DependencyGraphHandler {
     void AddServices(const std::vector<std::string> &services_to_enable,
-                     const std::vector<std::shared_ptr<Service>> &services);
+                     const std::vector<Service> &services);
     void RemoveServices(const std::vector<std::string> &service);
 
 private:

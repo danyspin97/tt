@@ -22,7 +22,6 @@
 
 #include <memory>
 
-#include "tt/data/longrun.hpp"
 #include "tt/data/service.hpp"
 #include "tt/exception.hpp"
 #include "tt/parser/section/environment_builder.hpp"
@@ -32,15 +31,12 @@
 #include "tt/parser/section/script_builder.hpp"
 #include "tt/parser/section/section_builder.hpp"
 
-using std::make_shared;
-using std::shared_ptr;
 using std::string;
 
 using tt::Exception;
 using tt::Longrun;
 using tt::LongrunDirector;
 using tt::SectionBuilder;
-using tt::Service;
 
 LongrunDirector::LongrunDirector()
     : main_section_builder_(main_section_),
@@ -49,22 +45,21 @@ LongrunDirector::LongrunDirector()
       logger_script_builder_(environment_, main_section_.name),
       env_section_builder_(environment_), options_builder_(options_) {}
 
-shared_ptr<Service> LongrunDirector::InstanceService(const string &path) {
+tt::Service LongrunDirector::InstanceService(const string &path) {
     if (!run_script_builder_.HasScript()) {
         throw Exception("Service '" + main_section_.name +
                         "' does not have a [run] section");
     }
 
-    auto service =
-        make_shared<Longrun>(main_section_.name, main_section_.polish_name,
-                             main_section_.description, path, options_,
-                             run_script_builder_.script());
+    auto service = Longrun(main_section_.name, main_section_.polish_name,
+                           main_section_.description, path, options_,
+                           run_script_builder_.script());
 
     if (finish_script_builder_.HasScript()) {
-        service->finish(finish_script_builder_.script());
+        service.finish(finish_script_builder_.script());
     }
     if (logger_script_builder_.HasScript()) {
-        service->logger(logger_script_builder_.logger_script());
+        service.logger(logger_script_builder_.logger_script());
     }
 
     return service;

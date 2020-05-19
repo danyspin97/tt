@@ -36,7 +36,7 @@ void tt::DependencyChecker::Validate(tt::DependencyGraph &graph,
     advance(itr, starting_index);
     for (; itr != services.end(); ++itr) {
         tt::DependencyReader dep_reader;
-        (*itr).service()->Accept(dep_reader);
+        std::visit(dep_reader, (*itr).service());
         const auto deps = dep_reader.dependencies();
         for (const auto &dep : deps) {
             std::cout << dep << std::endl;
