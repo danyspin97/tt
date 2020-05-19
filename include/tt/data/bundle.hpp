@@ -24,13 +24,13 @@
 #include <istream>
 
 #include "tt/data/bundle_options.hpp"
-#include "tt/data/service.hpp"
+#include "tt/data/service_impl.hpp"
 
 namespace tt {
 
 class ServiceVisitor;
 
-class Bundle : public Service {
+class Bundle : public ServiceImpl {
 public:
     Bundle(const std::string &name, const std::string &polish_name,
            const std::string &description, const std::string &path,

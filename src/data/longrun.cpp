@@ -30,11 +30,11 @@ using tt::ServiceVisitor;
 Longrun::Longrun(const std::string &name, const std::string &polish_name,
                  const std::string &description, const std::string &path,
                  LongrunOptions options, const Script &run)
-    : Service(name, polish_name, description, path, options), run_(run) {}
+    : ServiceImpl(name, polish_name, description, path, options), run_(run) {}
 
 ostream &Longrun::Dump(ostream &oss) const {
     oss << "[main]\n";
-    Service::Dump(oss);
+    ServiceImpl::Dump(oss);
     oss << "\ntype = longrun";
     oss << "\n\n[run]\n" << run();
     if (finish()) {

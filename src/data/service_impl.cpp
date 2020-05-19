@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/data/service.hpp"
+#include "tt/data/service_impl.hpp"
 
 #include <filesystem>
 #include <utility>
@@ -27,27 +27,23 @@
 
 using std::ostream;
 
-using tt::Service;
-using tt::ServiceNameDoNotMatchFileExecption;
-using tt::ServiceOptions;
-
-Service::Service(std::string name, std::string polish_name,
-                 std::string description, std::string path,
-                 ServiceOptions &options)
+tt::Service::Service(std::string name, std::string polish_name,
+                     std::string description, std::string path,
+                     tt::ServiceOptions &options)
     : name_(std::move(name)), polish_name_(std::move(polish_name)),
       description_(std::move(description)), path_(std::move(path)),
       options_(options) {
     ValidatePath();
 }
 
-void Service::ValidatePath() const {
+void tt::ServiceImpl::ValidatePath() const {
     std::filesystem::path file(path());
     if (file.stem() != name()) {
         throw ServiceNameDoNotMatchFileExecption();
     }
 }
 
-ostream &Service::Dump(ostream &oss) const {
+ostream &tt::ServiceImpl::Dump(ostream &oss) const {
     oss << "name = " << name();
     if (!polish_name().empty()) {
         oss << "\npolish_name = " << polish_name();
@@ -56,8 +52,4 @@ ostream &Service::Dump(ostream &oss) const {
         oss << "\ndescription = " << description();
     }
     return oss;
-}
-
-ostream &operator<<(ostream &oss, const Service &service) {
-    return service.Dump(oss);
 }

@@ -30,12 +30,12 @@ using tt::ServiceVisitor;
 Bundle::Bundle(const std::string &name, const std::string &polish_name,
                const std::string &description, const std::string &path,
                BundleOptions &options)
-    : Service(name, polish_name, description, path, options) {}
+    : ServiceImpl(name, polish_name, description, path, options) {}
 
 ostream &Bundle::Dump(ostream &oss) const {
-    Service::Dump(oss);
     oss << "[main]\n"
         << "\ntype = bundle";
+    ServiceImpl::Dump(oss);
     return oss << "\n\n[options]\n" << options();
 }
 

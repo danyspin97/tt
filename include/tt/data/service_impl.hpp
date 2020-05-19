@@ -18,8 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TT_SERVICE_HPP_
-#define TT_SERVICE_HPP_
+#pragma once
 
 #include <string>
 
@@ -28,7 +27,7 @@
 namespace tt {
 class ServiceVisitor;
 
-class Service {
+class ServiceImpl {
 public:
     [[nodiscard]] std::string name() const noexcept { return name_; }
 
@@ -50,12 +49,13 @@ public:
 
     virtual std::ostream &Dump(std::ostream &oss) const;
 
-    virtual ~Service() = default;
+    virtual ~ServiceImpl() = default;
     virtual void Accept(ServiceVisitor &) = 0;
 
 protected:
-    Service(std::string name, std::string polish_name, std::string description,
-            std::string path, ServiceOptions &options);
+    ServiceImpl(std::string name, std::string polish_name,
+                std::string description, std::string path,
+                ServiceOptions &options);
 
 private:
     void ValidatePath() const;
@@ -68,7 +68,3 @@ private:
 };
 
 } // namespace tt
-
-std::ostream &operator<<(std::ostream &oss, const tt::Service &service);
-
-#endif // TT_SERVICE_HPP_

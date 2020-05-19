@@ -24,13 +24,13 @@
 #include "tt/data/logger_script.hpp"
 #include "tt/data/longrun_options.hpp"
 #include "tt/data/script.hpp"
-#include "tt/data/service.hpp"
+#include "tt/data/service_impl.hpp"
 #include <optional>
 #include <string>
 
 namespace tt {
 
-class Longrun : public Service {
+class Longrun : public ServiceImpl {
 public:
     [[nodiscard]] Script run() const noexcept { return run_; }
 

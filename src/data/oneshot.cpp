@@ -30,11 +30,12 @@ using tt::ServiceVisitor;
 Oneshot::Oneshot(const std::string &name, const std::string &polish_name,
                  const std::string &description, const std::string &path,
                  OneshotOptions options, const Script &start)
-    : Service(name, polish_name, description, path, options), start_(start) {}
+    : ServiceImpl(name, polish_name, description, path, options),
+      start_(start) {}
 
 ostream &Oneshot::Dump(ostream &oss) const {
     oss << "[main]\n";
-    Service::Dump(oss);
+    ServiceImpl::Dump(oss);
     oss << "\ntype = oneshot";
     oss << "\n\n[start]\n" << start_;
     if (stop_) {

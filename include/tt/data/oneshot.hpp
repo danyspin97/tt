@@ -25,13 +25,13 @@
 
 #include "tt/data/oneshot_options.hpp"
 #include "tt/data/script.hpp"
-#include "tt/data/service.hpp"
+#include "tt/data/service_impl.hpp"
 
 namespace tt {
 
 class ServiceVisitor;
 
-class Oneshot : public Service {
+class Oneshot : public ServiceImpl {
 public:
     [[nodiscard]] Script start() const noexcept { return start_; }
 
