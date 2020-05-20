@@ -27,10 +27,9 @@ using std::ostream;
 using tt::LoggerScript;
 
 LoggerScript::LoggerScript(Type type, const std::string &execute,
-                           Environment &environment, std::string service_to_log,
-                           const std::string &user, const std::string &group)
-    : Script(type, execute, environment),
-      service_to_log_(std::move(service_to_log)) {
+                           std::string service_to_log, const std::string &user,
+                           const std::string &group)
+    : Script(type, execute), service_to_log_(std::move(service_to_log)) {
     this->user(user);
     this->group(group);
 }

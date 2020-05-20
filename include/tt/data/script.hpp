@@ -21,6 +21,7 @@
 #ifndef TT_DATA_SCRIPT_HPP_
 #define TT_DATA_SCRIPT_HPP_
 
+#include <cassert>
 #include <optional>
 #include <string>
 
@@ -45,8 +46,7 @@ public:
         return group_;
     }
     void group(const std::string &group) noexcept { group_ = group; }
-    [[nodiscard]] Environment environment() const noexcept { return env_; }
-    Script(Type type, std::string execute, Environment &environment);
+    Script(Type type, std::string execute);
     virtual ~Script() = default;
     virtual std::ostream &Dump(std::ostream &oss) const;
 
@@ -57,7 +57,6 @@ private:
     Type type_;
     std::optional<std::string> user_;
     std::optional<std::string> group_;
-    Environment &env_;
 };
 
 } // namespace tt

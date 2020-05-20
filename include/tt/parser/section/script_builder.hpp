@@ -23,7 +23,6 @@
 
 #include <string>
 
-#include "tt/data/environment.hpp"
 #include "tt/data/script.hpp"
 #include "tt/parser/section/code_section_builder.hpp"
 
@@ -31,7 +30,7 @@ namespace tt {
 
 class ScriptBuilder : public CodeSectionBuilder {
 public:
-    ScriptBuilder(Environment &environment, const std::string &section);
+    ScriptBuilder(const std::string &section);
     Script script() const;
     bool HasScript() const;
     void EndParsing() override;
@@ -40,8 +39,6 @@ protected:
     std::string &GetAttributeForKey(const std::string &key) override;
     std::string &GetCodeAttributeForKey(const std::string &key) override;
     Script::Type GetParsedType() const;
-
-    Environment &environment_;
 
     std::string type_;
     std::string user_;

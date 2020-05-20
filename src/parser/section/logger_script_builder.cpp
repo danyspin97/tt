@@ -35,10 +35,8 @@ using tt::LoggerScript;
 using tt::LoggerScriptBuilder;
 using tt::LoggerScriptInvalidSettingsException;
 
-LoggerScriptBuilder::LoggerScriptBuilder(Environment &environment,
-                                         std::string service_name)
-    : ScriptBuilder(environment, "log"),
-      service_name_(std::move(service_name)) {}
+LoggerScriptBuilder::LoggerScriptBuilder(std::string service_name)
+    : ScriptBuilder("log"), service_name_(std::move(service_name)) {}
 
 void LoggerScriptBuilder::EndParsing() {
     CheckParsedValues();
@@ -110,8 +108,8 @@ std::string LoggerScriptBuilder::GetDefaultDestination() const noexcept {
 }
 
 LoggerScript LoggerScriptBuilder::logger_script() const {
-    LoggerScript logger_script = LoggerScript(
-        GetParsedType(), execute_, environment_, service_name_, user_, group_);
+    LoggerScript logger_script =
+        LoggerScript(GetParsedType(), execute_, service_name_, user_, group_);
     // TODO: Check if EndParsing has been called
     return logger_script;
 }

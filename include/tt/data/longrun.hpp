@@ -32,6 +32,13 @@ namespace tt {
 
 class Longrun : public ServiceImpl {
 public:
+    Longrun(const std::string &name, const std::string &polish_name,
+            const std::string &description, const std::string &path,
+            LongrunOptions options, Environment environment, const Script &run);
+
+    [[nodiscard]] Environment environment() const noexcept {
+        return environment_;
+    }
     [[nodiscard]] Script run() const noexcept { return run_; }
 
     [[nodiscard]] std::optional<Script> finish() const noexcept {
@@ -48,13 +55,10 @@ public:
         logger_.emplace(logger);
     }
 
-    Longrun(const std::string &name, const std::string &polish_name,
-            const std::string &description, const std::string &path,
-            LongrunOptions options, const Script &run);
-
     std::ostream &Dump(std::ostream &oss) const override;
 
 private:
+    Environment environment_;
     Script run_;
     std::optional<Script> finish_;
     std::optional<LoggerScript> logger_;

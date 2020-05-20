@@ -28,8 +28,10 @@ using tt::Longrun;
 
 Longrun::Longrun(const std::string &name, const std::string &polish_name,
                  const std::string &description, const std::string &path,
-                 LongrunOptions options, const Script &run)
-    : ServiceImpl(name, polish_name, description, path, options), run_(run) {}
+                 LongrunOptions options, Environment environment,
+                 const Script &run)
+    : ServiceImpl(name, polish_name, description, path, options),
+      environment_(std::move(environment)), run_(run) {}
 
 ostream &Longrun::Dump(ostream &oss) const {
     oss << "[main]\n";
@@ -41,8 +43,8 @@ ostream &Longrun::Dump(ostream &oss) const {
     }
     oss << "\n\n[logger]\n" << logger().value();
     oss << "\n\n[options]\n" << options();
-    if (!run().environment().GetAll().empty()) {
-        oss << "\n\n[config]\n" << run().environment();
+    if (!environment_.GetAll().empty()) {
+        oss << "\n\n[config]\n" << environment_;
     }
     return oss;
 }

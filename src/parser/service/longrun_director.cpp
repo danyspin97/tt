@@ -39,10 +39,9 @@ using tt::LongrunDirector;
 using tt::SectionBuilder;
 
 LongrunDirector::LongrunDirector()
-    : main_section_builder_(main_section_),
-      run_script_builder_(environment_, "run"),
-      finish_script_builder_(environment_, "finish"),
-      logger_script_builder_(environment_, main_section_.name),
+    : main_section_builder_(main_section_), run_script_builder_("run"),
+      finish_script_builder_("finish"),
+      logger_script_builder_(main_section_.name),
       env_section_builder_(environment_), options_builder_(options_) {}
 
 tt::Service LongrunDirector::InstanceService(const string &path) {
@@ -53,7 +52,7 @@ tt::Service LongrunDirector::InstanceService(const string &path) {
 
     auto service = Longrun(main_section_.name, main_section_.polish_name,
                            main_section_.description, path, options_,
-                           run_script_builder_.script());
+                           environment_, run_script_builder_.script());
 
     if (finish_script_builder_.HasScript()) {
         service.finish(finish_script_builder_.script());

@@ -30,8 +30,7 @@ using tt::ScriptBuilder;
 using tt::TestBuilderWithFile;
 
 TEST_CASE("ScriptBuilder") {
-    Environment e;
-    auto builder = ScriptBuilder(e, "test");
+    auto builder = ScriptBuilder("test");
     SECTION("Parse valid script section") {
         TestBuilderWithFile(builder, "../test/data/script_section");
         Script s = builder.script();

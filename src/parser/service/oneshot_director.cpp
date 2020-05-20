@@ -37,10 +37,9 @@ using tt::OneshotDirector;
 using tt::SectionBuilder;
 
 OneshotDirector::OneshotDirector()
-    : main_section_builder_(main_section_),
-      start_script_builder_(environment_, "start"),
-      stop_script_builder_(environment_, "stop"),
-      env_section_builder_(environment_), options_builder_(options_) {}
+    : main_section_builder_(main_section_), start_script_builder_("start"),
+      stop_script_builder_("stop"), env_section_builder_(environment_),
+      options_builder_(options_) {}
 
 tt::Service OneshotDirector::InstanceService(const string &path) {
     if (!start_script_builder_.HasScript()) {
@@ -50,7 +49,7 @@ tt::Service OneshotDirector::InstanceService(const string &path) {
 
     auto service = Oneshot(main_section_.name, main_section_.polish_name,
                            main_section_.description, path, options_,
-                           start_script_builder_.script());
+                           environment_, start_script_builder_.script());
 
     if (stop_script_builder_.HasScript()) {
         service.stop(stop_script_builder_.script());

@@ -35,8 +35,8 @@ public:
     }
 
     LoggerScript(Type type, const std::string &execute,
-                 Environment &environment, std::string service_to_log,
-                 const std::string &user, const std::string &group);
+                 std::string service_to_log, const std::string &user,
+                 const std::string &group);
 
     std::ostream &Dump(std::ostream &oss) const override;
 

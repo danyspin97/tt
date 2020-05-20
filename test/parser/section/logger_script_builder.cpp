@@ -32,8 +32,7 @@ using tt::LoggerScript;
 using tt::LoggerScriptBuilder;
 
 TEST_CASE("LoggerScriptBuilder") {
-    Environment e = Environment();
-    auto builder = LoggerScriptBuilder(e, "foo");
+    auto builder = LoggerScriptBuilder("foo");
 
     SECTION("Parse valid section") {
         TestBuilderWithFile(builder, "../test/data/logger_script");

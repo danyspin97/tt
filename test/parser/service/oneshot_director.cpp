@@ -45,5 +45,5 @@ TEST_CASE("OneshotDirector") {
     auto oneshot = std::get<Oneshot>(service);
 
     CHECK(oneshot.name() == "init-fsck");
-    CHECK(oneshot.start().environment().Get("CMDARGS") == "-d");
+    CHECK(oneshot.environment().Get("CMDARGS") == "-d");
 }

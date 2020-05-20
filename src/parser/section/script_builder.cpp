@@ -32,9 +32,8 @@ using tt::AttributeNotFound;
 using tt::Script;
 using tt::ScriptBuilder;
 
-ScriptBuilder::ScriptBuilder(Environment &environment,
-                             const std::string &section)
-    : CodeSectionBuilder(section), environment_(environment) {}
+ScriptBuilder::ScriptBuilder(const std::string &section)
+    : CodeSectionBuilder(section) {}
 
 void ScriptBuilder::EndParsing() {
     if (execute_.empty()) {
@@ -89,7 +88,7 @@ Script::Type tt::ScriptBuilder::GetParsedType() const {
 }
 
 Script ScriptBuilder::script() const {
-    Script script = Script(GetParsedType(), execute_, environment_);
+    Script script = Script(GetParsedType(), execute_);
 
     if (!user_.empty()) {
         script.user(user_);

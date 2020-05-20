@@ -26,8 +26,8 @@ using std::ostream;
 
 using tt::Script;
 
-Script::Script(Type type, std::string execute, Environment &environment)
-    : execute_(std::move(execute)), type_(type), env_(environment) {}
+Script::Script(Type type, std::string execute)
+    : execute_(std::move(execute)), type_(type) {}
 
 ostream &Script::Dump(ostream &oss) const {
     // TODO: Convert from Type to string

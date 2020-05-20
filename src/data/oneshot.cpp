@@ -28,9 +28,10 @@ using tt::Oneshot;
 
 Oneshot::Oneshot(const std::string &name, const std::string &polish_name,
                  const std::string &description, const std::string &path,
-                 OneshotOptions options, const Script &start)
+                 OneshotOptions options, Environment environment,
+                 const Script &start)
     : ServiceImpl(name, polish_name, description, path, options),
-      start_(start) {}
+      environment_(std::move(environment)), start_(start) {}
 
 ostream &Oneshot::Dump(ostream &oss) const {
     oss << "[main]\n";
@@ -41,8 +42,8 @@ ostream &Oneshot::Dump(ostream &oss) const {
         oss << "\n\n[stop]\n" << stop().value();
     }
     oss << "\n\n[options]\n" << options();
-    if (!start_.environment().GetAll().empty()) {
-        oss << "\n\n[config]\n" << start_.environment();
+    if (!environment_.GetAll().empty()) {
+        oss << "\n\n[config]\n" << environment_;
     }
     return oss;
 }
