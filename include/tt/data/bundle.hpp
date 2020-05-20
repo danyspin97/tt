@@ -36,6 +36,12 @@ public:
            const std::string &description, const std::string &path,
            BundleOptions &options);
 
+    Bundle(Bundle &) = default;
+    Bundle(Bundle &&) noexcept = default;
+    Bundle(Bundle const &) noexcept = default;
+    Bundle &operator=(Bundle &&) = default;
+    Bundle &operator=(Bundle const &) = default;
+
     std::ostream &Dump(std::ostream &oss) const override;
 };
 

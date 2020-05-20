@@ -36,6 +36,12 @@ public:
             const std::string &description, const std::string &path,
             LongrunOptions options, Environment environment, const Script &run);
 
+    Longrun(Longrun &) = default;
+    Longrun(Longrun &&) noexcept = default;
+    Longrun(Longrun const &) noexcept = default;
+    Longrun &operator=(Longrun &&) = default;
+    Longrun &operator=(Longrun const &) = default;
+
     [[nodiscard]] Environment environment() const noexcept {
         return environment_;
     }

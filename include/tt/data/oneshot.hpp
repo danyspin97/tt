@@ -36,6 +36,11 @@ public:
             const std::string &description, const std::string &path,
             OneshotOptions options, Environment environment,
             const Script &start);
+    Oneshot(Oneshot &) = default;
+    Oneshot(Oneshot &&) noexcept = default;
+    Oneshot(Oneshot const &) noexcept = default;
+    Oneshot &operator=(Oneshot &&) = default;
+    Oneshot &operator=(Oneshot const &) = default;
 
     [[nodiscard]] Environment environment() const noexcept {
         return environment_;
