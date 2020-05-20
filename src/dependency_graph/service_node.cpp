@@ -20,11 +20,19 @@
 
 #include "tt/dependency_graph/service_node.hpp"
 
+#include <algorithm>
+
 tt::ServiceNode::ServiceNode(tt::Service service)
-    : service_(std::move(service)) {}
-
-tt::Service tt::ServiceNode::service() { return service_; }
-
-void tt::ServiceNode::AddDependant(const tt::Service &service_to_add) {
-    dependant_.push_back(service_to_add);
+    : service_(std::move(service)), dependants_(0) {
+    service_name_ = std::visit([](auto &arg) { return arg.name(); }, service);
 }
+
+std::string_view tt::ServiceNode::name() const { return service_name_; }
+
+tt::Service tt::ServiceNode::service() const { return service_; }
+
+void tt::ServiceNode::AddDependant() { dependants_++; }
+
+bool tt::ServiceNode::HasDependants() const { return dependants_ != 0; }
+
+void tt::ServiceNode::RemoveDependant() { dependants_--; }

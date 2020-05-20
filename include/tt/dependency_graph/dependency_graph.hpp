@@ -33,21 +33,30 @@ class ServiceNode;
 
 class DependencyGraph {
 private:
-    std::set<std::string> enabled_services_;
-    std::map<std::string, size_t> name_to_index_;
-    std::vector<ServiceNode> nodes_;
+    std::set<std::string_view> enabled_services_;
+    std::map<std::string_view, size_t> name_to_index_;
+    std::vector<ServiceNode> services_;
 
 public:
-    [[nodiscard]] const std::set<std::string> &enabled_services() const;
+    [[nodiscard]] const std::set<std::string_view> &enabled_services() const;
     [[nodiscard]] const std::vector<ServiceNode> &services() const;
 
     size_t AddNodes(const std::vector<Service> &services);
+    void AddServices(const std::vector<std::string> &services_to_enable,
+                     const std::vector<tt::Service> &services);
     void AddEnabledServices(const std::vector<std::string> &services_to_enable);
-    [[nodiscard]] const ServiceNode &
-    GetServiceFromName(const std::string &name) const;
+    [[nodiscard]] ServiceNode &GetServiceFromName(const std::string &name);
     [[nodiscard]] bool IsServiceActive(const std::string &service) const;
     [[nodiscard]] bool IsServiceEnabled(const std::string &service) const;
-    void PopulateDependant(const std::vector<std::string> &services) const;
+    [[nodiscard]] bool IsServiceUsed(const ServiceNode &node) const;
+    void PopulateDependant(const std::vector<std::string> &services);
+    void RemoveServices(const std::vector<std::string> &services);
+    void RemoveEnabledServices(const std::vector<std::string> &services);
+    void RemoveUnusedServices();
+    void RemoveService(const ServiceNode &node);
+    void ValidateDependencies(size_t starting_index) const;
+    void UpdateDependant(const ServiceNode &node);
+    void UpdateDependants();
 };
 
 } // namespace tt

@@ -27,17 +27,25 @@
 
 namespace tt {
 
+class ServiceNode;
+
+using ServiceNodeRef = std::reference_wrapper<ServiceNode>;
+
 class ServiceNode {
 public:
     explicit ServiceNode(Service service);
-    Service service();
+    [[nodiscard]] Service service() const;
+    [[nodiscard]] std::string_view name() const;
 
-    void AddDependant(const Service &service_to_add);
+    void AddDependant();
+    [[nodiscard]] bool HasDependants() const;
+    void RemoveDependant();
 
 private:
     Service service_;
-    std::vector<Service> dependant_;
-    std::vector<Service> optional_dependencies_;
+    std::string_view service_name_;
+    uint_fast8_t dependants_;
+    std::vector<ServiceNodeRef> optional_dependencies_;
 };
 
 } // namespace tt

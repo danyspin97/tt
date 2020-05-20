@@ -18,12 +18,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/dependency_graph/dependency_checker.hpp"
+#include "tt/dependency_graph/dependency_graph.hpp"
 
 #include "catch2/catch.hpp"
 
 #include "tt/data/service.hpp"
-#include "tt/dependency_graph/dependency_graph.hpp"
 #include "tt/dependency_graph/service_node.hpp"
 #include "tt/parser/service/service_parser.hpp"
 #include "tt/parser/service/services_parser.hpp"
@@ -36,7 +35,7 @@ TEST_CASE("DependencyChecker") {
         auto service = parser.service();
         auto services = std::vector<tt::Service>{service};
         graph.AddNodes(services);
-        REQUIRE_THROWS(tt::DependencyChecker::Validate(graph, 0));
+        REQUIRE_THROWS(graph.ValidateDependencies(0));
     }
 
     SECTION("mount-fstab with unresolved deps") {
@@ -49,6 +48,6 @@ TEST_CASE("DependencyChecker") {
             services.push_back(service);
         }
         graph.AddNodes(services);
-        REQUIRE_THROWS(tt::DependencyChecker::Validate(graph, 0));
+        REQUIRE_THROWS(graph.ValidateDependencies(0));
     }
 }
