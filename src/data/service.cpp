@@ -20,10 +20,7 @@
 
 #include "tt/data/service.hpp"
 
-#include <iostream>
-
 std::ostream &tt::operator<<(std::ostream &oss, tt::Service const &service) {
-    std::cout << "HERE" << std::endl;
     std::visit([&oss](auto &arg) { arg.Dump(oss); }, service);
 
     return oss;
