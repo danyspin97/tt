@@ -45,8 +45,10 @@ public:
     void AddServices(const std::vector<std::string> &services_to_enable,
                      const std::vector<tt::Service> &services);
     void AddEnabledServices(const std::vector<std::string> &services_to_enable);
+    template <typename Func>
+    void ForEachDependency(const ServiceNode &node, Func function);
     [[nodiscard]] ServiceNode &GetServiceFromName(const std::string &name);
-    [[nodiscard]] bool IsServiceActive(const std::string &service) const;
+    [[nodiscard]] bool IsServiceActive(const std::string_view &service) const;
     [[nodiscard]] bool IsServiceEnabled(const std::string &service) const;
     [[nodiscard]] bool IsServiceUsed(const ServiceNode &node) const;
     void PopulateDependant(const std::vector<std::string> &services);
@@ -54,7 +56,7 @@ public:
     void RemoveEnabledServices(const std::vector<std::string> &services);
     void RemoveUnusedServices();
     void RemoveService(const ServiceNode &node);
-    void ValidateDependencies(size_t starting_index) const;
+    void ValidateDependencies(size_t starting_index);
     void UpdateDependant(const ServiceNode &node);
     void UpdateDependants();
 };

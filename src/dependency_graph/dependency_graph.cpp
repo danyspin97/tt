@@ -57,29 +57,20 @@ void tt::DependencyGraph::PopulateDependant(
     const std::vector<std::string> &services) {
     for (const auto &service_name : services) {
         auto &node = GetServiceFromName(service_name);
-        auto service = node.service();
-        tt::DependencyReader dep_reader;
-        std::visit(dep_reader, service);
-        const auto deps = dep_reader.dependencies();
-        for (auto &&dep : deps) {
-            auto &dep_node = GetServiceFromName(dep);
-            dep_node.AddDependant();
-        }
+        ForEachDependency(node,
+                          [&](auto &dep_node) { dep_node.AddDependant(); });
     }
 }
 
-void tt::DependencyGraph::ValidateDependencies(size_t starting_index) const {
+void tt::DependencyGraph::ValidateDependencies(size_t starting_index) {
     auto itr = services_.begin();
     advance(itr, starting_index);
     for (; itr != services_.end(); ++itr) {
-        tt::DependencyReader dep_reader;
-        std::visit(dep_reader, (*itr).service());
-        const auto deps = dep_reader.dependencies();
-        for (const auto &dep : deps) {
-            if (!IsServiceActive(dep)) {
+        ForEachDependency(*itr, [&](auto &dep_node) {
+            if (!IsServiceActive(dep_node.name())) {
                 throw tt::Exception("Dep not respected");
             }
-        }
+        });
     }
 }
 
@@ -121,15 +112,23 @@ void tt::DependencyGraph::UpdateDependants() {
 }
 
 void tt::DependencyGraph::UpdateDependant(const ServiceNode &node) {
+    ForEachDependency(node, [&](auto &dep_node) {
+        dep_node.RemoveDependant();
+        if (!IsServiceUsed(dep_node)) {
+            UpdateDependant(dep_node);
+        }
+    });
+}
+
+template <typename Func>
+void tt::DependencyGraph::ForEachDependency(const ServiceNode &node,
+                                            Func function) {
     tt::DependencyReader dep_reader;
     std::visit(dep_reader, node.service());
     const auto deps = dep_reader.dependencies();
     for (auto &&dep : deps) {
         auto &dep_node = GetServiceFromName(dep);
-        dep_node.RemoveDependant();
-        if (!IsServiceUsed(dep_node)) {
-            UpdateDependant(dep_node);
-        }
+        function(dep_node);
     }
 }
 
@@ -152,7 +151,8 @@ tt::DependencyGraph::GetServiceFromName(const std::string &name) {
     return services_.at(index);
 }
 
-bool tt::DependencyGraph::IsServiceActive(const std::string &service) const {
+bool tt::DependencyGraph::IsServiceActive(
+    const std::string_view &service) const {
     auto itr = name_to_index_.find(service);
     return itr != name_to_index_.end();
 }
