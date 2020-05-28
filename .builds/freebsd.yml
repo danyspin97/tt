@@ -1,0 +1,16 @@
+image: freebsd/latest
+packages:
+  - gcc9
+  - meson
+sources:
+  - https://github.com/danyspin97/tt
+tasks:
+  - setup: |
+      cd tt
+      CXX=g++9 meson -Dtests=enabled --unity on build
+  - build: |
+      cd tt
+      ninja -C build
+  - test: |
+      cd tt
+      ninja -C build test
