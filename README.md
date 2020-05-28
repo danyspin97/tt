@@ -1,6 +1,7 @@
 # tt
 
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fdanyspin97%2Ftt%2Fbadge&style=flat-square)](https://actions-badge.atrox.dev/danyspin97/tt/goto)
+![Coveralls github](https://img.shields.io/coveralls/github/DanySpin97/tt?logo=coveralls&style=flat-square)
 [![CodeFactor](https://img.shields.io/codefactor/grade/github/danyspin97/tt?logo=CodeFactor&style=flat-square)](https://www.codefactor.io/repository/github/danyspin97/tt)
 [![Codacy Badge](https://img.shields.io/codacy/grade/964fc2e2d7374cda979ac4b470e93561?logo=Codacy&style=flat-square)](https://www.codacy.com/manual/danyspin97/tt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DanySpin97/tt&amp;utm_campaign=Badge_Grade)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/DanySpin97/tt.svg?logo=lgtm&logoWidth=18&style=flat-square)](https://lgtm.com/projects/g/DanySpin97/tt/alerts/)
