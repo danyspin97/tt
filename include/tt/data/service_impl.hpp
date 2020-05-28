@@ -50,11 +50,6 @@ public:
     virtual std::ostream &Dump(std::ostream &oss) const;
 
     virtual ~ServiceImpl() = default;
-    ServiceImpl(ServiceImpl &) = default;
-    ServiceImpl(ServiceImpl &&) = default;
-    ServiceImpl(ServiceImpl const &) = default;
-    ServiceImpl &operator=(ServiceImpl &&) = default;
-    ServiceImpl &operator=(ServiceImpl const &) = default;
 
 protected:
     ServiceImpl(std::string name, std::string polish_name,
