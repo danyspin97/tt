@@ -23,7 +23,7 @@ jobs:
           compiler=${{ matrix.compiler }}
           compiler=${compiler/clang++/clang}
           sudo apt-get install --force-yes ${compiler}
-          pip3 install meson gcovr
+          pip3 install meson gcovr cpp-coveralls
 
       - name: Build using meson
         env:
@@ -35,4 +35,12 @@ jobs:
 
       - name: Run meson tests
         run: ninja -C build test
+
+      - name: Generate coverage
+        run: ninja -C build coverage-text
+
+      - name: Send coverago to coveralls
+        run: coveralls -e tests -e include/args.hxx -b build --gcov-options '\-lp'
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
