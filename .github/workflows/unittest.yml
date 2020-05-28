@@ -23,40 +23,15 @@ jobs:
           compiler=${{ matrix.compiler }}
           compiler=${compiler/clang++/clang}
           sudo apt-get install --force-yes ${compiler}
-          pip3 install meson gcovr cpp-coveralls
+          pip3 install meson
 
       - name: Build using meson
         env:
           CXX: ${{ matrix.compiler }}
         run: |
           meson --unity on -Dtests=enabled -Db_lundef=false \
-          -Db_sanitize=address,undefined -Db_coverage=true build && \
+          -Db_sanitize=address,undefined build && \
           ninja -C build
 
       - name: Run meson tests
         run: ninja -C build test
-
-      - name: Generate coverage
-        run: ninja -C build coverage-text
-
-      - name: Send coverago to coveralls
-        run: |
-          COVERALLS_ARGS="-e build -e include/args.hxx -e subprojects -e test -b build"
-          if [[ "${CXX}" == g++* ]];
-          then coveralls ${COVERALLS_ARGS} --gcov /usr/bin/${CXX/\+\+/cov} --gcov-options '\-lp';
-          else coveralls ${COVERALLS_ARGS} --gcov $(which ${CXX/clang\+\+/llvm-cov}) --gcov-options 'gcov \-lp';
-          fi
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-          CXX: ${{ matrix.compiler }}
-          TRAVIS_JOB_ID: ${{ github.run_id }}
-          COVERALLS_PARALLEL: 1
-  finish:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.github_token }}
-        parallel-finished: true
