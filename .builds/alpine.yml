@@ -7,8 +7,7 @@ sources:
 tasks:
   - setup: |
       cd tt
-      meson -Dtests=enabled --unity on -Db_lundef=false \
-      -Db_sanitize=address,undefined build
+      meson -Dtests=enabled --unity on build
   - build: |
       cd tt
       ninja -C build
