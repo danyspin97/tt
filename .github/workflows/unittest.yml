@@ -40,7 +40,12 @@ jobs:
         run: ninja -C build coverage-text
 
       - name: Send coverago to coveralls
-        run: if [[ "${CXX}" == g++* ]]; then coveralls -e tests -e include/args.hxx -b build --gcov /usr/bin/${CXX/\+\+/cov} --gcov-options '\-lp'; fi
+        run: |
+          COVERALLS_ARGS="-e build -e include/args.hxx -e subprojects -e test -b build"
+          if [[ "${CXX}" == g++* ]];
+          then coveralls ${COVERALLS_ARGS} --gcov /usr/bin/${CXX/\+\+/cov} --gcov-options '\-lp';
+          else coveralls ${COVERALLS_ARGS} --gcov $(which ${CXX/clang\+\+/llvm-cov}) --gcov-options 'gcov \-lp';
+          fi
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
           CXX: ${{ matrix.compiler }}
