@@ -49,6 +49,8 @@ jobs:
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
           CXX: ${{ matrix.compiler }}
+          TRAVIS_JOB_ID: $${ github.run_id }}
+          COVERALLS_PARALLEL: 1
   finish:
     needs: test
     runs-on: ubuntu-latest
