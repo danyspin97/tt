@@ -19,6 +19,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-9
+      python: 3.7
       env:
         - CXX=g++-9
 
