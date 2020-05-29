@@ -30,7 +30,7 @@ namespace tt {
 
 class ScriptBuilder : public CodeSectionBuilder {
 public:
-    ScriptBuilder(const std::string &section);
+    explicit ScriptBuilder(const std::string &section);
     Script script() const;
     bool HasScript() const;
     void EndParsing() override;
