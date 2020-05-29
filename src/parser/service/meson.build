@@ -1,6 +1,5 @@
 tt_src += files(
     'bundle_director.cpp',
-    'dependency_reader.cpp',
     'instance_service_parser.cpp',
     'longrun_director.cpp',
     'oneshot_director.cpp',

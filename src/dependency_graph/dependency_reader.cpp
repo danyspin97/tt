@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/parser/service/dependency_reader.hpp"
+#include "tt/dependency_graph/dependency_reader.hpp"
 
 #include "tt/data/bundle.hpp"
 #include "tt/data/bundle_options.hpp"
@@ -36,16 +36,19 @@ using tt::Oneshot;
 using tt::OneshotOptions;
 
 void DependencyReader::operator()(const Bundle &bundle) {
-    const auto &options_ = dynamic_cast<const BundleOptions &>(bundle.options());
+    const auto &options_ =
+        dynamic_cast<const BundleOptions &>(bundle.options());
     dependencies_ = options_.contents();
 }
 
 void DependencyReader::operator()(const Longrun &longrun) {
-    const auto &options_ = dynamic_cast<const LongrunOptions &>(longrun.options());
+    const auto &options_ =
+        dynamic_cast<const LongrunOptions &>(longrun.options());
     dependencies_ = options_.dependencies();
 }
 
 void DependencyReader::operator()(const Oneshot &oneshot) {
-    const auto &options_ = dynamic_cast<const OneshotOptions &>(oneshot.options());
+    const auto &options_ =
+        dynamic_cast<const OneshotOptions &>(oneshot.options());
     dependencies_ = options_.dependencies();
 }

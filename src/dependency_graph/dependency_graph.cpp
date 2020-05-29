@@ -27,7 +27,6 @@
 #include "tt/dependency_graph/service_node.hpp"
 #include "tt/dependency_graph/utils.hpp"
 #include "tt/exception.hpp"
-#include "tt/parser/service/dependency_reader.hpp"
 
 void tt::DependencyGraph::AddServices(
     const std::vector<std::string> &services_to_enable,

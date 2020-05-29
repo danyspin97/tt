@@ -21,7 +21,7 @@
 #pragma once
 
 #include "tt/data/service.hpp"
-#include "tt/parser/service/dependency_reader.hpp"
+#include "tt/dependency_graph/dependency_reader.hpp"
 
 namespace tt {
 
