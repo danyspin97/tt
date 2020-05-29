@@ -24,4 +24,4 @@ script:
   - ninja -C build
   - ninja -C build test
   - ninja -C build coverage-text
-  - coveralls -e build -e include/args.hxx -e subprojects -e test -b build --gcov /usr/bin/${CXX/\+\+/cov} --gcov-options '\-lp'
+  - coveralls -e include/args.hxx -e subprojects -e test -b build --gcov /usr/bin/gcov-9 --gcov-options '\-lp'
