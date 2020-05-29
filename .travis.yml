@@ -9,18 +9,7 @@ env:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "NpFRjt6BCLrzhu5rzUMcXWH9yC7LuMhjcx1vUdCi2j51baXKqP91nXK/vwwpD1kfHw2aa1huhJzqnnyZPZMcgMEkNYuZ7h6+VzqiXVpDkXh413f7UEP0s7gjYmJeE7B65IjS20xKMSmsWQlrCHTSr5JIqdQW4jCmn8UTda+skTGetrjxBFytig28696s2eBe0X9Zhdw8gMXS5MzaqJLoyRnlFV9EyphrXT8k/4+pWSAXvMr9QQttD8/0oDG1/fbXyWOUJRF3BYvsiTVOuIh9ZRApJhTS5/+4i/UpYH39JOMjYIzE4R3DijQg1//kLrG9/XxWO6TUFVPeRkUdK6oQpPO79wdS+FQ8emwetdlP7+KenLzv4M/MtGuH1YG390aL8jLNWE0xMzHmXxlB/iaG3PoqbyxKHfapLbEqlYBWWjriWRjr9w6iKQ40EDBcZAqdVwNmNg6pgvUjOw3cQ2nWy+5Y2aVp1YSAh0OzsjO/4K4XPq4a3UO/yDC8LHvdm5l3EpZq/L60YKepz8l7syKrYi4f15oegGX9wqRf0x63N0RJokhwWrDg5vj0XCu9NtAtR73vWM7iqh5WMrGFsU+Jco527jycTuVbPQw+rYWMtH2zq1beGe7S/KMwDcn2djEuwspIqVfAqgOHJLje2ZHCDaKzQpffYhPVK8ULMu5XbgU="
-
-matrix:
-  include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-9
-      env:
-        - CXX=g++-9
+   - CXX=g++-9
 
 before_install:
   - pyenv global 3.6
@@ -36,6 +25,11 @@ script:
   - coveralls -e include/args.hxx -e subprojects -e test -b build --gcov /usr/bin/gcov-9 --gcov-options '\-lp'
 
 addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-9
   coverity_scan:
     project:
       name: "DanySpin97/tt"
