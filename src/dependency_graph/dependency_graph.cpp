@@ -25,6 +25,7 @@
 
 #include "tt/data/service.hpp"
 #include "tt/dependency_graph/service_node.hpp"
+#include "tt/dependency_graph/utils.hpp"
 #include "tt/exception.hpp"
 #include "tt/parser/service/dependency_reader.hpp"
 
@@ -38,14 +39,14 @@ void tt::DependencyGraph::AddServices(
 }
 
 size_t tt::DependencyGraph::AddNodes(const std::vector<tt::Service> &services) {
-    size_t ret_index = services_.size();
+    size_t ret_index = nodes_.size();
     size_t current_index = ret_index;
-    services_.reserve(services.size() + services_.size());
+    nodes_.reserve(services.size() + nodes_.size());
     for (auto &&service : services) {
         auto get_name = [](auto &service) { return service.name(); };
         const auto name = std::visit(get_name, service);
         if (!IsServiceEnabled(name)) {
-            services_.emplace_back(service);
+            nodes_.emplace_back(service);
             name_to_index_[name] = current_index;
             current_index++;
         }
@@ -56,18 +57,18 @@ size_t tt::DependencyGraph::AddNodes(const std::vector<tt::Service> &services) {
 void tt::DependencyGraph::PopulateDependant(
     const std::vector<std::string> &services) {
     for (const auto &service_name : services) {
-        auto &node = GetServiceFromName(service_name);
-        ForEachDependency(node,
-                          [&](auto &dep_node) { dep_node.AddDependant(); });
+        auto &node = GetNodeFromName(service_name);
+        ForEachDependencyOfNode(
+            node, [&](auto &dep_node) { dep_node.AddDependant(); });
     }
 }
 
 void tt::DependencyGraph::ValidateDependencies(size_t starting_index) {
-    auto itr = services_.begin();
+    auto itr = nodes_.begin();
     advance(itr, starting_index);
-    for (; itr != services_.end(); ++itr) {
-        ForEachDependency(*itr, [&](auto &dep_node) {
-            if (!IsServiceActive(dep_node.name())) {
+    for (; itr != nodes_.end(); ++itr) {
+        tt::ForEachDependencyOfService(itr->service(), [&](auto &dep) {
+            if (!HasService(dep)) {
                 throw tt::Exception("Dep not respected");
             }
         });
@@ -90,9 +91,8 @@ void tt::DependencyGraph::RemoveServices(
 
 void tt::DependencyGraph::AddEnabledServices(
     const std::vector<std::string> &services_to_enable) {
-    for (auto &&service : services_to_enable) {
-        enabled_services_.insert(service);
-    }
+    enabled_services_.insert(services_to_enable.begin(),
+                             services_to_enable.end());
 }
 
 void tt::DependencyGraph::RemoveEnabledServices(
@@ -104,55 +104,50 @@ void tt::DependencyGraph::RemoveEnabledServices(
 }
 
 void tt::DependencyGraph::UpdateDependants() {
-    for (auto &service : services_) {
-        if (!IsServiceUsed(service)) {
-            UpdateDependant(service);
+    for (auto &node : nodes_) {
+        if (!IsNodeRequired(node)) {
+            UpdateDependantOfNode(node);
         }
     }
 }
 
-void tt::DependencyGraph::UpdateDependant(const ServiceNode &node) {
-    ForEachDependency(node, [&](auto &dep_node) {
+void tt::DependencyGraph::UpdateDependantOfNode(const ServiceNode &node) {
+    ForEachDependencyOfNode(node, [&](ServiceNode &dep_node) {
         dep_node.RemoveDependant();
-        if (!IsServiceUsed(dep_node)) {
-            UpdateDependant(dep_node);
+        if (!IsNodeRequired(dep_node)) {
+            UpdateDependantOfNode(dep_node);
         }
     });
 }
 
-template <typename Func>
-void tt::DependencyGraph::ForEachDependency(const ServiceNode &node,
-                                            Func function) {
-    tt::DependencyReader dep_reader;
-    std::visit(dep_reader, node.service());
-    const auto deps = dep_reader.dependencies();
-    for (auto &&dep : deps) {
-        auto &dep_node = GetServiceFromName(dep);
-        function(dep_node);
-    }
-}
-
 void tt::DependencyGraph::RemoveUnusedServices() {
-    services_.erase(std::remove_if(services_.begin(), services_.end(),
-                                   [*this](const auto &node) {
-                                       return !IsServiceUsed(node);
-                                   }),
-                    services_.end());
+    nodes_.erase(std::remove_if(nodes_.begin(), nodes_.end(),
+                                [*this](const auto &node) {
+                                    return !IsNodeRequired(node);
+                                }),
+                 nodes_.end());
 }
 
-bool tt::DependencyGraph::IsServiceUsed(const tt::ServiceNode &node) const {
+template <typename Func>
+void tt::DependencyGraph::ForEachDependencyOfNode(const ServiceNode &node,
+                                                  Func function) {
+    tt::ForEachDependencyOfService(node.service(), [&](auto &dep_name) {
+        auto &dep_node = GetNodeFromName(dep_name);
+        function(dep_node);
+    });
+}
+
+bool tt::DependencyGraph::IsNodeRequired(const tt::ServiceNode &node) const {
     auto itr = enabled_services_.find(node.name());
-    return !(itr == enabled_services_.end() && node.HasDependants());
+    return itr == enabled_services_.end() || node.HasDependants();
 }
 
-tt::ServiceNode &
-tt::DependencyGraph::GetServiceFromName(const std::string &name) {
+tt::ServiceNode &tt::DependencyGraph::GetNodeFromName(const std::string &name) {
     const auto index = name_to_index_.at(name);
-    return services_.at(index);
+    return nodes_.at(index);
 }
 
-bool tt::DependencyGraph::IsServiceActive(
-    const std::string_view &service) const {
+bool tt::DependencyGraph::HasService(std::string_view service) const {
     auto itr = name_to_index_.find(service);
     return itr != name_to_index_.end();
 }
@@ -167,6 +162,6 @@ tt::DependencyGraph::enabled_services() const {
     return enabled_services_;
 }
 
-const std::vector<tt::ServiceNode> &tt::DependencyGraph::services() const {
-    return services_;
+const std::vector<tt::ServiceNode> &tt::DependencyGraph::nodes() const {
+    return nodes_;
 }
