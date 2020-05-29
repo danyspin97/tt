@@ -35,6 +35,6 @@ addons:
       name: "DanySpin97/tt"
       description: "A init/rc manager inspired by 66 and based on s6 suite"
     notification_email: danyspin97@protonmail.com
-    build_command_prepend: "cov-configure --comptype g++ --compiler /usr/bin/g++-9 --template && meson build -Dtests=enabled"
+    build_command_prepend: "cov-configure --comptype g++ --compiler /usr/bin/g++-9 && meson build -Dtests=enabled"
     build_command: "ninja -C build"
     branch_pattern: coverity_scan
