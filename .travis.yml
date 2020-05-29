@@ -19,9 +19,11 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-9
-      python: 3.7
       env:
         - CXX=g++-9
+
+before_install:
+  - pyenv global 3.6
 
 install:
   - pip3 install meson ninja gcovr cpp-coveralls
