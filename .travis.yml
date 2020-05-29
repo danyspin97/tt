@@ -2,7 +2,7 @@ dist: bionic
 group: travis_latest
 
 os: linux
-language: python
+language: cpp
 
 matrix:
   include:
