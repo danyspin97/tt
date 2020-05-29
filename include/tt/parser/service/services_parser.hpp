@@ -39,7 +39,7 @@ protected:
 
 private:
     void ParseService(const std::string &service_name);
-    void ParseDependenciesOfService(const std::string &name, Service *service);
+    void ParseDependenciesOfService(const Service &service);
     static size_t GetInstanceTokenIndex(const std::string &service_name);
     static std::string SplitServiceNameFromInstance(std::string &service,
                                                     size_t token_index);

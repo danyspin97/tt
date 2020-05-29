@@ -31,7 +31,7 @@
 #include "tt/data/bundle.hpp"
 #include "tt/data/longrun.hpp"
 #include "tt/data/oneshot.hpp"
-#include "tt/parser/service/dependency_reader.hpp"
+#include "tt/dependency_graph/utils.hpp"
 #include "tt/parser/service/exception.hpp"
 #include "tt/parser/service/instance_service_parser.hpp"
 #include "tt/parser/service/service_parser.hpp"
@@ -41,7 +41,6 @@ using std::string;
 using std::stringstream;
 using std::vector;
 
-using tt::DependencyReader;
 using tt::ServiceNotFoundParserException;
 using tt::ServiceParser;
 using tt::ServicesParser;
@@ -50,7 +49,8 @@ ServicesParser::ServicesParser(std::string suffix,
                                std::vector<std::string> paths)
     : suffix_(std::move(suffix)), paths_(std::move(paths)) {}
 
-void ServicesParser::ParseServices(const vector<string> &service_names) {
+void ServicesParser::ParseServices(
+    const std::vector<std::string> &service_names) {
     for (const auto &name : service_names) {
         ParseService(name);
     }
@@ -76,10 +76,7 @@ void ServicesParser::ParseService(const std::string &service_name) {
 
     auto path = GetPathForServiceName(service_name);
     service_map_.emplace(service_name, ServiceParser(path).service());
-    tt::DependencyReader dep_reader;
-    std::visit(dep_reader, service_map_.at(service_name));
-    const auto deps = dep_reader.dependencies();
-    ParseServices(deps);
+    ParseDependenciesOfService(service_map_.at(service_name));
 }
 
 size_t ServicesParser::GetInstanceTokenIndex(const string &service_name) {
@@ -115,4 +112,9 @@ string ServicesParser::GetPathForServiceName(const string &name) {
     }
     msg += joined_paths.str();
     throw ServiceNotFoundParserException(msg);
+}
+
+void ServicesParser::ParseDependenciesOfService(const Service &service) {
+    tt::ForEachDependencyOfService(service,
+                                   [&](auto name) { ParseService(name); });
 }
