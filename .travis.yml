@@ -22,7 +22,7 @@ script:
   - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ninja -C build; fi
   - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ninja -C build test; fi
   - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ninja -C build coverage-text; fi
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then coveralls -e include/args.hxx -e subprojects -e test -b build --gcov /usr/bin/gcov-9 --gcov-options '\-lp'; fi
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then coveralls -e ext -e subprojects -e test -b build --gcov /usr/bin/gcov-9 --gcov-options '\-lp'; fi
 
 addons:
   apt:

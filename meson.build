@@ -71,6 +71,7 @@ if default_log_group == 'default_log_user'
     default_log_group = default_log_user
 endif
 
+subdir('ext')
 subdir('include')
 subdir('src')
 

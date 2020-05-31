@@ -4,7 +4,7 @@ path_classifiers:
     - test
     - exclude: test/data
   library:
-    - include/args.hxx
+    - ext
 
 queries:
   # Start by hiding the results of all queries.
