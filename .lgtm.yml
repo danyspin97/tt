@@ -7,7 +7,6 @@ path_classifiers:
     - ext
 
 queries:
-  # Start by hiding the results of all queries.
   - include: "*"
 
 extraction:
