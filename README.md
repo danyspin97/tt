@@ -2,8 +2,8 @@
 
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fdanyspin97%2Ftt%2Fbadge&style=flat-square)](https://actions-badge.atrox.dev/danyspin97/tt/goto)
 [![builds.sr.ht status](https://builds.sr.ht/~danyspin97/tt.svg)](https://builds.sr.ht/~danyspin97/tt?)
-[![Build Status](https://travis-ci.org/DanySpin97/tt.svg?branch=master)](https://travis-ci.org/DanySpin97/tt)
-![Coveralls github](https://img.shields.io/coveralls/github/DanySpin97/tt?logo=coveralls&style=flat-square)
+[![Travis (.org)](https://img.shields.io/travis/danyspin97/tt?logo=travis&style=flat-square)](https://travis-ci.org/DanySpin97/tt)
+[![Coveralls github](https://img.shields.io/coveralls/github/DanySpin97/tt?logo=coveralls&style=flat-square)](https://coveralls.io/github/DanySpin97/tt)
 [![CodeFactor](https://img.shields.io/codefactor/grade/github/danyspin97/tt?logo=CodeFactor&style=flat-square)](https://www.codefactor.io/repository/github/danyspin97/tt)
 [![Codacy Badge](https://img.shields.io/codacy/grade/964fc2e2d7374cda979ac4b470e93561?logo=Codacy&style=flat-square)](https://www.codacy.com/manual/danyspin97/tt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DanySpin97/tt&amp;utm_campaign=Badge_Grade)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/DanySpin97/tt.svg?logo=lgtm&logoWidth=18&style=flat-square)](https://lgtm.com/projects/g/DanySpin97/tt/alerts/)
