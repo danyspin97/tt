@@ -25,6 +25,11 @@
 
 namespace tt {
 
+class DependencyGraph;
+
+void AddTestDependenciesToGraph(DependencyGraph &graph,
+                                const std::vector<std::string> &filenames);
+
 template <typename Func>
 void ForEachDependencyOfService(const Service &service, Func function) {
     tt::DependencyReader dep_reader;
