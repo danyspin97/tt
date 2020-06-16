@@ -32,10 +32,9 @@ namespace tt {
 class Oneshot : public ServiceImpl {
 public:
     [[nodiscard]] Script start() const noexcept { return start_; }
-    Oneshot(const std::string &name, const std::string &polish_name,
-            const std::string &description, const std::string &path,
-            OneshotOptions options, Environment environment,
-            const Script &start);
+    Oneshot(const std::string &name, const std::string &description,
+            const std::string &path, OneshotOptions options,
+            Environment environment, const Script &start);
 
     [[nodiscard]] Environment environment() const noexcept {
         return environment_;

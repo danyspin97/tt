@@ -21,20 +21,24 @@
 #ifndef TT_LONGRUN_HPP_
 #define TT_LONGRUN_HPP_
 
+#include <optional>
+#include <string>
+
+#include "bitsery/ext/inheritance.h"
+#include "bitsery/ext/std_optional.h"
+
 #include "tt/data/logger_script.hpp"
 #include "tt/data/longrun_options.hpp"
 #include "tt/data/script.hpp"
 #include "tt/data/service_impl.hpp"
-#include <optional>
-#include <string>
 
 namespace tt {
 
 class Longrun : public ServiceImpl {
 public:
-    Longrun(const std::string &name, const std::string &polish_name,
-            const std::string &description, const std::string &path,
-            LongrunOptions options, Environment environment, const Script &run);
+    Longrun(const std::string &name, const std::string &description,
+            const std::string &path, LongrunOptions options,
+            Environment environment, const Script &run);
 
     [[nodiscard]] Environment environment() const noexcept {
         return environment_;

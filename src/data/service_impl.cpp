@@ -27,12 +27,10 @@
 
 using std::ostream;
 
-tt::ServiceImpl::ServiceImpl(std::string name, std::string polish_name,
-                             std::string description, std::string path,
-                             tt::ServiceOptions &options)
-    : name_(std::move(name)), polish_name_(std::move(polish_name)),
-      description_(std::move(description)), path_(std::move(path)),
-      options_(options) {
+tt::ServiceImpl::ServiceImpl(std::string name, std::string description,
+                             std::string path, tt::ServiceOptions &options)
+    : name_(std::move(name)), description_(std::move(description)),
+      path_(std::move(path)), options_(options) {
     ValidatePath();
 }
 
@@ -45,9 +43,6 @@ void tt::ServiceImpl::ValidatePath() const {
 
 ostream &tt::ServiceImpl::Dump(ostream &oss) const {
     oss << "name = " << name();
-    if (!polish_name().empty()) {
-        oss << "\npolish_name = " << polish_name();
-    }
     if (!description().empty()) {
         oss << "\ndescription = " << description();
     }

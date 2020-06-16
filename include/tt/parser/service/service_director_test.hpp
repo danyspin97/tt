@@ -41,7 +41,7 @@ class ServiceDirectorTest : public ServiceDirector {
 public:
     Service InstanceService(const std::string & /*path*/) override {
         tt::BundleOptions options;
-        return tt::Bundle("mybundle", "MyBundle", "", "/mybundle", options);
+        return tt::Bundle("mybundle", "", "/mybundle", options);
     }
 
     SectionBuilder *

@@ -27,10 +27,9 @@ using std::ostream;
 
 using tt::Bundle;
 
-Bundle::Bundle(const std::string &name, const std::string &polish_name,
-               const std::string &description, const std::string &path,
-               BundleOptions &options)
-    : ServiceImpl(name, polish_name, description, path, options) {}
+Bundle::Bundle(const std::string &name, const std::string &description,
+               const std::string &path, BundleOptions &options)
+    : ServiceImpl(name, description, path, options) {}
 
 ostream &Bundle::Dump(ostream &oss) const {
     oss << "[main]\n"

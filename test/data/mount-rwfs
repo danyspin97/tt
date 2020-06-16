@@ -1,6 +1,5 @@
 [main]
 name = mount-rwfs
-polish_name = RWFS
 description = Test service
 type = oneshot
 

@@ -31,10 +31,6 @@ class ServiceImpl {
 public:
     [[nodiscard]] std::string name() const noexcept { return name_; }
 
-    [[nodiscard]] std::string polish_name() const noexcept {
-        return polish_name_;
-    }
-
     [[nodiscard]] std::string description() const noexcept {
         return description_;
     }
@@ -52,15 +48,13 @@ public:
     virtual ~ServiceImpl() = default;
 
 protected:
-    ServiceImpl(std::string name, std::string polish_name,
-                std::string description, std::string path,
+    ServiceImpl(std::string name, std::string description, std::string path,
                 ServiceOptions &options);
 
 private:
     void ValidatePath() const;
 
     std::string name_;
-    std::string polish_name_;
     std::string description_;
     std::string path_;
     ServiceOptions options_;

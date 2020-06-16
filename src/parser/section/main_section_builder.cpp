@@ -67,9 +67,6 @@ string &MainSectionBuilder::GetAttributeForKey(const std::string &key) {
     if (key == "description") {
         return main_section_.description;
     }
-    if (key == "polish_name") {
-        return main_section_.polish_name;
-    }
     if (key == "type") {
         return main_section_.type;
     };

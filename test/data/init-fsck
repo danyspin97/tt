@@ -1,6 +1,5 @@
 [main]
 name = init-fsck
-polish_name = FSCK
 description = Test service
 type = oneshot
 

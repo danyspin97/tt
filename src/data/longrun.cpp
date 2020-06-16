@@ -26,11 +26,10 @@ using std::ostream;
 
 using tt::Longrun;
 
-Longrun::Longrun(const std::string &name, const std::string &polish_name,
-                 const std::string &description, const std::string &path,
-                 LongrunOptions options, Environment environment,
-                 const Script &run)
-    : ServiceImpl(name, polish_name, description, path, options),
+Longrun::Longrun(const std::string &name, const std::string &description,
+                 const std::string &path, LongrunOptions options,
+                 Environment environment, const Script &run)
+    : ServiceImpl(name, description, path, options),
       environment_(std::move(environment)), run_(run) {}
 
 ostream &Longrun::Dump(ostream &oss) const {

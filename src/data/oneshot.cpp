@@ -26,11 +26,10 @@ using std::ostream;
 
 using tt::Oneshot;
 
-Oneshot::Oneshot(const std::string &name, const std::string &polish_name,
-                 const std::string &description, const std::string &path,
-                 OneshotOptions options, Environment environment,
-                 const Script &start)
-    : ServiceImpl(name, polish_name, description, path, options),
+Oneshot::Oneshot(const std::string &name, const std::string &description,
+                 const std::string &path, OneshotOptions options,
+                 Environment environment, const Script &start)
+    : ServiceImpl(name, description, path, options),
       environment_(std::move(environment)), start_(start) {}
 
 ostream &Oneshot::Dump(ostream &oss) const {

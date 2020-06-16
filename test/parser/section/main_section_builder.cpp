@@ -36,7 +36,6 @@ TEST_CASE("MainSectionBuilder") {
         TestBuilderWithFile(builder, "../test/data/main_section");
 
         CHECK(m.name == "nginx");
-        CHECK(m.polish_name == "Nginx Service");
         CHECK(m.description == "Run nginx server");
         CHECK(m.type == "longrun");
     }

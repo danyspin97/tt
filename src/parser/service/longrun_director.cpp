@@ -50,9 +50,9 @@ tt::Service LongrunDirector::InstanceService(const string &path) {
                         "' does not have a [run] section");
     }
 
-    auto service = Longrun(main_section_.name, main_section_.polish_name,
-                           main_section_.description, path, options_,
-                           environment_, run_script_builder_.script());
+    auto service =
+        Longrun(main_section_.name, main_section_.description, path, options_,
+                environment_, run_script_builder_.script());
 
     if (finish_script_builder_.HasScript()) {
         service.finish(finish_script_builder_.script());

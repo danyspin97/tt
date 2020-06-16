@@ -36,8 +36,8 @@ BundleDirector::BundleDirector()
     : main_section_builder_(main_section_), options_builder_(options_) {}
 
 tt::Service BundleDirector::InstanceService(const string &path) {
-    return Bundle(main_section_.name, main_section_.polish_name,
-                  main_section_.description, path, options_);
+    return Bundle(main_section_.name, main_section_.description, path,
+                  options_);
 }
 
 SectionBuilder *

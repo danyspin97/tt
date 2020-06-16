@@ -47,9 +47,9 @@ tt::Service OneshotDirector::InstanceService(const string &path) {
                         "' does not have a [start] section");
     }
 
-    auto service = Oneshot(main_section_.name, main_section_.polish_name,
-                           main_section_.description, path, options_,
-                           environment_, start_script_builder_.script());
+    auto service =
+        Oneshot(main_section_.name, main_section_.description, path, options_,
+                environment_, start_script_builder_.script());
 
     if (stop_script_builder_.HasScript()) {
         service.stop(stop_script_builder_.script());

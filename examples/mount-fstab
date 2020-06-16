@@ -1,6 +1,5 @@
 [main]
 name = mount-fstab
-polish_name = Mount partitions
 description = Parse and mount all the devices listed in /etc/fstab
 type = oneshot
 

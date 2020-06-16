@@ -1,4 +1,3 @@
 name = nginx
-polish_name = Nginx Service
 description = Run nginx server
 type = longrun

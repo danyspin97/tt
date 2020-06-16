@@ -27,7 +27,6 @@ namespace tt {
 // Store Service attributes contained in the main section
 struct MainSection {
     std::string name;
-    std::string polish_name;
     std::string description;
     std::string type;
 };

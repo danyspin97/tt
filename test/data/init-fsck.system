@@ -1,6 +1,5 @@
 [main]
 name = init-fsck
-polish_name = Run fsck
 description = Check the filesystem integrity
 type = oneshot
 
