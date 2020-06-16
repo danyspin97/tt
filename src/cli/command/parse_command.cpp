@@ -27,7 +27,7 @@
 
 #include "args.hxx"
 
-#include "tt/dirs.h"
+#include "tt/dirs.hpp"
 #include "tt/parser/service/service_parser.hpp"
 
 #include "tt/cli/global_options.hpp"
@@ -38,7 +38,6 @@ using std::shared_ptr;
 using std::string;
 using std::vector;
 
-using tt::dirs;
 using tt::ServiceParser;
 
 using tt::cli::GlobalOptions;
@@ -92,7 +91,9 @@ void ParseCommand::ParseUserSystemServices() {
 }
 
 bool ParseCommand::CheckForFileInDefaultDirs(const std::string &name) {
-    auto default_dirs = vector<string>{dirs.service, dirs.adminService};
+    tt::Dirs &dirs = tt::Dirs::GetInstance();
+    auto default_dirs =
+        vector<string>{dirs.servicedir(), dirs.admin_servicedir()};
     for (auto i = default_dirs.rbegin(); i != default_dirs.rend(); ++i) {
         auto filename = *i + "/" + name;
         struct stat buffer {};

@@ -5,6 +5,7 @@
 
 #include "tt/dependency_graph/dependency_graph.hpp"
 #include "tt/dependency_graph/utils.hpp"
+#include "tt/dirs.hpp"
 
 TEST_CASE("DependencyGraphSerializer") {
     tt::DependencyGraphSerializer::Buffer buffer;

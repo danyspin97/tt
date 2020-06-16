@@ -1,4 +1,5 @@
 tt_src = [
+    'dirs.cpp',
     'signal.cpp'
 ]
 

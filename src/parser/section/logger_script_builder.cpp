@@ -23,12 +23,11 @@
 #include "tt/parser/section/logger_script_builder.hpp"
 
 #include "tt/define.h"
-#include "tt/dirs.h"
+#include "tt/dirs.hpp"
 #include "tt/parser/section/exception.hpp"
 
 using std::string;
 
-using tt::dirs;
 using tt::kDefaultLogGroup;
 using tt::kDefaultLogUser;
 using tt::LoggerScript;
@@ -104,7 +103,8 @@ std::string LoggerScriptBuilder::GetDefaultExecute() const noexcept {
 }
 
 std::string LoggerScriptBuilder::GetDefaultDestination() const noexcept {
-    return string{dirs.log} + "/" + service_name_;
+    tt::Dirs &dirs = tt::Dirs::GetInstance();
+    return string{dirs.logdir()} + "/" + service_name_;
 }
 
 LoggerScript LoggerScriptBuilder::logger_script() const {

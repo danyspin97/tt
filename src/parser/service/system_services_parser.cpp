@@ -20,14 +20,15 @@
 
 #include "tt/parser/service/system_services_parser.hpp"
 
-#include "tt/dirs.h"
+#include "tt/dirs.hpp"
 
 using std::string;
 using std::vector;
 
-using tt::dirs;
 using tt::SystemServicesParser;
 
 SystemServicesParser::SystemServicesParser()
-    : ServicesParser(string{".system"},
-                     vector<string>{dirs.service, dirs.adminService}) {}
+    : ServicesParser(
+          string{".system"},
+          vector<string>{tt::Dirs::GetInstance().servicedir(),
+                         tt::Dirs::GetInstance().admin_servicedir()}) {}
