@@ -37,27 +37,19 @@ public:
     const std::string &livedir();
     const std::string &logdir();
     const std::string &servicedir();
-    const std::string &systemdir();
-
-    const std::string &custom_scriptsdir();
-    const std::string &admin_servicedir();
-    const std::string &admin_confdir();
+    const std::string &statedir();
 
 private:
     Dirs() = default;
 
-    std::string bin_ = "@bindir@";
-    std::string conf_ = "@confdir@";
+    std::string bindir_ = "@bindir@";
+    std::string confdir_ = "@confdir@";
     std::string execline_prefix_ = "@execline_prefix@";
-    std::string libexec_ = "@libexecdir@";
-    std::string live_ = "@livedir@";
-    std::string log_ = "@logdir@";
-    std::string service_ = "@servicedir@";
-    std::string system_ = "@systemdir@";
-
-    std::string custom_scripts_ = "@confdir@";
-    std::string admin_service_ = "@confdir@/service";
-    std::string admin_conf_ = "@confdir@/conf";
+    std::string libexecdir_ = "@libexecdir@";
+    std::string livedir_ = "@livedir@";
+    std::string logdir_ = "@logdir@";
+    std::string servicedir_ = "@servicedir@";
+    std::string statedir_ = "@statedir@";
 };
 
 } // namespace tt

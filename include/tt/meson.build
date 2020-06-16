@@ -14,7 +14,7 @@ define_h = configure_file(
 
 dirs_config = configuration_data({
     'livedir': livedir,
-    'systemdir': systemdir,
+    'statedir': statedir,
     'confdir': confdir,
     'logdir': logdir,
     'servicedir': servicedir,

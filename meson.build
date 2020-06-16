@@ -55,9 +55,9 @@ if logdir == 'localstatedir/log/tt'
     logdir = localstatedir / 'log/tt'
 endif
 
-systemdir = get_option('systemdir')
-if systemdir == 'localstatedir/lib/tt'
-    systemdir = localstatedir / 'lib/tt'
+statedir = get_option('statedir')
+if statedir == 'localstatedir/lib/tt'
+    statedir = localstatedir / 'lib/tt'
 endif
 
 servicedir = get_option('servicedir')
