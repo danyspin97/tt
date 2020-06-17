@@ -35,7 +35,7 @@ class ServiceNode {
 public:
     explicit ServiceNode(Service service);
     [[nodiscard]] Service service() const;
-    [[nodiscard]] std::string_view name() const;
+    [[nodiscard]] const std::string &name() const;
 
     void AddDependant();
     [[nodiscard]] bool HasDependants() const;
@@ -43,9 +43,9 @@ public:
 
 private:
     Service service_;
-    std::string_view service_name_;
     uint_fast8_t dependants_;
     std::vector<ServiceNodeRef> optional_dependencies_;
+    std::string service_name_;
 };
 
 } // namespace tt

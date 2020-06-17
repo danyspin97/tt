@@ -29,7 +29,7 @@ tt::ServiceNode::ServiceNode(tt::Service service)
     service_name_ = std::visit(tt::GetName, service);
 }
 
-std::string_view tt::ServiceNode::name() const { return service_name_; }
+const std::string &tt::ServiceNode::name() const { return service_name_; }
 
 tt::Service tt::ServiceNode::service() const { return service_; }
 

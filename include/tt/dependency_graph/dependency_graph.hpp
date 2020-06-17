@@ -32,13 +32,8 @@ namespace tt {
 class ServiceNode;
 
 class DependencyGraph {
-private:
-    std::set<std::string_view> enabled_services_;
-    std::map<std::string_view, size_t> name_to_index_;
-    std::vector<ServiceNode> nodes_;
-
 public:
-    [[nodiscard]] const std::set<std::string_view> &enabled_services() const;
+    [[nodiscard]] const std::set<std::string> &enabled_services() const;
     [[nodiscard]] const std::vector<ServiceNode> &nodes() const;
 
     size_t AddNodes(const std::vector<Service> &services);
@@ -48,7 +43,7 @@ public:
     template <typename Func>
     void ForEachDependencyOfNode(const ServiceNode &node, Func function);
     [[nodiscard]] ServiceNode &GetNodeFromName(const std::string &name);
-    [[nodiscard]] bool HasService(std::string_view service) const;
+    [[nodiscard]] bool HasService(const std::string &service) const;
     [[nodiscard]] bool IsNodeRequired(const ServiceNode &node) const;
     [[nodiscard]] bool IsServiceEnabled(const std::string &service) const;
     void PopulateDependant(const std::vector<std::string> &services);
@@ -59,6 +54,11 @@ public:
     void ValidateDependencies(size_t starting_index);
     void UpdateDependantOfNode(const ServiceNode &node);
     void UpdateDependants();
-};
+
+private:
+    std::set<std::string> enabled_services_;
+    std::map<std::string, size_t> name_to_index_;
+    std::vector<ServiceNode> nodes_;
+}; // namespace tt
 
 } // namespace tt

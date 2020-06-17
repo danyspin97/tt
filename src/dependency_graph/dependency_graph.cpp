@@ -146,7 +146,7 @@ tt::ServiceNode &tt::DependencyGraph::GetNodeFromName(const std::string &name) {
     return nodes_.at(index);
 }
 
-bool tt::DependencyGraph::HasService(std::string_view service) const {
+bool tt::DependencyGraph::HasService(const std::string &service) const {
     auto itr = name_to_index_.find(service);
     return itr != name_to_index_.end();
 }
@@ -156,8 +156,7 @@ bool tt::DependencyGraph::IsServiceEnabled(const std::string &service) const {
     return itr != enabled_services_.end();
 }
 
-const std::set<std::string_view> &
-tt::DependencyGraph::enabled_services() const {
+const std::set<std::string> &tt::DependencyGraph::enabled_services() const {
     return enabled_services_;
 }
 
