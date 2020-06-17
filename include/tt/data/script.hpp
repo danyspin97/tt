@@ -31,7 +31,7 @@ namespace tt {
 
 class Script {
 public:
-    enum class Type {
+    enum class Type : uint16_t {
         Bash,
         Execline,
     };
