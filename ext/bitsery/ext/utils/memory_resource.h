@@ -56,7 +56,7 @@ namespace bitsery {
                 (::operator delete(ptr));
             }
 
-            ~MemResourceNewDelete() noexcept final = default;
+            ~MemResourceNewDelete() noexcept = default;
         };
 
         // these classes are used internally by bitsery extensions and and pointer utils
