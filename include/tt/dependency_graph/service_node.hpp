@@ -32,6 +32,7 @@ class ServiceNode;
 class ServiceNode {
 public:
     explicit ServiceNode(Service service);
+    bool operator==(const ServiceNode &node) const;
     [[nodiscard]] Service service() const;
     [[nodiscard]] const std::string &name() const;
 

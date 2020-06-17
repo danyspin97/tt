@@ -29,6 +29,10 @@ tt::ServiceNode::ServiceNode(tt::Service service)
     service_name_ = std::visit(tt::GetName, service);
 }
 
+bool tt::ServiceNode::operator==(const ServiceNode &node) const {
+    return node.service_name_ == service_name_;
+}
+
 const std::string &tt::ServiceNode::name() const { return service_name_; }
 
 tt::Service tt::ServiceNode::service() const { return service_; }
