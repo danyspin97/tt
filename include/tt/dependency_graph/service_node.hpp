@@ -29,8 +29,6 @@ namespace tt {
 
 class ServiceNode;
 
-using ServiceNodeRef = std::reference_wrapper<ServiceNode>;
-
 class ServiceNode {
 public:
     explicit ServiceNode(Service service);
@@ -44,7 +42,6 @@ public:
 private:
     Service service_;
     uint_fast8_t dependants_;
-    std::vector<ServiceNodeRef> optional_dependencies_;
     std::string service_name_;
 };
 
