@@ -23,6 +23,9 @@
 
 #include <optional>
 
+#include "bitsery/ext/inheritance.h"
+#include "bitsery/ext/std_optional.h"
+
 #include "tt/data/oneshot_options.hpp"
 #include "tt/data/script.hpp"
 #include "tt/data/service_impl.hpp"
@@ -47,6 +50,18 @@ public:
     std::ostream &Dump(std::ostream &oss) const override;
 
 private:
+    friend class bitsery::Access;
+    Oneshot() = default;
+
+    template <typename S> void serialize(S &serializer) {
+        serializer.ext(*this, bitsery::ext::BaseClass<ServiceImpl>{});
+        serializer.object(environment_);
+        serializer.object(start_);
+        serializer.ext(
+            stop_, bitsery::ext::StdOptional{},
+            [](S &serializer, Script &script) { serializer.object(script); });
+    }
+
     Environment environment_;
     Script start_;
     std::optional<Script> stop_;

@@ -8,6 +8,7 @@ project('tt', 'cpp',
         'werror=true',
     ],
 )
+add_project_arguments('-Wno-missing-braces', language: 'cpp')
 
 pkg = import('pkgconfig')
 

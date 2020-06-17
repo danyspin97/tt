@@ -25,6 +25,8 @@
 #include <map>
 #include <string>
 
+#include "bitsery/ext/std_map.h"
+
 namespace tt {
 
 class Environment {
@@ -38,6 +40,19 @@ public:
     bool SetUnique(const std::string &key, const std::string &value);
 
 private:
+    friend class bitsery::Access;
+
+    template <typename S> void serialize(S &serializer) {
+        serializer.ext(
+            env_, bitsery::ext::StdMap{env_.max_size()},
+            [](S &serializer, std::string &key, std::string &value) {
+                serializer.template text<sizeof(std::string::value_type),
+                                         std::string>(key, key.max_size());
+                serializer.template text<sizeof(std::string::value_type),
+                                         std::string>(value, value.max_size());
+            });
+    }
+
     std::map<std::string, std::string> env_;
 };
 

@@ -23,6 +23,8 @@
 
 #include <string>
 
+#include "bitsery/ext/inheritance.h"
+
 #include "tt/data/environment.hpp"
 #include "tt/data/script.hpp"
 
@@ -41,6 +43,14 @@ public:
     std::ostream &Dump(std::ostream &oss) const override;
 
 private:
+    friend class bitsery::Access;
+    LoggerScript() = default;
+    template <typename S> void serialize(S &serializer) {
+        serializer.ext(*this, bitsery::ext::BaseClass<Script>{});
+        serializer.template text<sizeof(std::string::value_type), std::string>(
+            service_to_log_, service_to_log_.max_size());
+    }
+
     std::string service_to_log_;
 };
 

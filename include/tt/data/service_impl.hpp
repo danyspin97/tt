@@ -51,8 +51,22 @@ protected:
     ServiceImpl(std::string name, std::string description, std::string path,
                 ServiceOptions &options);
 
+    // Required for Bundle(), Longrun() and Oneshot()
+    ServiceImpl() = default;
+
 private:
     void ValidatePath() const;
+
+    friend class bitsery::Access;
+    template <typename S> void serialize(S &serializer) {
+        serializer.template text<sizeof(std::string::value_type), std::string>(
+            name_, name_.max_size());
+        serializer.template text<sizeof(std::string::value_type), std::string>(
+            description_, description_.max_size());
+        serializer.template text<sizeof(std::string::value_type), std::string>(
+            path_, path_.max_size());
+        serializer.object(options_);
+    }
 
     std::string name_;
     std::string description_;

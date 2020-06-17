@@ -26,6 +26,9 @@
 #include <utility>
 #include <vector>
 
+#include "bitsery/traits/string.h"
+#include "bitsery/traits/vector.h"
+
 namespace tt {
 
 class ServiceOptions {
@@ -42,7 +45,22 @@ public:
 
     virtual std::ostream &Dump(std::ostream &oss) const;
 
+protected:
+    friend class ServiceImpl;
+    ServiceOptions() = default;
+
 private:
+    friend class bitsery::Access;
+    template <typename S> void serialize(S &serializer) {
+        serializer.container(
+            depends_, depends_.max_size(),
+            [](S &serializer, std::string &dependency) {
+                serializer.template text<sizeof(std::string::value_type),
+                                         std::string>(dependency,
+                                                      dependency.max_size());
+            });
+    }
+
     std::vector<std::string> depends_;
 };
 

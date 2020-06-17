@@ -25,6 +25,9 @@
 #include <optional>
 #include <string>
 
+#include "bitsery/ext/std_optional.h"
+#include "bitsery/traits/string.h"
+
 #include "tt/data/environment.hpp"
 
 namespace tt {
@@ -49,6 +52,32 @@ public:
     Script(Type type, std::string execute);
     virtual ~Script() = default;
     virtual std::ostream &Dump(std::ostream &oss) const;
+
+protected:
+    friend class Longrun;
+    friend class Oneshot;
+    // Needed for LoggerScript()
+    Script() = default;
+
+private:
+    friend class bitsery::Access;
+    template <typename S> void serialize(S &serializer) {
+        serializer.template text<sizeof(std::string::value_type), std::string>(
+            execute_, execute_.max_size());
+        serializer.value2b(type_);
+        serializer.ext(
+            user_, bitsery::ext::StdOptional{true},
+            [](S &serializer, std::string &user) {
+                serializer.template text<sizeof(std::string::value_type),
+                                         std::string>(user, user.max_size());
+            });
+        serializer.ext(
+            user_, bitsery::ext::StdOptional{true},
+            [](S &serializer, std::string &group) {
+                serializer.template text<sizeof(std::string::value_type),
+                                         std::string>(group, group.max_size());
+            });
+    }
 
 protected:
     std::string execute_;

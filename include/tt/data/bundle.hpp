@@ -23,6 +23,8 @@
 
 #include <istream>
 
+#include "bitsery/ext/inheritance.h"
+
 #include "tt/data/bundle_options.hpp"
 #include "tt/data/service_impl.hpp"
 
@@ -36,6 +38,14 @@ public:
            const std::string &path, BundleOptions &options);
 
     std::ostream &Dump(std::ostream &oss) const override;
+
+private:
+    friend class bitsery::Access;
+    Bundle() = default;
+
+    template <typename S> void serialize(S &serializer) {
+        serializer.ext(*this, bitsery::ext::BaseClass<ServiceImpl>{});
+    }
 };
 
 } // namespace tt

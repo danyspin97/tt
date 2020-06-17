@@ -25,11 +25,14 @@
 #include <set>
 #include <vector>
 
+#include "bitsery/ext/std_map.h"
+#include "bitsery/ext/std_set.h"
+#include "bitsery/traits/vector.h"
+
 #include "tt/data/service.hpp"
+#include "tt/dependency_graph/service_node.hpp"
 
 namespace tt {
-
-class ServiceNode;
 
 class DependencyGraph {
 public:
@@ -54,6 +57,24 @@ public:
     void ValidateDependencies(size_t starting_index);
     void UpdateDependantOfNode(const ServiceNode &node);
     void UpdateDependants();
+
+    template <typename S> void serialize(S &serializer) {
+        serializer.ext(
+            enabled_services_,
+            bitsery::ext::StdSet{enabled_services_.max_size()},
+            [](S &serializer, std::string &name) {
+                serializer.template text<sizeof(std::string::value_type),
+                                         std::string>(name, name.max_size());
+            });
+        serializer.ext(
+            name_to_index_, bitsery::ext::StdMap{name_to_index_.max_size()},
+            [](S &serializer, std::string &name, size_t index) {
+                serializer.template text<sizeof(std::string::value_type),
+                                         std::string>(name, name.max_size());
+                serializer.template value<sizeof(size_t)>(index);
+            });
+        serializer.container(nodes_, nodes_.max_size());
+    }
 
 private:
     std::set<std::string> enabled_services_;

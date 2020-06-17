@@ -62,6 +62,22 @@ public:
     std::ostream &Dump(std::ostream &oss) const override;
 
 private:
+    friend class bitsery::Access;
+    Longrun() = default;
+
+    template <typename S> void serialize(S &serializer) {
+        serializer.ext(*this, bitsery::ext::BaseClass<ServiceImpl>{});
+        serializer.object(environment_);
+        serializer.object(run_);
+        serializer.ext(
+            finish_, bitsery::ext::StdOptional{},
+            [](S &serializer, Script &script) { serializer.object(script); });
+        serializer.ext(logger_, bitsery::ext::StdOptional{},
+                       [](S &serializer, LoggerScript &logger_script) {
+                           serializer.object(logger_script);
+                       });
+    }
+
     Environment environment_;
     Script run_;
     std::optional<Script> finish_;
