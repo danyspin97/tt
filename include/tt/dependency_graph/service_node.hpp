@@ -40,6 +40,8 @@ public:
     [[nodiscard]] bool HasDependants() const;
     void RemoveDependant();
 
+    void Dump(std::ostream &oss) const;
+
 private:
     Service service_;
     uint_fast8_t dependants_;
@@ -47,3 +49,5 @@ private:
 };
 
 } // namespace tt
+
+std::ostream &operator<<(std::ostream &oss, const tt::ServiceNode &node);

@@ -42,3 +42,14 @@ void tt::ServiceNode::AddDependant() { dependants_++; }
 bool tt::ServiceNode::HasDependants() const { return dependants_ != 0; }
 
 void tt::ServiceNode::RemoveDependant() { dependants_--; }
+
+void tt::ServiceNode::Dump(std::ostream &oss) const {
+    oss << "Service: " << service_;
+    oss << "\nService name: " << service_name_;
+    oss << "\nDependants: " << dependants_;
+}
+
+std::ostream &operator<<(std::ostream &oss, const tt::ServiceNode &node) {
+    node.Dump(oss);
+    return oss;
+}
