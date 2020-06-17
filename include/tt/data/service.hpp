@@ -29,7 +29,7 @@
 
 namespace tt {
 
-using Service = std::variant<Bundle, Longrun, Oneshot>;
+using Service = std::variant<std::monostate, Bundle, Longrun, Oneshot>;
 
 std::ostream &operator<<(std::ostream &oss, Service const &service);
 

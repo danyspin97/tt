@@ -42,8 +42,8 @@ size_t tt::DependencyGraph::AddNodes(const std::vector<tt::Service> &services) {
     size_t current_index = ret_index;
     nodes_.reserve(services.size() + nodes_.size());
     for (auto &&service : services) {
-        auto get_name = [](auto &service) { return service.name(); };
-        const auto name = std::visit(get_name, service);
+        assert(not std::holds_alternative<std::monostate>(service));
+        const auto name = std::visit(tt::GetName, service);
         if (!IsServiceEnabled(name)) {
             nodes_.emplace_back(service);
             name_to_index_[name] = current_index;

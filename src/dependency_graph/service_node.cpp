@@ -22,9 +22,11 @@
 
 #include <algorithm>
 
+#include "tt/dependency_graph/utils.hpp"
+
 tt::ServiceNode::ServiceNode(tt::Service service)
     : service_(std::move(service)), dependants_(0) {
-    service_name_ = std::visit([](auto &arg) { return arg.name(); }, service);
+    service_name_ = std::visit(tt::GetName, service);
 }
 
 std::string_view tt::ServiceNode::name() const { return service_name_; }

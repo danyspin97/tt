@@ -21,7 +21,14 @@
 #include "tt/data/service.hpp"
 
 std::ostream &tt::operator<<(std::ostream &oss, tt::Service const &service) {
-    std::visit([&oss](auto &arg) { arg.Dump(oss); }, service);
+    std::visit(
+        [&oss](auto &arg) {
+            if constexpr (not std::is_same_v<std::decay_t<decltype(arg)>,
+                                             std::monostate>) {
+                arg.Dump(oss);
+            }
+        },
+        service);
 
     return oss;
 }

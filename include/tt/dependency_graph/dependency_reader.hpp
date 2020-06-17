@@ -21,6 +21,7 @@
 #pragma once
 
 #include <string>
+#include <variant>
 #include <vector>
 
 namespace tt {
@@ -36,6 +37,7 @@ public:
     void operator()(const Bundle &bundle);
     void operator()(const Longrun &longrun);
     void operator()(const Oneshot &oneshot);
+    void operator()(std::monostate /*unused*/) {}
 
 private:
     std::vector<std::string> dependencies_;

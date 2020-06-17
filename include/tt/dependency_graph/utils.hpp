@@ -40,4 +40,13 @@ void ForEachDependencyOfService(const Service &service, Func function) {
     }
 }
 
+constexpr auto GetName = [](auto &service) {
+    if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
+                                 std::monostate>) {
+        return std::string{};
+    } else {
+        return service.name();
+    }
+};
+
 } // namespace tt
