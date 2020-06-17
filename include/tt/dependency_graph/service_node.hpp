@@ -64,8 +64,8 @@ private:
         serializer.value4b(dependants_);
     }
     Service service_;
-    uint_fast8_t dependants_;
     std::string service_name_;
+    uint32_t dependants_;
 };
 
 } // namespace tt
