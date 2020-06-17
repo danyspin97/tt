@@ -1,11 +1,11 @@
 
 #include "tt/dependency_graph/dependency_graph_serializer.hpp"
 
-#include "catch2/catch.hpp"
-
 #include "tt/dependency_graph/dependency_graph.hpp"
 #include "tt/dependency_graph/utils.hpp"
 #include "tt/dirs.hpp"
+
+#include "catch2/catch.hpp"
 
 TEST_CASE("DependencyGraphSerializer") {
     tt::DependencyGraphSerializer::Buffer buffer;
@@ -14,14 +14,19 @@ TEST_CASE("DependencyGraphSerializer") {
                                           "../test/data/init-fsck",
                                           "../test/data/mount-rwfs"};
     tt::AddTestDependenciesToGraph(graph, filenames);
+    std::vector<std::string> services_to_enable{"mount-fstab"};
+    graph.AddEnabledServices(services_to_enable);
 
-    SECTION("Serialize and deserialize correctly") {
-        auto result = tt::DependencyGraphSerializer::Serialize(graph);
-        buffer = std::get<0>(result);
-        auto writtenSize = std::get<1>(result);
+    SECTION("Serialize and deserialize "
+            "correctly") {
+        auto serialized_data = tt::DependencyGraphSerializer::Serialize(graph);
+
+        tt::DependencyGraphSerializer::Buffer buffer =
+            std::get<0>(serialized_data);
+        size_t written_size = std::get<1>(serialized_data);
 
         tt::DependencyGraph deserialized_graph =
-            tt::DependencyGraphSerializer::Deserialize(buffer, writtenSize);
+            tt::DependencyGraphSerializer::Deserialize(buffer, written_size);
 
         CHECK(graph.enabled_services() ==
               deserialized_graph.enabled_services());
