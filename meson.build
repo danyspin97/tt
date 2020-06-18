@@ -80,3 +80,6 @@ if catch2_dep.found()
     subdir('test')
 endif
 
+run_target('coverage-sonarcloud',
+    command: ['scripts/coverage-sonarcloud.sh'])
+

@@ -4,6 +4,10 @@ group: travis_latest
 os: linux
 language: cpp
 
+# Sonarcloud requires past commits
+git:
+  depth: 50
+
 env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
@@ -19,10 +23,12 @@ install:
 
 script:
   - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then meson -Dtests=enabled -Db_coverage=true build; fi
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ninja -C build; fi
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory ninja -C build; fi
   - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ninja -C build test; fi
   - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ninja -C build coverage-text; fi
   - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then coveralls -e ext -e subprojects -e test -b build --gcov /usr/bin/gcov-9 --gcov-options '\-lp'; fi
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ninja -C build coverage-sonarcloud; fi
+  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then sonar-scanner; fi
 
 addons:
   apt:
@@ -38,3 +44,5 @@ addons:
     build_command_prepend: "cov-configure --comptype g++ --compiler /usr/bin/g++-9 && meson build -Dtests=enabled"
     build_command: "ninja -C build"
     branch_pattern: coverity_scan
+  sonarcloud:
+    organization: "danyspin97"
