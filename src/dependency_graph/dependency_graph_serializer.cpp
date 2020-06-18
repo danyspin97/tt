@@ -32,7 +32,7 @@
 #include "tt/exception.hpp"
 
 std::tuple<tt::DependencyGraphSerializer::Buffer, size_t>
-tt::DependencyGraphSerializer::Serialize(tt::DependencyGraph graph) {
+tt::DependencyGraphSerializer::Serialize(const tt::DependencyGraph& graph) {
     Buffer buffer;
     size_t written_size =
         bitsery::quickSerialization<bitsery::OutputBufferAdapter<Buffer>>(

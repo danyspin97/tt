@@ -30,7 +30,7 @@ class DependencyGraph;
 class DependencyGraphSerializer {
 public:
     using Buffer = std::vector<uint8_t>;
-    static std::tuple<Buffer, size_t> Serialize(DependencyGraph graph);
+    static std::tuple<Buffer, size_t> Serialize(const DependencyGraph& graph);
     static DependencyGraph Deserialize(const Buffer &buffer,
                                        size_t written_size);
 };
