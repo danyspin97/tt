@@ -23,6 +23,7 @@
 #include <memory>
 #include <vector>
 
+#include "bitsery/ext/growable.h"
 #include "bitsery/ext/std_variant.h"
 
 #include "tt/data/service.hpp"
@@ -50,17 +51,28 @@ private:
     template <typename S> void serialize(S &serializer) {
         serializer.template text<sizeof(std::string::value_type), std::string>(
             service_name_, service_name_.max_size());
-        serializer.ext(service_, bitsery::ext::StdVariant{
-                                     [](S & /*unused*/, std::monostate & /*unused*/) {},
-                                     [](S &serializer, Bundle &bundle) {
-                                         serializer.object(bundle);
-                                     },
-                                     [](S &serializer, Longrun &longrun) {
-                                         serializer.object(longrun);
-                                     },
-                                     [](S &serializer, Oneshot &oneshot) {
-                                         serializer.object(oneshot);
-                                     }});
+        serializer.ext(
+            service_,
+            bitsery::ext::StdVariant{
+                [](S & /*unused*/, std::monostate & /*unused*/) {},
+                [](S &serializer, Bundle &bundle) {
+                    serializer.ext(bundle, bitsery::ext::Growable{},
+                                   [](S &serializer, Bundle &bundle) {
+                                       serializer.object(bundle);
+                                   });
+                },
+                [](S &serializer, Longrun &longrun) {
+                    serializer.ext(longrun, bitsery::ext::Growable{},
+                                   [](S &serializer, Longrun &longrun) {
+                                       serializer.object(longrun);
+                                   });
+                },
+                [](S &serializer, Oneshot &oneshot) {
+                    serializer.ext(oneshot, bitsery::ext::Growable{},
+                                   [](S &serializer, Oneshot &oneshot) {
+                                       serializer.object(oneshot);
+                                   });
+                }});
         serializer.value4b(dependants_);
     }
     Service service_;

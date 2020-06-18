@@ -23,6 +23,7 @@
 
 #include <optional>
 
+#include "bitsery/ext/growable.h"
 #include "bitsery/ext/inheritance.h"
 #include "bitsery/ext/std_optional.h"
 
@@ -55,11 +56,20 @@ private:
 
     template <typename S> void serialize(S &serializer) {
         serializer.ext(*this, bitsery::ext::BaseClass<ServiceImpl>{});
-        serializer.object(environment_);
-        serializer.object(start_);
+        serializer.ext(environment_, bitsery::ext::Growable{},
+                       [](S &serializer, Environment &environment) {
+                           serializer.object(environment);
+                       });
         serializer.ext(
-            stop_, bitsery::ext::StdOptional{},
+            start_, bitsery::ext::Growable{},
             [](S &serializer, Script &script) { serializer.object(script); });
+        serializer.ext(stop_, bitsery::ext::StdOptional{},
+                       [](S &serializer, Script &script) {
+                           serializer.ext(script, bitsery::ext::Growable{},
+                                          [](S &serializer, Script &script) {
+                                              serializer.object(script);
+                                          });
+                       });
     }
 
     Environment environment_;
