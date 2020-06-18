@@ -51,7 +51,7 @@ private:
         serializer.template text<sizeof(std::string::value_type), std::string>(
             service_name_, service_name_.max_size());
         serializer.ext(service_, bitsery::ext::StdVariant{
-                                     [](S &, std::monostate &) {},
+                                     [](S & /*unused*/, std::monostate & /*unused*/) {},
                                      [](S &serializer, Bundle &bundle) {
                                          serializer.object(bundle);
                                      },
