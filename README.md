@@ -1,6 +1,7 @@
 # tt
 
 ![GitHub](https://img.shields.io/github/license/danyspin97/tt?color=blue&logo=github&style=flat-square)
+![Liberapay receiving](https://img.shields.io/liberapay/receives/danyspin97?logo=liberapay&style=flat-square)
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fdanyspin97%2Ftt%2Fbadge&style=flat-square)](https://actions-badge.atrox.dev/danyspin97/tt/goto)
 [![builds.sr.ht status](https://builds.sr.ht/~danyspin97/tt.svg)](https://builds.sr.ht/~danyspin97/tt?)
 [![Travis (.org)](https://img.shields.io/travis/danyspin97/tt?logo=travis&style=flat-square)](https://travis-ci.org/DanySpin97/tt)
