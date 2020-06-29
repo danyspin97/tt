@@ -1,5 +1,6 @@
 # tt
 
+![GitHub](https://img.shields.io/github/license/danyspin97/tt?color=blue&logo=github&style=flat-square)
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fdanyspin97%2Ftt%2Fbadge&style=flat-square)](https://actions-badge.atrox.dev/danyspin97/tt/goto)
 [![builds.sr.ht status](https://builds.sr.ht/~danyspin97/tt.svg)](https://builds.sr.ht/~danyspin97/tt?)
 [![Travis (.org)](https://img.shields.io/travis/danyspin97/tt?logo=travis&style=flat-square)](https://travis-ci.org/DanySpin97/tt)
@@ -9,7 +10,6 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/DanySpin97/tt.svg?logo=lgtm&logoWidth=18&style=flat-square)](https://lgtm.com/projects/g/DanySpin97/tt/alerts/)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/DanySpin97/tt.svg?logo=lgtm&logoWidth=18&style=flat-square)](https://lgtm.com/projects/g/DanySpin97/tt/context:cpp)
 [![CII Best Practices](https://img.shields.io/cii/summary/3935?style=flat-square)](https://bestpractices.coreinfrastructure.org/projects/3935)
-![GitHub License](https://img.shields.io/github/license/danyspin97/tt?logo=github&style=flat-square)
 
 tt is a Work in Progress init and service manager inspired by [66](https://web.obarun.org/software/66) and based on
 the [s6](https://skarnet.org/software/s6/) suite.
