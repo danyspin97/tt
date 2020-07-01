@@ -24,7 +24,6 @@
 
 #include "tt/parser/section/utils.hpp"
 
-using tt::Environment;
 using tt::Script;
 using tt::ScriptBuilder;
 using tt::TestBuilderWithFile;

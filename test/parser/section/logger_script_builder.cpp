@@ -25,7 +25,6 @@
 #include "tt/define.h"
 #include "tt/parser/section/utils.hpp"
 
-using tt::Environment;
 using tt::kDefaultLogGroup;
 using tt::kDefaultLogUser;
 using tt::LoggerScript;
