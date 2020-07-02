@@ -12,7 +12,6 @@ add_project_arguments('-Wno-missing-braces', language: 'cpp')
 
 pkg = import('pkgconfig')
 
-add_global_arguments('-DSPDLOG_FMT_EXTERNAL', language : 'cpp')
 fmt_dep = dependency('fmt', fallback: ['fmt', 'fmt_dep'])
 spdlog_dep = dependency('spdlog', fallback: ['spdlog', 'spdlog_dep'])
 catch2_dep = dependency('catch2', required: get_option('tests'), fallback: ['catch2', 'catch2_dep'])
