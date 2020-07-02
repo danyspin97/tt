@@ -77,7 +77,7 @@ private:
     }
     Service service_;
     std::string service_name_;
-    uint32_t dependants_;
+    uint32_t dependants_{0};
 };
 
 } // namespace tt

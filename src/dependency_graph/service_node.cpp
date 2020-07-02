@@ -25,7 +25,7 @@
 #include "tt/dependency_graph/utils.hpp"
 
 tt::ServiceNode::ServiceNode(tt::Service service)
-    : service_(std::move(service)), dependants_(0) {
+    : service_(std::move(service)) {
     service_name_ = std::visit(tt::GetName, service);
 }
 
