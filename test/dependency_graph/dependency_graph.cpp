@@ -37,11 +37,11 @@ TEST_CASE("DependencyChecker") {
         REQUIRE_THROWS(graph.ValidateDependencies(0));
     }
 
-    SECTION("mount-fstab with unresolved deps") {
+    SECTION("mount-fstab with resolved deps") {
         std::vector<std::string> filenames = {"../test/data/mount-fstab",
                                               "../test/data/init-fsck",
                                               "../test/data/mount-rwfs"};
         tt::AddTestDependenciesToGraph(graph, filenames);
-        REQUIRE_THROWS(graph.ValidateDependencies(0));
+        REQUIRE_NOTHROW(graph.ValidateDependencies(0));
     }
 }
