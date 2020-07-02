@@ -30,3 +30,13 @@ GlobalOptions::GlobalOptions()
                  "Set the verbosity level to one of {'debug', 'info', 'warn', "
                  "'critical', 'err'}",
                  {"verbosity"}) {}
+
+auto tt::cli::GlobalOptions::arguments() -> args::Group & { return arguments_; }
+
+auto tt::cli::GlobalOptions::help() const -> bool { return help_; }
+
+auto tt::cli::GlobalOptions::quiet() const -> bool { return quiet_; }
+
+auto tt::cli::GlobalOptions::verbosity() -> args::ValueFlag<std::string> & {
+    return verbosity_;
+}

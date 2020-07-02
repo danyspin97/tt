@@ -34,9 +34,9 @@ tt::cli::Command::Command(args::Subparser &parser,
 
 auto tt::cli::Command::InitAndExecute() -> int {
     parser_.Parse();
-    auto verbosity = global_options_->verbosity_.Matched()
-                         ? global_options_->verbosity_.Get()
+    auto verbosity = global_options_->verbosity().Matched()
+                         ? global_options_->verbosity().Get()
                          : tt::cli::DEFAULT_VERBOSITY;
-    tt::cli::setupConsoleLoggers(verbosity, global_options_->quiet_);
+    tt::cli::setupConsoleLoggers(verbosity, global_options_->quiet());
     return Execute();
 }

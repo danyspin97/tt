@@ -28,6 +28,12 @@ class GlobalOptions {
 public:
     GlobalOptions();
 
+    auto arguments() -> args::Group &;
+    auto help() const -> bool;
+    auto quiet() const -> bool;
+    auto verbosity() -> args::ValueFlag<std::string> &;
+
+private:
     args::Group arguments_;
     args::HelpFlag help_;
     args::Flag quiet_;

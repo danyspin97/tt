@@ -61,7 +61,7 @@ auto main(int argc, char *argv[]) -> int {
                             ParseCommand::Dispatch(parser, common_options);
                         });
 
-    args::GlobalOptions global_options(parser, common_options->arguments_);
+    args::GlobalOptions global_options(parser, common_options->arguments());
 
     try {
         parser.ParseCLI(argc, argv);
