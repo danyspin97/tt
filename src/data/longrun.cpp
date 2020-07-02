@@ -30,7 +30,8 @@ Longrun::Longrun(std::string &&name, std::string &&description,
                  std::string &&path, LongrunOptions &&options,
                  Environment &&environment, Script &&run)
     : ServiceImpl(std::move(name), std::move(description), std::move(path)),
-      options_(options), environment_(environment), run_(run) {}
+      options_(std::move(options)), environment_(std::move(environment)),
+      run_(std::move(run)) {}
 
 auto Longrun::Dump(ostream &oss) const -> ostream & {
     oss << "[main]\n";

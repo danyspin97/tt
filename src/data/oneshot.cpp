@@ -30,7 +30,8 @@ Oneshot::Oneshot(std::string &&name, std::string &&description,
                  std::string &&path, OneshotOptions &&options,
                  Environment &&environment, Script &&start)
     : ServiceImpl(std::move(name), std::move(description), std::move(path)),
-      options_(options), environment_(environment), start_(start) {}
+      options_(std::move(options)), environment_(std::move(environment)),
+      start_(std::move(start)) {}
 
 auto Oneshot::Dump(ostream &oss) const -> ostream & {
     oss << "[main]\n";
