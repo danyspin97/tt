@@ -20,17 +20,6 @@
 
 #include "tt/cli/global_options.hpp"
 
-using tt::cli::GlobalOptions;
-
-GlobalOptions::GlobalOptions()
-    : arguments_("Global options:"),
-      help_(arguments_, "help", "Display this help menu", {'h', "help"}),
-      quiet_(arguments_, "quiet", "Do not print output.", {'q', "quiet"}),
-      verbosity_(arguments_, "verbosity",
-                 "Set the verbosity level to one of {'debug', 'info', 'warn', "
-                 "'critical', 'err'}",
-                 {"verbosity"}) {}
-
 auto tt::cli::GlobalOptions::arguments() -> args::Group & { return arguments_; }
 
 auto tt::cli::GlobalOptions::help() const -> bool { return help_; }

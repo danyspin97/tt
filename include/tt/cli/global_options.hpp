@@ -26,7 +26,7 @@ namespace tt::cli {
 
 class GlobalOptions {
 public:
-    GlobalOptions();
+    GlobalOptions() = default;
 
     auto arguments() -> args::Group &;
     auto help() const -> bool;
@@ -34,10 +34,21 @@ public:
     auto verbosity() -> args::ValueFlag<std::string> &;
 
 private:
-    args::Group arguments_;
-    args::HelpFlag help_;
-    args::Flag quiet_;
-    args::ValueFlag<std::string> verbosity_;
+    args::Group arguments_{"Global options:"};
+    args::HelpFlag help_{
+        arguments_,
+        "help",
+        "Display this help menu",
+        {'h', "help"},
+    };
+    args::Flag quiet_{
+        arguments_, "quiet", "Do not print output.", {'q', "quiet"}};
+    args::ValueFlag<std::string> verbosity_{
+        arguments_,
+        "verbosity",
+        "Set the verbosity level to one of {'debug', 'info', 'warn', "
+        "'critical', 'err'}",
+        {"verbosity"}};
 };
 
 } // namespace tt::cli
