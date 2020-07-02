@@ -37,28 +37,20 @@
 
 #include "tt/cli/global_options.hpp"
 
-using std::shared_ptr;
-using std::string;
-using std::vector;
-
-using tt::ServiceParser;
-
-using tt::cli::GlobalOptions;
-using tt::cli::ParseCommand;
-
-ParseCommand::ParseCommand(args::Subparser &parser,
-                           shared_ptr<GlobalOptions> common_options)
+tt::cli::ParseCommand::ParseCommand(
+    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
     : Command(parser, std::move(common_options)),
       service_list_(parser, "services", "services to parse"),
       is_file_(parser, "file", "", {'f', "file"}) {}
 
-auto ParseCommand::Dispatch(args::Subparser &parser,
-                            shared_ptr<GlobalOptions> common_options) -> int {
+auto tt::cli::ParseCommand::Dispatch(
+    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
+    -> int {
     ParseCommand command = ParseCommand(parser, std::move(common_options));
     return command.InitAndExecute();
 }
 
-auto ParseCommand::Execute() -> int {
+auto tt::cli::ParseCommand::Execute() -> int {
     if (is_file_) {
         ParseFiles();
         return 0;
@@ -67,18 +59,18 @@ auto ParseCommand::Execute() -> int {
     return 0;
 }
 
-void ParseCommand::ParseFiles() {
+void tt::cli::ParseCommand::ParseFiles() const {
     for (auto &&service : service_list_) {
         auto parser = ServiceParser(service);
         spdlog::info(parser.service());
     }
 }
 
-void ParseCommand::ParseUserSystemServices() {
+void tt::cli::ParseCommand::ParseUserSystemServices() {
     // TODO: Check for UID != 0 and add xdg.userservice
     for (auto &&service : service_list_) {
         bool found = false;
-        for (auto &name : GetPossibleNameForService(service)) {
+        for (const auto &name : GetPossibleNameForService(service)) {
             found = CheckForFileInDefaultDirs(name);
             if (found) {
                 break;
@@ -91,10 +83,11 @@ void ParseCommand::ParseUserSystemServices() {
     }
 }
 
-auto ParseCommand::CheckForFileInDefaultDirs(const std::string &name) -> bool {
+auto tt::cli::ParseCommand::CheckForFileInDefaultDirs(
+    const std::string &name) const -> bool {
     tt::Dirs &dirs = tt::Dirs::GetInstance();
-    auto default_dirs =
-        vector<string>{dirs.servicedir(), dirs.confdir() + "/service"};
+    auto default_dirs = std::vector<std::string>{dirs.servicedir(),
+                                                 dirs.confdir() + "/service"};
     for (auto i = default_dirs.rbegin(); i != default_dirs.rend(); ++i) {
         auto filename = *i + "/" + name;
         struct stat buffer {};
@@ -107,9 +100,9 @@ auto ParseCommand::CheckForFileInDefaultDirs(const std::string &name) -> bool {
     return false;
 }
 
-auto ParseCommand::GetPossibleNameForService(const std::string &service)
-    -> vector<string> {
-    auto possible_names = vector<string>{service};
+auto tt::cli::ParseCommand::GetPossibleNameForService(
+    const std::string &service) -> std::vector<std::string> {
+    auto possible_names = std::vector<std::string>{service};
     std::filesystem::path service_path{service};
     if (auto ext = service_path.extension();
         ext != "" && ext != (".system") && ext != ".user") {

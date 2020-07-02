@@ -36,17 +36,17 @@ public:
                  std::shared_ptr<GlobalOptions> common_options);
     ~ParseCommand() override = default;
     static auto Dispatch(args::Subparser &parser,
-                        std::shared_ptr<GlobalOptions> common_options) -> int;
+                         std::shared_ptr<GlobalOptions> common_options) -> int;
 
 protected:
     auto Execute() -> int override;
 
 private:
-    void ParseFiles();
+    void ParseFiles() const;
     void ParseUserSystemServices();
-    auto CheckForFileInDefaultDirs(const ::std::string &name) -> bool;
-    static auto
-    GetPossibleNameForService(const std::string &service) -> std::vector<std::string>;
+    auto CheckForFileInDefaultDirs(const ::std::string &name) const -> bool;
+    static auto GetPossibleNameForService(const std::string &service)
+        -> std::vector<std::string>;
 
     args::PositionalList<std::string> service_list_;
     args::Flag is_file_;
