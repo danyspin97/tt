@@ -33,6 +33,14 @@ TEST_CASE("ParseSignalFromString") {
     CHECK(ParseSignalFromString("SIGTERM") == Signal::kSigTerm);
 }
 
+TEST_CASE("GetSignalName") {
+    CHECK("SIGHUP" == tt::GetSignalName(Signal::kSigHup));
+    CHECK("SIGINT" == tt::GetSignalName(Signal::kSigInt));
+    CHECK("SIGQUIT" == tt::GetSignalName(Signal::kSigQuit));
+    CHECK("SIGKILL" == tt::GetSignalName(Signal::kSigKill));
+    CHECK("SIGTERM" == tt::GetSignalName(Signal::kSigTerm));
+}
+
 TEST_CASE("ParseSignalFromString with exception") {
     REQUIRE_THROWS(ParseSignalFromString(""));
 }
