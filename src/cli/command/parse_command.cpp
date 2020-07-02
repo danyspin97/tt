@@ -21,19 +21,19 @@
 #include "tt/cli/command/parse_command.hpp"
 
 #include <filesystem>
-#include <iostream>
 #include <sys/stat.h>
 #include <utility>
 
 #include "args.hxx"
+
+#include "spdlog/fmt/ostr.h" // Needed to use operator<< on custom class
+#include "spdlog/spdlog.h"
 
 #include "tt/dirs.hpp"
 #include "tt/parser/service/service_parser.hpp"
 
 #include "tt/cli/global_options.hpp"
 
-using std::cout;
-using std::endl;
 using std::shared_ptr;
 using std::string;
 using std::vector;
@@ -67,9 +67,7 @@ int ParseCommand::Execute() {
 void ParseCommand::ParseFiles() {
     for (auto &&service : service_list_) {
         auto parser = ServiceParser(service);
-        if (!global_options_->quiet_) {
-            std::cout << parser.service();
-        }
+        spdlog::info(parser.service());
     }
 }
 
@@ -85,7 +83,7 @@ void ParseCommand::ParseUserSystemServices() {
         }
 
         if (!found) {
-            cout << "Service '" << service << " could not be found" << endl;
+            spdlog::info("Service '{}' could not be found", service);
         }
     }
 }
@@ -99,9 +97,7 @@ bool ParseCommand::CheckForFileInDefaultDirs(const std::string &name) {
         struct stat buffer {};
         if (stat(filename.c_str(), &buffer) == 0) {
             auto parser = ServiceParser(name);
-            if (!global_options_->quiet_) {
-                cout << parser.service() << endl;
-            }
+            spdlog::info(parser.service());
             return true;
         }
     }

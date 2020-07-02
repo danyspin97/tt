@@ -18,17 +18,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/data/service.hpp"
+#pragma once
 
-std::ostream &operator<<(std::ostream &oss, const tt::Service &service) {
-    std::visit(
-        [&oss](auto &arg) {
-            if constexpr (not std::is_same_v<std::decay_t<decltype(arg)>,
-                                             std::monostate>) {
-                arg.Dump(oss);
-            }
-        },
-        service);
+#include <string>
 
-    return oss;
-}
+namespace tt::cli {
+
+void setupConsoleLoggers(const std::string &verbosity, bool silence_stderr);
+
+} // namespace tt::cli

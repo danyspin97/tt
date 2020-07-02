@@ -25,6 +25,9 @@
 
 #include "args.hxx"
 
+#include "tt/cli/define.hpp"
+#include "tt/cli/log.hpp"
+
 using std::shared_ptr;
 
 using tt::cli::Command;
@@ -36,5 +39,9 @@ Command::Command(args::Subparser &parser,
 
 int Command::InitAndExecute() {
     parser_.Parse();
+    auto verbosity = global_options_->verbosity_.Matched()
+                         ? global_options_->verbosity_.Get()
+                         : tt::cli::DEFAULT_VERBOSITY;
+    tt::cli::setupConsoleLoggers(verbosity, global_options_->quiet_);
     return Execute();
 }

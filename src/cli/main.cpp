@@ -27,6 +27,7 @@
 #include "tt/define.h"
 
 #include "tt/cli/command/parse_command.hpp"
+#include "tt/cli/log.hpp"
 
 using std::cerr;
 using std::endl;

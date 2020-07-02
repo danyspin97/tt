@@ -27,5 +27,6 @@ GlobalOptions::GlobalOptions()
       help_(arguments_, "help", "Display this help menu", {'h', "help"}),
       quiet_(arguments_, "quiet", "Do not print output.", {'q', "quiet"}),
       verbosity_(arguments_, "verbosity",
-                 "Set the verbosity level from 0 (Error) to 4 (Trace)",
+                 "Set the verbosity level to one of {'debug', 'info', 'warn', "
+                 "'critical', 'err'}",
                  {"verbosity"}) {}

@@ -31,7 +31,7 @@ public:
     args::Group arguments_;
     args::HelpFlag help_;
     args::Flag quiet_;
-    args::ValueFlag<int> verbosity_;
+    args::ValueFlag<std::string> verbosity_;
 };
 
 } // namespace tt::cli
