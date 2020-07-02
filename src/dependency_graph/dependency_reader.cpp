@@ -36,19 +36,16 @@ using tt::Oneshot;
 using tt::OneshotOptions;
 
 void DependencyReader::operator()(const Bundle &bundle) {
-    const auto &options_ =
-        dynamic_cast<const BundleOptions &>(bundle.options());
+    const auto &options_ = bundle.options();
     dependencies_ = options_.contents();
 }
 
 void DependencyReader::operator()(const Longrun &longrun) {
-    const auto &options_ =
-        dynamic_cast<const LongrunOptions &>(longrun.options());
+    const auto &options_ = longrun.options();
     dependencies_ = options_.dependencies();
 }
 
 void DependencyReader::operator()(const Oneshot &oneshot) {
-    const auto &options_ =
-        dynamic_cast<const OneshotOptions &>(oneshot.options());
+    const auto &options_ = oneshot.options();
     dependencies_ = options_.dependencies();
 }

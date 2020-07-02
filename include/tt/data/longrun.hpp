@@ -60,6 +60,10 @@ public:
         logger_.emplace(logger);
     }
 
+    [[nodiscard]] auto options() const noexcept -> LongrunOptions {
+        return options_;
+    }
+
     auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 private:
@@ -90,8 +94,10 @@ private:
                                    serializer.object(logger_script);
                                });
                        });
+        serializer.object(options_);
     }
 
+    LongrunOptions options_;
     Environment environment_;
     Script run_;
     std::optional<Script> finish_;

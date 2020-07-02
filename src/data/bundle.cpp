@@ -29,7 +29,7 @@ using tt::Bundle;
 
 Bundle::Bundle(const std::string &name, const std::string &description,
                const std::string &path, BundleOptions &options)
-    : ServiceImpl(name, description, path, options) {}
+    : ServiceImpl(name, description, path), options_(options) {}
 
 auto Bundle::Dump(ostream &oss) const -> ostream & {
     oss << "[main]\n"

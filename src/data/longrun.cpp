@@ -29,7 +29,7 @@ using tt::Longrun;
 Longrun::Longrun(const std::string &name, const std::string &description,
                  const std::string &path, LongrunOptions options,
                  Environment environment, const Script &run)
-    : ServiceImpl(name, description, path, options),
+    : ServiceImpl(name, description, path), options_(options),
       environment_(std::move(environment)), run_(run) {}
 
 auto Longrun::Dump(ostream &oss) const -> ostream & {

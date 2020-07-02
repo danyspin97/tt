@@ -37,6 +37,10 @@ public:
     Bundle(const std::string &name, const std::string &description,
            const std::string &path, BundleOptions &options);
 
+    [[nodiscard]] auto options() const noexcept -> BundleOptions {
+        return options_;
+    }
+
     auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 private:
@@ -45,7 +49,10 @@ private:
 
     template <typename S> void serialize(S &serializer) {
         serializer.ext(*this, bitsery::ext::BaseClass<ServiceImpl>{});
+        serializer.object(options_);
     }
+
+    BundleOptions options_;
 };
 
 } // namespace tt

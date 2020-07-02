@@ -29,7 +29,7 @@ using tt::Oneshot;
 Oneshot::Oneshot(const std::string &name, const std::string &description,
                  const std::string &path, OneshotOptions options,
                  Environment environment, const Script &start)
-    : ServiceImpl(name, description, path, options),
+    : ServiceImpl(name, description, path), options_(options),
       environment_(std::move(environment)), start_(start) {}
 
 auto Oneshot::Dump(ostream &oss) const -> ostream & {

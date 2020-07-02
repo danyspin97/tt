@@ -48,6 +48,10 @@ public:
 
     void stop(const Script &stop) { stop_.emplace(stop); }
 
+    [[nodiscard]] auto options() const noexcept -> OneshotOptions {
+        return options_;
+    }
+
     auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 private:
@@ -70,8 +74,10 @@ private:
                                               serializer.object(script);
                                           });
                        });
+        serializer.object(options_);
     }
 
+    OneshotOptions options_;
     Environment environment_;
     Script start_;
     std::optional<Script> stop_;

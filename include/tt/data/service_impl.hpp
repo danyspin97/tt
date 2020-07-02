@@ -22,7 +22,7 @@
 
 #include <string>
 
-#include "tt/data/service_options.hpp"
+#include "bitsery/bitsery.h"
 
 namespace tt {
 class ServiceVisitor;
@@ -37,19 +37,12 @@ public:
 
     [[nodiscard]] auto path() const noexcept -> std::string { return path_; }
 
-    auto options() noexcept -> ServiceOptions & { return options_; }
-
-    [[nodiscard]] auto options() const noexcept -> const ServiceOptions & {
-        return options_;
-    }
-
     virtual auto Dump(std::ostream &oss) const -> std::ostream &;
 
     virtual ~ServiceImpl() = default;
 
 protected:
-    ServiceImpl(std::string name, std::string description, std::string path,
-                ServiceOptions &options);
+    ServiceImpl(std::string name, std::string description, std::string path);
 
     // Required for Bundle(), Longrun() and Oneshot()
     ServiceImpl() = default;
@@ -65,13 +58,11 @@ private:
             description_, description_.max_size());
         serializer.template text<sizeof(std::string::value_type), std::string>(
             path_, path_.max_size());
-        serializer.object(options_);
     }
 
     std::string name_;
     std::string description_;
     std::string path_;
-    ServiceOptions options_;
 };
 
 } // namespace tt
