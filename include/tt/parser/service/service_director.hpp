@@ -37,12 +37,12 @@ public:
     virtual ~ServiceDirector() = default;
 
     auto ParseAndGetService(std::vector<std::string> &service_lines,
-                               const std::string &path) -> Service;
+                            std::string &&path) -> Service;
 
 protected:
-    virtual auto InstanceService(const std::string &path) -> Service = 0;
-    virtual auto
-    GetBuilderForSection(const std::string &section) -> SectionBuilder * = 0;
+    virtual auto InstanceService(std::string &&path) -> Service = 0;
+    virtual auto GetBuilderForSection(const std::string &section)
+        -> SectionBuilder * = 0;
 
 private:
     void ParseSections();

@@ -41,15 +41,16 @@ OneshotDirector::OneshotDirector()
       stop_script_builder_("stop"), env_section_builder_(environment_),
       options_builder_(options_) {}
 
-auto OneshotDirector::InstanceService(const string &path) -> tt::Service {
+auto OneshotDirector::InstanceService(string &&path) -> tt::Service {
     if (!start_script_builder_.HasScript()) {
         throw Exception("Service '" + main_section_.name +
                         "' does not have a [start] section");
     }
 
-    auto service =
-        Oneshot(main_section_.name, main_section_.description, path, options_,
-                environment_, start_script_builder_.script());
+    auto service = Oneshot(
+        std::move(main_section_.name), std::move(main_section_.description),
+        std::move(path), std::move(options_), std::move(environment_),
+        start_script_builder_.script());
 
     if (stop_script_builder_.HasScript()) {
         service.stop(stop_script_builder_.script());
@@ -58,7 +59,8 @@ auto OneshotDirector::InstanceService(const string &path) -> tt::Service {
     return service;
 }
 
-auto OneshotDirector::GetBuilderForSection(const string &section) -> SectionBuilder * {
+auto OneshotDirector::GetBuilderForSection(const string &section)
+    -> SectionBuilder * {
     if (section == "main") {
         return &main_section_builder_;
     }

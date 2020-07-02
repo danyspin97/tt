@@ -39,13 +39,13 @@ public:
 
 class ServiceDirectorTest : public ServiceDirector {
 public:
-    auto InstanceService(const std::string & /*path*/) -> Service override {
+    auto InstanceService(std::string && /*path*/) -> Service override {
         tt::BundleOptions options;
-        return tt::Bundle("mybundle", "", "/mybundle", options);
+        return tt::Bundle("mybundle", "", "/mybundle", std::move(options));
     }
 
-    auto
-    GetBuilderForSection(const std::string & /*section*/) -> SectionBuilder * override {
+    auto GetBuilderForSection(const std::string & /*section*/)
+        -> SectionBuilder * override {
         return &builder_test_;
     }
 

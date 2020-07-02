@@ -31,7 +31,7 @@ namespace tt {
 class LoggerScriptBuilder : public ScriptBuilder {
 public:
     explicit LoggerScriptBuilder(std::string service_name);
-    auto logger_script() const -> LoggerScript;
+    auto logger_script() -> LoggerScript;
 
     void EndParsing() override;
 

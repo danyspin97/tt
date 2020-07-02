@@ -44,15 +44,16 @@ LongrunDirector::LongrunDirector()
       logger_script_builder_(main_section_.name),
       env_section_builder_(environment_), options_builder_(options_) {}
 
-auto LongrunDirector::InstanceService(const string &path) -> tt::Service {
+auto LongrunDirector::InstanceService(string &&path) -> tt::Service {
     if (!run_script_builder_.HasScript()) {
         throw Exception("Service '" + main_section_.name +
                         "' does not have a [run] section");
     }
 
-    auto service =
-        Longrun(main_section_.name, main_section_.description, path, options_,
-                environment_, run_script_builder_.script());
+    auto service = Longrun(
+        std::move(main_section_.name), std::move(main_section_.description),
+        std::move(path), std::move(options_), std::move(environment_),
+        run_script_builder_.script());
 
     if (finish_script_builder_.HasScript()) {
         service.finish(finish_script_builder_.script());
@@ -64,7 +65,8 @@ auto LongrunDirector::InstanceService(const string &path) -> tt::Service {
     return service;
 }
 
-auto LongrunDirector::GetBuilderForSection(const string &section) -> SectionBuilder * {
+auto LongrunDirector::GetBuilderForSection(const string &section)
+    -> SectionBuilder * {
     if (section == "main") {
         return &main_section_builder_;
     }

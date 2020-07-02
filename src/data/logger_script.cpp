@@ -26,10 +26,10 @@ using std::ostream;
 
 using tt::LoggerScript;
 
-LoggerScript::LoggerScript(Type type, const std::string &execute,
-                           std::string service_to_log, const std::string &user,
-                           const std::string &group)
-    : Script(type, execute), service_to_log_(std::move(service_to_log)) {
+LoggerScript::LoggerScript(Type type, std::string &&execute,
+                           const std::string &service_to_log,
+                           std::string &&user, std::string &&group)
+    : Script(type, std::move(execute)), service_to_log_(service_to_log) {
     this->user(user);
     this->group(group);
 }

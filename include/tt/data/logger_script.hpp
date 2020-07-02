@@ -36,9 +36,9 @@ public:
         return service_to_log_;
     }
 
-    LoggerScript(Type type, const std::string &execute,
-                 std::string service_to_log, const std::string &user,
-                 const std::string &group);
+    LoggerScript(Type type, std::string &&execute,
+                 const std::string &service_to_log, std::string &&user,
+                 std::string &&group);
 
     auto Dump(std::ostream &oss) const -> std::ostream & override;
 

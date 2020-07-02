@@ -37,9 +37,8 @@ namespace tt {
 
 class Longrun : public ServiceImpl {
 public:
-    Longrun(const std::string &name, const std::string &description,
-            const std::string &path, LongrunOptions options,
-            Environment environment, const Script &run);
+    Longrun(std::string &&name, std::string &&description, std::string &&path,
+            LongrunOptions &&options, Environment &&environment, Script &&run);
 
     [[nodiscard]] auto environment() const noexcept -> Environment {
         return environment_;
@@ -106,6 +105,7 @@ private:
 
 } // namespace tt
 
-auto operator<<(std::ostream &oss, const tt::Longrun &longrun) -> std::ostream &;
+auto operator<<(std::ostream &oss, const tt::Longrun &longrun)
+    -> std::ostream &;
 
 #endif // TT_LONGRUN_HPP_

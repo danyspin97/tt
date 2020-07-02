@@ -27,8 +27,8 @@
 
 using std::ostream;
 
-tt::ServiceImpl::ServiceImpl(std::string name, std::string description,
-                             std::string path)
+tt::ServiceImpl::ServiceImpl(std::string &&name, std::string &&description,
+                             std::string &&path)
     : name_(std::move(name)), description_(std::move(description)),
       path_(std::move(path)) {
     ValidatePath();

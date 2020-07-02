@@ -102,14 +102,16 @@ auto LoggerScriptBuilder::GetDefaultExecute() const noexcept -> std::string {
     return "exec -c s6-log -- s" + maxsize_ + " n20 t " + destination_;
 }
 
-auto LoggerScriptBuilder::GetDefaultDestination() const noexcept -> std::string {
+auto LoggerScriptBuilder::GetDefaultDestination() const noexcept
+    -> std::string {
     tt::Dirs &dirs = tt::Dirs::GetInstance();
     return string{dirs.logdir()} + "/" + service_name_;
 }
 
-auto LoggerScriptBuilder::logger_script() const -> LoggerScript {
+auto LoggerScriptBuilder::logger_script() -> LoggerScript {
     LoggerScript logger_script =
-        LoggerScript(GetParsedType(), execute_, service_name_, user_, group_);
+        LoggerScript(GetParsedType(), std::move(execute_), service_name_,
+                     std::move(user_), std::move(group_));
     // TODO: Check if EndParsing has been called
     return logger_script;
 }

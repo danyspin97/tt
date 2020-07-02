@@ -34,10 +34,10 @@ using tt::SectionLineParser;
 using tt::ServiceDirector;
 
 auto ServiceDirector::ParseAndGetService(vector<string> &service_lines,
-                                                const string &path) -> tt::Service {
+                                         string &&path) -> tt::Service {
     service_lines_ = service_lines;
     ParseSections();
-    return InstanceService(path);
+    return InstanceService(std::move(path));
 }
 
 void ServiceDirector::ParseSections() {

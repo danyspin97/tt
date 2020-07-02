@@ -39,8 +39,9 @@ public:
     OneshotDirector();
     ~OneshotDirector() override = default;
 
-    auto InstanceService(const std::string &path) -> Service override;
-    auto GetBuilderForSection(const std::string &section) -> SectionBuilder * override;
+    auto InstanceService(std::string &&path) -> Service override;
+    auto GetBuilderForSection(const std::string &section)
+        -> SectionBuilder * override;
 
 private:
     MainSection main_section_;

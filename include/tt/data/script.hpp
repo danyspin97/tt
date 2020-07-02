@@ -40,7 +40,9 @@ public:
     };
 
     [[nodiscard]] auto type() const noexcept -> Type { return type_; }
-    [[nodiscard]] auto execute() const noexcept -> std::string { return execute_; }
+    [[nodiscard]] auto execute() const noexcept -> std::string {
+        return execute_;
+    }
     [[nodiscard]] auto user() const noexcept -> std::optional<std::string> {
         return user_;
     }
@@ -49,7 +51,7 @@ public:
         return group_;
     }
     void group(const std::string &group) noexcept { group_ = group; }
-    Script(Type type, std::string execute);
+    Script(Type type, std::string &&execute);
     virtual ~Script() = default;
     virtual auto Dump(std::ostream &oss) const -> std::ostream &;
 

@@ -34,8 +34,8 @@ class ServiceVisitor;
 
 class Bundle : public ServiceImpl {
 public:
-    Bundle(const std::string &name, const std::string &description,
-           const std::string &path, BundleOptions &options);
+    Bundle(std::string &&name, std::string &&description, std::string &&path,
+           BundleOptions &&options);
 
     [[nodiscard]] auto options() const noexcept -> BundleOptions {
         return options_;

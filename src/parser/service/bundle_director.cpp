@@ -35,13 +35,14 @@ using tt::SectionBuilder;
 BundleDirector::BundleDirector()
     : main_section_builder_(main_section_), options_builder_(options_) {}
 
-auto BundleDirector::InstanceService(const string &path) -> tt::Service {
-    return Bundle(main_section_.name, main_section_.description, path,
-                  options_);
+auto BundleDirector::InstanceService(string &&path) -> tt::Service {
+    return Bundle(std::move(main_section_.name),
+                  std::move(main_section_.description), std::move(path),
+                  std::move(options_));
 }
 
-auto
-BundleDirector::GetBuilderForSection(const std::string &section) -> SectionBuilder * {
+auto BundleDirector::GetBuilderForSection(const std::string &section)
+    -> SectionBuilder * {
     if (section == "main") {
         return &main_section_builder_;
     }

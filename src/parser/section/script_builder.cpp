@@ -87,8 +87,8 @@ auto tt::ScriptBuilder::GetParsedType() const -> Script::Type {
     throw tt::ScriptTypeNotValidException(error_message);
 }
 
-auto ScriptBuilder::script() const -> Script {
-    Script script = Script(GetParsedType(), execute_);
+auto ScriptBuilder::script() -> Script {
+    Script script = Script(GetParsedType(), std::move(execute_));
 
     if (!user_.empty()) {
         script.user(user_);

@@ -35,16 +35,19 @@ namespace tt {
 
 class Oneshot : public ServiceImpl {
 public:
-    [[nodiscard]] auto start() const noexcept -> Script { return start_; }
-    Oneshot(const std::string &name, const std::string &description,
-            const std::string &path, OneshotOptions options,
-            Environment environment, const Script &start);
+    Oneshot(std::string &&name, std::string &&description, std::string &&path,
+            OneshotOptions &&options, Environment &&environment,
+            Script &&start);
 
     [[nodiscard]] auto environment() const noexcept -> Environment {
         return environment_;
     }
 
-    [[nodiscard]] auto stop() const noexcept -> std::optional<Script> { return stop_; }
+    [[nodiscard]] auto start() const noexcept -> Script { return start_; }
+
+    [[nodiscard]] auto stop() const noexcept -> std::optional<Script> {
+        return stop_;
+    }
 
     void stop(const Script &stop) { stop_.emplace(stop); }
 
@@ -85,6 +88,7 @@ private:
 
 } // namespace tt
 
-auto operator<<(std::ostream &oss, const tt::Oneshot &oneshot) -> std::ostream &;
+auto operator<<(std::ostream &oss, const tt::Oneshot &oneshot)
+    -> std::ostream &;
 
 #endif // TT_ONESHOT_HPP_

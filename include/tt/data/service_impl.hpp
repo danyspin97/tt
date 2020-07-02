@@ -42,7 +42,8 @@ public:
     virtual ~ServiceImpl() = default;
 
 protected:
-    ServiceImpl(std::string name, std::string description, std::string path);
+    ServiceImpl(std::string &&name, std::string &&description,
+                std::string &&path);
 
     // Required for Bundle(), Longrun() and Oneshot()
     ServiceImpl() = default;

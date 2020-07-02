@@ -33,8 +33,9 @@ public:
     BundleDirector();
     ~BundleDirector() override = default;
 
-    auto InstanceService(const std::string &path) -> Service override;
-    auto GetBuilderForSection(const std::string &section) -> SectionBuilder * override;
+    auto InstanceService(std::string &&path) -> Service override;
+    auto GetBuilderForSection(const std::string &section)
+        -> SectionBuilder * override;
 
 private:
     MainSectionBuilder main_section_builder_;
