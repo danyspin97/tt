@@ -27,18 +27,10 @@
 #include "tt/define.h"
 
 #include "tt/cli/command/parse_command.hpp"
-#include "tt/cli/log.hpp"
-
-using std::cerr;
-using std::endl;
-using std::make_shared;
-
-using tt::cli::GlobalOptions;
-using tt::cli::ParseCommand;
 
 auto main(int argc, char *argv[]) -> int {
     args::ArgumentParser parser("tt init/rc manager.");
-    auto common_options = make_shared<GlobalOptions>();
+    auto common_options = std::make_shared<tt::cli::GlobalOptions>();
 
     args::Group manage(parser, "Manage services");
 
@@ -55,21 +47,22 @@ auto main(int argc, char *argv[]) -> int {
     // args::Command status(query, "status", "Show the status of the system");
 
     args::Group testing(parser, "Test services files");
-    args::Command parse(testing, "parse",
-                        "Parse one or more services for testing purposes.",
-                        [&](args::Subparser &parser) {
-                            ParseCommand::Dispatch(parser, common_options);
-                        });
+    args::Command parse(
+        testing, "parse", "Parse one or more services for testing purposes.",
+        [common_options](args::Subparser &subparser) {
+            tt::cli::ParseCommand::Dispatch(subparser, common_options);
+        });
 
     args::GlobalOptions global_options(parser, common_options->arguments());
 
     try {
         parser.ParseCLI(argc, argv);
-    } catch (args::Help &e) {
+    } catch (args::Help & /*e*/) {
         std::cout << parser;
-    } catch (args::Error &e) {
-        cerr << e.what() << endl << parser;
+    } catch (const args::Error &e) {
+        std::cerr << e.what() << std::endl << parser;
         return 1;
     }
+
     return 0;
 }
