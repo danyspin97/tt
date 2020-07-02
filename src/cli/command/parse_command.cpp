@@ -26,7 +26,10 @@
 
 #include "args.hxx"
 
-#include "spdlog/fmt/ostr.h" // Needed to use operator<< on custom class
+// Include operator<<(ostream, Service) before ostream.h
+#include "tt/data/service.hpp"
+
+#include "fmt/ostream.h" // Needed to use operator<< on custom class
 #include "spdlog/spdlog.h"
 
 #include "tt/dirs.hpp"
