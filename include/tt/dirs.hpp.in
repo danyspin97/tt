@@ -30,14 +30,14 @@ public:
     Dirs(Dirs const &) = delete;
     void operator=(Dirs const &) = delete;
 
-    const std::string &bindir();
-    const std::string &confdir();
-    const std::string &execline_prefix();
-    const std::string &libexecdir();
-    const std::string &livedir();
-    const std::string &logdir();
-    const std::string &servicedir();
-    const std::string &statedir();
+    const std::string &bindir() const;
+    const std::string &confdir() const;
+    const std::string &execline_prefix() const;
+    const std::string &libexecdir() const;
+    const std::string &livedir() const;
+    const std::string &logdir() const;
+    const std::string &servicedir() const;
+    const std::string &statedir() const;
 
 private:
     Dirs() = default;
