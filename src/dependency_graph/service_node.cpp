@@ -33,7 +33,9 @@ auto tt::ServiceNode::operator==(const ServiceNode &node) const -> bool {
     return node.service_name_ == service_name_;
 }
 
-auto tt::ServiceNode::name() const -> const std::string & { return service_name_; }
+auto tt::ServiceNode::name() const -> const std::string & {
+    return service_name_;
+}
 
 auto tt::ServiceNode::service() const -> tt::Service { return service_; }
 
@@ -49,7 +51,8 @@ void tt::ServiceNode::Dump(std::ostream &oss) const {
     oss << "\nDependants: " << dependants_;
 }
 
-auto operator<<(std::ostream &oss, const tt::ServiceNode &node) -> std::ostream & {
+auto operator<<(std::ostream &oss, const tt::ServiceNode &node)
+    -> std::ostream & {
     node.Dump(oss);
     return oss;
 }

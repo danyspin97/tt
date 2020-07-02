@@ -24,8 +24,8 @@ auto operator<<(std::ostream &oss, const tt::Service &service)
     -> std::ostream & {
     std::visit(
         [&oss](auto &arg) {
-            if constexpr (not std::is_same_v<std::decay_t<decltype(arg)>,
-                                             std::monostate>) {
+            if constexpr (!std::is_same_v<std::decay_t<decltype(arg)>,
+                                          std::monostate>) {
                 arg.Dump(oss);
             }
         },
