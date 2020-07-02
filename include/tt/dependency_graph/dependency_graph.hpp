@@ -36,7 +36,8 @@ namespace tt {
 
 class DependencyGraph {
 public:
-    [[nodiscard]] auto enabled_services() const -> const std::set<std::string> &;
+    [[nodiscard]] auto enabled_services() const
+        -> const std::set<std::string> &;
     [[nodiscard]] auto nodes() const -> const std::vector<ServiceNode> &;
 
     auto AddNodes(const std::vector<Service> &services) -> size_t;
@@ -45,10 +46,12 @@ public:
     void AddEnabledServices(const std::vector<std::string> &services_to_enable);
     template <typename Func>
     void ForEachDependencyOfNode(const ServiceNode &node, Func function);
-    [[nodiscard]] auto GetNodeFromName(const std::string &name) -> ServiceNode &;
+    [[nodiscard]] auto GetNodeFromName(const std::string &name)
+        -> ServiceNode &;
     [[nodiscard]] auto HasService(const std::string &service) const -> bool;
     [[nodiscard]] auto IsNodeRequired(const ServiceNode &node) const -> bool;
-    [[nodiscard]] auto IsServiceEnabled(const std::string &service) const -> bool;
+    [[nodiscard]] auto IsServiceEnabled(const std::string &service) const
+        -> bool;
     void PopulateDependant(const std::vector<std::string> &services);
     void RemoveServices(const std::vector<std::string> &services);
     void RemoveEnabledServices(const std::vector<std::string> &services);
