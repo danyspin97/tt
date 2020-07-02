@@ -62,7 +62,7 @@ void LoggerScriptBuilder::CheckParsedValues() {
     }
 }
 
-string &LoggerScriptBuilder::GetAttributeForKey(const string &key) {
+auto LoggerScriptBuilder::GetAttributeForKey(const string &key) -> string & {
     if (key == "destination") {
         return destination_;
     }
@@ -98,16 +98,16 @@ void LoggerScriptBuilder::SetDefaultForOptionalValues() noexcept {
     }
 }
 
-std::string LoggerScriptBuilder::GetDefaultExecute() const noexcept {
+auto LoggerScriptBuilder::GetDefaultExecute() const noexcept -> std::string {
     return "exec -c s6-log -- s" + maxsize_ + " n20 t " + destination_;
 }
 
-std::string LoggerScriptBuilder::GetDefaultDestination() const noexcept {
+auto LoggerScriptBuilder::GetDefaultDestination() const noexcept -> std::string {
     tt::Dirs &dirs = tt::Dirs::GetInstance();
     return string{dirs.logdir()} + "/" + service_name_;
 }
 
-LoggerScript LoggerScriptBuilder::logger_script() const {
+auto LoggerScriptBuilder::logger_script() const -> LoggerScript {
     LoggerScript logger_script =
         LoggerScript(GetParsedType(), execute_, service_name_, user_, group_);
     // TODO: Check if EndParsing has been called

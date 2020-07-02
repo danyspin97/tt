@@ -60,7 +60,7 @@ void MainSectionBuilder::TryParseLine(const string &line) {
     SetThrowsIfNotEmpty(GetAttributeForKey(key_), value_);
 }
 
-string &MainSectionBuilder::GetAttributeForKey(const std::string &key) {
+auto MainSectionBuilder::GetAttributeForKey(const std::string &key) -> string & {
     if (key == "name") {
         return main_section_.name;
     }

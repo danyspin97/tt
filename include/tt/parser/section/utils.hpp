@@ -33,7 +33,7 @@ void AttributeNotFound(const std::string &attribute,
                        const std::string &section);
 
 // Is called many times during parsing, allow inlining
-inline bool IsEmptyLine(const std::string &line) {
+inline auto IsEmptyLine(const std::string &line) -> bool {
     const auto strippedLine = trim_copy(line);
     return strippedLine.empty() || strippedLine[0] == '#';
 }

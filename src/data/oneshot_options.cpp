@@ -24,7 +24,7 @@ using std::ostream;
 
 using tt::OneshotOptions;
 
-ostream &OneshotOptions::Dump(ostream &oss) const {
+auto OneshotOptions::Dump(ostream &oss) const -> ostream & {
     ServiceOptions::Dump(oss) << "\n";
     oss << "write_message = " << write_start_stop_messages();
     return oss << "\noptional = " << optional();

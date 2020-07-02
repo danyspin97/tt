@@ -81,7 +81,7 @@ void EnvironmentBuilder::CheckKeyIsValid(const string &key) {
     }
 }
 
-string EnvironmentBuilder::StripQuotes(const string &value) {
+auto EnvironmentBuilder::StripQuotes(const string &value) -> string {
     const auto val_size = value.size();
     if (val_size < 2 || value[0] != '"' || value[val_size - 1] != '"') {
         throw EnvironmentValueNotQuotedException();

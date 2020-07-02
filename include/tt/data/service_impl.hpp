@@ -29,21 +29,21 @@ class ServiceVisitor;
 
 class ServiceImpl {
 public:
-    [[nodiscard]] std::string name() const noexcept { return name_; }
+    [[nodiscard]] auto name() const noexcept -> std::string { return name_; }
 
-    [[nodiscard]] std::string description() const noexcept {
+    [[nodiscard]] auto description() const noexcept -> std::string {
         return description_;
     }
 
-    [[nodiscard]] std::string path() const noexcept { return path_; }
+    [[nodiscard]] auto path() const noexcept -> std::string { return path_; }
 
-    ServiceOptions &options() noexcept { return options_; }
+    auto options() noexcept -> ServiceOptions & { return options_; }
 
-    [[nodiscard]] const ServiceOptions &options() const noexcept {
+    [[nodiscard]] auto options() const noexcept -> const ServiceOptions & {
         return options_;
     }
 
-    virtual std::ostream &Dump(std::ostream &oss) const;
+    virtual auto Dump(std::ostream &oss) const -> std::ostream &;
 
     virtual ~ServiceImpl() = default;
 

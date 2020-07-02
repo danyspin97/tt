@@ -37,8 +37,8 @@ public:
     LongrunDirector();
     ~LongrunDirector() override = default;
 
-    Service InstanceService(const std::string &path) override;
-    SectionBuilder *GetBuilderForSection(const std::string &section) override;
+    auto InstanceService(const std::string &path) -> Service override;
+    auto GetBuilderForSection(const std::string &section) -> SectionBuilder * override;
 
 private:
     MainSection main_section_;

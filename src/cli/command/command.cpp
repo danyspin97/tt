@@ -28,16 +28,11 @@
 #include "tt/cli/define.hpp"
 #include "tt/cli/log.hpp"
 
-using std::shared_ptr;
-
-using tt::cli::Command;
-using tt::cli::GlobalOptions;
-
-Command::Command(args::Subparser &parser,
-                 shared_ptr<GlobalOptions> global_options)
+tt::cli::Command::Command(args::Subparser &parser,
+                          std::shared_ptr<GlobalOptions> global_options)
     : parser_(parser), global_options_(std::move(global_options)) {}
 
-int Command::InitAndExecute() {
+auto tt::cli::Command::InitAndExecute() -> int {
     parser_.Parse();
     auto verbosity = global_options_->verbosity_.Matched()
                          ? global_options_->verbosity_.Get()

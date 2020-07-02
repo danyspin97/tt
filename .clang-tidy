@@ -1,5 +1,5 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,misc-*,modernize-*,-modernize-use-trailing-return-type,performance-*,readability-*,portability-*,cppcoreguidelines-*,bugprone-*,hicpp-*'
+Checks:          'clang-diagnostic-*,clang-analyzer-*,misc-*,modernize-*,performance-*,readability-*,portability-*,cppcoreguidelines-*,bugprone-*,hicpp-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false

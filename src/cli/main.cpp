@@ -36,7 +36,7 @@ using std::make_shared;
 using tt::cli::GlobalOptions;
 using tt::cli::ParseCommand;
 
-int main(int argc, char *argv[]) {
+auto main(int argc, char *argv[]) -> int {
     args::ArgumentParser parser("tt init/rc manager.");
     auto common_options = make_shared<GlobalOptions>();
 

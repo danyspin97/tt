@@ -33,7 +33,7 @@ using tt::kAssignmentToken;
 using tt::kCodeCloseToken;
 using tt::kCodeOpenToken;
 
-bool CodeParser::StartParsing(const string &line) {
+auto CodeParser::StartParsing(const string &line) -> bool {
     if (IsParsing()) {
         throw tt::CodeParserIsStillParsingException();
     }
@@ -69,7 +69,7 @@ void CodeParser::ParseLine(const string &line) {
     code_ << "\n";
 }
 
-string CodeParser::code() const {
+auto CodeParser::code() const -> string {
     if (IsParsing()) {
         throw CodeParserIsStillParsingException();
     }

@@ -42,7 +42,7 @@ using tt::KeyValueParser;
 using tt::SectionLineParser;
 using tt::ServiceParser;
 
-vector<string> ServiceParser::GenerateListFrom(const string &path) {
+auto ServiceParser::GenerateListFrom(const string &path) -> vector<string> {
     vector<string> lines;
     ifstream file{path};
     const auto size = std::filesystem::file_size(path);
@@ -60,14 +60,14 @@ vector<string> ServiceParser::GenerateListFrom(const string &path) {
 ServiceParser::ServiceParser(string path)
     : path_(std::move(path)), service_(ParseService()) {}
 
-tt::Service tt::ServiceParser::ParseService() {
+auto tt::ServiceParser::ParseService() -> tt::Service {
     auto service_lines = GenerateListFrom(path_);
     const auto type = GetTypeFromService(service_lines);
     auto director = tt::ParserFactory::GetDirectorPerType(type);
     return director->ParseAndGetService(service_lines, path_);
 }
 
-string ServiceParser::GetTypeFromService(const vector<string> &service_lines) {
+auto ServiceParser::GetTypeFromService(const vector<string> &service_lines) -> string {
     auto main_section_index = GetMainSectionIndex(service_lines);
     for (auto i = main_section_index; i < service_lines.size(); i++) {
         auto key_value_parser = KeyValueParser(service_lines.at(i));
@@ -80,8 +80,8 @@ string ServiceParser::GetTypeFromService(const vector<string> &service_lines) {
     throw Exception(msg);
 }
 
-size_t
-ServiceParser::GetMainSectionIndex(const vector<string> &service_lines) const {
+auto
+ServiceParser::GetMainSectionIndex(const vector<string> &service_lines) const -> size_t {
     size_t index = 0;
     for (const auto &line : service_lines) {
         auto section_line_parser = SectionLineParser(line);
@@ -97,4 +97,4 @@ ServiceParser::GetMainSectionIndex(const vector<string> &service_lines) const {
     throw Exception(msg);
 }
 
-tt::Service &ServiceParser::service() { return service_; }
+auto ServiceParser::service() -> tt::Service & { return service_; }

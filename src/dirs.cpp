@@ -20,24 +20,24 @@
 
 #include "tt/dirs.hpp"
 
-tt::Dirs &tt::Dirs::GetInstance() {
+auto tt::Dirs::GetInstance() -> tt::Dirs & {
     static tt::Dirs instance;
 
     return instance;
 }
 
-const std::string &tt::Dirs::bindir() { return bindir_; }
+auto tt::Dirs::bindir() -> const std::string & { return bindir_; }
 
-const std::string &tt::Dirs::confdir() { return confdir_; }
+auto tt::Dirs::confdir() -> const std::string & { return confdir_; }
 
-const std::string &tt::Dirs::execline_prefix() { return execline_prefix_; }
+auto tt::Dirs::execline_prefix() -> const std::string & { return execline_prefix_; }
 
-const std::string &tt::Dirs::libexecdir() { return libexecdir_; }
+auto tt::Dirs::libexecdir() -> const std::string & { return libexecdir_; }
 
-const std::string &tt::Dirs::livedir() { return livedir_; }
+auto tt::Dirs::livedir() -> const std::string & { return livedir_; }
 
-const std::string &tt::Dirs::logdir() { return logdir_; }
+auto tt::Dirs::logdir() -> const std::string & { return logdir_; }
 
-const std::string &tt::Dirs::servicedir() { return servicedir_; }
+auto tt::Dirs::servicedir() -> const std::string & { return servicedir_; }
 
-const std::string &tt::Dirs::statedir() { return statedir_; }
+auto tt::Dirs::statedir() -> const std::string & { return statedir_; }

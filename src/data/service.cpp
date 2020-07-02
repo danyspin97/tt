@@ -20,7 +20,8 @@
 
 #include "tt/data/service.hpp"
 
-std::ostream &operator<<(std::ostream &oss, const tt::Service &service) {
+auto operator<<(std::ostream &oss, const tt::Service &service)
+    -> std::ostream & {
     std::visit(
         [&oss](auto &arg) {
             if constexpr (not std::is_same_v<std::decay_t<decltype(arg)>,

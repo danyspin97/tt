@@ -31,13 +31,13 @@ namespace tt {
 
 class BundleOptions : public ServiceOptions {
 public:
-    [[nodiscard]] std::vector<std::string> contents() const { return contents_; }
+    [[nodiscard]] auto contents() const -> std::vector<std::string> { return contents_; }
 
     void contents(std::vector<std::string> contents) {
         contents_ = std::move(contents);
     }
 
-    std::ostream &Dump(std::ostream &oss) const override;
+    auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 private:
     std::vector<std::string> contents_;

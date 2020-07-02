@@ -37,7 +37,7 @@ public:
 private:
     void TryParseLine(const std::string &line);
     static void CheckKeyIsValid(const std::string &key);
-    static std::string StripQuotes(const std::string &value);
+    static auto StripQuotes(const std::string &value) -> std::string;
 
     Environment &environment_;
 };

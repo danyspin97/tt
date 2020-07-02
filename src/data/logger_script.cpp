@@ -34,7 +34,7 @@ LoggerScript::LoggerScript(Type type, const std::string &execute,
     this->group(group);
 }
 
-ostream &LoggerScript::Dump(ostream &oss) const {
+auto LoggerScript::Dump(ostream &oss) const -> ostream & {
     Script::Dump(oss);
     return oss << "\nservice_to_log = " << service_to_log();
 }

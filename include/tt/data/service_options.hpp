@@ -33,7 +33,7 @@ namespace tt {
 
 class ServiceOptions {
 public:
-    [[nodiscard]] std::vector<std::string> dependencies() const {
+    [[nodiscard]] auto dependencies() const -> std::vector<std::string> {
         return depends_;
     }
 
@@ -43,7 +43,7 @@ public:
 
     virtual ~ServiceOptions() = default;
 
-    virtual std::ostream &Dump(std::ostream &oss) const;
+    virtual auto Dump(std::ostream &oss) const -> std::ostream &;
 
 protected:
     friend class ServiceImpl;
@@ -66,6 +66,6 @@ private:
 
 } // namespace tt
 
-std::ostream &operator<<(std::ostream &oss, tt::ServiceOptions const &options);
+auto operator<<(std::ostream &oss, tt::ServiceOptions const &options) -> std::ostream &;
 
 #endif // TT_SERVICE_OPTIONS_HPP_

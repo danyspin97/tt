@@ -65,7 +65,7 @@ void OptionsBuilder::EndParsing() {
     }
 }
 
-bool OptionsBuilder::ParseMultilineValue(const string &line) {
+auto OptionsBuilder::ParseMultilineValue(const string &line) -> bool {
     try {
         return TryParseMultilineValue(line);
     } catch (AttributeNotFoundException &e) {
@@ -79,7 +79,7 @@ bool OptionsBuilder::ParseMultilineValue(const string &line) {
     }
 }
 
-bool OptionsBuilder::TryParseMultilineValue(const string &line) {
+auto OptionsBuilder::TryParseMultilineValue(const string &line) -> bool {
     if (array_parser_.IsParsing()) {
         array_parser_.ParseLine(line);
         CheckParserHasFinished();

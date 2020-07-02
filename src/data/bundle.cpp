@@ -31,13 +31,13 @@ Bundle::Bundle(const std::string &name, const std::string &description,
                const std::string &path, BundleOptions &options)
     : ServiceImpl(name, description, path, options) {}
 
-ostream &Bundle::Dump(ostream &oss) const {
+auto Bundle::Dump(ostream &oss) const -> ostream & {
     oss << "[main]\n"
         << "\ntype = bundle";
     ServiceImpl::Dump(oss);
     return oss << "\n\n[options]\n" << options();
 }
 
-std::ostream &operator<<(std::ostream &oss, const Bundle &bundle) {
+auto operator<<(std::ostream &oss, const Bundle &bundle) -> std::ostream & {
     return bundle.Dump(oss);
 }

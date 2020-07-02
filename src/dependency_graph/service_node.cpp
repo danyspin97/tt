@@ -29,17 +29,17 @@ tt::ServiceNode::ServiceNode(tt::Service service)
     service_name_ = std::visit(tt::GetName, service);
 }
 
-bool tt::ServiceNode::operator==(const ServiceNode &node) const {
+auto tt::ServiceNode::operator==(const ServiceNode &node) const -> bool {
     return node.service_name_ == service_name_;
 }
 
-const std::string &tt::ServiceNode::name() const { return service_name_; }
+auto tt::ServiceNode::name() const -> const std::string & { return service_name_; }
 
-tt::Service tt::ServiceNode::service() const { return service_; }
+auto tt::ServiceNode::service() const -> tt::Service { return service_; }
 
 void tt::ServiceNode::AddDependant() { dependants_++; }
 
-bool tt::ServiceNode::HasDependants() const { return dependants_ != 0; }
+auto tt::ServiceNode::HasDependants() const -> bool { return dependants_ != 0; }
 
 void tt::ServiceNode::RemoveDependant() { dependants_--; }
 
@@ -49,7 +49,7 @@ void tt::ServiceNode::Dump(std::ostream &oss) const {
     oss << "\nDependants: " << dependants_;
 }
 
-std::ostream &operator<<(std::ostream &oss, const tt::ServiceNode &node) {
+auto operator<<(std::ostream &oss, const tt::ServiceNode &node) -> std::ostream & {
     node.Dump(oss);
     return oss;
 }

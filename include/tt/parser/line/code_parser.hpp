@@ -28,13 +28,13 @@ namespace tt {
 
 class CodeParser {
 public:
-    bool IsParsing() const { return is_parsing_; }
+    auto IsParsing() const -> bool { return is_parsing_; }
 
-    std::string key() const { return key_; }
+    auto key() const -> std::string { return key_; }
 
-    std::string code() const;
+    auto code() const -> std::string;
 
-    bool StartParsing(const std::string &line);
+    auto StartParsing(const std::string &line) -> bool;
 
     void ParseLine(const std::string &line);
 

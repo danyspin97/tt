@@ -35,20 +35,20 @@ namespace tt {
 
 class Oneshot : public ServiceImpl {
 public:
-    [[nodiscard]] Script start() const noexcept { return start_; }
+    [[nodiscard]] auto start() const noexcept -> Script { return start_; }
     Oneshot(const std::string &name, const std::string &description,
             const std::string &path, OneshotOptions options,
             Environment environment, const Script &start);
 
-    [[nodiscard]] Environment environment() const noexcept {
+    [[nodiscard]] auto environment() const noexcept -> Environment {
         return environment_;
     }
 
-    [[nodiscard]] std::optional<Script> stop() const noexcept { return stop_; }
+    [[nodiscard]] auto stop() const noexcept -> std::optional<Script> { return stop_; }
 
     void stop(const Script &stop) { stop_.emplace(stop); }
 
-    std::ostream &Dump(std::ostream &oss) const override;
+    auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 private:
     friend class bitsery::Access;
@@ -79,6 +79,6 @@ private:
 
 } // namespace tt
 
-std::ostream &operator<<(std::ostream &oss, const tt::Oneshot &oneshot);
+auto operator<<(std::ostream &oss, const tt::Oneshot &oneshot) -> std::ostream &;
 
 #endif // TT_ONESHOT_HPP_

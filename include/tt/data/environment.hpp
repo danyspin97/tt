@@ -31,13 +31,13 @@ namespace tt {
 
 class Environment {
 public:
-    [[nodiscard]] std::string Get(const std::string &key) const;
+    [[nodiscard]] auto Get(const std::string &key) const -> std::string;
 
-    [[nodiscard]] std::map<std::string, std::string> GetAll() const;
+    [[nodiscard]] auto GetAll() const -> std::map<std::string, std::string>;
 
     void Set(const std::string &key, const std::string &value);
 
-    bool SetUnique(const std::string &key, const std::string &value);
+    auto SetUnique(const std::string &key, const std::string &value) -> bool;
 
 private:
     friend class bitsery::Access;
@@ -58,6 +58,7 @@ private:
 
 } // namespace tt
 
-std::ostream &operator<<(std::ostream &strm, const tt::Environment &env);
+auto operator<<(std::ostream &strm, const tt::Environment &env)
+    -> std::ostream &;
 
 #endif // TT_ENVINRONMENT_HPP_

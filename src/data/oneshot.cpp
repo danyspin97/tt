@@ -32,7 +32,7 @@ Oneshot::Oneshot(const std::string &name, const std::string &description,
     : ServiceImpl(name, description, path, options),
       environment_(std::move(environment)), start_(start) {}
 
-ostream &Oneshot::Dump(ostream &oss) const {
+auto Oneshot::Dump(ostream &oss) const -> ostream & {
     oss << "[main]\n";
     ServiceImpl::Dump(oss);
     oss << "\ntype = oneshot";
@@ -47,6 +47,6 @@ ostream &Oneshot::Dump(ostream &oss) const {
     return oss;
 }
 
-std::ostream &operator<<(std::ostream &oss, const Oneshot &oneshot) {
+auto operator<<(std::ostream &oss, const Oneshot &oneshot) -> std::ostream & {
     return oneshot.Dump(oss);
 }

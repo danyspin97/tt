@@ -29,7 +29,7 @@ using tt::Script;
 Script::Script(Type type, std::string execute)
     : execute_(std::move(execute)), type_(type) {}
 
-ostream &Script::Dump(ostream &oss) const {
+auto Script::Dump(ostream &oss) const -> ostream & {
     // TODO: Convert from Type to string
     // o << "type = " << type() << "\n";
     oss << "execute = (\n" << execute() << "\n)";
@@ -42,6 +42,6 @@ ostream &Script::Dump(ostream &oss) const {
     return oss;
 }
 
-ostream &operator<<(ostream &oss, const Script &script) {
+auto operator<<(ostream &oss, const Script &script) -> ostream & {
     return script.Dump(oss);
 }

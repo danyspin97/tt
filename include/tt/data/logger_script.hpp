@@ -32,7 +32,7 @@ namespace tt {
 
 class LoggerScript : public Script {
 public:
-    [[nodiscard]] std::string service_to_log() const noexcept {
+    [[nodiscard]] auto service_to_log() const noexcept -> std::string {
         return service_to_log_;
     }
 
@@ -40,7 +40,7 @@ public:
                  std::string service_to_log, const std::string &user,
                  const std::string &group);
 
-    std::ostream &Dump(std::ostream &oss) const override;
+    auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 private:
     friend class bitsery::Access;

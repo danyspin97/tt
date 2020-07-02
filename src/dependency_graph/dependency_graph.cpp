@@ -37,7 +37,7 @@ void tt::DependencyGraph::AddServices(
     ValidateDependencies(index);
 }
 
-size_t tt::DependencyGraph::AddNodes(const std::vector<tt::Service> &services) {
+auto tt::DependencyGraph::AddNodes(const std::vector<tt::Service> &services) -> size_t {
     size_t ret_index = nodes_.size();
     size_t current_index = ret_index;
     nodes_.reserve(services.size() + nodes_.size());
@@ -136,30 +136,30 @@ void tt::DependencyGraph::ForEachDependencyOfNode(const ServiceNode &node,
     });
 }
 
-bool tt::DependencyGraph::IsNodeRequired(const tt::ServiceNode &node) const {
+auto tt::DependencyGraph::IsNodeRequired(const tt::ServiceNode &node) const -> bool {
     auto itr = enabled_services_.find(node.name());
     return itr == enabled_services_.end() || node.HasDependants();
 }
 
-tt::ServiceNode &tt::DependencyGraph::GetNodeFromName(const std::string &name) {
+auto tt::DependencyGraph::GetNodeFromName(const std::string &name) -> tt::ServiceNode & {
     const auto index = name_to_index_.at(name);
     return nodes_.at(index);
 }
 
-bool tt::DependencyGraph::HasService(const std::string &service) const {
+auto tt::DependencyGraph::HasService(const std::string &service) const -> bool {
     auto itr = name_to_index_.find(service);
     return itr != name_to_index_.end();
 }
 
-bool tt::DependencyGraph::IsServiceEnabled(const std::string &service) const {
+auto tt::DependencyGraph::IsServiceEnabled(const std::string &service) const -> bool {
     auto itr = enabled_services_.find(service);
     return itr != enabled_services_.end();
 }
 
-const std::set<std::string> &tt::DependencyGraph::enabled_services() const {
+auto tt::DependencyGraph::enabled_services() const -> const std::set<std::string> & {
     return enabled_services_;
 }
 
-const std::vector<tt::ServiceNode> &tt::DependencyGraph::nodes() const {
+auto tt::DependencyGraph::nodes() const -> const std::vector<tt::ServiceNode> & {
     return nodes_;
 }

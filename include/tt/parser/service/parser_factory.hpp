@@ -29,8 +29,8 @@ class ServiceDirector;
 
 class ParserFactory {
 public:
-    static std::unique_ptr<ServiceDirector>
-    GetDirectorPerType(const std::string &type);
+    static auto
+    GetDirectorPerType(const std::string &type) -> std::unique_ptr<ServiceDirector>;
 };
 
 } // namespace tt

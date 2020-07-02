@@ -31,11 +31,11 @@ namespace tt {
 
 class LongrunOptions : public ServiceOptions {
 public:
-    [[nodiscard]] uint_fast32_t notify() const noexcept { return notify_; }
+    [[nodiscard]] auto notify() const noexcept -> uint_fast32_t { return notify_; }
 
     void notify(uint_fast32_t notify) noexcept { notify_ = notify; }
 
-    [[nodiscard]] uint_fast32_t timeout_finish() const noexcept {
+    [[nodiscard]] auto timeout_finish() const noexcept -> uint_fast32_t {
         return timeout_finish_;
     }
 
@@ -43,7 +43,7 @@ public:
         timeout_finish_ = timeout_finish;
     }
 
-    [[nodiscard]] uint_fast32_t timeout_kill() const noexcept {
+    [[nodiscard]] auto timeout_kill() const noexcept -> uint_fast32_t {
         return timeout_kill_;
     }
 
@@ -51,19 +51,19 @@ public:
         timeout_kill_ = timeout_kill;
     }
 
-    [[nodiscard]] Signal down_signal() const noexcept { return down_signal_; }
+    [[nodiscard]] auto down_signal() const noexcept -> Signal { return down_signal_; }
 
     void down_signal(Signal down_signal) noexcept {
         down_signal_ = down_signal;
     }
 
-    [[nodiscard]] uint_fast16_t max_death() const noexcept {
+    [[nodiscard]] auto max_death() const noexcept -> uint_fast16_t {
         return max_death_;
     }
 
     void max_death(uint_fast16_t max_death);
 
-    [[nodiscard]] bool write_run_finish_message() const noexcept {
+    [[nodiscard]] auto write_run_finish_message() const noexcept -> bool {
         return write_run_finish_message_;
     }
 
@@ -71,11 +71,11 @@ public:
         write_run_finish_message_ = write_run_finish_message;
     }
 
-    [[nodiscard]] bool optional() const noexcept { return optional_; }
+    [[nodiscard]] auto optional() const noexcept -> bool { return optional_; }
 
     void optional(bool optional) noexcept { optional_ = optional; }
 
-    std::ostream &Dump(std::ostream &oss) const override;
+    auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 private:
     uint_fast32_t notify_;

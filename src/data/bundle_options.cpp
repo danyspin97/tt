@@ -30,7 +30,7 @@ using std::string;
 
 using tt::BundleOptions;
 
-ostream &BundleOptions::Dump(ostream &oss) const {
+auto BundleOptions::Dump(ostream &oss) const -> ostream & {
     oss << "contents = ( ";
     copy(contents_.begin(), contents_.end(),
          ostream_iterator<string>(oss, " "));

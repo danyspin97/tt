@@ -30,9 +30,9 @@ class DependencyGraph;
 class DependencyGraphSerializer {
 public:
     using Buffer = std::vector<uint8_t>;
-    static std::tuple<Buffer, size_t> Serialize(const DependencyGraph& graph);
-    static DependencyGraph Deserialize(const Buffer &buffer,
-                                       size_t written_size);
+    static auto Serialize(const DependencyGraph& graph) -> std::tuple<Buffer, size_t>;
+    static auto Deserialize(const Buffer &buffer,
+                                       size_t written_size) -> DependencyGraph;
 };
 
 } // namespace tt

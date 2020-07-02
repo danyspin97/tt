@@ -22,7 +22,7 @@
 
 #include "tt/exception.hpp"
 
-tt::Signal tt::ParseSignalFromString(const std::string &signal) {
+auto tt::ParseSignalFromString(const std::string &signal) -> tt::Signal {
     static const std::map<std::string, Signal> signal_strings{
         {"SIGHUP", Signal::kSigHup},   {"SIGINT", Signal::kSigInt},
         {"SIGQUIT", Signal::kSigQuit}, {"SIGKILL", Signal::kSigKill},

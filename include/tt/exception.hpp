@@ -30,10 +30,10 @@ class Exception : public std::exception {
 public:
     explicit Exception(std::string msg) : msg_(std::move(msg)) {}
 
-    [[nodiscard]] const char *what() const noexcept override {
+    [[nodiscard]] auto what() const noexcept -> const char * override {
         return msg_.c_str();
     }
-    [[nodiscard]] std::string msg() const noexcept { return msg_; }
+    [[nodiscard]] auto msg() const noexcept -> std::string { return msg_; }
 
 private:
     const std::string msg_;

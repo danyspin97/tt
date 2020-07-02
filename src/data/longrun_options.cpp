@@ -33,7 +33,7 @@ void LongrunOptions::max_death(uint_fast16_t max_death) {
     max_death_ = max_death;
 }
 
-ostream &LongrunOptions::Dump(ostream &oss) const {
+auto LongrunOptions::Dump(ostream &oss) const -> ostream & {
     oss << "\ntimeout_finish = " << timeout_finish();
     oss << "\ntimeout_kill = " << timeout_kill();
     // TODO: Convert a tt::Signal to string

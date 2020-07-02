@@ -34,7 +34,7 @@ public:
     InstanceServiceParser(const std::string &path, std::string instance_name);
 
 protected:
-    std::vector<std::string> GenerateListFrom(const std::string &path);
+    auto GenerateListFrom(const std::string &path) -> std::vector<std::string>;
 
 private:
     std::string instance_name_;

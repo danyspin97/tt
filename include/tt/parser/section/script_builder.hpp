@@ -31,14 +31,14 @@ namespace tt {
 class ScriptBuilder : public CodeSectionBuilder {
 public:
     explicit ScriptBuilder(const std::string &section);
-    Script script() const;
-    bool HasScript() const;
+    auto script() const -> Script;
+    auto HasScript() const -> bool;
     void EndParsing() override;
 
 protected:
-    std::string &GetAttributeForKey(const std::string &key) override;
-    std::string &GetCodeAttributeForKey(const std::string &key) override;
-    Script::Type GetParsedType() const;
+    auto GetAttributeForKey(const std::string &key) -> std::string & override;
+    auto GetCodeAttributeForKey(const std::string &key) -> std::string & override;
+    auto GetParsedType() const -> Script::Type;
 
     std::string type_;
     std::string user_;

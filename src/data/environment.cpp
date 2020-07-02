@@ -26,14 +26,14 @@ using std::string;
 
 using tt::Environment;
 
-string Environment::Get(const string &key) const { return env_.at(key); }
+auto Environment::Get(const string &key) const -> string { return env_.at(key); }
 
-map<string, string> Environment::GetAll() const { return env_; }
+auto Environment::GetAll() const -> map<string, string> { return env_; }
 
 void Environment::Set(const string &key, const string &value) {
     env_[key] = value;
 }
-bool Environment::SetUnique(const string &key, const string &value) {
+auto Environment::SetUnique(const string &key, const string &value) -> bool {
     if (env_.find(key) == env_.end()) {
         return false;
     }
@@ -42,7 +42,7 @@ bool Environment::SetUnique(const string &key, const string &value) {
     return true;
 }
 
-ostream &operator<<(ostream &strm, const Environment &env) {
+auto operator<<(ostream &strm, const Environment &env) -> ostream & {
     auto env_map = env.GetAll();
     for (const auto &pair : env_map) {
         strm << pair.first << " = \"" << pair.second << "\"\n";

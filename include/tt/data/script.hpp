@@ -39,19 +39,19 @@ public:
         Execline,
     };
 
-    [[nodiscard]] Type type() const noexcept { return type_; }
-    [[nodiscard]] std::string execute() const noexcept { return execute_; }
-    [[nodiscard]] std::optional<std::string> user() const noexcept {
+    [[nodiscard]] auto type() const noexcept -> Type { return type_; }
+    [[nodiscard]] auto execute() const noexcept -> std::string { return execute_; }
+    [[nodiscard]] auto user() const noexcept -> std::optional<std::string> {
         return user_;
     }
     void user(const std::string &user) noexcept { user_ = user; }
-    [[nodiscard]] std::optional<std::string> group() const noexcept {
+    [[nodiscard]] auto group() const noexcept -> std::optional<std::string> {
         return group_;
     }
     void group(const std::string &group) noexcept { group_ = group; }
     Script(Type type, std::string execute);
     virtual ~Script() = default;
-    virtual std::ostream &Dump(std::ostream &oss) const;
+    virtual auto Dump(std::ostream &oss) const -> std::ostream &;
 
 protected:
     friend class Longrun;
@@ -90,6 +90,6 @@ private:
 
 } // namespace tt
 
-std::ostream &operator<<(std::ostream &oss, const tt::Script &script);
+auto operator<<(std::ostream &oss, const tt::Script &script) -> std::ostream &;
 
 #endif // TT_DATA_SCRIPT_HPP_

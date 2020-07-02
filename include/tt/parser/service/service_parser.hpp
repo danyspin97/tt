@@ -31,19 +31,19 @@ namespace tt {
 
 class ServiceParser {
 public:
-    Service &service();
+    auto service() -> Service &;
     explicit ServiceParser(std::string path);
 
 protected:
-    static std::vector<std::string> GenerateListFrom(const std::string &path);
+    static auto GenerateListFrom(const std::string &path) -> std::vector<std::string>;
 
 private:
-    std::string
-    GetTypeFromService(const std::vector<std::string> &service_lines);
+    auto
+    GetTypeFromService(const std::vector<std::string> &service_lines) -> std::string;
 
-    [[nodiscard]] size_t
-    GetMainSectionIndex(const std::vector<std::string> &service_lines) const;
-    [[nodiscard]] Service ParseService();
+    [[nodiscard]] auto
+    GetMainSectionIndex(const std::vector<std::string> &service_lines) const -> size_t;
+    [[nodiscard]] auto ParseService() -> Service;
 
     std::string path_;
     Service service_;

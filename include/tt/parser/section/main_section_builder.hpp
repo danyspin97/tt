@@ -37,7 +37,7 @@ public:
 
 private:
     void TryParseLine(const std::string &line);
-    std::string &GetAttributeForKey(const std::string &key);
+    auto GetAttributeForKey(const std::string &key) -> std::string &;
     MainSection &main_section_;
 
     std::string ret_;

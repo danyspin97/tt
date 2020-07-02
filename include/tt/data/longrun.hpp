@@ -41,18 +41,18 @@ public:
             const std::string &path, LongrunOptions options,
             Environment environment, const Script &run);
 
-    [[nodiscard]] Environment environment() const noexcept {
+    [[nodiscard]] auto environment() const noexcept -> Environment {
         return environment_;
     }
-    [[nodiscard]] Script run() const noexcept { return run_; }
+    [[nodiscard]] auto run() const noexcept -> Script { return run_; }
 
-    [[nodiscard]] std::optional<Script> finish() const noexcept {
+    [[nodiscard]] auto finish() const noexcept -> std::optional<Script> {
         return finish_;
     }
 
     void finish(const Script &finish) noexcept { finish_.emplace(finish); }
 
-    [[nodiscard]] std::optional<LoggerScript> logger() const noexcept {
+    [[nodiscard]] auto logger() const noexcept -> std::optional<LoggerScript> {
         return logger_;
     }
 
@@ -60,7 +60,7 @@ public:
         logger_.emplace(logger);
     }
 
-    std::ostream &Dump(std::ostream &oss) const override;
+    auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 private:
     friend class bitsery::Access;
@@ -100,6 +100,6 @@ private:
 
 } // namespace tt
 
-std::ostream &operator<<(std::ostream &oss, const tt::Longrun &longrun);
+auto operator<<(std::ostream &oss, const tt::Longrun &longrun) -> std::ostream &;
 
 #endif // TT_LONGRUN_HPP_

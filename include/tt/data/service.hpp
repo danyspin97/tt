@@ -33,4 +33,5 @@ using Service = std::variant<std::monostate, Bundle, Longrun, Oneshot>;
 
 } // namespace tt
 
-std::ostream &operator<<(std::ostream &oss, const tt::Service &service);
+auto operator<<(std::ostream &oss, const tt::Service &service)
+    -> std::ostream &;

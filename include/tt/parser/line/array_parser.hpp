@@ -28,17 +28,17 @@ namespace tt {
 
 class ArrayParser {
 public:
-    [[nodiscard]] bool IsParsing() const noexcept { return is_parsing_; }
+    [[nodiscard]] auto IsParsing() const noexcept -> bool { return is_parsing_; }
 
-    [[nodiscard]] std::string key() const noexcept { return key_; }
+    [[nodiscard]] auto key() const noexcept -> std::string { return key_; }
 
-    [[nodiscard]] std::vector<std::string> values() const noexcept {
+    [[nodiscard]] auto values() const noexcept -> std::vector<std::string> {
         return std::vector<std::string>{values_};
     }
 
     ArrayParser() : key_(""), values_({}) {}
 
-    bool StartParsing(const std::string &line);
+    auto StartParsing(const std::string &line) -> bool;
 
     void ParseLine(const std::string &line);
 

@@ -36,10 +36,10 @@ public:
             std::shared_ptr<GlobalOptions> global_options);
     virtual ~Command() = default;
 
-    int InitAndExecute();
+    auto InitAndExecute() -> int;
 
 protected:
-    virtual int Execute() = 0;
+    virtual auto Execute() -> int = 0;
 
     args::Subparser &parser_;
     std::shared_ptr<GlobalOptions> global_options_;

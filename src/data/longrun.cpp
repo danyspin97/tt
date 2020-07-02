@@ -32,7 +32,7 @@ Longrun::Longrun(const std::string &name, const std::string &description,
     : ServiceImpl(name, description, path, options),
       environment_(std::move(environment)), run_(run) {}
 
-ostream &Longrun::Dump(ostream &oss) const {
+auto Longrun::Dump(ostream &oss) const -> ostream & {
     oss << "[main]\n";
     ServiceImpl::Dump(oss);
     oss << "\ntype = longrun";
@@ -48,6 +48,6 @@ ostream &Longrun::Dump(ostream &oss) const {
     return oss;
 }
 
-std::ostream &operator<<(std::ostream &oss, Longrun const &longrun) {
+auto operator<<(std::ostream &oss, Longrun const &longrun) -> std::ostream & {
     return longrun.Dump(oss);
 }

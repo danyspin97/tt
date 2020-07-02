@@ -33,8 +33,8 @@ using tt::SectionBuilder;
 using tt::SectionLineParser;
 using tt::ServiceDirector;
 
-tt::Service ServiceDirector::ParseAndGetService(vector<string> &service_lines,
-                                                const string &path) {
+auto ServiceDirector::ParseAndGetService(vector<string> &service_lines,
+                                                const string &path) -> tt::Service {
     service_lines_ = service_lines;
     ParseSections();
     return InstanceService(path);

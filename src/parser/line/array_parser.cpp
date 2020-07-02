@@ -42,7 +42,7 @@ using tt::kArrayCloseToken;
 using tt::kArrayOpenToken;
 using tt::kAssignmentToken;
 
-bool ArrayParser::StartParsing(const string &line) {
+auto ArrayParser::StartParsing(const string &line) -> bool {
     assert(!IsParsing());
 
     auto equal_token_pos = line.find(kAssignmentToken);

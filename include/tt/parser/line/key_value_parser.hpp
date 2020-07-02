@@ -27,17 +27,17 @@ namespace tt {
 
 class KeyValueParser {
 public:
-    [[nodiscard]] std::string key() const noexcept { return key_; }
+    [[nodiscard]] auto key() const noexcept -> std::string { return key_; }
 
-    [[nodiscard]] std::string value() const noexcept { return value_; }
+    [[nodiscard]] auto value() const noexcept -> std::string { return value_; }
 
-    [[nodiscard]] bool IsLineValid() const noexcept { return valid_; }
+    [[nodiscard]] auto IsLineValid() const noexcept -> bool { return valid_; }
 
     explicit KeyValueParser(std::string line, bool throw_on_error = false);
 
 private:
     void ParseLine();
-    bool TryParseLine();
+    auto TryParseLine() -> bool;
 
     std::string line_;
     std::string key_;

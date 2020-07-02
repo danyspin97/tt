@@ -45,7 +45,7 @@ void ScriptBuilder::EndParsing() {
     finished_ = true;
 }
 
-string &ScriptBuilder::GetAttributeForKey(const string &key) {
+auto ScriptBuilder::GetAttributeForKey(const string &key) -> string & {
     if (key == "build") {
         return type_;
     }
@@ -64,7 +64,7 @@ string &ScriptBuilder::GetAttributeForKey(const string &key) {
     return section_;
 }
 
-string &ScriptBuilder::GetCodeAttributeForKey(const string &key) {
+auto ScriptBuilder::GetCodeAttributeForKey(const string &key) -> string & {
     if (key == "execute") {
         return execute_;
     }
@@ -74,7 +74,7 @@ string &ScriptBuilder::GetCodeAttributeForKey(const string &key) {
     return section_;
 }
 
-Script::Type tt::ScriptBuilder::GetParsedType() const {
+auto tt::ScriptBuilder::GetParsedType() const -> Script::Type {
     // TODO: add "path" type
     if (type_ == "auto" || type_ == "execline") {
         return Script::Type::Execline;
@@ -87,7 +87,7 @@ Script::Type tt::ScriptBuilder::GetParsedType() const {
     throw tt::ScriptTypeNotValidException(error_message);
 }
 
-Script ScriptBuilder::script() const {
+auto ScriptBuilder::script() const -> Script {
     Script script = Script(GetParsedType(), execute_);
 
     if (!user_.empty()) {
@@ -100,4 +100,4 @@ Script ScriptBuilder::script() const {
     return script;
 }
 
-bool ScriptBuilder::HasScript() const { return finished_; }
+auto ScriptBuilder::HasScript() const -> bool { return finished_; }

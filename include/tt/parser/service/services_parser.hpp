@@ -31,7 +31,7 @@ namespace tt {
 
 class ServicesParser {
 public:
-    std::vector<Service> services();
+    auto services() -> std::vector<Service>;
     void ParseServices(const std::vector<std::string> &service_names);
 
 protected:
@@ -40,10 +40,10 @@ protected:
 private:
     void ParseService(const std::string &service_name);
     void ParseDependenciesOfService(const Service &service);
-    static size_t GetInstanceTokenIndex(const std::string &service_name);
-    static std::string SplitServiceNameFromInstance(std::string &service,
-                                                    size_t token_index);
-    std::string GetPathForServiceName(const std::string &name);
+    static auto GetInstanceTokenIndex(const std::string &service_name) -> size_t;
+    static auto SplitServiceNameFromInstance(std::string &service,
+                                                    size_t token_index) -> std::string;
+    auto GetPathForServiceName(const std::string &name) -> std::string;
 
 protected:
     std::string suffix_;

@@ -36,19 +36,19 @@ namespace tt {
 
 class DependencyGraph {
 public:
-    [[nodiscard]] const std::set<std::string> &enabled_services() const;
-    [[nodiscard]] const std::vector<ServiceNode> &nodes() const;
+    [[nodiscard]] auto enabled_services() const -> const std::set<std::string> &;
+    [[nodiscard]] auto nodes() const -> const std::vector<ServiceNode> &;
 
-    size_t AddNodes(const std::vector<Service> &services);
+    auto AddNodes(const std::vector<Service> &services) -> size_t;
     void AddServices(const std::vector<std::string> &services_to_enable,
                      const std::vector<tt::Service> &services);
     void AddEnabledServices(const std::vector<std::string> &services_to_enable);
     template <typename Func>
     void ForEachDependencyOfNode(const ServiceNode &node, Func function);
-    [[nodiscard]] ServiceNode &GetNodeFromName(const std::string &name);
-    [[nodiscard]] bool HasService(const std::string &service) const;
-    [[nodiscard]] bool IsNodeRequired(const ServiceNode &node) const;
-    [[nodiscard]] bool IsServiceEnabled(const std::string &service) const;
+    [[nodiscard]] auto GetNodeFromName(const std::string &name) -> ServiceNode &;
+    [[nodiscard]] auto HasService(const std::string &service) const -> bool;
+    [[nodiscard]] auto IsNodeRequired(const ServiceNode &node) const -> bool;
+    [[nodiscard]] auto IsServiceEnabled(const std::string &service) const -> bool;
     void PopulateDependant(const std::vector<std::string> &services);
     void RemoveServices(const std::vector<std::string> &services);
     void RemoveEnabledServices(const std::vector<std::string> &services);

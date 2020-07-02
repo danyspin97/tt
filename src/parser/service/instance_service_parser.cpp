@@ -33,8 +33,8 @@ InstanceServiceParser::InstanceServiceParser(const string &path,
                                              string instance_name)
     : ServiceParser(path), instance_name_(std::move(instance_name)) {}
 
-vector<string>
-InstanceServiceParser::GenerateListFrom(const std::string &path) {
+auto
+InstanceServiceParser::GenerateListFrom(const std::string &path) -> vector<string> {
     auto lines = ServiceParser::GenerateListFrom(path);
     replace(lines.begin(), lines.end(), InstanceToken, instance_name_);
     return lines;

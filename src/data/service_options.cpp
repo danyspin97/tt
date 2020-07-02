@@ -32,7 +32,7 @@ using std::string;
 
 using tt::ServiceOptions;
 
-ostream &ServiceOptions::Dump(ostream &oss) const {
+auto ServiceOptions::Dump(ostream &oss) const -> ostream & {
     if (!depends_.empty()) {
         oss << "depends = " << tt::kArrayOpenToken << " ";
         copy(depends_.begin(), depends_.end(),
@@ -43,6 +43,6 @@ ostream &ServiceOptions::Dump(ostream &oss) const {
     return oss;
 }
 
-ostream &operator<<(ostream &oss, ServiceOptions const &options) {
+auto operator<<(ostream &oss, ServiceOptions const &options) -> ostream & {
     return options.Dump(oss);
 }

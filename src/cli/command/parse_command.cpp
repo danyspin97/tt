@@ -49,13 +49,13 @@ ParseCommand::ParseCommand(args::Subparser &parser,
       service_list_(parser, "services", "services to parse"),
       is_file_(parser, "file", "", {'f', "file"}) {}
 
-int ParseCommand::Dispatch(args::Subparser &parser,
-                           shared_ptr<GlobalOptions> common_options) {
+auto ParseCommand::Dispatch(args::Subparser &parser,
+                            shared_ptr<GlobalOptions> common_options) -> int {
     ParseCommand command = ParseCommand(parser, std::move(common_options));
     return command.InitAndExecute();
 }
 
-int ParseCommand::Execute() {
+auto ParseCommand::Execute() -> int {
     if (is_file_) {
         ParseFiles();
         return 0;
@@ -88,7 +88,7 @@ void ParseCommand::ParseUserSystemServices() {
     }
 }
 
-bool ParseCommand::CheckForFileInDefaultDirs(const std::string &name) {
+auto ParseCommand::CheckForFileInDefaultDirs(const std::string &name) -> bool {
     tt::Dirs &dirs = tt::Dirs::GetInstance();
     auto default_dirs =
         vector<string>{dirs.servicedir(), dirs.confdir() + "/service"};
@@ -104,8 +104,8 @@ bool ParseCommand::CheckForFileInDefaultDirs(const std::string &name) {
     return false;
 }
 
-vector<string>
-ParseCommand::GetPossibleNameForService(const std::string &service) {
+auto ParseCommand::GetPossibleNameForService(const std::string &service)
+    -> vector<string> {
     auto possible_names = vector<string>{service};
     std::filesystem::path service_path{service};
     if (auto ext = service_path.extension();

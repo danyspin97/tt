@@ -37,7 +37,7 @@ public:
     Bundle(const std::string &name, const std::string &description,
            const std::string &path, BundleOptions &options);
 
-    std::ostream &Dump(std::ostream &oss) const override;
+    auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 private:
     friend class bitsery::Access;
@@ -50,6 +50,6 @@ private:
 
 } // namespace tt
 
-std::ostream &operator<<(std::ostream &oss, const tt::Bundle &bundle);
+auto operator<<(std::ostream &oss, const tt::Bundle &bundle) -> std::ostream &;
 
 #endif // TT_BUNDLE_HPP_

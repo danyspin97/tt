@@ -41,7 +41,7 @@ void tt::ServiceImpl::ValidatePath() const {
     }
 }
 
-ostream &tt::ServiceImpl::Dump(ostream &oss) const {
+auto tt::ServiceImpl::Dump(ostream &oss) const -> ostream & {
     oss << "name = " << name();
     if (!description().empty()) {
         oss << "\ndescription = " << description();

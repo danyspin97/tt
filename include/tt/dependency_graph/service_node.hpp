@@ -35,12 +35,12 @@ class ServiceNode;
 class ServiceNode {
 public:
     explicit ServiceNode(Service service);
-    bool operator==(const ServiceNode &node) const;
-    [[nodiscard]] Service service() const;
-    [[nodiscard]] const std::string &name() const;
+    auto operator==(const ServiceNode &node) const -> bool;
+    [[nodiscard]] auto service() const -> Service;
+    [[nodiscard]] auto name() const -> const std::string &;
 
     void AddDependant();
-    [[nodiscard]] bool HasDependants() const;
+    [[nodiscard]] auto HasDependants() const -> bool;
     void RemoveDependant();
 
     void Dump(std::ostream &oss) const;
@@ -82,4 +82,5 @@ private:
 
 } // namespace tt
 
-std::ostream &operator<<(std::ostream &oss, const tt::ServiceNode &node);
+auto operator<<(std::ostream &oss, const tt::ServiceNode &node)
+    -> std::ostream &;

@@ -36,8 +36,8 @@ using tt::OneshotDirector;
 using tt::ParserFactory;
 using tt::ServiceDirector;
 
-unique_ptr<ServiceDirector>
-ParserFactory::GetDirectorPerType(const string &type) {
+auto
+ParserFactory::GetDirectorPerType(const string &type) -> unique_ptr<ServiceDirector> {
     if (type == "bundle") {
         return make_unique<BundleDirector>();
     }

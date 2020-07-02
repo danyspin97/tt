@@ -31,21 +31,21 @@ namespace tt {
 class LoggerScriptBuilder : public ScriptBuilder {
 public:
     explicit LoggerScriptBuilder(std::string service_name);
-    LoggerScript logger_script() const;
+    auto logger_script() const -> LoggerScript;
 
     void EndParsing() override;
 
 protected:
-    std::string &GetAttributeForKey(const std::string &key) override;
+    auto GetAttributeForKey(const std::string &key) -> std::string & override;
 
 private:
     void CheckParsedValues();
 
     void SetDefaultForOptionalValues() noexcept;
 
-    std::string GetDefaultExecute() const noexcept;
+    auto GetDefaultExecute() const noexcept -> std::string;
 
-    std::string GetDefaultDestination() const noexcept;
+    auto GetDefaultDestination() const noexcept -> std::string;
 
     std::string destination_;
     std::string maxsize_;

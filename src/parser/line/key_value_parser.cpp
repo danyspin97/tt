@@ -49,7 +49,7 @@ void tt::KeyValueParser::ParseLine() {
     }
 }
 
-bool tt::KeyValueParser::TryParseLine() {
+auto tt::KeyValueParser::TryParseLine() -> bool {
     auto token_pos = line_.find(kAssignmentToken);
     if (token_pos == string::npos) {
         return false;

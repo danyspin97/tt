@@ -34,7 +34,7 @@ enum class Signal {
     kSigTerm = 15
 };
 
-Signal ParseSignalFromString(const std::string &signal);
+auto ParseSignalFromString(const std::string &signal) -> Signal;
 
 } // namespace tt
 

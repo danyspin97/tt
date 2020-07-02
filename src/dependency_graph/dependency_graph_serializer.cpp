@@ -31,8 +31,8 @@
 #include "tt/dirs.hpp"
 #include "tt/exception.hpp"
 
-std::tuple<tt::DependencyGraphSerializer::Buffer, size_t>
-tt::DependencyGraphSerializer::Serialize(const tt::DependencyGraph& graph) {
+auto
+tt::DependencyGraphSerializer::Serialize(const tt::DependencyGraph& graph) -> std::tuple<tt::DependencyGraphSerializer::Buffer, size_t> {
     Buffer buffer;
     size_t written_size =
         bitsery::quickSerialization<bitsery::OutputBufferAdapter<Buffer>>(
@@ -41,9 +41,9 @@ tt::DependencyGraphSerializer::Serialize(const tt::DependencyGraph& graph) {
     return std::make_tuple(buffer, written_size);
 }
 
-tt::DependencyGraph
+auto
 tt::DependencyGraphSerializer::Deserialize(const Buffer &buffer,
-                                           size_t written_size) {
+                                           size_t written_size) -> tt::DependencyGraph {
     tt::DependencyGraph graph;
     auto state =
         bitsery::quickDeserialization<bitsery::InputBufferAdapter<Buffer>>(

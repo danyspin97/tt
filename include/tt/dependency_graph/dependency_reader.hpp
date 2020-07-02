@@ -32,7 +32,7 @@ class Oneshot;
 
 class DependencyReader {
 public:
-    std::vector<std::string> dependencies() { return dependencies_; }
+    auto dependencies() -> std::vector<std::string> { return dependencies_; }
 
     void operator()(const Bundle &bundle);
     void operator()(const Longrun &longrun);

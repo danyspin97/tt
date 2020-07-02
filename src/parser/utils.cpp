@@ -28,7 +28,7 @@ using std::string;
 
 using tt::BooleanParseException;
 
-bool tt::ParseBoolean(const string &value) {
+auto tt::ParseBoolean(const string &value) -> bool {
     if (value == "yes") {
         return true;
     }

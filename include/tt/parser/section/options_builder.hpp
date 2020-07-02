@@ -32,10 +32,10 @@ public:
     void EndParsing() override;
 
 protected:
-    bool ParseMultilineValue(const std::string &line);
+    auto ParseMultilineValue(const std::string &line) -> bool;
 
 private:
-    bool TryParseMultilineValue(const std::string &line);
+    auto TryParseMultilineValue(const std::string &line) -> bool;
 
     void CheckParserHasFinished();
 
