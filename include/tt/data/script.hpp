@@ -52,6 +52,8 @@ public:
     }
     void group(const std::string &group) noexcept { group_ = group; }
     Script(Type type, std::string &&execute);
+    Script(Type type, std::string &&execute, std::string &&user,
+           std::string &&group);
     virtual ~Script() = default;
     virtual auto Dump(std::ostream &oss) const -> std::ostream &;
 

@@ -29,10 +29,8 @@ using tt::LoggerScript;
 LoggerScript::LoggerScript(Type type, std::string &&execute,
                            const std::string &service_to_log,
                            std::string &&user, std::string &&group)
-    : Script(type, std::move(execute)), service_to_log_(service_to_log) {
-    this->user(user);
-    this->group(group);
-}
+    : Script(type, std::move(execute), std::move(user), std::move(group)),
+      service_to_log_(service_to_log) {}
 
 auto LoggerScript::Dump(ostream &oss) const -> ostream & {
     Script::Dump(oss);

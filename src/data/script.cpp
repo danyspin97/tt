@@ -27,7 +27,12 @@ using std::ostream;
 using tt::Script;
 
 Script::Script(Type type, std::string &&execute)
-    : execute_(execute), type_(type) {}
+    : execute_(std::move(execute)), type_(type) {}
+
+Script::Script(Type type, std::string &&execute, std::string &&user,
+               std::string &&group)
+    : execute_(std::move(execute)), type_(type), user_(std::move(user)),
+      group_(std::move(group)) {}
 
 auto Script::Dump(ostream &oss) const -> ostream & {
     // TODO: Convert from Type to string
