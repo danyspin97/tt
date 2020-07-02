@@ -35,6 +35,8 @@ auto tt::GetSignalName(tt::Signal signal) -> std::string {
     case Signal::kSigTerm:
         return "SIGTERM";
     };
+
+    throw Exception("Should never reach here");
 }
 
 auto tt::ParseSignalFromString(const std::string &signal) -> Signal {
