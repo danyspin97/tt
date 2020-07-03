@@ -23,26 +23,14 @@
 #include "catch2/catch.hpp"
 
 #include "tt/data/oneshot.hpp"
-
-using std::ifstream;
-using std::string;
-using std::vector;
-
-using tt::Oneshot;
-using tt::OneshotDirector;
+#include "tt/parser/service/utils.hpp"
 
 TEST_CASE("OneshotDirector") {
-    auto director = OneshotDirector();
+    auto director = tt::OneshotDirector();
 
-    ifstream service_file("../test/data/init-fsck.system");
-
-    vector<string> lines;
-    string line;
-    while (getline(service_file, line)) {
-        lines.push_back(line);
-    }
+    auto lines = tt::GetLinesFromFile("../test/data/init-fsck.system");
     auto service = director.ParseAndGetService(lines, "/tmp/init-fsck");
-    auto oneshot = std::get<Oneshot>(service);
+    auto oneshot = std::get<tt::Oneshot>(service);
 
     CHECK(oneshot.name() == "init-fsck");
     CHECK(oneshot.environment().Get("CMDARGS") == "-d");
