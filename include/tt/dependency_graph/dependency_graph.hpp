@@ -50,6 +50,8 @@ public:
 private:
     auto AddNodes(const std::vector<Service> &services) -> size_t;
     void AddEnabledServices(const std::vector<std::string> &services_to_enable);
+    void CheckDepenciesAreFullfilled(size_t starting_index);
+    void CheckGraphIsAcyclic(const std::vector<std::string> &enabled_services);
     template <typename Func>
     void ForEachDependencyOfNode(const ServiceNode &node, Func function);
     [[nodiscard]] auto GetNodeFromName(const std::string &name)
@@ -59,7 +61,6 @@ private:
     void RemoveEnabledServices(const std::vector<std::string> &services);
     void RemoveService(const ServiceNode &node);
     void RemoveUnusedServices();
-    void ValidateDependencies(size_t starting_index);
     void UpdateDependantOfNode(const ServiceNode &node);
     void UpdateDependants();
 

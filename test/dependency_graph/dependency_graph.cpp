@@ -25,6 +25,7 @@
 #include "tt/data/service.hpp"
 #include "tt/dependency_graph/service_node.hpp"
 #include "tt/dependency_graph/utils.hpp"
+#include "tt/exception.hpp"
 #include "tt/parser/service/service_parser.hpp"
 #include "tt/parser/service/services_parser.hpp"
 
@@ -46,7 +47,23 @@ TEST_CASE("DependencyChecker") {
 
     SECTION("mount-fstab with unresolved deps") {
         std::vector<std::string> filenames = {"../test/data/mount-fstab"};
-        REQUIRE_THROWS(
-            tt::AddTestDependenciesToGraph(graph, {"mount-fstab"}, filenames));
+        REQUIRE_THROWS_AS(
+            tt::AddTestDependenciesToGraph(graph, {"mount-fstab"}, filenames),
+            tt::Exception);
+    }
+
+    SECTION("CheckGraphIsAcyclic") {
+        std::vector<std::string> filenames = {"../test/data/selfdep"};
+        REQUIRE_THROWS_AS(
+            tt::AddTestDependenciesToGraph(graph, {"selfdep"}, filenames),
+            tt::Exception);
+    }
+
+    SECTION("CheckGraphIsAcyclic with self dependency") {
+        std::vector<std::string> filenames = {
+            "../test/data/foo", "../test/data/bar", "../test/data/foobar"};
+        REQUIRE_THROWS_AS(
+            tt::AddTestDependenciesToGraph(graph, {"foobar"}, filenames),
+            tt::Exception);
     }
 }

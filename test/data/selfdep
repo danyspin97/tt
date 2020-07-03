@@ -1,0 +1,13 @@
+[main]
+name = selfdep
+description = Selfdep
+type = oneshot
+
+[start]
+build = auto
+execute =(
+    echo
+)
+
+[options]
+deps =[ selfdep ]

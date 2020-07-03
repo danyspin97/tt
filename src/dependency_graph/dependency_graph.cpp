@@ -33,7 +33,8 @@ void tt::DependencyGraph::AddServices(
     const std::vector<tt::Service> &services) {
     auto index = AddNodes(services);
     AddEnabledServices(services_to_enable);
-    ValidateDependencies(index);
+    CheckDepenciesAreFullfilled(index);
+    CheckGraphIsAcyclic(services_to_enable);
     PopulateDependant(services_to_enable);
 }
 
@@ -64,15 +65,53 @@ void tt::DependencyGraph::PopulateDependant(
     }
 }
 
-void tt::DependencyGraph::ValidateDependencies(size_t starting_index) {
+void tt::DependencyGraph::CheckDepenciesAreFullfilled(size_t starting_index) {
     auto itr = nodes_.begin();
     advance(itr, starting_index);
     for (; itr != nodes_.end(); ++itr) {
-        tt::ForEachDependencyOfService(itr->service(), [this](auto &dep) {
-            if (!HasService(dep)) {
-                throw tt::Exception("Dep not respected");
+        tt::ForEachDependencyOfService(
+            itr->service(), [this](const std::string &dep) {
+                if (!HasService(dep)) {
+                    throw tt::Exception("Dependency '" + dep +
+                                        "' could not be found");
+                }
+            });
+    }
+}
+
+void tt::DependencyGraph::CheckGraphIsAcyclic(
+    const std::vector<std::string> &enabled_services) {
+    enum class Color { White = 0, Gray = 1, Black = 2 };
+
+    std::map<std::string_view, Color> colors{};
+    std::function<void(ServiceNode)> visit = [this, &visit, &colors](
+                                                 const ServiceNode &node) {
+        colors[node.name()] = Color::Gray;
+        ForEachDependencyOfNode(node, [visit, &colors](ServiceNode &dep_node) {
+            switch (colors.at(dep_node.name())) {
+            case Color::White:
+                visit(dep_node);
+                break;
+            case Color::Gray:
+                throw Exception("Cycle found while calculating the "
+                                "dependencies of the services");
+            case Color::Black:
+                assert(false);
             }
+
+            colors[dep_node.name()] = Color::Black;
         });
+    };
+
+    std::for_each(begin(nodes_), end(nodes_),
+                  [&colors](const ServiceNode &node) {
+                      colors.emplace(node.name(), Color::White);
+                  });
+    for (const auto &service_name : enabled_services) {
+        if (colors.at(service_name) == Color::White) {
+            const auto &node = GetNodeFromName(service_name);
+            visit(node);
+        }
     }
 }
 

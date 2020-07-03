@@ -1,0 +1,13 @@
+[main]
+name = foo
+description = FOO
+type = oneshot
+
+[start]
+build = auto
+execute =(
+    echo
+)
+
+[options]
+deps =[ bar ]
