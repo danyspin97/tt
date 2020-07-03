@@ -40,27 +40,30 @@ public:
         -> const std::set<std::string> &;
     [[nodiscard]] auto nodes() const -> const std::vector<ServiceNode> &;
 
-    auto AddNodes(const std::vector<Service> &services) -> size_t;
     void AddServices(const std::vector<std::string> &services_to_enable,
                      const std::vector<tt::Service> &services);
+    [[nodiscard]] auto HasService(const std::string &service) const -> bool;
+    [[nodiscard]] auto IsServiceEnabled(const std::string &service) const
+        -> bool;
+    void RemoveServices(const std::vector<std::string> &services);
+
+private:
+    auto AddNodes(const std::vector<Service> &services) -> size_t;
     void AddEnabledServices(const std::vector<std::string> &services_to_enable);
     template <typename Func>
     void ForEachDependencyOfNode(const ServiceNode &node, Func function);
     [[nodiscard]] auto GetNodeFromName(const std::string &name)
         -> ServiceNode &;
-    [[nodiscard]] auto HasService(const std::string &service) const -> bool;
     [[nodiscard]] auto IsNodeRequired(const ServiceNode &node) const -> bool;
-    [[nodiscard]] auto IsServiceEnabled(const std::string &service) const
-        -> bool;
     void PopulateDependant(const std::vector<std::string> &services);
-    void RemoveServices(const std::vector<std::string> &services);
     void RemoveEnabledServices(const std::vector<std::string> &services);
-    void RemoveUnusedServices();
     void RemoveService(const ServiceNode &node);
+    void RemoveUnusedServices();
     void ValidateDependencies(size_t starting_index);
     void UpdateDependantOfNode(const ServiceNode &node);
     void UpdateDependants();
 
+    friend class bitsery::Access;
     template <typename S> void serialize(S &serializer) {
         serializer.ext(
             enabled_services_,
@@ -79,7 +82,6 @@ public:
         serializer.container(nodes_, nodes_.max_size());
     }
 
-private:
     std::set<std::string> enabled_services_;
     std::map<std::string, size_t> name_to_index_;
     std::vector<ServiceNode> nodes_;
