@@ -9,6 +9,12 @@ execute =(
     fsck ${CMDARGS}
 )
 
+[stop]
+build = auto
+execute =(
+    fsck --stop # Example command needed for test
+)
+
 [config]
 CMDARGS = "-d"
 

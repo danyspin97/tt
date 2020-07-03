@@ -1,0 +1,5 @@
+[main]
+name = nostart
+description = missing [start] section
+type = oneshot
+

@@ -28,10 +28,24 @@
 TEST_CASE("OneshotDirector") {
     auto director = tt::OneshotDirector();
 
-    auto lines = tt::GetLinesFromFile("../test/data/init-fsck.system");
-    auto service = director.ParseAndGetService(lines, "/tmp/init-fsck");
-    auto oneshot = std::get<tt::Oneshot>(service);
+    SECTION("Test init-fsck.system service") {
+        auto lines = tt::GetLinesFromFile("../test/data/init-fsck.system");
+        auto service = director.ParseAndGetService(lines, "/tmp/init-fsck");
+        auto oneshot = std::get<tt::Oneshot>(service);
 
-    CHECK(oneshot.name() == "init-fsck");
-    CHECK(oneshot.environment().Get("CMDARGS") == "-d");
+        CHECK(oneshot.name() == "init-fsck");
+        CHECK(oneshot.environment().Get("CMDARGS") == "-d");
+    }
+
+    SECTION("Test service without [start] section") {
+        auto lines = tt::GetLinesFromFile("../test/data/nostart");
+        CHECK_THROWS_WITH(director.ParseAndGetService(lines, "/tmp/nostart"),
+                          "Service 'nostart' does not have a [start] section");
+    }
+
+    SECTION("Test service with unknown section") {
+        auto lines = tt::GetLinesFromFile("../test/data/unknown_section");
+        CHECK_THROWS_WITH(director.ParseAndGetService(lines, "/tmp/nostart"),
+                          "Section 'unknown' is not supported");
+    }
 }
