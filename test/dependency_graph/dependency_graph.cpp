@@ -31,12 +31,17 @@
 TEST_CASE("DependencyChecker") {
     tt::DependencyGraph graph;
 
-    SECTION("mount-fstab with resolved deps") {
+    SECTION("Add mount-fstab with resolved deps and remove it") {
         std::vector<std::string> filenames = {"../test/data/mount-fstab",
                                               "../test/data/init-fsck",
                                               "../test/data/mount-rwfs"};
         REQUIRE_NOTHROW(
             tt::AddTestDependenciesToGraph(graph, {"mount-fstab"}, filenames));
+
+        REQUIRE_NOTHROW(graph.RemoveServices({"mount-fstab"}));
+
+        CHECK(graph.nodes().empty());
+        CHECK(graph.enabled_services().empty());
     }
 
     SECTION("mount-fstab with unresolved deps") {
