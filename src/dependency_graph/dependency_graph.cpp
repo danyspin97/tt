@@ -87,6 +87,7 @@ void tt::DependencyGraph::CheckGraphIsAcyclic(
     std::function<void(ServiceNode)> visit = [this, &visit, &colors](
                                                  const ServiceNode &node) {
         colors[node.name()] = Color::Gray;
+
         ForEachDependencyOfNode(node, [visit, &colors](ServiceNode &dep_node) {
             switch (colors.at(dep_node.name())) {
             case Color::White:
@@ -98,9 +99,9 @@ void tt::DependencyGraph::CheckGraphIsAcyclic(
             case Color::Black:
                 assert(false);
             }
-
-            colors[dep_node.name()] = Color::Black;
         });
+
+        colors[node.name()] = Color::Black;
     };
 
     std::for_each(begin(nodes_), end(nodes_),
