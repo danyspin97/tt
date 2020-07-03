@@ -13,12 +13,12 @@ foreach src : tt_test_src
     #file_name = fs.replace_suffix(src, '')
 
     tt_test_exe = executable(
-        'test_' + file_name,
+        file_name,
         src,
         dependencies: [tt_dep, catch2_dep],
         cpp_args: '-DCATCH_CONFIG_MAIN',
     )
 
-    test('test_' + file_name, tt_test_exe)
+    test(file_name, tt_test_exe)
 endforeach
 
