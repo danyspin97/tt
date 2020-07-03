@@ -33,8 +33,6 @@ TEST_CASE("DependencyGraphSerializer") {
                                           "../test/data/init-fsck",
                                           "../test/data/mount-rwfs"};
     tt::AddTestDependenciesToGraph(graph, {"mount-fstab"}, filenames);
-    std::vector<std::string> services_to_enable{"mount-fstab"};
-    graph.AddEnabledServices(services_to_enable);
 
     SECTION("Serialize and deserialize "
             "correctly") {
