@@ -24,13 +24,15 @@
 #include "tt/dependency_graph/dependency_graph.hpp"
 #include "tt/parser/service/service_parser.hpp"
 
-void tt::AddTestDependenciesToGraph(tt::DependencyGraph &graph,
-                                    const std::vector<std::string> &filenames) {
+void tt::AddTestDependenciesToGraph(
+    tt::DependencyGraph &graph,
+    const std::vector<std::string> &service_to_enable,
+    const std::vector<std::string> &filenames) {
     auto services = std::vector<tt::Service>{};
     for (const auto &file : filenames) {
         auto parser = tt::ServiceParser(file);
         auto service = parser.service();
         services.push_back(service);
     }
-    graph.AddNodes(services);
+    graph.AddServices(service_to_enable, services);
 }

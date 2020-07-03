@@ -33,21 +33,22 @@ void tt::DependencyGraph::AddServices(
     const std::vector<tt::Service> &services) {
     auto index = AddNodes(services);
     AddEnabledServices(services_to_enable);
-    PopulateDependant(services_to_enable);
     ValidateDependencies(index);
+    PopulateDependant(services_to_enable);
 }
 
 auto tt::DependencyGraph::AddNodes(const std::vector<tt::Service> &services)
     -> size_t {
     size_t ret_index = nodes_.size();
     size_t current_index = ret_index;
-    nodes_.reserve(services.size() + nodes_.size());
+    nodes_.reserve(services.size() + ret_index);
     for (auto &&service : services) {
         assert(!std::holds_alternative<std::monostate>(service));
         const auto name = std::visit(tt::GetName, service);
-        if (!IsServiceEnabled(name)) {
+        if (!HasService(name)) {
+            assert(nodes_.size() == current_index);
             nodes_.emplace_back(service);
-            name_to_index_[name] = current_index;
+            name_to_index_.emplace(name, current_index);
             current_index++;
         }
     }
@@ -122,7 +123,7 @@ void tt::DependencyGraph::UpdateDependantOfNode(const ServiceNode &node) {
 
 void tt::DependencyGraph::RemoveUnusedServices() {
     nodes_.erase(std::remove_if(nodes_.begin(), nodes_.end(),
-                                [*this](const auto &node) {
+                                [this](const auto &node) {
                                     return !IsNodeRequired(node);
                                 }),
                  nodes_.end());
@@ -146,6 +147,7 @@ auto tt::DependencyGraph::IsNodeRequired(const tt::ServiceNode &node) const
 
 auto tt::DependencyGraph::GetNodeFromName(const std::string &name)
     -> tt::ServiceNode & {
+    assert(name_to_index_.find(name) != end(name_to_index_));
     const auto index = name_to_index_.at(name);
     return nodes_.at(index);
 }

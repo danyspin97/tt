@@ -27,8 +27,9 @@ namespace tt {
 
 class DependencyGraph;
 
-void AddTestDependenciesToGraph(DependencyGraph &graph,
-                                const std::vector<std::string> &filenames);
+void AddTestDependenciesToGraph(
+    DependencyGraph &graph, const std::vector<std::string> &services_to_enable,
+    const std::vector<std::string> &filenames);
 
 template <typename Func>
 void ForEachDependencyOfService(const Service &service, Func function) {
