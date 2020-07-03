@@ -86,6 +86,6 @@ auto LongrunDirector::GetBuilderForSection(const string &section)
         return &options_builder_;
     }
 
-    auto msg = "Section '" + section + "' is not supported.";
+    auto msg = "Section '" + section + "' is not supported";
     throw Exception(msg);
 }
