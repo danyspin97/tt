@@ -76,6 +76,6 @@ auto OneshotDirector::GetBuilderForSection(const string &section)
     if (section == "options") {
         return &options_builder_;
     }
-    auto msg = "Section '" + section + "' is not supported.";
+    auto msg = "Section '" + section + "' is not supported";
     throw Exception(msg);
 }
