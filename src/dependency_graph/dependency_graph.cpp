@@ -142,7 +142,7 @@ void tt::DependencyGraph::ForEachDependencyOfNode(const ServiceNode &node,
 auto tt::DependencyGraph::IsNodeRequired(const tt::ServiceNode &node) const
     -> bool {
     auto itr = enabled_services_.find(node.name());
-    return itr == enabled_services_.end() || node.HasDependants();
+    return itr != enabled_services_.end() || node.HasDependants();
 }
 
 auto tt::DependencyGraph::GetNodeFromName(const std::string &name)
