@@ -92,7 +92,19 @@ the following command to format your changes:
 
 ### Continuous Integration
 
-tt uses Github Actions for CI, running and checking the test suite; in particular, the CI runs a meson [unity build](https://mesonbuild.com/Unity-builds.html) with `-Werror` enabled and `address`, `undefined` sanitizers enabled. All Pull Requests must pass the CI before being included.
+tt is tested under 3 different CI platforms: 
+
+- Github Actions, testing a meson [unity
+  build](https://mesonbuild.com/Unity-builds.html) using a compiler matrix of
+  different clang and gcc versions. `address` and `undefined` sanitizers are
+  enabled.
+- Travis CI, sending coverage to [Coveralls](https://coveralls.io) and analyzing
+  the build with [SonarCloud](https://sonarcloud.io).
+- [build.sr.ht](https://builds.sr.ht), testing tt on various systems and
+  architectures.
+
+All Pull Requests must pass the CI and the static analyzers' checks before
+being accepted.
 
 ```
 $ ninja -C build clang-format
