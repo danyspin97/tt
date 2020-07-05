@@ -15,34 +15,31 @@
 [![Sonar Tech Debt](https://img.shields.io/sonar/tech_debt/DanySpin97_tt?logo=sonarcloud&server=https%3A%2F%2Fsonarcloud.io&style=flat-square)](https://sonarcloud.io/dashboard?id=DanySpin97_tt)
 [![CII Best Practices](https://img.shields.io/cii/summary/3935?style=flat-square)](https://bestpractices.coreinfrastructure.org/projects/3935)
 
-tt is a Work in Progress init and service manager inspired by [66](https://web.obarun.org/software/66) and based on
-the [s6](https://skarnet.org/software/s6/) suite.
+tt is an init and service manager inspired by
+[66](https://web.obarun.org/software/66),
+[s6](https://skarnet.org/software/s6/) suite and [deamontools](http://cr.yp.to/daemontools.html).
 
-tt tries to offer a valid alternative to systemd for PID 1 and service
+tt offers a valid alternative to systemd for PID 1 and service
 management. It uses the supervision to manage long running programs (deamons),
 log everything to files (no binary log interface) and provides an easy to use
 command line interface.
 
-Inheriting [s6-rc](https://skarnet.org/software/s6-rc/) feature, the services must be compiled before being able to
-run. This is one of the biggest differences with the current service managers,
+The services must be compiled before being able to run; this is the biggest difference with the most used service managers (_systemd_, _OpenRC_, _runit_),
 which instead are based on runtime services.
-
-tt is designed to run on both desktops and servers, and does not target embedded
-devices; if memory and space are constrained (e.g. you're configuring a router),
-then the use of s6 configured ad-hoc for that machine is recommended.
 
 ## Planned features
 
 - Support for different types of services: _oneshot_, _deamons_ and _bundles_
 - Predictable dependencies at build time
-- Configurable parameters for services (i.e. change CMDARGS without editing the service file)
-- Asynchrounus start of the services (no [run levels](https://en.wikipedia.org/wiki/Runlevel))
-- Log everything into files, no syslog needed for deamons
+- Configurable parameters for services (i.e. change command line arguments
+  without editing the service file)
+- Asynchrounus start of the services (no [run
+  levels](https://en.wikipedia.org/wiki/Runlevel))
+- Log everything into files, no syslog needed
 - Low footprint
 - Target desktop and servers
 - Conditional dependencies for complex services (such as web apps)
 - Provides sane defaults
-- Prioritize usability
 
 ## Getting started
 
@@ -55,11 +52,11 @@ tt supports the following compilers:
 
 tt depends on the following libraries:
 
-- [s6](https://skarnet.org/software/s6/)
-- [s6-rc](https://skarnet.org/software/s6-rc/)
-- [execline](https://skarnet.org/software/execline/)
+- [fmt](https://github.com/fmtlib/fmt)
+- [spdlog](https://github.com/gabime/spdlog)
 
-You can install them using your package manager.
+If these libraries are not found in the system, meson will download and
+statically compile them inside the tt binary.
 
 ### Building
 
@@ -119,7 +116,9 @@ Credits also to:
 
 - [@Taywee](https://github.com/Taywee) for its
   [args](https://github.com/Taywee/args) library
-- [@skarnet](https://github.com/skarnet) for its s6 supervision suite
+- [@fraillt](https://github.com/fraillt) for its
+  [bitsery](https://github.com/fraillt/bitsery) library
+- [@skarnet](https://github.com/skarnet) for his work on s6
 - [@obarun](https://obarun.org) for his work on 66
 
 ## License
