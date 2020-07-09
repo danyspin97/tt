@@ -53,7 +53,7 @@ auto LongrunDirector::InstanceService(string &&path) -> tt::Service {
     auto service = Longrun(
         std::move(main_section_.name), std::move(main_section_.description),
         std::move(path), std::move(options_), std::move(environment_),
-        run_script_builder_.script());
+        run_script_builder_.long_lived_script());
 
     if (finish_script_builder_.HasScript()) {
         service.finish(finish_script_builder_.script());

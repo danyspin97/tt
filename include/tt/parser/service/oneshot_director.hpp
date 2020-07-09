@@ -27,9 +27,9 @@
 #include "tt/data/script.hpp"
 #include "tt/data/service.hpp"
 #include "tt/parser/section/environment_builder.hpp"
+#include "tt/parser/section/main_script_builder.hpp"
 #include "tt/parser/section/main_section_builder.hpp"
 #include "tt/parser/section/oneshot_options_builder.hpp"
-#include "tt/parser/section/script_builder.hpp"
 #include "tt/parser/service/service_director.hpp"
 
 namespace tt {
@@ -48,7 +48,7 @@ private:
     Environment environment_;
     OneshotOptions options_;
     MainSectionBuilder main_section_builder_;
-    ScriptBuilder start_script_builder_;
+    MainScriptBuilder start_script_builder_;
     ScriptBuilder stop_script_builder_;
     EnvironmentBuilder env_section_builder_;
     OneshotOptionsBuilder options_builder_;

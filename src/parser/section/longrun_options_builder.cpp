@@ -24,7 +24,6 @@
 #include "tt/parser/utils.hpp"
 #include "tt/signal.hpp"
 
-using std::stoi;
 using std::string;
 
 using tt::AttributeNotFound;

@@ -28,7 +28,7 @@ using tt::Oneshot;
 
 Oneshot::Oneshot(std::string &&name, std::string &&description,
                  std::string &&path, OneshotOptions &&options,
-                 Environment &&environment, Script &&start)
+                 Environment &&environment, MainScript &&start)
     : ServiceImpl(std::move(name), std::move(description), std::move(path)),
       options_(std::move(options)), environment_(std::move(environment)),
       start_(std::move(start)) {}

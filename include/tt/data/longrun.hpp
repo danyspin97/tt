@@ -30,7 +30,6 @@
 
 #include "tt/data/logger_script.hpp"
 #include "tt/data/longrun_options.hpp"
-#include "tt/data/script.hpp"
 #include "tt/data/service_impl.hpp"
 
 namespace tt {
@@ -38,12 +37,13 @@ namespace tt {
 class Longrun : public ServiceImpl {
 public:
     Longrun(std::string &&name, std::string &&description, std::string &&path,
-            LongrunOptions &&options, Environment &&environment, Script &&run);
+            LongrunOptions &&options, Environment &&environment,
+            LongLivedScript &&run);
 
     [[nodiscard]] auto environment() const noexcept -> Environment {
         return environment_;
     }
-    [[nodiscard]] auto run() const noexcept -> Script { return run_; }
+    [[nodiscard]] auto run() const noexcept -> LongLivedScript { return run_; }
 
     [[nodiscard]] auto finish() const noexcept -> std::optional<Script> {
         return finish_;
@@ -75,9 +75,10 @@ private:
                        [](S &serializer, Environment &environment) {
                            serializer.object(environment);
                        });
-        serializer.ext(
-            run_, bitsery::ext::Growable{},
-            [](S &serializer, Script &script) { serializer.object(script); });
+        serializer.ext(run_, bitsery::ext::Growable{},
+                       [](S &serializer, LongLivedScript &long_lived_script) {
+                           serializer.object(long_lived_script);
+                       });
         serializer.ext(finish_, bitsery::ext::StdOptional{},
                        [](S &serializer, Script &script) {
                            serializer.ext(script, bitsery::ext::Growable{},
@@ -98,7 +99,7 @@ private:
 
     LongrunOptions options_;
     Environment environment_;
-    Script run_;
+    LongLivedScript run_;
     std::optional<Script> finish_;
     std::optional<LoggerScript> logger_;
 };

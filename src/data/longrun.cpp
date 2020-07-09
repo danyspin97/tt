@@ -28,7 +28,7 @@ using tt::Longrun;
 
 Longrun::Longrun(std::string &&name, std::string &&description,
                  std::string &&path, LongrunOptions &&options,
-                 Environment &&environment, Script &&run)
+                 Environment &&environment, LongLivedScript &&run)
     : ServiceImpl(std::move(name), std::move(description), std::move(path)),
       options_(std::move(options)), environment_(std::move(environment)),
       run_(std::move(run)) {}

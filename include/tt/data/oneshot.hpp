@@ -27,8 +27,8 @@
 #include "bitsery/ext/inheritance.h"
 #include "bitsery/ext/std_optional.h"
 
+#include "tt/data/main_script.hpp"
 #include "tt/data/oneshot_options.hpp"
-#include "tt/data/script.hpp"
 #include "tt/data/service_impl.hpp"
 
 namespace tt {
@@ -37,13 +37,13 @@ class Oneshot : public ServiceImpl {
 public:
     Oneshot(std::string &&name, std::string &&description, std::string &&path,
             OneshotOptions &&options, Environment &&environment,
-            Script &&start);
+            MainScript &&start);
 
     [[nodiscard]] auto environment() const noexcept -> Environment {
         return environment_;
     }
 
-    [[nodiscard]] auto start() const noexcept -> Script { return start_; }
+    [[nodiscard]] auto start() const noexcept -> MainScript { return start_; }
 
     [[nodiscard]] auto stop() const noexcept -> std::optional<Script> {
         return stop_;
@@ -67,9 +67,10 @@ private:
                        [](S &serializer, Environment &environment) {
                            serializer.object(environment);
                        });
-        serializer.ext(
-            start_, bitsery::ext::Growable{},
-            [](S &serializer, Script &script) { serializer.object(script); });
+        serializer.ext(start_, bitsery::ext::Growable{},
+                       [](S &serializer, MainScript &main_script) {
+                           serializer.object(main_script);
+                       });
         serializer.ext(stop_, bitsery::ext::StdOptional{},
                        [](S &serializer, Script &script) {
                            serializer.ext(script, bitsery::ext::Growable{},
@@ -82,7 +83,7 @@ private:
 
     OneshotOptions options_;
     Environment environment_;
-    Script start_;
+    MainScript start_;
     std::optional<Script> stop_;
 };
 

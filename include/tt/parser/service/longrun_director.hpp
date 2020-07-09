@@ -46,7 +46,7 @@ private:
     Environment environment_;
     LongrunOptions options_;
     MainSectionBuilder main_section_builder_;
-    ScriptBuilder run_script_builder_;
+    LongLivedScriptBuilder run_script_builder_;
     ScriptBuilder finish_script_builder_;
     LoggerScriptBuilder logger_script_builder_;
     EnvironmentBuilder env_section_builder_;

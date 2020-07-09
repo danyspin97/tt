@@ -50,7 +50,7 @@ auto OneshotDirector::InstanceService(string &&path) -> tt::Service {
     auto service = Oneshot(
         std::move(main_section_.name), std::move(main_section_.description),
         std::move(path), std::move(options_), std::move(environment_),
-        start_script_builder_.script());
+        start_script_builder_.main_script());
 
     if (stop_script_builder_.HasScript()) {
         service.stop(stop_script_builder_.script());
