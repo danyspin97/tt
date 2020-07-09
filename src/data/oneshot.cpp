@@ -42,7 +42,7 @@ auto Oneshot::Dump(ostream &oss) const -> ostream & {
         oss << "\n\n[stop]\n" << stop().value();
     }
     oss << "\n\n[options]\n" << options();
-    if (!environment_.GetAll().empty()) {
+    if (environment_.CountKeys() != 0) {
         oss << "\n\n[config]\n" << environment_;
     }
     return oss;

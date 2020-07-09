@@ -25,35 +25,40 @@
 #include <map>
 #include <string>
 
-#include "bitsery/ext/std_map.h"
+#include "bitsery/ext/std_tuple.h"
+#include "bitsery/traits/string.h"
+#include "bitsery/traits/vector.h"
 
 namespace tt {
 
 class Environment {
 public:
     [[nodiscard]] auto Get(const std::string &key) const -> std::string;
-
-    [[nodiscard]] auto GetAll() const -> std::map<std::string, std::string>;
-
+    [[nodiscard]] auto GetKeys() const -> std::vector<std::string>;
     void Set(const std::string &key, const std::string &value);
-
     auto SetUnique(const std::string &key, const std::string &value) -> bool;
+    [[nodiscard]] auto CountKeys() const -> int;
+    void UpdateValuesWithEnvironment(const Environment &env);
+
+    auto Dump(std::ostream &strm) const -> std::ostream &;
 
 private:
     friend class bitsery::Access;
-
     template <typename S> void serialize(S &serializer) {
-        serializer.ext(
-            env_, bitsery::ext::StdMap{env_.max_size()},
-            [](S &serializer, std::string &key, std::string &value) {
-                serializer.template text<sizeof(std::string::value_type),
-                                         std::string>(key, key.max_size());
-                serializer.template text<sizeof(std::string::value_type),
-                                         std::string>(value, value.max_size());
+        serializer.container(
+            pairs_, pairs_.max_size(),
+            [](S &serializer, std::tuple<std::string, std::string> &pair) {
+                serializer.ext(
+                    pair, bitsery::ext::StdTuple{[](S &serializer,
+                                                    std::string &value) {
+                        serializer.template text<
+                            sizeof(std::string::value_type), std::string>(
+                            value, value.max_size());
+                    }});
             });
     }
 
-    std::map<std::string, std::string> env_;
+    std::vector<std::tuple<std::string, std::string>> pairs_;
 };
 
 } // namespace tt

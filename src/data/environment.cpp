@@ -20,32 +20,60 @@
 
 #include "tt/data/environment.hpp"
 
-using std::map;
-using std::ostream;
-using std::string;
-
-using tt::Environment;
-
-auto Environment::Get(const string &key) const -> string { return env_.at(key); }
-
-auto Environment::GetAll() const -> map<string, string> { return env_; }
-
-void Environment::Set(const string &key, const string &value) {
-    env_[key] = value;
-}
-auto Environment::SetUnique(const string &key, const string &value) -> bool {
-    if (env_.find(key) == env_.end()) {
-        return false;
+auto tt::Environment::Get(const std::string &key) const -> std::string {
+    for (const auto &pair : pairs_) {
+        if (std::get<0>(pair) == key) {
+            return std::get<1>(pair);
+        }
     }
 
-    env_[key] = value;
+    // TODO: Should thir throw an error?
+    return "";
+}
+
+void tt::Environment::Set(const std::string &key, const std::string &value) {
+    for (auto &pair : pairs_) {
+        if (std::get<0>(pair) == key) {
+            std::get<1>(pair) = value;
+            return;
+        }
+    }
+
+    pairs_.emplace_back(key, value);
+}
+
+auto tt::Environment::SetUnique(const std::string &key,
+                                const std::string &value) -> bool {
+    for (auto &pair : pairs_) {
+        if (std::get<0>(pair) == key) {
+            return false;
+        }
+    }
+
+    pairs_.emplace_back(key, value);
     return true;
 }
 
-auto operator<<(ostream &strm, const Environment &env) -> ostream & {
-    auto env_map = env.GetAll();
-    for (const auto &pair : env_map) {
-        strm << pair.first << " = \"" << pair.second << "\"\n";
+auto tt::Environment::CountKeys() const -> int { return pairs_.size(); }
+
+void tt::Environment::UpdateValuesWithEnvironment(const Environment &env) {
+    for (const auto &new_pair : env.pairs_) {
+        for (auto &old_pair : pairs_) {
+            if (std::get<0>(old_pair) == std::get<0>(new_pair)) {
+                std::get<1>(old_pair) = std::get<1>(new_pair);
+            }
+        }
+    }
+}
+
+auto tt::Environment::Dump(std::ostream &strm) const -> std::ostream & {
+    for (const auto &pair : pairs_) {
+        strm << std::get<0>(pair) << " = \"" << std::get<1>(pair) << "\"\n";
     }
     return strm;
+}
+
+auto operator<<(std::ostream &strm, const tt::Environment &env)
+    -> std::ostream & {
+    return env.Dump(strm);
 }

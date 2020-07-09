@@ -43,7 +43,7 @@ auto Longrun::Dump(ostream &oss) const -> ostream & {
     }
     oss << "\n\n[logger]\n" << logger().value();
     oss << "\n\n[options]\n" << options();
-    if (!environment_.GetAll().empty()) {
+    if (environment_.CountKeys() != 0) {
         oss << "\n\n[config]\n" << environment_;
     }
     return oss;
