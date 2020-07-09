@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "tt/data/service.hpp"
-#include "tt/supervisor/service_wait_queue.hpp"
 #include "tt/supervisor/types.hpp"
 
 namespace tt {
