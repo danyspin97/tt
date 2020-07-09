@@ -37,6 +37,8 @@ public:
     auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 protected:
+    friend class Longrun;
+    friend class Oneshot;
     MainScript() = default;
 
 private:
