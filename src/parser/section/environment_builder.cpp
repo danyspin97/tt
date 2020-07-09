@@ -49,6 +49,9 @@ void EnvironmentBuilder::ParseLine(const string &line) {
     } catch (EnvironmentKeyNotValidException &e) {
         const string msg = e.msg() + " in [config] section";
         throw SectionBuilderException(msg);
+    } catch (EnvironmentKeyAlreadySetException &e) {
+        const string msg = e.msg() + " in [config] section";
+        throw SectionBuilderException(msg);
     }
 }
 
@@ -62,7 +65,10 @@ void EnvironmentBuilder::TryParseLine(const string &line) {
     CheckKeyIsValid(key);
     const string value = key_value_parser.value();
 
-    environment_.Set(key, value);
+    if (!environment_.SetUnique(key, value)) {
+        const auto msg = "Key " + key + " has been already set";
+        throw tt::EnvironmentKeyAlreadySetException(msg);
+    }
 }
 
 void EnvironmentBuilder::CheckKeyIsValid(const string &key) {

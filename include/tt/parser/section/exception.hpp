@@ -50,6 +50,12 @@ public:
     DummyBuilderException() : Exception("") {}
 };
 
+class EnvironmentKeyAlreadySetException : public Exception {
+public:
+    EnvironmentKeyAlreadySetException(const std::string &msg)
+        : Exception(msg) {}
+};
+
 class EnvironmentKeyNotValidException : public Exception {
 public:
     explicit EnvironmentKeyNotValidException(const std::string &msg)
