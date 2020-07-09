@@ -7,6 +7,7 @@ tt_src = [
 subdir('data')
 subdir('dependency_graph')
 subdir('parser')
+subdir('supervisor')
 
 tt_soversion = 0
 
