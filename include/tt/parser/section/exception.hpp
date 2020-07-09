@@ -29,12 +29,14 @@ namespace tt {
 
 class AttributeIsAlreadySetException : public Exception {
 public:
-    explicit AttributeIsAlreadySetException(const std::string &msg) : Exception(msg) {}
+    explicit AttributeIsAlreadySetException(const std::string &msg)
+        : Exception(msg) {}
 };
 
 class AttributeNotFoundException : public Exception {
 public:
-    explicit AttributeNotFoundException(const std::string &msg) : Exception(msg) {}
+    explicit AttributeNotFoundException(const std::string &msg)
+        : Exception(msg) {}
 };
 
 class CodeNotSuppliedInScriptParserException : public Exception {
@@ -67,7 +69,8 @@ public:
 
 class ScriptTypeNotValidException : public Exception {
 public:
-    explicit ScriptTypeNotValidException(const std::string &msg) : Exception(msg) {}
+    explicit ScriptTypeNotValidException(const std::string &msg)
+        : Exception(msg) {}
 };
 
 class SectionBuilderException : public Exception {
