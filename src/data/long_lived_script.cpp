@@ -18,18 +18,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <utility>
+#include "tt/data/long_lived_script.hpp"
 
-#include "tt/data/logger_script.hpp"
-
-tt::LoggerScript::LoggerScript(Type type, std::string &&execute,
-                               std::string service_to_log, std::string &&user,
-                               std::string &&group)
-    : LongLivedScript(type, std::move(execute), std::move(user),
-                      std::move(group)),
-      service_to_log_(std::move(service_to_log)) {}
-
-auto tt::LoggerScript::Dump(std::ostream &oss) const -> std::ostream & {
-    LongLivedScript::Dump(oss);
-    return oss << "\nservice_to_log = " << service_to_log();
+auto tt::LongLivedScript::Dump(std::ostream &oss) const -> std::ostream & {
+    MainScript::Dump(oss);
+    if (notify()) {
+        oss << "\nnotify = " << *(notify());
+    }
+    return oss;
 }

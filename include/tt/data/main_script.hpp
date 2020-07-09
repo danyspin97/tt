@@ -18,42 +18,35 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TT_LOGGER_SCRIPT_HPP_
-#define TT_LOGGER_SCRIPT_HPP_
+#pragma once
 
-#include <string>
+#include "tt/data/script.hpp"
 
+#include "bitsery/bitsery.h"
 #include "bitsery/ext/inheritance.h"
-
-#include "tt/data/environment.hpp"
-#include "tt/data/long_lived_script.hpp"
 
 namespace tt {
 
-class LoggerScript : public LongLivedScript {
+class MainScript : public Script {
 public:
-    [[nodiscard]] auto service_to_log() const noexcept -> std::string {
-        return service_to_log_;
-    }
+    using Script::Script;
 
-    LoggerScript(Type type, std::string &&execute, std::string service_to_log,
-                 std::string &&user, std::string &&group);
+    [[nodiscard]] auto autostart() const noexcept -> bool { return autostart_; }
+    void autostart(bool autostart) { autostart_ = autostart; }
 
     auto Dump(std::ostream &oss) const -> std::ostream & override;
 
-private:
-    LoggerScript() = default;
+protected:
+    MainScript() = default;
 
+private:
     friend class bitsery::Access;
     template <typename S> void serialize(S &serializer) {
-        serializer.ext(*this, bitsery::ext::BaseClass<LongLivedScript>{});
-        serializer.template text<sizeof(std::string::value_type), std::string>(
-            service_to_log_, service_to_log_.max_size());
+        serializer.ext(*this, bitsery::ext::BaseClass<Script>{});
+        serializer.value1b(autostart_);
     }
 
-    std::string service_to_log_;
+    bool autostart_ = true;
 };
 
 } // namespace tt
-
-#endif // TT_LOGGER_SCRIPT_HPP_
