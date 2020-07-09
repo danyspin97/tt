@@ -46,20 +46,8 @@ void LongrunOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
 
 void LongrunOptionsBuilder::TrySetAttributeForKey(const string &key,
                                                   const string &value) {
-    if (key == "down_signal") {
-        options_.down_signal(ParseSignalFromString(value));
-    } else if (key == "maxdeath") {
-        options_.max_death(stoi(value));
-    } else if (key == "notify") {
-        options_.notify(stoi(value));
-    } else if (key == "optional") {
+    if (key == "optional") {
         options_.optional(ParseBoolean(value));
-    } else if (key == "timeout_finish") {
-        options_.timeout_finish(stoi(value));
-    } else if (key == "timeout_kill") {
-        options_.timeout_kill(stoi(value));
-    } else if (key == "write_message") {
-        options_.write_run_finish_message(ParseBoolean(value));
     } else {
         AttributeNotFound(key, "options");
     }

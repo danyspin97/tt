@@ -4,4 +4,8 @@ execute =(
 )
 user = dbus
 group = dbus
+timeout = 5000
+timeout_kill = 10
+down_signal = SIGKILL
+maxdeath = 250
 

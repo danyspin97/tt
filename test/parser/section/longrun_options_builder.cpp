@@ -31,7 +31,6 @@ using std::vector;
 using tt::LongrunOptions;
 using tt::LongrunOptionsBuilder;
 using tt::SectionBuilderException;
-using tt::Signal;
 using tt::TestBuilderWithFile;
 
 TEST_CASE("LongrunOptionsBuilder") {
@@ -44,12 +43,6 @@ TEST_CASE("LongrunOptionsBuilder") {
         auto expected_deps = vector<string>{"foo", "bar"};
 
         CHECK(options.dependencies() == expected_deps);
-        CHECK(options.notify() == 3);
-        CHECK(options.timeout_finish() == 5000);
-        CHECK(options.timeout_kill() == 10);
-        CHECK(options.down_signal() == Signal::kSigKill);
-        CHECK(options.max_death() == 250);
-        CHECK(options.write_run_finish_message() == false);
         CHECK(options.optional() == true);
     }
 

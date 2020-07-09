@@ -43,7 +43,6 @@ TEST_CASE("OneshotOptionsBuilder") {
 
         auto expected_deps = vector<string>{"foo", "bar"};
         CHECK(options.optional() == true);
-        CHECK(options.write_start_stop_messages() == false);
         CHECK(options.dependencies() == expected_deps);
     }
 

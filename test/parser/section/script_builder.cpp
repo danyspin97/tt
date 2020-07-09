@@ -24,18 +24,18 @@
 
 #include "tt/parser/section/utils.hpp"
 
-using tt::Script;
-using tt::ScriptBuilder;
-using tt::TestBuilderWithFile;
-
 TEST_CASE("ScriptBuilder") {
-    auto builder = ScriptBuilder("test");
+    auto builder = tt::ScriptBuilder("test");
     SECTION("Parse valid script section") {
         TestBuilderWithFile(builder, "../test/data/script_section");
-        Script s = builder.script();
+        tt::Script s = builder.script();
 
         CHECK(s.user().value() == "dbus");
         CHECK(s.group().value() == "dbus");
+        CHECK(s.timeout() == 5000);
+        CHECK(s.timeout_kill() == 10);
+        CHECK(s.down_signal() == tt::Signal::kSigKill);
+        CHECK(s.max_death() == 250);
     }
 
     SECTION("Parse invalid line") {

@@ -40,11 +40,29 @@ protected:
     auto GetCodeAttributeForKey(const std::string &key)
         -> std::string & override;
     auto GetParsedType() const -> Script::Type;
+    void SetOptionalAttribute(Script &script);
 
+    auto execute() -> const std::string &;
+    void execute(std::string &&);
+    auto execute_move() -> std::string &&;
+    auto type() -> const std::string &;
+    void type(const std::string &type);
+    auto user() -> const std::string &;
+    void user(const std::string &);
+    auto user_move() -> std::string &&;
+    auto group() -> const std::string &;
+    void group(const std::string &);
+    auto group_move() -> std::string &&;
+
+private:
     std::string type_;
     std::string user_;
     std::string group_;
     std::string execute_;
+    std::string down_signal_;
+    std::string max_death_;
+    std::string timeout_;
+    std::string timeout_kill_;
     bool finished_ = false;
 };
 

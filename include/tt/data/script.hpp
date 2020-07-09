@@ -29,6 +29,7 @@
 #include "bitsery/traits/string.h"
 
 #include "tt/data/environment.hpp"
+#include "tt/signal.hpp"
 
 namespace tt {
 
@@ -57,7 +58,33 @@ public:
     virtual ~Script() = default;
     virtual auto Dump(std::ostream &oss) const -> std::ostream &;
 
+    [[nodiscard]] auto timeout() const noexcept -> uint_fast32_t {
+        return timeout_;
+    }
+    void timeout(uint_fast32_t timeout) noexcept { timeout_ = timeout; }
+
+    [[nodiscard]] auto timeout_kill() const noexcept -> uint_fast32_t {
+        return timeout_kill_;
+    }
+    void timeout_kill(uint_fast32_t timeout_kill) noexcept {
+        timeout_kill_ = timeout_kill;
+    }
+
+    [[nodiscard]] auto down_signal() const noexcept -> Signal {
+        return down_signal_;
+    }
+    void down_signal(Signal down_signal) noexcept {
+        down_signal_ = down_signal;
+    }
+
+    [[nodiscard]] auto max_death() const noexcept -> uint_fast16_t {
+        return max_death_;
+    }
+    void max_death(uint_fast16_t max_death) { max_death_ = max_death; };
+
 protected:
+    void execute(std::string &&execute) { execute_ = std::move(execute); }
+
     friend class Longrun;
     friend class Oneshot;
     // Needed for LoggerScript()
@@ -83,13 +110,14 @@ private:
             });
     }
 
-protected:
     std::string execute_;
-
-private:
     Type type_;
     std::optional<std::string> user_;
     std::optional<std::string> group_;
+    uint_fast32_t timeout_ = 3000;
+    uint_fast32_t timeout_kill_ = 3000;
+    Signal down_signal_ = Signal::kSigTerm;
+    uint_fast16_t max_death_ = 3;
 };
 
 } // namespace tt

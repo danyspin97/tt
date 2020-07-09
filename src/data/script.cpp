@@ -44,6 +44,10 @@ auto Script::Dump(ostream &oss) const -> ostream & {
     if (group() && !group().value().empty()) {
         oss << "\ngroup = " << group().value();
     }
+    oss << "\ntimeout_finish = " << timeout();
+    oss << "\ntimeout_kill = " << timeout_kill();
+    oss << "\ndown_signal = " << GetSignalName(down_signal());
+    oss << "\nmax_death = " << max_death();
     return oss;
 }
 

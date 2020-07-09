@@ -43,8 +43,8 @@ void LoggerScriptBuilder::EndParsing() {
 }
 
 void LoggerScriptBuilder::CheckParsedValues() {
-    bool is_execute_set = !execute_.empty();
-    bool is_type_set = !type_.empty();
+    bool is_execute_set = !execute().empty();
+    bool is_type_set = !type().empty();
     // A XOR B
     if (is_execute_set != is_type_set) {
         const auto *msg = "Both execute and type attributes needs to set";
@@ -73,8 +73,8 @@ auto LoggerScriptBuilder::GetAttributeForKey(const string &key) -> string & {
 }
 
 void LoggerScriptBuilder::SetDefaultForOptionalValues() noexcept {
-    if (type_.empty()) {
-        type_ = "auto";
+    if (type().empty()) {
+        type("auto");
     }
 
     if (maxsize_.empty()) {
@@ -85,16 +85,16 @@ void LoggerScriptBuilder::SetDefaultForOptionalValues() noexcept {
         destination_ = GetDefaultDestination();
     }
 
-    if (execute_.empty()) {
-        execute_ = GetDefaultExecute();
+    if (execute().empty()) {
+        execute(GetDefaultExecute());
     }
 
-    if (user_.empty()) {
-        user_ = kDefaultLogUser;
+    if (user().empty()) {
+        user(kDefaultLogUser);
     }
 
-    if (group_.empty()) {
-        group_ = kDefaultLogGroup;
+    if (group().empty()) {
+        group(kDefaultLogGroup);
     }
 }
 
@@ -110,8 +110,8 @@ auto LoggerScriptBuilder::GetDefaultDestination() const noexcept
 
 auto LoggerScriptBuilder::logger_script() -> LoggerScript {
     LoggerScript logger_script =
-        LoggerScript(GetParsedType(), std::move(execute_), service_name_,
-                     std::move(user_), std::move(group_));
+        LoggerScript(GetParsedType(), std::move(execute_move()), service_name_,
+                     std::move(user_move()), std::move(group_move()));
     // TODO: Check if EndParsing has been called
     return logger_script;
 }

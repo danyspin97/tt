@@ -58,12 +58,23 @@ auto ScriptBuilder::GetAttributeForKey(const string &key) -> string & {
     if (key == "user") {
         return user_;
     }
+    if (key == "down_signal") {
+        return down_signal_;
+    }
+    if (key == "maxdeath") {
+        return max_death_;
+    }
+    if (key == "timeout") {
+        return timeout_;
+    }
+    if (key == "timeout_kill") {
+        return timeout_kill_;
+    }
 
     AttributeNotFound(key, section_);
     // Never reached
     return section_;
 }
-
 auto ScriptBuilder::GetCodeAttributeForKey(const string &key) -> string & {
     if (key == "execute") {
         return execute_;
@@ -86,10 +97,13 @@ auto tt::ScriptBuilder::GetParsedType() const -> Script::Type {
     auto error_message = "Type " + type_ + " is not allowed.";
     throw tt::ScriptTypeNotValidException(error_message);
 }
-
-auto ScriptBuilder::script() -> Script {
+auto tt::ScriptBuilder::script() -> Script {
     Script script = Script(GetParsedType(), std::move(execute_));
+    SetOptionalAttribute(script);
+    return script;
+}
 
+void tt::ScriptBuilder::SetOptionalAttribute(Script &script) {
     if (!user_.empty()) {
         script.user(user_);
     }
@@ -97,7 +111,41 @@ auto ScriptBuilder::script() -> Script {
     if (!group_.empty()) {
         script.group(group_);
     }
-    return script;
+
+    if (!down_signal_.empty()) {
+        script.down_signal(ParseSignalFromString(down_signal_));
+    }
+
+    if (!max_death_.empty()) {
+        script.max_death(stoi(max_death_));
+    }
+
+    if (!timeout_.empty()) {
+        script.timeout(stoi(timeout_));
+    }
+
+    if (!timeout_kill_.empty()) {
+        script.timeout_kill(stoi(timeout_kill_));
+    }
 }
 
 auto ScriptBuilder::HasScript() const -> bool { return finished_; }
+auto tt::ScriptBuilder::execute() -> const std::string & { return execute_; }
+void tt::ScriptBuilder::execute(std::string &&execute) {
+    execute_ = std::move(execute);
+}
+auto tt::ScriptBuilder::execute_move() -> std::string && {
+    return std::move(execute_);
+}
+auto tt::ScriptBuilder::type() -> const std::string & { return type_; }
+void tt::ScriptBuilder::type(const std::string &type) { type_ = type; }
+auto tt::ScriptBuilder::user() -> const std::string & { return user_; }
+void tt::ScriptBuilder::user(const std::string &user) { user_ = user; }
+auto tt::ScriptBuilder::user_move() -> std::string && {
+    return std::move(user_);
+}
+auto tt::ScriptBuilder::group() -> const std::string & { return group_; }
+void tt::ScriptBuilder::group(const std::string &group) { group_ = group; }
+auto tt::ScriptBuilder::group_move() -> std::string && {
+    return std::move(group_);
+}

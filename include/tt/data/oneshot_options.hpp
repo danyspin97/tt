@@ -30,22 +30,12 @@ namespace tt {
 class OneshotOptions : public ServiceOptions {
 public:
     [[nodiscard]] auto optional() const noexcept -> bool { return optional_; }
-
     void optional(bool optional) { optional_ = optional; }
-
-    [[nodiscard]] auto write_start_stop_messages() const noexcept -> bool {
-        return write_start_stop_messages_;
-    }
-
-    void write_start_stop_messages(bool new_value) {
-        write_start_stop_messages_ = new_value;
-    }
 
     auto Dump(std::ostream &oss) const -> std::ostream & override;
 
 private:
     bool optional_ = false;
-    bool write_start_stop_messages_ = true;
 };
 
 } // namespace tt

@@ -20,12 +20,7 @@
 
 #include "tt/data/oneshot_options.hpp"
 
-using std::ostream;
-
-using tt::OneshotOptions;
-
-auto OneshotOptions::Dump(ostream &oss) const -> ostream & {
+auto tt::OneshotOptions::Dump(std::ostream &oss) const -> std::ostream & {
     ServiceOptions::Dump(oss) << "\n";
-    oss << "write_message = " << write_start_stop_messages();
     return oss << "\noptional = " << optional();
 }
