@@ -32,7 +32,6 @@ using std::string;
 using tt::Environment;
 using tt::EnvironmentBuilder;
 using tt::EnvironmentKeyNotValidException;
-using tt::EnvironmentValueNotQuotedException;
 using tt::IsEmptyLine;
 using tt::KeyValueParser;
 using tt::KeyValueParserLineInvalidException;
@@ -61,7 +60,7 @@ void EnvironmentBuilder::TryParseLine(const string &line) {
     auto key_value_parser = KeyValueParser(line, true);
     const string key = key_value_parser.key();
     CheckKeyIsValid(key);
-    const string value = StripQuotes(key_value_parser.value());
+    const string value = key_value_parser.value();
 
     environment_.Set(key, value);
 }
@@ -79,13 +78,4 @@ void EnvironmentBuilder::CheckKeyIsValid(const string &key) {
             throw EnvironmentKeyNotValidException(msg);
         }
     }
-}
-
-auto EnvironmentBuilder::StripQuotes(const string &value) -> string {
-    const auto val_size = value.size();
-    if (val_size < 2 || value[0] != '"' || value[val_size - 1] != '"') {
-        throw EnvironmentValueNotQuotedException();
-    }
-
-    return value.substr(1, val_size - 2);
 }

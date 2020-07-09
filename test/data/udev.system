@@ -16,5 +16,5 @@ execute =(
 )
 
 [config]
-CMDARGS = "-d"
+CMDARGS = -d
 
