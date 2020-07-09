@@ -66,6 +66,14 @@ void tt::Environment::UpdateValuesWithEnvironment(const Environment &env) {
     }
 }
 
+auto tt::Environment::Vector() const -> std::vector<std::string> {
+    std::vector<std::string> vec{pairs_.size()};
+    std::for_each(pairs_.begin(), pairs_.end(), [&vec](auto &pair) {
+        vec.emplace_back(std::get<0>(pair) + "=" + std::get<1>(pair));
+    });
+    return vec;
+}
+
 auto tt::Environment::Dump(std::ostream &strm) const -> std::ostream & {
     for (const auto &pair : pairs_) {
         strm << std::get<0>(pair) << " = \"" << std::get<1>(pair) << "\"\n";
