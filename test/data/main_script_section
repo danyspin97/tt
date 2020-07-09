@@ -1,0 +1,6 @@
+build = auto
+execute =(
+    dbus-daemon
+)
+autostart = no
+

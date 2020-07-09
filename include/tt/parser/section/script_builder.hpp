@@ -40,7 +40,7 @@ protected:
     auto GetCodeAttributeForKey(const std::string &key)
         -> std::string & override;
     auto GetParsedType() const -> Script::Type;
-    void SetOptionalAttribute(Script &script);
+    void SetOptionalAttributeForScript(Script &script);
 
     auto execute() -> const std::string &;
     void execute(std::string &&);

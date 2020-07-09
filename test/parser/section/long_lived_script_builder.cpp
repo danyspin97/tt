@@ -18,40 +18,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TT_LOGGER_SCRIPT_BUILDER_HPP_
-#define TT_LOGGER_SCRIPT_BUILDER_HPP_
-
-#include <string>
-
-#include "tt/data/logger_script.hpp"
 #include "tt/parser/section/long_lived_script_builder.hpp"
+#include "tt/data/long_lived_script.hpp"
 
-namespace tt {
+#include "catch2/catch.hpp"
 
-class LoggerScriptBuilder : public LongLivedScriptBuilder {
-public:
-    explicit LoggerScriptBuilder(std::string service_name);
-    auto logger_script() -> LoggerScript;
+#include "tt/parser/section/utils.hpp"
 
-    void EndParsing() override;
+TEST_CASE("LongLivedScriptBuilder") {
+    auto builder = tt::LongLivedScriptBuilder("test");
+    SECTION("Parse valid script section") {
+        TestBuilderWithFile(builder, "../test/data/long_lived_script_section");
+        tt::LongLivedScript s = builder.long_lived_script();
 
-protected:
-    auto GetAttributeForKey(const std::string &key) -> std::string & override;
+        CHECK(s.notify());
+        CHECK(s.notify().value() == 3);
+    }
 
-private:
-    void CheckParsedValues();
-
-    void SetDefaultForOptionalValues() noexcept;
-
-    auto GetDefaultExecute() const noexcept -> std::string;
-
-    auto GetDefaultDestination() const noexcept -> std::string;
-
-    std::string destination_;
-    std::string maxsize_;
-    std::string service_name_;
-};
-
-} // namespace tt
-
-#endif // TT_LOGGER_SCRIPT_BUILDER_HPP_
+    SECTION("Parse invalid line") {
+        REQUIRE_THROWS(builder.ParseLine("invalid"));
+    }
+}

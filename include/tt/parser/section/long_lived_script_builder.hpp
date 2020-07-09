@@ -18,40 +18,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TT_LOGGER_SCRIPT_BUILDER_HPP_
-#define TT_LOGGER_SCRIPT_BUILDER_HPP_
+#pragma once
 
-#include <string>
-
-#include "tt/data/logger_script.hpp"
-#include "tt/parser/section/long_lived_script_builder.hpp"
+#include "tt/parser/section/main_script_builder.hpp"
 
 namespace tt {
 
-class LoggerScriptBuilder : public LongLivedScriptBuilder {
-public:
-    explicit LoggerScriptBuilder(std::string service_name);
-    auto logger_script() -> LoggerScript;
+class LongLivedScript;
 
-    void EndParsing() override;
+class LongLivedScriptBuilder : public MainScriptBuilder {
+public:
+    using MainScriptBuilder::MainScriptBuilder;
+    auto long_lived_script() -> LongLivedScript;
 
 protected:
     auto GetAttributeForKey(const std::string &key) -> std::string & override;
+    void
+    SetOptionalAttributeForLongLivedScript(LongLivedScript &long_lived_script);
 
 private:
-    void CheckParsedValues();
-
-    void SetDefaultForOptionalValues() noexcept;
-
-    auto GetDefaultExecute() const noexcept -> std::string;
-
-    auto GetDefaultDestination() const noexcept -> std::string;
-
-    std::string destination_;
-    std::string maxsize_;
-    std::string service_name_;
+    std::string notify_;
 };
 
 } // namespace tt
-
-#endif // TT_LOGGER_SCRIPT_BUILDER_HPP_

@@ -1,0 +1,6 @@
+build = auto
+execute =(
+    dbus-daemon
+)
+notify = 3
+

@@ -97,13 +97,14 @@ auto tt::ScriptBuilder::GetParsedType() const -> Script::Type {
     auto error_message = "Type " + type_ + " is not allowed.";
     throw tt::ScriptTypeNotValidException(error_message);
 }
+
 auto tt::ScriptBuilder::script() -> Script {
     Script script = Script(GetParsedType(), std::move(execute_));
-    SetOptionalAttribute(script);
+    SetOptionalAttributeForScript(script);
     return script;
 }
 
-void tt::ScriptBuilder::SetOptionalAttribute(Script &script) {
+void tt::ScriptBuilder::SetOptionalAttributeForScript(Script &script) {
     if (!user_.empty()) {
         script.user(user_);
     }

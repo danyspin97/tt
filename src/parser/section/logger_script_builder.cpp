@@ -35,7 +35,7 @@ using tt::LoggerScriptBuilder;
 using tt::LoggerScriptInvalidSettingsException;
 
 LoggerScriptBuilder::LoggerScriptBuilder(std::string service_name)
-    : ScriptBuilder("log"), service_name_(std::move(service_name)) {}
+    : LongLivedScriptBuilder("log"), service_name_(std::move(service_name)) {}
 
 void LoggerScriptBuilder::EndParsing() {
     CheckParsedValues();
@@ -69,7 +69,7 @@ auto LoggerScriptBuilder::GetAttributeForKey(const string &key) -> string & {
     if (key == "maxsize") {
         return maxsize_;
     }
-    return ScriptBuilder::GetAttributeForKey(key);
+    return LongLivedScriptBuilder::GetAttributeForKey(key);
 }
 
 void LoggerScriptBuilder::SetDefaultForOptionalValues() noexcept {
@@ -112,6 +112,7 @@ auto LoggerScriptBuilder::logger_script() -> LoggerScript {
     LoggerScript logger_script =
         LoggerScript(GetParsedType(), std::move(execute_move()), service_name_,
                      std::move(user_move()), std::move(group_move()));
+    SetOptionalAttributeForLongLivedScript(logger_script);
     // TODO: Check if EndParsing has been called
     return logger_script;
 }
