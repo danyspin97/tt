@@ -25,23 +25,44 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <charconv>
+
+#include "spdlog/spdlog.h"
+
 tt::Supervisor::Supervisor(PipeFd supervisor_fd)
-    : supervisor_fd_(supervisor_fd) {
-    Supervise();
+    : supervisor_fd_(supervisor_fd) {}
+
+void tt::Supervisor::Supervise(std::vector<char *> script,
+                               std::vector<const char *> environment) {
+    SetupFds();
+    execve("/bin/supervise", const_cast<char **>(GetExecArgs(script).data()),
+           const_cast<char *const *>(environment.data()));
+    spdlog::critical("An error had happened while running execve: {}",
+                     strerror(errno));
 }
 
-void tt::Supervisor::Supervise() {
-    // The parent should run supervise executable
-    // The children should follow the code and let Spawn*Script run the script
-    if (int pid = fork(); pid != 0) {
-        close(STDIN_FILENO);
-        close(STDOUT_FILENO);
-        dup2(supervisor_fd_.at(0), STDIN_FILENO);
-        dup2(supervisor_fd_.at(1), STDOUT_FILENO);
-        std::vector<char *> args{};
-        args.push_back(const_cast<char *>("supervise"));
-        std::vector<const char *> environment{};
-        execve("/bin/supervise", const_cast<char **>(args.data()),
-               const_cast<char *const *>(environment.data()));
-    }
+void tt::Supervisor::SetupFds() {
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
+    // No need to close the fds as they have O_CLOEXEC
+    dup2(supervisor_fd_.at(0), 0);
+    dup2(supervisor_fd_.at(1), 1);
+}
+
+auto tt::Supervisor::GetExecArgs(std::vector<char *> script)
+    -> std::vector<char *> {
+    std::vector<char *> args{};
+    args.push_back(const_cast<char *>("supervise"));
+    args.push_back(GetCStrFromInt(0).data());
+    args.push_back(GetCStrFromInt(1).data());
+    std::for_each(script.begin(), script.end(),
+                  [&args](char *arg) { args.push_back(arg); });
+    args.push_back(0);
+    return args;
+}
+
+auto tt::Supervisor::GetCStrFromInt(int num) -> std::array<char, 2> {
+    std::array<char, 2> cstr{};
+    std::to_chars(cstr.data(), cstr.data() + cstr.size(), num);
+    return cstr;
 }

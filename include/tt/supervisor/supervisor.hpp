@@ -31,9 +31,13 @@ namespace tt {
 class Supervisor {
 public:
     explicit Supervisor(PipeFd supervisor_fd);
+    void Supervise(std::vector<char *> script,
+                   std::vector<const char *> environment);
 
 private:
-    void Supervise();
+    static auto GetExecArgs(std::vector<char *> script) -> std::vector<char *>;
+    static auto GetCStrFromInt(int num) -> std::array<char, 2>;
+    void SetupFds();
 
     PipeFd supervisor_fd_;
 };
