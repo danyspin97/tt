@@ -34,4 +34,4 @@ jobs:
           ninja -C build
 
       - name: Run meson tests
-        run: ninja -C build test
+        run: ASAN_OPTIONS=detect_odr_violation=0 ninja -C build test
