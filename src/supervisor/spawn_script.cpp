@@ -54,7 +54,6 @@ auto tt::SpawnScript::Spawn() -> ScriptStatus {
 auto tt::SpawnScript::TrySpawn() -> ScriptStatus {
     if (int pid = fork(); pid == 0) {
         PipeFd supervisor_fd = SetupProcessFdAndGetSupervisorFd();
-        Supervisor supervisor(supervisor_fd);
         SetupUidGid();
         std::vector<char *> args{};
         args.push_back(const_cast<char *>("sh"));
@@ -69,8 +68,8 @@ auto tt::SpawnScript::TrySpawn() -> ScriptStatus {
                       [&environment_vec_cstr](const std::string &key_value) {
                           environment_vec_cstr.push_back(key_value.c_str());
                       });
-        execve("/bin/sh", const_cast<char **>(args.data()),
-               const_cast<char *const *>(environment_vec_cstr.data()));
+        Supervisor supervisor(supervisor_fd);
+        supervisor.Supervise(args, environment_vec_cstr);
     } else {
         std::array<pollfd, 1> pollfds{process_fd_.at(0), POLLIN | POLLRDHUP, 0};
         if (poll(pollfds.data(), 1, script_.timeout()) != 1) {
