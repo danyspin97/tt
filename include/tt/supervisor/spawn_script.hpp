@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <mutex>
+
 #include "tt/data/service.hpp"
 #include "tt/supervisor/supervisor.hpp"
 #include "tt/supervisor/types.hpp"
@@ -34,17 +36,31 @@ public:
 
     [[nodiscard]] auto GetStatus() const noexcept -> ScriptStatus;
 
-    auto GetCurrentScriptStatusFromProcessFd() -> ScriptStatus;
     auto Spawn() -> ScriptStatus;
+
+protected:
+    void AdjustSupervisionFdFlags();
+    auto GetSupervisorArgs() -> std::vector<char *>;
+    auto GetEnviromentFromScript() -> std::vector<const char *>;
+    auto HasConnectionHungUp(short revents) -> bool;
+    auto HasReceivedUpdate(short revents) -> bool;
+    void ReadStatusFromProcessFd();
+    void WaitOnStatus();
     void SetupUidGid();
-    auto SetupProcessFdAndGetSupervisorFd() -> PipeFd;
-    auto TrySpawn() -> ScriptStatus;
+    void SetupFds();
+    void TrySpawn();
 
 private:
+    void LockForkMutex();
+    void UnlockForkMutex();
+
     const Script &script_;
     const Environment &environment_;
     PipeFd process_fd_;
+    PipeFd supervisor_fd_;
     OnSuccessCallback on_success_;
+    ScriptStatus status_ = ScriptStatus::Failure;
+    static std::mutex fork_mutex_;
 };
 
 } // namespace tt
