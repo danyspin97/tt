@@ -25,5 +25,6 @@ namespace tt {
 
 using OnSuccessCallback = std::function<void(std::string)>;
 using PipeFd = std::array<int, 2>;
+enum class ScriptStatus { Failure = 0, Success = 1 };
 
 } // namespace tt

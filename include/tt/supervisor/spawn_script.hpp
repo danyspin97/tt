@@ -27,8 +27,6 @@
 namespace tt {
 
 class SpawnScript {
-    enum class ScriptStatus { Failure = 0, Success = 1 };
-
 public:
     explicit SpawnScript(const Script &script, const Environment &environment,
                          OnSuccessCallback &&on_success);
