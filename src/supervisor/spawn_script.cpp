@@ -145,7 +145,7 @@ void tt::SpawnScript::AdjustSupervisionFdFlags() {
 }
 
 auto tt::SpawnScript::HasConnectionHungUp(short revents) -> bool {
-    return revents & (POLLERR | POLLNVAL | POLLRDHUP | POLLHUP);
+    return revents & (POLLERR | POLLNVAL | POLLHUP);
 }
 
 auto tt::SpawnScript::HasReceivedUpdate(short revents) -> bool {
