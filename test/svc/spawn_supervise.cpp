@@ -1,6 +1,6 @@
 
-#include "tt/supervisor/spawn_supervise.hpp"
-#include "tt/supervisor/types.hpp"
+#include "tt/svc/spawn_supervise.hpp"
+#include "tt/svc/types.hpp"
 
 #include "catch2/catch.hpp"
 

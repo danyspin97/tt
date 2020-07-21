@@ -24,7 +24,7 @@
 #include <vector>
 
 #include "tt/data/service.hpp"
-#include "tt/supervisor/types.hpp"
+#include "tt/svc/types.hpp"
 
 namespace tt {
 

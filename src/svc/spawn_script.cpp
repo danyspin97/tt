@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/supervisor/spawn_script.hpp"
+#include "tt/svc/spawn_script.hpp"
 
 #include <fcntl.h>
 #include <poll.h>
