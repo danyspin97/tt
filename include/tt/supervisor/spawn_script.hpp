@@ -23,7 +23,7 @@
 #include <mutex>
 
 #include "tt/data/service.hpp"
-#include "tt/supervisor/supervisor.hpp"
+#include "tt/supervisor/spawn_supervise.hpp"
 #include "tt/supervisor/types.hpp"
 
 namespace tt {

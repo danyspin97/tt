@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/supervisor/supervisor.hpp"
+#include "tt/supervisor/spawn_supervise.hpp"
 
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -29,10 +29,10 @@
 
 #include "spdlog/spdlog.h"
 
-tt::Supervisor::Supervisor(PipeFd supervisor_fd)
+tt::SpawnSupervise::SpawnSupervise(PipeFd supervisor_fd)
     : supervisor_fd_(supervisor_fd) {}
 
-void tt::Supervisor::Supervise(std::vector<char *> script,
+void tt::SpawnSupervise::Spawn(std::vector<char *> script,
                                std::vector<const char *> environment) {
     SetupFds();
     execve("/bin/supervise", const_cast<char **>(GetExecArgs(script).data()),
@@ -41,7 +41,7 @@ void tt::Supervisor::Supervise(std::vector<char *> script,
                      strerror(errno));
 }
 
-void tt::Supervisor::SetupFds() {
+void tt::SpawnSupervise::SetupFds() {
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     // No need to close the fds as they have O_CLOEXEC
@@ -49,7 +49,7 @@ void tt::Supervisor::SetupFds() {
     dup2(supervisor_fd_.at(1), 1);
 }
 
-auto tt::Supervisor::GetExecArgs(std::vector<char *> script)
+auto tt::SpawnSupervise::GetExecArgs(std::vector<char *> script)
     -> std::vector<char *> {
     std::vector<char *> args{};
     args.push_back(const_cast<char *>("supervise"));
@@ -61,7 +61,7 @@ auto tt::Supervisor::GetExecArgs(std::vector<char *> script)
     return args;
 }
 
-auto tt::Supervisor::GetCStrFromInt(int num) -> std::array<char, 2> {
+auto tt::SpawnSupervise::GetCStrFromInt(int num) -> std::array<char, 2> {
     std::array<char, 2> cstr{};
     std::to_chars(cstr.data(), cstr.data() + cstr.size(), num);
     return cstr;

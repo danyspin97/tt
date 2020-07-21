@@ -28,11 +28,11 @@
 
 namespace tt {
 
-class Supervisor {
+class SpawnSupervise {
 public:
-    explicit Supervisor(PipeFd supervisor_fd);
-    void Supervise(std::vector<char *> script,
-                   std::vector<const char *> environment);
+    explicit SpawnSupervise(PipeFd supervisor_fd);
+    void Spawn(std::vector<char *> script,
+               std::vector<const char *> environment);
 
 private:
     static auto GetExecArgs(std::vector<char *> script) -> std::vector<char *>;

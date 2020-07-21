@@ -1,3 +1,3 @@
 tt_test_src += files(
-    'supervisor.cpp',
+    'spawn_supervise.cpp',
 )

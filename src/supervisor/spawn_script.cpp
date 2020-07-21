@@ -31,8 +31,6 @@
 
 #include "spdlog/spdlog.h"
 
-#include "tt/supervisor/supervisor.hpp"
-
 std::mutex tt::SpawnScript::fork_mutex_;
 
 tt::SpawnScript::SpawnScript(const Script &script,
@@ -59,8 +57,8 @@ void tt::SpawnScript::TrySpawn() {
     AdjustSupervisionFdFlags();
     if (int pid = fork(); pid == 0) {
         SetupUidGid();
-        Supervisor supervisor(supervisor_fd_);
-        supervisor.Supervise(GetSupervisorArgs(), GetEnviromentFromScript());
+        SpawnSupervise supervise(supervisor_fd_);
+        supervise.Spawn(GetSupervisorArgs(), GetEnviromentFromScript());
     } else {
         UnlockForkMutex();
         WaitOnStatus();

@@ -1,4 +1,4 @@
 tt_src += files (
-    'supervisor.cpp',
+    'spawn_supervise.cpp',
     'spawn_script.cpp',
 )
