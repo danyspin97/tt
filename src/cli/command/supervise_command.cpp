@@ -38,9 +38,6 @@
 #include "spdlog/spdlog.h"
 
 #include "tt/cli/global_options.hpp"
-#include "tt/cli/supervise/controlfd.hpp"
-#include "tt/cli/supervise/kill_children.hpp"
-#include "tt/cli/supervise/signal_handler.hpp"
 
 tt::cli::SuperviseCommand::SuperviseCommand(
     args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
