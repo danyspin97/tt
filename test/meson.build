@@ -7,11 +7,11 @@ subdir('parser')
 subdir('svc')
 
 # Available from 0.53.0
-#import('fs')
+fs = import('fs')
 foreach src : tt_test_src
     fmt = '@0@'
     file_name = fmt.format(src).underscorify()
-    #file_name = fs.replace_suffix(src, '')
+    file_name = fs.replace_suffix(file_name, '')
 
     tt_test_exe = executable(
         file_name,
