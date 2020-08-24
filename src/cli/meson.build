@@ -1,10 +1,11 @@
-tt_cli_src = files(
+tt_cli_src += files(
     'global_options.cpp',
     'log.cpp',
     'main.cpp',
 )
 
 subdir('command')
+subdir('supervise')
 
 tt_exe = executable(
     'tt',

@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <mutex>
+#include <chrono>
 
 #include "tt/data/service.hpp"
 #include "tt/svc/spawn_supervise.hpp"
@@ -30,37 +30,36 @@ namespace tt {
 
 class SpawnScript {
 public:
-    explicit SpawnScript(const Script &script, const Environment &environment,
+    explicit SpawnScript(const std::string &service_name, const Script &script,
+                         const Environment &environment,
                          OnSuccessCallback &&on_success);
     virtual ~SpawnScript() = default;
 
-    [[nodiscard]] auto GetStatus() const noexcept -> ScriptStatus;
-
     auto Spawn() -> ScriptStatus;
 
+    struct Timeout {
+        std::chrono::steady_clock::time_point start =
+            std::chrono::steady_clock::now();
+        std::chrono::milliseconds timeout;
+        Timeout(std::chrono::milliseconds t) : timeout(t) {}
+
+        bool TimedOut() {
+            return start + timeout < std::chrono::steady_clock::now();
+        }
+    };
+
 protected:
-    void AdjustSupervisionFdFlags();
     auto GetSupervisorArgs() -> std::vector<char *>;
     auto GetEnviromentFromScript() -> std::vector<const char *>;
-    auto HasConnectionHungUp(short revents) -> bool;
-    auto HasReceivedUpdate(short revents) -> bool;
-    void ReadStatusFromProcessFd();
     void WaitOnStatus();
     void SetupUidGid();
-    void SetupFds();
-    void TrySpawn();
+    auto TrySpawn(Timeout timeout) -> ScriptStatus;
 
 private:
-    void LockForkMutex();
-    void UnlockForkMutex();
-
+    const std::string &service_name_;
     const Script &script_;
     const Environment &environment_;
-    PipeFd process_fd_;
-    PipeFd supervisor_fd_;
     OnSuccessCallback on_success_;
-    ScriptStatus status_ = ScriptStatus::Failure;
-    static std::mutex fork_mutex_;
 };
 
 } // namespace tt

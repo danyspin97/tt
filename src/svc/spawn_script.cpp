@@ -28,22 +28,30 @@
 #include <unistd.h>
 
 #include <cstdio>
+#include <future>
 
 #include "spdlog/spdlog.h"
 
-std::mutex tt::SpawnScript::fork_mutex_;
+#include "pstream.h"
 
-tt::SpawnScript::SpawnScript(const Script &script,
+tt::SpawnScript::SpawnScript(const std::string &service_name,
+                             const Script &script,
                              const Environment &environment,
                              OnSuccessCallback &&on_success)
-    : script_(script), environment_(environment),
+    : service_name_(service_name), script_(script), environment_(environment),
       on_success_(std::move(on_success)) {}
 
 auto tt::SpawnScript::Spawn() -> ScriptStatus {
     auto max_death = script_.max_death();
     decltype(max_death) time_tried = 0;
     while (time_tried != script_.max_death()) {
-        if (status_ == ScriptStatus::Success) {
+        // This method is already running in a different thread than tt-svc
+        // Use std::launch::deferred to not use a third thread
+        std::future<ScriptStatus> future =
+            std::async(std::launch::deferred, &SpawnScript::TrySpawn, this,
+                       Timeout(std::chrono::milliseconds(script_.timeout())));
+
+        if (future.get() == ScriptStatus::Success) {
             return ScriptStatus::Success;
         }
         time_tried++;
@@ -51,43 +59,58 @@ auto tt::SpawnScript::Spawn() -> ScriptStatus {
     return ScriptStatus::Failure;
 }
 
-void tt::SpawnScript::TrySpawn() {
-    SetupFds();
-    LockForkMutex();
-    AdjustSupervisionFdFlags();
-    if (int pid = fork(); pid == 0) {
-        SetupUidGid();
-        SpawnSupervise supervise(supervisor_fd_);
-        supervise.Spawn(GetSupervisorArgs(), GetEnviromentFromScript());
-    } else {
-        UnlockForkMutex();
-        WaitOnStatus();
+auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
+    std::string command{script_.execute()};
+    redi::ipstream proc(command,
+                        redi::pstreams::pstdout | redi::pstreams::pstderr);
+    std::string line;
+    std::array<bool, 2> finished = {false, false};
+    uint8_t count = 0;
+    uint8_t max_lines = 10;
+    while (!finished[0] || !finished[1]) {
+        if (!finished[0]) {
+            while (std::getline(proc.err(), line) && count != max_lines) {
+                spdlog::get("oneshot")->error("{}: {}", service_name_, line);
+                count++;
+            }
+            count = 0;
+            if (proc.err().eof()) {
+                finished[0] = true;
+                if (!finished[1]) {
+                    proc.clear();
+                }
+            }
+        }
+        if (timeout.TimedOut()) {
+            break;
+        }
+        if (!finished[1]) {
+            while (std::getline(proc.out(), line) && count != max_lines) {
+                spdlog::get("oneshot")->info("{}: {}", service_name_, line);
+                count++;
+            }
+            count = 0;
+            if (proc.out().eof()) {
+                finished[1] = true;
+                if (!finished[0]) {
+                    proc.clear();
+                }
+            }
+        }
+        if (timeout.TimedOut()) {
+            break;
+        }
     }
-    assert(false);
-}
+    proc.close();
+    if (proc.rdbuf()->exited()) {
+        if (proc.rdbuf()->status() != 0) {
+            return ScriptStatus::Failure;
+        }
+        return ScriptStatus::Success;
+    }
+    // TODO: Implement kill
 
-void tt::SpawnScript::WaitOnStatus() {
-    std::array<pollfd, 1> pollfds{process_fd_.at(0), POLLIN | POLLRDHUP, 0};
-    if (poll(pollfds.data(), 1, script_.timeout()) != 1) {
-        spdlog::critical("Failed to run poll()");
-    }
-    if (HasConnectionHungUp(pollfds[0].revents)) {
-        spdlog::warn("Pipe error");
-    }
-    if (HasReceivedUpdate(pollfds[0].revents)) {
-        ReadStatusFromProcessFd();
-    }
-    // TODO: Handle case with timeout and kill the process
-}
-
-void tt::SpawnScript::ReadStatusFromProcessFd() {
-    siginfo_t scriptinfo = {};
-    if (read(process_fd_.at(0), &scriptinfo, sizeof(scriptinfo)) < 0) {
-        spdlog::critical("Failed to read from process_fd");
-    }
-    if (scriptinfo.si_status == 0) {
-        status_ = ScriptStatus::Success;
-    }
+    return ScriptStatus::Failure;
 }
 
 auto tt::SpawnScript::GetSupervisorArgs() -> std::vector<char *> {
@@ -111,45 +134,6 @@ auto tt::SpawnScript::GetEnviromentFromScript() -> std::vector<const char *> {
     return environment_vec_cstr;
 }
 
-void tt::SpawnScript::SetupFds() {
-    PipeFd first;
-    PipeFd second;
-    pipe2(first.data(), O_CLOEXEC);
-    pipe2(second.data(), O_CLOEXEC);
-
-    process_fd_.at(0) = second.at(0);
-    process_fd_.at(1) = first.at(1);
-
-    supervisor_fd_.at(0) = first.at(0);
-    supervisor_fd_.at(1) = second.at(1);
-}
-
 void tt::SpawnScript::SetupUidGid() {
     // TODO: implement
 }
-
-void tt::SpawnScript::AdjustSupervisionFdFlags() {
-    for (auto &fd : supervisor_fd_) {
-        int flags;
-        if ((flags = fcntl(fd, F_GETFL, 0)) < 0) {
-            spdlog::critical("Error on F_GETFL");
-        } else {
-            flags &= ~O_CLOEXEC;
-            if (fcntl(fd, F_SETFL, flags) < 0) {
-                spdlog::critical("Error on F_SETFL");
-            }
-        }
-    }
-}
-
-auto tt::SpawnScript::HasConnectionHungUp(short revents) -> bool {
-    return revents & (POLLERR | POLLNVAL | POLLHUP);
-}
-
-auto tt::SpawnScript::HasReceivedUpdate(short revents) -> bool {
-    return revents & POLLIN;
-}
-
-void tt::SpawnScript::LockForkMutex() { fork_mutex_.lock(); }
-
-void tt::SpawnScript::UnlockForkMutex() { fork_mutex_.unlock(); }
