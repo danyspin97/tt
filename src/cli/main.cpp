@@ -27,6 +27,7 @@
 #include "tt/define.h"
 
 #include "tt/cli/command/parse_command.hpp"
+#include "tt/cli/command/supervise_command.hpp"
 
 auto main(int argc, char *argv[]) -> int {
     args::ArgumentParser parser("tt init/rc manager.");
