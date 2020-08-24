@@ -2097,7 +2097,7 @@ namespace redi
             ::fcntl(rpipe(), F_SETFL, flags | O_NONBLOCK);  // set non-blocking
 
           error_ = 0;
-          rc = read(rbuf + pbsz, bufsz - pbsz);
+          rc = read(rbuf + pbsz, static_cast<int>(bufsz) - static_cast<int>(pbsz));
 
           if (rc == -1 && error_ == EAGAIN)  // nothing available
             rc = 0;
@@ -2109,7 +2109,7 @@ namespace redi
         }
       }
       else
-        rc = read(rbuf + pbsz, bufsz - pbsz);
+        rc = read(rbuf + pbsz, static_cast<int>(bufsz) - static_cast<int>(pbsz));
 
       if (rc > 0 || (rc == 0 && non_blocking))
       {
