@@ -1,4 +1,4 @@
-tt_cli_src = files(
+tt_cli_src += files(
     'global_options.cpp',
     'log.cpp',
     'main.cpp',
