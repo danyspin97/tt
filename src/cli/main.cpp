@@ -46,6 +46,17 @@ auto main(int argc, char *argv[]) -> int {
     //                   "Show the status and the configuration of a service");
     // args::Command status(query, "status", "Show the status of the system");
 
+    // args::Group query(parser, "Query the status of the system");
+    // args::Command show(query, "show",
+    //                   "Show the status and the configuration of a service");
+
+    args::Group system(parser, "System commands");
+    args::Command supervise(
+        system, "supervise", "Supervise a process [Do not run manually]",
+        [common_options](args::Subparser &subparser) {
+            tt::cli::SuperviseCommand::Dispatch(subparser, common_options);
+        });
+
     args::Group testing(parser, "Test services files");
     args::Command parse(
         testing, "parse", "Parse one or more services for testing purposes.",
