@@ -24,12 +24,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#ifdef __linux__
-#include <sys/prctl.h>
-#else
-#error Only Linux is currently supported
-#endif
-
 #include <array>
 #include <filesystem>
 #include <utility>
