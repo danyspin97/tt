@@ -219,7 +219,7 @@ namespace redi
 
       /// Wait for the child process to exit.
       int
-      wait(bool nohang = false);
+      wait(bool nohang = true);
 
       /// Return the file descriptor for the output pipe.
       fd_type&
