@@ -34,6 +34,7 @@
 
 #include "pstream.h"
 
+#include "tt/svc/timeout.hpp"
 #include "tt/svc/utils.hpp"
 
 tt::SpawnScript::SpawnScript(const std::string &service_name,

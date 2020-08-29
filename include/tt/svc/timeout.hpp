@@ -22,35 +22,20 @@
 
 #include <chrono>
 
-#include "tt/data/service.hpp"
-#include "tt/svc/spawn_supervise.hpp"
-#include "tt/svc/types.hpp"
-
 namespace tt {
 
-class Timeout;
-
-class SpawnScript {
+class Timeout {
 public:
-    explicit SpawnScript(const std::string &service_name, const Script &script,
-                         const Environment &environment,
-                         OnSuccessCallback &&on_success);
-    virtual ~SpawnScript() = default;
+    explicit Timeout(std::chrono::milliseconds time) : timeout_(time) {}
 
-    auto Spawn() -> ScriptStatus;
-
-protected:
-    auto GetSupervisorArgs() -> std::vector<char *>;
-    auto GetEnviromentFromScript() -> std::vector<const char *>;
-    void WaitOnStatus();
-    void SetupUidGid();
-    auto TrySpawn(Timeout timeout) -> ScriptStatus;
+    auto TimedOut() -> bool {
+        return start_ + timeout_ < std::chrono::steady_clock::now();
+    }
 
 private:
-    const std::string &service_name_;
-    const Script &script_;
-    const Environment &environment_;
-    OnSuccessCallback on_success_;
+    std::chrono::steady_clock::time_point start_ =
+        std::chrono::steady_clock::now();
+    std::chrono::milliseconds timeout_;
 };
 
 } // namespace tt
