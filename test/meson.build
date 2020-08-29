@@ -17,7 +17,12 @@ foreach src : tt_test_src
         file_name,
         src,
         dependencies: [tt_dep, catch2_dep],
-        cpp_args: '-DCATCH_CONFIG_MAIN',
+        cpp_args: [
+            '-DCATCH_CONFIG_MAIN',
+            '-DCATCH_CONFIG_FAST_COMPILE',
+            '-DCATCH_CONFIG_EXPERIMENTAL_REDIRECT',
+            '-DCATCH_CONFIG_POSIX_SIGNALS',
+        ],
     )
 
     test(file_name, tt_test_exe)
