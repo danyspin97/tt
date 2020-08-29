@@ -34,6 +34,8 @@
 
 #include "pstream.h"
 
+#include "tt/svc/utils.hpp"
+
 tt::SpawnScript::SpawnScript(const std::string &service_name,
                              const Script &script,
                              const Environment &environment,
@@ -65,15 +67,14 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
                         redi::pstreams::pstdout | redi::pstreams::pstderr);
     std::string line;
     std::array<bool, 2> finished = {false, false};
-    uint8_t count = 0;
-    uint8_t max_lines = 10;
+    uint_fast8_t count = 0;
+    uint_fast8_t max_lines = 10;
     while (!finished[0] || !finished[1]) {
         if (!finished[0]) {
-            while (std::getline(proc.err(), line) && count != max_lines) {
+            while (getline_async(proc.err(), line) && count != max_lines) {
                 spdlog::get("oneshot")->error("{}: {}", service_name_, line);
                 count++;
             }
-            count = 0;
             if (proc.err().eof()) {
                 finished[0] = true;
                 if (!finished[1]) {
@@ -81,15 +82,11 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
                 }
             }
         }
-        if (timeout.TimedOut()) {
-            break;
-        }
         if (!finished[1]) {
-            while (std::getline(proc.out(), line) && count != max_lines) {
+            while (getline_async(proc.out(), line) && count != max_lines) {
                 spdlog::get("oneshot")->info("{}: {}", service_name_, line);
                 count++;
             }
-            count = 0;
             if (proc.out().eof()) {
                 finished[1] = true;
                 if (!finished[0]) {
@@ -100,6 +97,11 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
         if (timeout.TimedOut()) {
             break;
         }
+        if (count == 0) {
+            std::this_thread::sleep_for(
+                std::chrono::milliseconds(script_.timeout() / 100));
+        }
+        count = 0;
     }
     proc.close();
     if (proc.rdbuf()->exited()) {
@@ -107,8 +109,20 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
             return ScriptStatus::Failure;
         }
         return ScriptStatus::Success;
+    } else {
+        proc.rdbuf()->kill(static_cast<int>(script_.down_signal()));
+        if (!proc.rdbuf()->exited()) {
+            auto wait = script_.timeout_kill() / 100;
+            std::this_thread::sleep_for(std::chrono::milliseconds(wait));
+            if (!proc.rdbuf()->exited()) {
+                std::this_thread::sleep_for(
+                    std::chrono::milliseconds(script_.timeout_kill() - wait));
+                if (!proc.rdbuf()->exited()) {
+                    proc.rdbuf()->kill(static_cast<int>(Signal::kSigKill));
+                }
+            }
+        }
     }
-    // TODO: Implement kill
 
     return ScriptStatus::Failure;
 }
