@@ -23,7 +23,7 @@
 // https://stackoverflow.com/questions/16592357/non-blocking-stdgetline-exit-if-no-input
 auto tt::getline_async(std::istream &is, std::string &str, char delim) -> bool {
     static std::string lineSoFar;
-    char inChar;
+    char inChar = 0;
     int charsRead = 0;
     bool lineRead = false;
     str = "";

@@ -28,12 +28,9 @@
 #include "tt/data/oneshot_options.hpp"
 
 using tt::Bundle;
-using tt::BundleOptions;
 using tt::DependencyReader;
 using tt::Longrun;
-using tt::LongrunOptions;
 using tt::Oneshot;
-using tt::OneshotOptions;
 
 void DependencyReader::operator()(const Bundle &bundle) {
     const auto &options_ = bundle.options();

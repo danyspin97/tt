@@ -110,8 +110,7 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
             return ScriptStatus::Failure;
         }
         return ScriptStatus::Success;
-    } else {
-        proc.rdbuf()->kill(static_cast<int>(script_.down_signal()));
+    }         proc.rdbuf()->kill(static_cast<int>(script_.down_signal()));
         if (!proc.rdbuf()->exited()) {
             auto wait = script_.timeout_kill() / 100;
             std::this_thread::sleep_for(std::chrono::milliseconds(wait));
@@ -123,7 +122,7 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
                 }
             }
         }
-    }
+   
 
     return ScriptStatus::Failure;
 }
