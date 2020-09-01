@@ -26,43 +26,69 @@
 #include <unistd.h>
 
 #include <charconv>
+#include <filesystem>
+#include <fstream>
+#include <utility>
 
 #include "spdlog/spdlog.h"
 
-tt::SpawnSupervise::SpawnSupervise(PipeFd supervisor_fd)
-    : supervisor_fd_(supervisor_fd) {}
+#include "bitsery/adapter/stream.h"
+#include "bitsery/bitsery.h"
+#include <bitsery/adapter/buffer.h>
 
-void tt::SpawnSupervise::Spawn(std::vector<char *> script,
-                               std::vector<const char *> environment) {
-    SetupFds();
-    execve("/bin/supervise", const_cast<char **>(GetExecArgs(script).data()),
-           const_cast<char *const *>(environment.data()));
-    spdlog::critical("An error had happened while running execve: {}",
-                     strerror(errno));
+#include "tt/dirs.hpp"
+#include "tt/exception.hpp"
+
+tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun,
+                                   const std::vector<const char *> &environment)
+    : longrun_(longrun), environment_(environment) {
+    auto filename = GetScriptFilename();
+    WriteScriptToFile(filename);
+    Spawn(filename);
 }
 
-void tt::SpawnSupervise::SetupFds() {
-    close(STDIN_FILENO);
-    close(STDOUT_FILENO);
-    // No need to close the fds as they have O_CLOEXEC
-    dup2(supervisor_fd_.at(0), 0);
-    dup2(supervisor_fd_.at(1), 1);
+void tt::SpawnSupervise::Spawn(const std::string &filename) {
+    if (int pid = fork(); pid == 0) {
+        execve("tt", const_cast<char **>(GetExecArgs(filename).data()),
+               const_cast<char *const *>(environment_.data()));
+        spdlog::critical("An error had happened while running execve: {}",
+                         strerror(errno));
+        std::exit(1);
+    }
 }
 
-auto tt::SpawnSupervise::GetExecArgs(std::vector<char *> script)
+void tt::SpawnSupervise::WriteScriptToFile(const std::string &filename) {
+    std::fstream file{filename, file.binary | file.trunc | file.out};
+    if (!file.is_open()) {
+        spdlog::error("Error opening file {}", filename);
+        throw tt::Exception("");
+    }
+
+    using Buffer = std::array<uint8_t, 10000>;
+    using OutputAdapter = bitsery::OutputBufferAdapter<Buffer>;
+    Buffer buffer{};
+    auto writtenSize =
+        bitsery::quickSerialization<OutputAdapter>(buffer, longrun_);
+
+    file.write(reinterpret_cast<char *>(buffer.data()), writtenSize);
+    file.flush();
+    file.close();
+}
+
+auto tt::SpawnSupervise::GetScriptFilename() -> std::string {
+    auto &dirs = Dirs::GetInstance();
+    std::filesystem::path filename(dirs.livedir());
+    filename /= "supervise";
+    filename /= longrun_.name();
+    return filename;
+}
+
+auto tt::SpawnSupervise::GetExecArgs(const std::string &filename)
     -> std::vector<char *> {
     std::vector<char *> args{};
+    args.push_back(const_cast<char *>("tt"));
     args.push_back(const_cast<char *>("supervise"));
-    args.push_back(GetCStrFromInt(0).data());
-    args.push_back(GetCStrFromInt(1).data());
-    std::for_each(script.begin(), script.end(),
-                  [&args](char *arg) { args.push_back(arg); });
+    args.push_back(const_cast<char *>(filename.data()));
     args.push_back(0);
     return args;
-}
-
-auto tt::SpawnSupervise::GetCStrFromInt(int num) -> std::array<char, 2> {
-    std::array<char, 2> cstr{};
-    std::to_chars(cstr.data(), cstr.data() + cstr.size(), num);
-    return cstr;
 }

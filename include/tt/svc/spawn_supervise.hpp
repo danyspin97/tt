@@ -30,16 +30,17 @@ namespace tt {
 
 class SpawnSupervise {
 public:
-    explicit SpawnSupervise(PipeFd supervisor_fd);
-    void Spawn(std::vector<char *> script,
-               std::vector<const char *> environment);
+    explicit SpawnSupervise(const Longrun &longrun,
+                            const std::vector<const char *> &environment);
 
 private:
-    static auto GetExecArgs(std::vector<char *> script) -> std::vector<char *>;
-    static auto GetCStrFromInt(int num) -> std::array<char, 2>;
-    void SetupFds();
+    static auto GetExecArgs(const std::string &filename) -> std::vector<char *>;
+    auto GetScriptFilename() -> std::string;
+    void Spawn(const std::string &filename);
+    void WriteScriptToFile(const std::string &filename);
 
-    PipeFd supervisor_fd_;
+    const Longrun &longrun_;
+    std::vector<const char *> environment_;
 };
 
 } // namespace tt
