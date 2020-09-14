@@ -40,8 +40,8 @@
 #include "tt/exception.hpp"
 
 tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun,
-                                   const std::vector<const char *> &environment)
-    : longrun_(longrun), environment_(environment) {
+                                   std::vector<const char *> environment)
+    : longrun_(longrun), environment_(std::move(environment)) {
     auto filename = GetScriptFilename();
     WriteScriptToFile(filename);
     Spawn(filename);
@@ -58,7 +58,7 @@ void tt::SpawnSupervise::Spawn(const std::string &filename) {
 }
 
 void tt::SpawnSupervise::WriteScriptToFile(const std::string &filename) {
-    std::fstream file{filename, file.binary | file.trunc | file.out};
+    std::fstream file{filename, std::fstream::binary | std::fstream::trunc | std::fstream::out};
     if (!file.is_open()) {
         spdlog::error("Error opening file {}", filename);
         throw tt::Exception("");

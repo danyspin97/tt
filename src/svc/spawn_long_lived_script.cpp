@@ -56,7 +56,7 @@ auto tt::SpawnLongLivedScript::Spawn() -> ScriptStatus {
 void tt::SpawnLongLivedScript::RunScript() {
     int pid = fork();
     if (pid == 0) {
-        execve("/bin/sh", const_cast<char **>(GetExecArgs().data()), NULL);
+        execve("/bin/sh", const_cast<char **>(GetExecArgs().data()), nullptr);
         spdlog::critical("An error had happened while running execve: {}",
                          strerror(errno));
         exit(1);
@@ -81,7 +81,7 @@ auto tt::SpawnLongLivedScript::ListenOnNotifyFd() -> ScriptStatus {
     int res = poll(&fd, 1, long_lived_script_.timeout());
     // We got a revents on notify_fd_
     if (res == 1) {
-        if (revents | POLLIN) {
+        if ((revents | POLLIN) != 0) {
             return ScriptStatus::Success;
         }
     };
@@ -106,6 +106,6 @@ auto tt::SpawnLongLivedScript::HasExited() -> bool {
     return SupervisionSignalHandler::HasChildExited();
 }
 
-auto tt::SpawnLongLivedScript::HasStarted() -> bool {
+auto tt::SpawnLongLivedScript::HasStarted() const -> bool {
     return waiting_on_startup_;
 }

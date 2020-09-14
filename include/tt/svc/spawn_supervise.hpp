@@ -31,7 +31,7 @@ namespace tt {
 class SpawnSupervise {
 public:
     explicit SpawnSupervise(const Longrun &longrun,
-                            const std::vector<const char *> &environment);
+                            std::vector<const char *> environment);
 
 private:
     static auto GetExecArgs(const std::string &filename) -> std::vector<char *>;

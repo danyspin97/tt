@@ -85,7 +85,7 @@ TEST_CASE("SpawnScript") {
             std::filesystem::remove(testfile);
         }
         constexpr auto time_to_try = 3;
-        auto command = "echo 1 >> TIME_TRIED ; exit 1";
+        const auto *command = "echo 1 >> TIME_TRIED ; exit 1";
         tt::Script script{tt::Script::Type::Bash, command};
         script.max_death(time_to_try);
         tt::SpawnScript spawn_script("time-tried", script, env);
@@ -101,7 +101,7 @@ TEST_CASE("SpawnScript") {
         if (std::filesystem::exists(testfile)) {
             std::filesystem::remove(testfile);
         }
-        auto command = "sleep 1 && touch PROCESS_EXISTS";
+        const auto *command = "sleep 1 && touch PROCESS_EXISTS";
         tt::Script script{tt::Script::Type::Bash, command};
         script.timeout(50);
         script.max_death(1);

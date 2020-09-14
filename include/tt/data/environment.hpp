@@ -39,7 +39,7 @@ public:
     auto SetUnique(const std::string &key, const std::string &value) -> bool;
     [[nodiscard]] auto CountKeys() const -> int;
     void UpdateValuesWithEnvironment(const Environment &env);
-    auto Vector() const -> std::vector<std::string>;
+    [[nodiscard]] auto Vector() const -> std::vector<std::string>;
 
     auto Dump(std::ostream &strm) const -> std::ostream &;
 

@@ -52,7 +52,7 @@ public:
 
 class EnvironmentKeyAlreadySetException : public Exception {
 public:
-    EnvironmentKeyAlreadySetException(const std::string &msg)
+    explicit EnvironmentKeyAlreadySetException(const std::string &msg)
         : Exception(msg) {}
 };
 

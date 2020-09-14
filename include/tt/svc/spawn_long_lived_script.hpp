@@ -33,7 +33,7 @@ public:
     auto Spawn() -> ScriptStatus;
 
     void SignalChild(int signum);
-    auto HasStarted() -> bool;
+    auto HasStarted() const -> bool;
     void Signal(int signum) override;
 
 protected:
