@@ -68,8 +68,10 @@ auto tt::SpawnLongLivedScript::GetExecArgs() -> std::vector<char *> {
     std::vector<char *> args{};
     args.push_back(const_cast<char *>("/bin/sh"));
     args.push_back(const_cast<char *>("-c"));
-    args.push_back(long_lived_script_.execute().data());
-    args.push_back(0);
+    // This leaks, but it doesn't matter since it is an argument for execve
+    std::string *execute = new std::string(long_lived_script_.execute());
+    args.push_back(const_cast<char *>(execute->c_str()));
+    args.push_back(nullptr);
     return args;
 }
 
