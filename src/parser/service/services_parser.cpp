@@ -79,12 +79,14 @@ void ServicesParser::ParseService(const std::string &service_name) {
     ParseDependenciesOfService(service_map_.at(service_name));
 }
 
-auto ServicesParser::GetInstanceTokenIndex(const string &service_name) -> size_t {
+auto ServicesParser::GetInstanceTokenIndex(const string &service_name)
+    -> size_t {
     return service_name.find('@');
 }
 
 auto ServicesParser::SplitServiceNameFromInstance(string &service_name,
-                                                    size_t token_index) -> string {
+                                                  size_t token_index)
+    -> string {
     auto string_iter = service_name.begin();
     advance(string_iter, token_index);
     string instance{string_iter, service_name.end()};
