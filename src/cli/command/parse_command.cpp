@@ -68,8 +68,7 @@ void tt::cli::ParseCommand::ParseUserSystemServices() {
     for (auto &&service : service_list_) {
         bool found = false;
         for (const auto &name : GetPossibleNameForService(service)) {
-            found = CheckForFileInDefaultDirs(name);
-            if (found) {
+            if (found = CheckForFileInDefaultDirs(name); found) {
                 break;
             }
         }
