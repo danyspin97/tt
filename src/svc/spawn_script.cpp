@@ -103,26 +103,30 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
         count = 0;
     }
     proc_.close();
-    if (proc_.rdbuf()->exited()) {
+    if (HasExited()) {
         if (proc_.rdbuf()->status() != 0) {
             return ScriptStatus::Failure;
         }
         return ScriptStatus::Success;
     }
-    proc_.rdbuf()->kill(static_cast<int>(script_.down_signal()));
-    if (!proc_.rdbuf()->exited()) {
+    Kill();
+
+    return ScriptStatus::Failure;
+}
+
+void tt::SpawnScript::Kill() {
+    Signal(static_cast<int>(script_.down_signal()));
+    if (!HasExited()) {
         auto wait = script_.timeout_kill() / 100;
         std::this_thread::sleep_for(std::chrono::milliseconds(wait));
-        if (!proc_.rdbuf()->exited()) {
+        if (!HasExited()) {
             std::this_thread::sleep_for(
                 std::chrono::milliseconds(script_.timeout_kill() - wait));
-            if (!proc_.rdbuf()->exited()) {
-                proc_.rdbuf()->kill(static_cast<int>(Signal::kSigKill));
+            if (!HasExited()) {
+                Signal(static_cast<int>(Signal::kSigKill));
             }
         }
     }
-
-    return ScriptStatus::Failure;
 }
 
 auto tt::SpawnScript::GetSupervisorArgs() -> std::vector<char *> {
@@ -135,6 +139,10 @@ auto tt::SpawnScript::GetSupervisorArgs() -> std::vector<char *> {
     args.push_back(cexecute.data());
     return args;
 }
+
+void tt::SpawnScript::Signal(int signum) { proc_.rdbuf()->kill(signum); }
+
+auto tt::SpawnScript::HasExited() -> bool { return proc_.rdbuf()->exited(); }
 
 auto tt::SpawnScript::GetEnviromentFromScript() -> std::vector<const char *> {
     auto environment_vec = environment_.Vector();

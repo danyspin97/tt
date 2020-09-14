@@ -39,11 +39,13 @@ public:
     virtual ~SpawnScript() = default;
 
     auto Spawn() -> ScriptStatus;
+    void Kill();
+    virtual void Signal(int signum);
 
 protected:
     auto GetSupervisorArgs() -> std::vector<char *>;
     auto GetEnviromentFromScript() -> std::vector<const char *>;
-    void WaitOnStatus();
+    virtual auto HasExited() -> bool;
     void SetupUidGid();
     auto TrySpawn(Timeout timeout) -> ScriptStatus;
 
