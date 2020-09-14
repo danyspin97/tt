@@ -53,6 +53,11 @@ auto tt::cli::ParseCommand::Execute() -> int {
 
 void tt::cli::ParseCommand::ParseFiles() const {
     for (auto &&service : service_list_) {
+        if (!std::filesystem::exists(service)) {
+            spdlog::error("File {} does not exist", service);
+            continue;
+        }
+
         auto parser = ServiceParser(service);
         spdlog::info(parser.service());
     }
