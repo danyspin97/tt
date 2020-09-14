@@ -32,7 +32,7 @@
 tt::SpawnLongLivedScript::SpawnLongLivedScript(const std::string &service_name,
                                                const LongLivedScript &script,
                                                const Environment &environment)
-    : SpawnScript(service_name, script, environment, [](std::string) {}),
+    : SpawnScript(service_name, script, environment),
       long_lived_script_(script) {}
 
 tt::SpawnLongLivedScript::~SpawnLongLivedScript() {

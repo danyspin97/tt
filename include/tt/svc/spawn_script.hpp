@@ -33,8 +33,7 @@ class Timeout;
 class SpawnScript {
 public:
     explicit SpawnScript(const std::string &service_name, const Script &script,
-                         const Environment &environment,
-                         OnSuccessCallback &&on_success);
+                         const Environment &environment);
     virtual ~SpawnScript() = default;
 
     auto Spawn() -> ScriptStatus;
@@ -50,7 +49,6 @@ private:
     const std::string &service_name_;
     const Script &script_;
     const Environment &environment_;
-    OnSuccessCallback on_success_;
 };
 
 } // namespace tt

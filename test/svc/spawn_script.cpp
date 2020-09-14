@@ -43,16 +43,14 @@ TEST_CASE("SpawnScript") {
 
     SECTION("Spawn sucessfull script") {
         tt::Script script{tt::Script::Type::Bash, "exit 0"};
-        tt::SpawnScript spawn_script("test-script", script, env,
-                                     [](std::string) {});
+        tt::SpawnScript spawn_script("test-script", script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Success);
     }
 
     SECTION("Spawn failing script") {
         tt::Script script{tt::Script::Type::Bash, "exit 1"};
-        tt::SpawnScript spawn_script("failing-script", script, env,
-                                     [](std::string) {});
+        tt::SpawnScript spawn_script("failing-script", script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
     }
@@ -60,8 +58,7 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn script within timeout") {
         tt::Script script{tt::Script::Type::Bash, "sleep 1"};
         script.timeout(2000);
-        tt::SpawnScript spawn_script("timeout-success", script, env,
-                                     [](std::string) {});
+        tt::SpawnScript spawn_script("timeout-success", script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Success);
     }
@@ -69,8 +66,7 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn script that exceed timeout") {
         tt::Script script{tt::Script::Type::Bash, "sleep 10"};
         script.timeout(50);
-        tt::SpawnScript spawn_script("timeout-fail", script, env,
-                                     [](std::string) {});
+        tt::SpawnScript spawn_script("timeout-fail", script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
     }
@@ -78,8 +74,7 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn script within timeout and fail") {
         tt::Script script{tt::Script::Type::Bash, "sleep 1 && exit 1"};
         script.timeout(2000);
-        tt::SpawnScript spawn_script("timeout-fail", script, env,
-                                     [](std::string) {});
+        tt::SpawnScript spawn_script("timeout-fail", script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
     }
@@ -93,8 +88,7 @@ TEST_CASE("SpawnScript") {
         auto command = "echo 1 >> TIME_TRIED ; exit 1";
         tt::Script script{tt::Script::Type::Bash, command};
         script.max_death(time_to_try);
-        tt::SpawnScript spawn_script("time-tried", script, env,
-                                     [](std::string) {});
+        tt::SpawnScript spawn_script("time-tried", script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
         REQUIRE(std::filesystem::exists(testfile));
@@ -111,8 +105,7 @@ TEST_CASE("SpawnScript") {
         tt::Script script{tt::Script::Type::Bash, command};
         script.timeout(50);
         script.max_death(1);
-        tt::SpawnScript spawn_script("timeout-fail", script, env,
-                                     [](std::string) {});
+        tt::SpawnScript spawn_script("timeout-fail", script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
         CHECK(status == tt::ScriptStatus::Failure);

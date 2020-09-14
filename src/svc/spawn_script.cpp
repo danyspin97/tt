@@ -39,10 +39,8 @@
 
 tt::SpawnScript::SpawnScript(const std::string &service_name,
                              const Script &script,
-                             const Environment &environment,
-                             OnSuccessCallback &&on_success)
-    : service_name_(service_name), script_(script), environment_(environment),
-      on_success_(std::move(on_success)) {}
+                             const Environment &environment)
+    : service_name_(service_name), script_(script), environment_(environment) {}
 
 auto tt::SpawnScript::Spawn() -> ScriptStatus {
     auto max_death = script_.max_death();
