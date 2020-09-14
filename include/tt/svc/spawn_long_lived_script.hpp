@@ -46,9 +46,9 @@ private:
     void SetupNotifyFd();
 
     LongLivedScript long_lived_script_;
-    bool waiting_on_startup_;
-    int notify_fd_;
-    int child_pid_;
+    bool waiting_on_startup_ = false;
+    int notify_fd_ = 0;
+    int child_pid_ = 0;
 };
 
 } // namespace tt
