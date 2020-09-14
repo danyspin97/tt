@@ -21,7 +21,6 @@
 #include "tt/cli/command/parse_command.hpp"
 
 #include <filesystem>
-#include <sys/stat.h>
 #include <utility>
 
 #include "args.hxx"
@@ -76,16 +75,15 @@ void tt::cli::ParseCommand::ParseUserSystemServices() {
     }
 }
 
-auto tt::cli::ParseCommand::CheckForFileInDefaultDirs(
-    const std::string &name) -> bool {
+auto tt::cli::ParseCommand::CheckForFileInDefaultDirs(const std::string &name)
+    -> bool {
     tt::Dirs &dirs = tt::Dirs::GetInstance();
     auto default_dirs = std::vector<std::string>{dirs.servicedir(),
                                                  dirs.confdir() + "/service"};
     for (auto i = default_dirs.rbegin(); i != default_dirs.rend(); ++i) {
         auto filename = *i + "/" + name;
-        struct stat buffer {};
-        if (stat(filename.c_str(), &buffer) == 0) {
-            auto parser = ServiceParser(name);
+        if (std::filesystem::exists(filename)) {
+            auto parser = ServiceParser(filename);
             spdlog::info(parser.service());
             return true;
         }
