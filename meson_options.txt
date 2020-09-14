@@ -3,7 +3,7 @@ option('confdir', type: 'string', value: 'sysconfdir/tt', description: 'Director
 option('logdir', type: 'string', value: 'localstatedir/log/tt', description: 'Log directory for system services')
 
 option('statedir', type: 'string', value: 'localstatedir/lib/tt', description: 'tt state working directory')
-option('servicedir', type: 'string', value: 'datadir/tt/service', description: 'System service frontend directory')
+option('servicedir', type: 'string', value: 'datadir/tt/services', description: 'System service frontend directory')
 
 option('execline_prefix', type: 'string', value: 'bindir', description: 'Prefix for execline executables if different than bindir')
 

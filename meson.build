@@ -67,8 +67,8 @@ if statedir == 'localstatedir/lib/tt'
 endif
 
 servicedir = get_option('servicedir')
-if servicedir == 'datadir/tt/service'
-    servicedir =  datadir / 'tt/service'
+if servicedir == 'datadir/tt/services'
+    servicedir =  datadir / 'tt/services'
 endif
 
 default_log_user = get_option('default_log_user')
