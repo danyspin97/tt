@@ -27,6 +27,7 @@
 #include "tt/define.h"
 
 #include "tt/cli/command/parse_command.hpp"
+#include "tt/cli/command/serialize_command.hpp"
 #include "tt/cli/command/supervise_command.hpp"
 
 auto main(int argc, char *argv[]) -> int {
@@ -62,8 +63,14 @@ auto main(int argc, char *argv[]) -> int {
     args::Group testing(parser, "Test services files");
     args::Command parse(testing, "parse",
                         "Parse one or more services for testing purposes.",
+                        [common_options](args::Subparser &subparser) {
+                            tt::cli::Command::Dispatch<tt::cli::ParseCommand>(
+                                subparser, common_options);
+                        });
+    args::Command serialize(
+        testing, "serialize", "Serialize a longrun into a file",
         [common_options](args::Subparser &subparser) {
-            tt::cli::Command::Dispatch<tt::cli::ParseCommand>(
+            tt::cli::Command::Dispatch<tt::cli::SerializeCommand>(
                 subparser, common_options);
         });
 
