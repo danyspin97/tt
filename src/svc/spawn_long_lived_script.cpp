@@ -29,20 +29,16 @@
 
 #include "pstream.h"
 
+#include "tt/svc/supervision_signal_handler.hpp"
+
 tt::SpawnLongLivedScript::SpawnLongLivedScript(const std::string &service_name,
                                                const LongLivedScript &script,
                                                const Environment &environment)
     : SpawnScript(service_name, script, environment),
       long_lived_script_(script) {}
 
-tt::SpawnLongLivedScript::~SpawnLongLivedScript() {
-    if (signals_handled_) {
-        ResetSignals();
-    }
-}
-
 auto tt::SpawnLongLivedScript::Spawn() -> ScriptStatus {
-    SetupSignals();
+    child_pid_ = 0;
     if (long_lived_script_.notify()) {
         SetupNotifyFd();
     }
@@ -58,12 +54,14 @@ auto tt::SpawnLongLivedScript::Spawn() -> ScriptStatus {
 }
 
 void tt::SpawnLongLivedScript::RunScript() {
-    if (int pid = fork(); pid == 0) {
+    int pid = fork();
+    if (pid == 0) {
         execve("/bin/sh", const_cast<char **>(GetExecArgs().data()), NULL);
         spdlog::critical("An error had happened while running execve: {}",
                          strerror(errno));
         exit(1);
     }
+    child_pid_ = pid;
 }
 
 auto tt::SpawnLongLivedScript::GetExecArgs() -> std::vector<char *> {
@@ -93,21 +91,19 @@ auto tt::SpawnLongLivedScript::ListenOnNotifyFd() -> ScriptStatus {
 }
 
 void tt::SpawnLongLivedScript::SetupNotifyFd() {
-    std::array<int, 2> fd;
+    std::array<int, 2> fd{};
     pipe(fd.data());
     notify_fd_ = dup(fd[0]);
     close(dup(fd[0]));
     dup2(fd[1], long_lived_script_.notify().value());
 }
 
-void tt::SpawnLongLivedScript::HandleSignal(int /*signum*/) {
-    // TODO
+void tt::SpawnLongLivedScript::Signal(int signum) { kill(child_pid_, signum); }
+
+auto tt::SpawnLongLivedScript::HasExited() -> bool {
+    return SupervisionSignalHandler::HasChildExited();
 }
 
-void tt::SpawnLongLivedScript::SetupSignals() {
-    // TODO
-}
-
-void tt::SpawnLongLivedScript::ResetSignals() {
-    // TODO
+auto tt::SpawnLongLivedScript::HasStarted() -> bool {
+    return waiting_on_startup_;
 }

@@ -31,21 +31,24 @@ public:
                                   const Environment &environment);
 
     auto Spawn() -> ScriptStatus;
-    ~SpawnLongLivedScript() override;
+
+    void SignalChild(int signum);
+    auto HasStarted() -> bool;
+    void Signal(int signum) override;
+
+protected:
+    auto HasExited() -> bool override;
 
 private:
-    void HandleSignal(int signum);
     auto GetExecArgs() -> std::vector<char *>;
     auto ListenOnNotifyFd() -> ScriptStatus;
-    void ResetSignals();
     void RunScript();
     void SetupNotifyFd();
-    void SetupSignals();
 
     LongLivedScript long_lived_script_;
     bool waiting_on_startup_;
-    bool signals_handled_;
     int notify_fd_;
+    int child_pid_;
 };
 
 } // namespace tt
