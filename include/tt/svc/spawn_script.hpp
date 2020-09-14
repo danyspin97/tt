@@ -22,6 +22,8 @@
 
 #include <chrono>
 
+#include "pstream.h"
+
 #include "tt/data/service.hpp"
 #include "tt/svc/spawn_supervise.hpp"
 #include "tt/svc/types.hpp"
@@ -49,6 +51,8 @@ private:
     const std::string &service_name_;
     const Script &script_;
     const Environment &environment_;
+
+    redi::ipstream proc_;
 };
 
 } // namespace tt
