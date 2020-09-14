@@ -43,7 +43,6 @@ public:
     virtual void Signal(int signum);
 
 protected:
-    auto GetSupervisorArgs() -> std::vector<char *>;
     auto GetEnviromentFromScript() -> std::vector<const char *>;
     virtual auto HasExited() -> bool;
     void SetupUidGid();

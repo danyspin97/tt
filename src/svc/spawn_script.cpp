@@ -129,17 +129,6 @@ void tt::SpawnScript::Kill() {
     }
 }
 
-auto tt::SpawnScript::GetSupervisorArgs() -> std::vector<char *> {
-    std::vector<char *> args{};
-    args.push_back(const_cast<char *>("sh"));
-    args.push_back(const_cast<char *>("-c"));
-    std::string execute = script_.execute();
-    std::vector<char> cexecute(execute.c_str(),
-                               execute.c_str() + execute.size() + 1);
-    args.push_back(cexecute.data());
-    return args;
-}
-
 void tt::SpawnScript::Signal(int signum) { proc_.rdbuf()->kill(signum); }
 
 auto tt::SpawnScript::HasExited() -> bool { return proc_.rdbuf()->exited(); }
