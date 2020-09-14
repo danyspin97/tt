@@ -21,6 +21,7 @@
 #pragma once
 
 #include "tt/data/longrun.hpp"
+#include "tt/svc/spawn_long_lived_script.hpp"
 #include "tt/svc/spawn_script.hpp"
 
 namespace tt {
@@ -33,9 +34,10 @@ public:
 private:
     void SetupLogger();
     void NotifyStatus(ScriptStatus status);
+    auto TrySpawn() -> ScriptStatus;
 
-    // uint_fast8_t time_tried;
     Longrun longrun_;
+    SpawnLongLivedScript spawn_;
 };
 
 } // namespace tt

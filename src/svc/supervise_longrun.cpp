@@ -20,14 +20,56 @@
 
 #include "tt/svc/supervise_longrun.hpp"
 
+#include <unistd.h>
+
 #include "tt/svc/spawn_long_lived_script.hpp"
+#include "tt/svc/spawn_script.hpp"
+#include "tt/svc/supervision_signal_handler.hpp"
 
 tt::SuperviseLongrun::SuperviseLongrun(Longrun &&longrun)
-    : longrun_(std::move(longrun)) {}
+    : longrun_(std::move(longrun)),
+      spawn_(longrun_.name(), longrun_.run(), longrun_.environment()) {}
 
 void tt::SuperviseLongrun::Spawn() {
-    SpawnLongLivedScript(longrun_.name(), longrun_.run(),
-                         longrun_.environment());
+    SupervisionSignalHandler::SetupSignals();
+
+    auto time_to_try = longrun_.run().max_death();
+    decltype(time_to_try) time_tried = 0;
+    while (time_tried < time_to_try) {
+        if (TrySpawn() == ScriptStatus::Failure) {
+            time_tried++;
+        }
+        // Should never reach here
+        assert(false);
+    }
+}
+
+auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
+    SupervisionSignalHandler::ResetStatus();
+
+    // Runs in another thread
+    if (int pid = fork(); pid == 0) {
+        spawn_.Spawn();
+    }
+
+    pause();
+
+    if (SupervisionSignalHandler::HasReceivedDeathSignal()) {
+        spawn_.Kill();
+        NotifyStatus(ScriptStatus::Failure);
+        exit(255);
+    }
+
+    if (SupervisionSignalHandler::HasChildExited()) {
+        if (longrun_.finish()) {
+            SpawnScript(longrun_.name(), longrun_.finish().value(),
+                        longrun_.environment());
+        }
+        return ScriptStatus::Failure;
+    }
+
+    // Should never reach here
+    assert(false);
 }
 
 void tt::SuperviseLongrun::SetupLogger() {}
