@@ -25,21 +25,18 @@
 
 void tt::cli::setupConsoleLoggers(const std::string &verbosity,
                                   bool silence_stderr) {
-    auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    auto console_err = std::make_shared<spdlog::sinks::stderr_color_sink_mt>();
+    spdlog::drop_all();
 
+    auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+
+    console->set_level(spdlog::level::from_str(verbosity));
     if (silence_stderr) {
         console->set_level(spdlog::level::off);
-        console_err->set_level(spdlog::level::off);
     }
-    console->set_level(spdlog::level::from_str(verbosity));
-    console_err->set_level(spdlog::level::err);
 
     std::vector<spdlog::sink_ptr> sinks;
     sinks.push_back(console);
-    sinks.push_back(console_err);
     auto console_sink =
         std::make_shared<spdlog::logger>("console", begin(sinks), end(sinks));
-    console_sink->set_level(spdlog::level::debug);
     spdlog::set_default_logger(console_sink);
 }
