@@ -26,7 +26,7 @@
 
 void tt::AddTestDependenciesToGraph(
     tt::DependencyGraph &graph,
-    const std::vector<std::string> &service_to_enable,
+    const std::vector<std::string> &services_to_enable,
     const std::vector<std::string> &filenames) {
     auto services = std::vector<tt::Service>{};
     for (const auto &file : filenames) {
@@ -34,5 +34,5 @@ void tt::AddTestDependenciesToGraph(
         auto service = parser.service();
         services.push_back(service);
     }
-    graph.AddServices(service_to_enable, services);
+    graph.AddServices(services_to_enable, services);
 }
