@@ -45,7 +45,7 @@ tt::SpawnScript::SpawnScript(const std::string &service_name,
 auto tt::SpawnScript::Spawn() -> ScriptStatus {
     auto max_death = script_.max_death();
     decltype(max_death) time_tried = 0;
-    while (time_tried != script_.max_death()) {
+    while (time_tried != max_death) {
         // This method is already running in a different thread than tt-svc
         // Use std::launch::deferred to not use a third thread
         std::future<ScriptStatus> future =
