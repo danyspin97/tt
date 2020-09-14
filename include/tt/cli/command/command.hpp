@@ -38,6 +38,15 @@ public:
 
     auto InitAndExecute() -> int;
 
+    template <typename T>
+    static auto Dispatch(args::Subparser &parser,
+                         std::shared_ptr<GlobalOptions> common_options) -> int {
+        static_assert(std::is_base_of<Command, T>::value,
+                      "Dispatch only works with a subclass of Command");
+        T command = T(parser, std::move(common_options));
+        return command.InitAndExecute();
+    }
+
 protected:
     virtual auto Execute() -> int = 0;
 

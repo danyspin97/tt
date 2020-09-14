@@ -35,8 +35,6 @@ public:
     ParseCommand(args::Subparser &parser,
                  std::shared_ptr<GlobalOptions> common_options);
     ~ParseCommand() override = default;
-    static auto Dispatch(args::Subparser &parser,
-                         std::shared_ptr<GlobalOptions> common_options) -> int;
 
 protected:
     auto Execute() -> int override;

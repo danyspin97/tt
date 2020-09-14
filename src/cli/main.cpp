@@ -55,14 +55,16 @@ auto main(int argc, char *argv[]) -> int {
     args::Command supervise(
         system, "supervise", "Supervise a process [Do not run manually]",
         [common_options](args::Subparser &subparser) {
-            tt::cli::SuperviseCommand::Dispatch(subparser, common_options);
+            tt::cli::Command::Dispatch<tt::cli::SuperviseCommand>(
+                subparser, common_options);
         });
 
     args::Group testing(parser, "Test services files");
-    args::Command parse(
-        testing, "parse", "Parse one or more services for testing purposes.",
+    args::Command parse(testing, "parse",
+                        "Parse one or more services for testing purposes.",
         [common_options](args::Subparser &subparser) {
-            tt::cli::ParseCommand::Dispatch(subparser, common_options);
+            tt::cli::Command::Dispatch<tt::cli::ParseCommand>(
+                subparser, common_options);
         });
 
     args::GlobalOptions global_options(parser, common_options->arguments());

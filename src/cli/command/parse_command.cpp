@@ -43,13 +43,6 @@ tt::cli::ParseCommand::ParseCommand(
       service_list_(parser, "services", "services to parse"),
       is_file_(parser, "file", "", {'f', "file"}) {}
 
-auto tt::cli::ParseCommand::Dispatch(
-    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
-    -> int {
-    ParseCommand command = ParseCommand(parser, std::move(common_options));
-    return command.InitAndExecute();
-}
-
 auto tt::cli::ParseCommand::Execute() -> int {
     if (is_file_) {
         ParseFiles();
