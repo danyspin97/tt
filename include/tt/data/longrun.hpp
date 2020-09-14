@@ -34,6 +34,10 @@
 
 namespace tt {
 
+namespace cli {
+class SuperviseCommand;
+}
+
 class Longrun : public ServiceImpl {
 public:
     Longrun(std::string &&name, std::string &&description, std::string &&path,
@@ -67,6 +71,7 @@ public:
 
 private:
     friend class bitsery::Access;
+    friend class tt::cli::SuperviseCommand;
     Longrun() = default;
 
     template <typename S> void serialize(S &serializer) {

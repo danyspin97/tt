@@ -40,7 +40,9 @@ protected:
     auto Execute() -> int override;
 
 private:
-    args::Positional<std::string> script_;
+    auto GetLongrunBuffer() -> std::vector<uint8_t>;
+
+    args::Positional<std::string> filename_;
 };
 
 } // namespace tt::cli
