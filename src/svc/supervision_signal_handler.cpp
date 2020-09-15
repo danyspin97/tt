@@ -30,6 +30,7 @@
 
 #include "tt/svc/spawn_long_lived_script.hpp"
 
+#if __linux__
 constexpr std::array<int, 23> deathsigs = {
     /* signals making us terminate */
     SIGHUP, SIGINT, SIGKILL, SIGPIPE, SIGALRM, SIGTERM, SIGUSR1, SIGUSR2,
@@ -37,6 +38,15 @@ constexpr std::array<int, 23> deathsigs = {
     /* signals making us coredump */
     SIGQUIT, SIGILL, SIGABRT, SIGFPE, SIGSEGV, SIGBUS, SIGSYS, SIGTRAP, SIGXCPU,
     SIGXFSZ};
+#else
+constexpr std::array<int, 21> deathsigs = {
+    /* signals making us terminate */
+    SIGHUP, SIGINT, SIGKILL, SIGPIPE, SIGALRM, SIGTERM, SIGUSR1, SIGUSR2,
+    SIGPROF, SIGVTALRM, SIGIO,
+    /* signals making us coredump */
+    SIGQUIT, SIGILL, SIGABRT, SIGFPE, SIGSEGV, SIGBUS, SIGSYS, SIGTRAP, SIGXCPU,
+    SIGXFSZ};
+#endif
 
 tt::SupervisionSignalHandler::SupervisionSignalHandler() { SetupSignals(); }
 
