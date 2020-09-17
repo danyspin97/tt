@@ -9,6 +9,6 @@ subdir('command')
 tt_exe = executable(
     'tt',
     tt_cli_src,
-    dependencies: [tt_dep, fmt_dep, spdlog_dep]
+    dependencies: [tt_dep, fmt_dep, spdlog_dep, nng_dep]
 )
 

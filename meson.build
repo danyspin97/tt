@@ -19,6 +19,7 @@ endif
 
 spdlog_dep = dependency('spdlog', fallback: ['spdlog', 'spdlog_dep'])
 catch2_dep = dependency('catch2', required: get_option('tests'), fallback: ['catch2', 'catch2_dep'])
+nng_dep = dependency('nng', method : 'cmake', modules : ['nng::nng'])
 
 prefix = get_option('prefix')
 bindir = get_option('bindir')
