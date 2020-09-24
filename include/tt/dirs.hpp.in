@@ -26,18 +26,18 @@ namespace tt {
 
 class Dirs {
 public:
-    static Dirs &GetInstance();
+    [[nodiscard]] static auto GetInstance() -> Dirs &;
     Dirs(Dirs const &) = delete;
     void operator=(Dirs const &) = delete;
 
-    const std::string &bindir() const;
-    const std::string &confdir() const;
-    const std::string &execline_prefix() const;
-    const std::string &libexecdir() const;
-    const std::string &livedir() const;
-    const std::string &logdir() const;
-    const std::string &servicedir() const;
-    const std::string &statedir() const;
+    [[nodiscard]] auto bindir() const -> const std::string &;
+    [[nodiscard]] auto confdir() const -> const std::string &;
+    [[nodiscard]] auto execline_prefix() const -> const std::string &;
+    [[nodiscard]] auto libexecdir() const -> const std::string &;
+    [[nodiscard]] auto livedir() const -> const std::string &;
+    [[nodiscard]] auto logdir() const -> const std::string &;
+    [[nodiscard]] auto servicedir() const -> const std::string &;
+    [[nodiscard]] auto statedir() const -> const std::string &;
 
 private:
     Dirs() = default;
