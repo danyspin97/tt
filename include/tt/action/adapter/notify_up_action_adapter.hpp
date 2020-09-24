@@ -18,35 +18,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/action/action_factory.hpp"
-
-#include "nngpp/nngpp.h"
+#pragma once
 
 #include "msgpack.hpp"
 
-#include "tt/action/adapter/notify_up_action_adapter.hpp"
 #include "tt/action/notify_up_action.hpp"
 
-auto tt::ActionFactory::GetActionFromBuffer(nng::buffer buffer)
-    -> std::unique_ptr<Action> {
-    msgpack::unpacker pac;
-    // Copy the buffer data to the unpacker object
-    pac.reserve_buffer(buffer.size());
-    memcpy(pac.buffer(), buffer.data(), buffer.size());
-    pac.buffer_consumed(buffer.size());
+namespace msgpack {
+MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
+    namespace adaptor {
 
-    msgpack::unpacked msg;
-    pac.next(msg);
-    msgpack::object obj = msg.get();
-    std::string action_name;
-    obj.convert(action_name);
+    // Place class template specialization here
+    template <> struct as<tt::NotifyUpAction> {
+        tt::NotifyUpAction operator()(msgpack::object const &o) const {
+            if (o.type != msgpack::type::MAP) {
+                throw msgpack::type_error();
+            }
+            if (o.via.array.size != 2) {
+                throw msgpack::type_error();
+            }
+            auto service = o.as<std::string>();
+            return tt::NotifyUpAction{std::move(service)};
+        }
+    };
 
-    pac.next(msg);
-    obj = msg.get();
-    std::unique_ptr<Action> action_ptr;
-    if (action_name == "notify_up") {
-        auto action = obj.as<NotifyUpAction>();
-        action_ptr = std::make_unique<NotifyUpAction>(action);
-    }
-    return action_ptr;
+    } // namespace adaptor
 }
+} // namespace msgpack
