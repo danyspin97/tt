@@ -49,7 +49,9 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
 
     // Runs in another thread
     if (int pid = fork(); pid == 0) {
-        spawn_.Spawn();
+        if (spawn_.Spawn() == ScriptStatus::Success) {
+            NotifyStatus(ScriptStatus::Success);
+        }
     }
 
     pause();
