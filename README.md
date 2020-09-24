@@ -52,11 +52,14 @@ tt supports the following compilers:
 
 tt depends on the following libraries:
 
-- [fmt](https://github.com/fmtlib/fmt)
-- [spdlog](https://github.com/gabime/spdlog)
+- [boost](https://www.boost.org/) (build time only)
+- [catch2](https://github.com/catchorg/Catch2)* (only required for the tests)
+- [fmt](https://github.com/fmtlib/fmt)*
+- [nng](https://github.com/nanomsg/nng)
+- [spdlog](https://github.com/gabime/spdlog)*
 
-If these libraries are not found in the system, meson will download and
-statically compile them inside the tt binary.
+\* _if these libraries are not found in the system, meson will download and use
+a local copy_.
 
 ### Building
 
@@ -69,8 +72,6 @@ $ ninja -C build
 
 ## Testing
 
-tt test suite uses catch2 header-only library. If this dependency is not found
-on the system, meson will download a copy to use in the local repository.
 To run the tt test suite, execute the following commands:
 
 ```
