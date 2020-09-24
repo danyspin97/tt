@@ -3,10 +3,13 @@ tt_src = [
     'signal.cpp'
 ]
 
+tt_cli_src = []
+
 # Add sources
 subdir('data')
 subdir('dependency_graph')
 subdir('parser')
+subdir('svc')
 
 tt_soversion = 0
 
@@ -32,7 +35,4 @@ pkg.generate(name: 'tt',
 )
 
 # Add CLI interface
-tt_cli_src = files()
-
-subdir('svc')
 subdir('cli')

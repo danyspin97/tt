@@ -1,3 +1,8 @@
+# tt/action needs these files
+tt_src += files (
+    'service_status.cpp',
+)
+
 tt_cli_src += files (
     'supervise_longrun.cpp',
     'supervision_signal_handler.cpp',
