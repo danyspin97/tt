@@ -1,7 +1,7 @@
-tt_src = [
+tt_src = files(
     'dirs.cpp',
     'signal.cpp'
-]
+)
 
 tt_cli_src = []
 
