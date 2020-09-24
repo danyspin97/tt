@@ -6,6 +6,7 @@ tt_src = files(
 tt_cli_src = []
 
 # Add sources
+subdir('action')
 subdir('data')
 subdir('dependency_graph')
 subdir('parser')
