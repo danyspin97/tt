@@ -42,6 +42,17 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
         }
     };
 
+    template <> struct pack<tt::NotifyUpAction> {
+        template <typename Stream>
+        auto operator()(msgpack::packer<Stream> &o,
+                        tt::NotifyUpAction const &v) const
+            -> msgpack::packer<Stream> & {
+            auto service = v.service();
+            o.pack_str(service.size());
+            o.pack_str_body(service.c_str(), service.size());
+            return o;
+        }
+    };
     } // namespace adaptor
 }
 } // namespace msgpack
