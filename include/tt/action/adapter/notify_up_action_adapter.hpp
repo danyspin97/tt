@@ -30,7 +30,7 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
 
     // Place class template specialization here
     template <> struct as<tt::NotifyUpAction> {
-        tt::NotifyUpAction operator()(msgpack::object const &o) const {
+        auto operator()(msgpack::object const &o) const -> tt::NotifyUpAction {
             if (o.type != msgpack::type::MAP) {
                 throw msgpack::type_error();
             }
