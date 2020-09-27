@@ -22,6 +22,12 @@
 
 #include <unistd.h>
 
+#include "nngpp/socket.h"
+
+#include "nngpp/protocol/req0.h"
+
+#include "tt/action/action_packer.hpp"
+#include "tt/action/notify_up_action.hpp"
 #include "tt/svc/spawn_long_lived_script.hpp"
 #include "tt/svc/spawn_script.hpp"
 #include "tt/svc/supervision_signal_handler.hpp"
@@ -76,4 +82,11 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
 
 void tt::SuperviseLongrun::SetupLogger() {}
 
-void tt::SuperviseLongrun::NotifyStatus(ScriptStatus /*status*/) {}
+void tt::SuperviseLongrun::NotifyStatus(ScriptStatus /*status*/) {
+    nng::socket socket = nng::req::open();
+    socket.dial("tcp://localhost:8000");
+
+    NotifyUpAction action(longrun_.name());
+    auto buffer = ActionPacker::Pack(std::move(action));
+    socket.send(buffer);
+}
