@@ -26,6 +26,8 @@
 tt::NotifyUpAction::NotifyUpAction(std::string &&service)
     : service_(std::move(service)) {}
 
+auto tt::NotifyUpAction::service() const -> std::string { return service_; }
+
 void tt::NotifyUpAction::Apply() {
     auto service_status_manager = tt::ServiceStatusManager::GetInstance();
     service_status_manager.ServiceHasStarted(service_);

@@ -32,6 +32,8 @@ public:
     NotifyUpAction() = delete;
     explicit NotifyUpAction(std::string &&service);
 
+    [[nodiscard]] auto service() const -> std::string;
+
     void Apply() override;
 
 private:
