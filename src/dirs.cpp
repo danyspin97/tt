@@ -20,6 +20,31 @@
 
 #include "tt/dirs.hpp"
 
+#include <unistd.h>
+
+#include "xdg.hpp"
+
+tt::Dirs::Dirs() {
+    // This exe has not been run as root
+    if (geteuid() > 0) {
+        InitUserDirs();
+    }
+}
+
+void tt::Dirs::InitUserDirs() {
+    xdg::BaseDirectories dirs{};
+    std::optional<std::filesystem::path> runtime_dir = dirs.Runtime();
+    if (runtime_dir) {
+        livedir_ = runtime_dir.value() / "tt";
+    } else {
+        livedir_ = dirs.CacheHome() / "tt";
+    }
+
+    confdir_ = dirs.ConfigHome() / "tt";
+    statedir_ = dirs.DataHome() / "tt" / "state";
+    logdir_ = dirs.DataHome() / "tt" / "log";
+}
+
 auto tt::Dirs::GetInstance() -> tt::Dirs & {
     static tt::Dirs instance;
 

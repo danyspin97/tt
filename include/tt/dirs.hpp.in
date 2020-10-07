@@ -40,7 +40,8 @@ public:
     [[nodiscard]] auto statedir() const -> const std::string &;
 
 private:
-    Dirs() = default;
+    Dirs();
+    void InitUserDirs();
 
     std::string bindir_ = "@bindir@";
     std::string confdir_ = "@confdir@";
