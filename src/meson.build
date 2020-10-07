@@ -17,7 +17,7 @@ tt_soversion = 0
 libtt = library('tt',
     tt_src,
     include_directories: [ext_inc, tt_inc],
-    dependencies: [fmt_dep, spdlog_dep],
+    dependencies: [fmt_dep, spdlog_dep, nng_dep],
     install: true,
     version: meson.project_version(),
     soversion: tt_soversion,
