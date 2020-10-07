@@ -22,7 +22,7 @@ jobs:
           sudo apt-get update
           compiler=${{ matrix.compiler }}
           compiler=${compiler/clang++/clang}
-          sudo apt-get install --force-yes ${compiler}
+          sudo apt-get install --force-yes ${compiler} libboost-all-dev
           pip3 install meson
 
       - name: Build using meson

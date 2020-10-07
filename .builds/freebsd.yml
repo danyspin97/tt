@@ -2,6 +2,7 @@ image: freebsd/latest
 packages:
   - gcc9
   - meson
+  - boost-all
 sources:
   - https://github.com/danyspin97/tt
 tasks:
