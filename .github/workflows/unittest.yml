@@ -30,7 +30,10 @@ jobs:
           CXX: ${{ matrix.compiler }}
         run: |
           meson --unity on -Dtests=enabled -Db_lundef=false \
-          -Db_sanitize=address,undefined build && \
+          $(if [[ $CXX = g++-* ]]; then
+                echo -Db_sanitize=address,undefined;
+            fi) \
+          build && \
           ninja -C build
 
       - name: Run meson tests
