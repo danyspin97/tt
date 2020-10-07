@@ -40,6 +40,16 @@ public:
     [[nodiscard]] auto servicedir() const -> const std::filesystem::path &;
     [[nodiscard]] auto statedir() const -> const std::filesystem::path &;
 
+protected:
+    void bindir(std::filesystem::path &&new_path);
+    void confdir(std::filesystem::path &&new_path);
+    void execline_prefix(std::filesystem::path &&new_path);
+    void libexecdir(std::filesystem::path &&new_path);
+    void livedir(std::filesystem::path &&new_path);
+    void logdir(std::filesystem::path &&new_path);
+    void servicedir(std::filesystem::path &&new_path);
+    void statedir(std::filesystem::path &&new_path);
+
 private:
     Dirs() = default;
     void InitUserDirs();
