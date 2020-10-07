@@ -41,6 +41,8 @@ public:
     [[nodiscard]] auto statedir() const -> const std::filesystem::path &;
 
 protected:
+    Dirs() = default;
+
     void bindir(std::filesystem::path &&new_path);
     void confdir(std::filesystem::path &&new_path);
     void execline_prefix(std::filesystem::path &&new_path);
@@ -51,9 +53,6 @@ protected:
     void statedir(std::filesystem::path &&new_path);
 
 private:
-    Dirs() = default;
-    void InitUserDirs();
-
     std::filesystem::path bindir_ = "@bindir@";
     std::filesystem::path confdir_ = "@confdir@";
     std::filesystem::path execline_prefix_ = "@execline_prefix@";

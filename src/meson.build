@@ -1,6 +1,7 @@
 tt_src = files(
     'dirs.cpp',
-    'signal.cpp'
+    'signal.cpp',
+    'user_dirs.cpp',
 )
 
 tt_cli_src = []
