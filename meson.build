@@ -5,9 +5,9 @@ project('tt', 'cpp',
     default_options: [
         'cpp_std=c++17',
         'warning_level=3',
-        'werror=true',
     ],
 )
+add_project_arguments('-Werror', language: 'cpp')
 add_project_arguments('-Wno-missing-braces', language: 'cpp')
 
 pkg = import('pkgconfig')
