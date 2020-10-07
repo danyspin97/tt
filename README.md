@@ -55,7 +55,7 @@ tt depends on the following libraries:
 - [boost](https://www.boost.org/) (build time only)
 - [catch2](https://github.com/catchorg/Catch2)* (only required for the tests)
 - [fmt](https://github.com/fmtlib/fmt)*
-- [nng](https://github.com/nanomsg/nng)
+- [nng](https://github.com/nanomsg/nng)*
 - [spdlog](https://github.com/gabime/spdlog)*
 
 \* _if these libraries are not found in the system, meson will download and use
