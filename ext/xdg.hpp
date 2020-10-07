@@ -128,11 +128,11 @@ private:
         -> std::filesystem::path {
         const char *env_var = getenv(env_name);
         if (env_var == nullptr) {
-            return default_path;
+            return std::move(default_path);
         }
         auto path = std::filesystem::path{env_var};
         if (!path.is_absolute()) {
-            return default_path;
+            return std::move(default_path);
         }
 
         return path;
@@ -144,7 +144,7 @@ private:
         -> std::vector<std::filesystem::path> {
         auto *env = getenv(env_name);
         if (env == nullptr) {
-            return default_paths;
+            return std::move(default_paths);
         }
         std::string paths{env};
 
@@ -167,7 +167,7 @@ private:
         }
 
         if (dirs.empty()) {
-            return default_paths;
+            return std::move(default_paths);
         }
 
         return dirs;
