@@ -31,4 +31,4 @@ SystemServicesParser::SystemServicesParser()
     : ServicesParser(
           string{".system"},
           vector<string>{tt::Dirs::GetInstance().servicedir(),
-                         tt::Dirs::GetInstance().confdir() + "/service"}) {}
+                         tt::Dirs::GetInstance().confdir() / "service"}) {}

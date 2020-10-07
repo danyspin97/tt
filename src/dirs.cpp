@@ -51,20 +51,34 @@ auto tt::Dirs::GetInstance() -> tt::Dirs & {
     return instance;
 }
 
-auto tt::Dirs::bindir() const -> const std::string & { return bindir_; }
+auto tt::Dirs::bindir() const -> const std::filesystem::path & {
+    return bindir_;
+}
 
-auto tt::Dirs::confdir() const -> const std::string & { return confdir_; }
+auto tt::Dirs::confdir() const -> const std::filesystem::path & {
+    return confdir_;
+}
 
-auto tt::Dirs::execline_prefix() const -> const std::string & {
+auto tt::Dirs::execline_prefix() const -> const std::filesystem::path & {
     return execline_prefix_;
 }
 
-auto tt::Dirs::libexecdir() const -> const std::string & { return libexecdir_; }
+auto tt::Dirs::libexecdir() const -> const std::filesystem::path & {
+    return libexecdir_;
+}
 
-auto tt::Dirs::livedir() const -> const std::string & { return livedir_; }
+auto tt::Dirs::livedir() const -> const std::filesystem::path & {
+    return livedir_;
+}
 
-auto tt::Dirs::logdir() const -> const std::string & { return logdir_; }
+auto tt::Dirs::logdir() const -> const std::filesystem::path & {
+    return logdir_;
+}
 
-auto tt::Dirs::servicedir() const -> const std::string & { return servicedir_; }
+auto tt::Dirs::servicedir() const -> const std::filesystem::path & {
+    return servicedir_;
+}
 
-auto tt::Dirs::statedir() const -> const std::string & { return statedir_; }
+auto tt::Dirs::statedir() const -> const std::filesystem::path & {
+    return statedir_;
+}

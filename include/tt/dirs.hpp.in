@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <filesystem>
 #include <string>
 
 namespace tt {
@@ -30,27 +31,27 @@ public:
     Dirs(Dirs const &) = delete;
     void operator=(Dirs const &) = delete;
 
-    [[nodiscard]] auto bindir() const -> const std::string &;
-    [[nodiscard]] auto confdir() const -> const std::string &;
-    [[nodiscard]] auto execline_prefix() const -> const std::string &;
-    [[nodiscard]] auto libexecdir() const -> const std::string &;
-    [[nodiscard]] auto livedir() const -> const std::string &;
-    [[nodiscard]] auto logdir() const -> const std::string &;
-    [[nodiscard]] auto servicedir() const -> const std::string &;
-    [[nodiscard]] auto statedir() const -> const std::string &;
+    [[nodiscard]] auto bindir() const -> const std::filesystem::path &;
+    [[nodiscard]] auto confdir() const -> const std::filesystem::path &;
+    [[nodiscard]] auto execline_prefix() const -> const std::filesystem::path &;
+    [[nodiscard]] auto libexecdir() const -> const std::filesystem::path &;
+    [[nodiscard]] auto livedir() const -> const std::filesystem::path &;
+    [[nodiscard]] auto logdir() const -> const std::filesystem::path &;
+    [[nodiscard]] auto servicedir() const -> const std::filesystem::path &;
+    [[nodiscard]] auto statedir() const -> const std::filesystem::path &;
 
 private:
-    Dirs();
+    Dirs() = default;
     void InitUserDirs();
 
-    std::string bindir_ = "@bindir@";
-    std::string confdir_ = "@confdir@";
-    std::string execline_prefix_ = "@execline_prefix@";
-    std::string libexecdir_ = "@libexecdir@";
-    std::string livedir_ = "@livedir@";
-    std::string logdir_ = "@logdir@";
-    std::string servicedir_ = "@servicedir@";
-    std::string statedir_ = "@statedir@";
+    std::filesystem::path bindir_ = "@bindir@";
+    std::filesystem::path confdir_ = "@confdir@";
+    std::filesystem::path execline_prefix_ = "@execline_prefix@";
+    std::filesystem::path libexecdir_ = "@libexecdir@";
+    std::filesystem::path livedir_ = "@livedir@";
+    std::filesystem::path logdir_ = "@logdir@";
+    std::filesystem::path servicedir_ = "@servicedir@";
+    std::filesystem::path statedir_ = "@statedir@";
 };
 
 } // namespace tt
