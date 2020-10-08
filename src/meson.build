@@ -1,5 +1,6 @@
 tt_src = files(
     'dirs.cpp',
+    'environment_generator.cpp',
     'signal.cpp',
     'user_dirs.cpp',
 )
