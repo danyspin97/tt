@@ -51,4 +51,4 @@ template <typename T> void Serialize(T obj, const std::filesystem::path &path) {
     std::copy(buffer.begin(), end, file_iterator);
 }
 
-}; // namespace tt::utils
+} // namespace tt::utils
