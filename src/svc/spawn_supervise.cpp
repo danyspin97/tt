@@ -39,10 +39,11 @@
 #include "tt/dirs.hpp"
 #include "tt/environment_generator.hpp"
 #include "tt/exception.hpp"
+#include "tt/serialize.hpp"
 
 tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun) : longrun_(longrun) {
     auto filename = GetScriptFilename();
-    WriteScriptToFile(filename);
+    utils::Serialize(longrun, filename);
     Spawn(filename);
 }
 
@@ -55,24 +56,6 @@ void tt::SpawnSupervise::Spawn(const std::string &filename) {
                          strerror(errno));
         std::exit(1);
     }
-}
-
-void tt::SpawnSupervise::WriteScriptToFile(const std::string &filename) {
-    std::fstream file{filename, std::fstream::binary | std::fstream::trunc | std::fstream::out};
-    if (!file.is_open()) {
-        spdlog::error("Error opening file {}", filename);
-        throw tt::Exception("");
-    }
-
-    using Buffer = std::array<uint8_t, 10000>;
-    using OutputAdapter = bitsery::OutputBufferAdapter<Buffer>;
-    Buffer buffer{};
-    auto writtenSize =
-        bitsery::quickSerialization<OutputAdapter>(buffer, longrun_);
-
-    file.write(reinterpret_cast<char *>(buffer.data()), writtenSize);
-    file.flush();
-    file.close();
 }
 
 auto tt::SpawnSupervise::GetScriptFilename() -> std::string {
