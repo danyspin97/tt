@@ -203,6 +203,15 @@ auto tt::DependencyGraph::IsServiceEnabled(const std::string &service) const
     return itr != enabled_services_.end();
 }
 
+auto tt::DependencyGraph::GetActiveServices() const
+    -> std::vector<std::string> {
+    std::vector<std::string> services;
+    std::transform(name_to_index_.begin(), name_to_index_.end(),
+                   std::back_inserter(services),
+                   [](auto &pair) { return pair.first; });
+    return services;
+}
+
 auto tt::DependencyGraph::enabled_services() const
     -> const std::set<std::string> & {
     return enabled_services_;
