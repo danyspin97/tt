@@ -36,6 +36,7 @@
 #include "bitsery/bitsery.h"
 
 #include "tt/cli/global_options.hpp"
+#include "tt/cli/utils.hpp"
 #include "tt/svc/supervise_longrun.hpp"
 
 tt::cli::SuperviseCommand::SuperviseCommand(
@@ -45,7 +46,7 @@ tt::cli::SuperviseCommand::SuperviseCommand(
 
 auto tt::cli::SuperviseCommand::Execute() -> int {
     Longrun longrun;
-    auto buffer = GetLongrunBuffer();
+    auto buffer = ReadBufferFromFile(args::get(filename_));
 
     auto state = bitsery::quickDeserialization<
         bitsery::InputBufferAdapter<std::vector<uint8_t>>>(
@@ -60,34 +61,4 @@ auto tt::cli::SuperviseCommand::Execute() -> int {
     auto supervise = SuperviseLongrun{std::move(longrun)};
     supervise.Spawn();
     return 0;
-}
-
-auto tt::cli::SuperviseCommand::GetLongrunBuffer() -> std::vector<uint8_t> {
-    auto filename = args::get(filename_);
-    if (!std::filesystem::exists(filename)) {
-        spdlog::error("File {} does not exist", filename);
-        // TODO: Exit
-    }
-
-    std::ifstream file{filename, std::ifstream::binary | std::ifstream::in};
-    if (!file.is_open()) {
-        spdlog::error("Cannot open file {} for reading", filename);
-        // TODO: Exit
-    }
-    // Properly read binary file
-    file.unsetf(std::ios::skipws);
-
-    // Get buffer size
-    file.seekg(0, std::ios::end);
-    auto buffer_size = file.tellg();
-    file.seekg(0, std::ios::beg);
-
-    std::vector<uint8_t> buffer;
-    buffer.reserve(buffer_size);
-
-    std::istream_iterator<uint8_t> start(file);
-    std::istream_iterator<uint8_t> end;
-    buffer.insert(buffer.begin(), start, end);
-
-    return buffer;
 }

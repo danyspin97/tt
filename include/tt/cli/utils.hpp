@@ -20,27 +20,14 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
+#include <filesystem>
 #include <vector>
 
-#include "args.hxx"
-
-#include "tt/cli/command/command.hpp"
+#include <cinttypes>
 
 namespace tt::cli {
 
-class SuperviseCommand : public Command {
-public:
-    SuperviseCommand(args::Subparser &parser,
-                     std::shared_ptr<GlobalOptions> common_options);
-    ~SuperviseCommand() override = default;
+auto ReadBufferFromFile(std::filesystem::path &&filename)
+    -> std::vector<uint8_t>;
 
-protected:
-    auto Execute() -> int override;
-
-private:
-    args::Positional<std::string> filename_;
-};
-
-} // namespace tt::cli
+}
