@@ -45,7 +45,6 @@ protected:
 private:
     auto ParseLongrunFromFile() -> int;
     auto ParseUserSystemLongrun() -> int;
-    auto SerializeLongrun() -> int;
 
     args::Positional<std::string> service_;
     args::Positional<std::string> filename_;

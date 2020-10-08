@@ -30,12 +30,10 @@
 
 #include "spdlog/spdlog.h"
 
-#include "bitsery/adapter/buffer.h"
-#include "bitsery/bitsery.h"
-
 #include "tt/data/service.hpp"
 #include "tt/dirs.hpp"
 #include "tt/parser/service/service_parser.hpp"
+#include "tt/serialize.hpp"
 
 #include "tt/cli/global_options.hpp"
 
@@ -51,7 +49,12 @@ auto tt::cli::SerializeCommand::Execute() -> int {
         return ret;
     }
 
-    return SerializeLongrun();
+    try {
+        utils::Serialize(*longrun_, filename_.Get());
+    } catch (Exception &e) {
+        return 255;
+    }
+    return 0;
 }
 
 auto tt::cli::SerializeCommand::ParseLongrunFromFile() -> int {
@@ -68,28 +71,5 @@ auto tt::cli::SerializeCommand::ParseLongrunFromFile() -> int {
     }
 
     longrun_ = std::make_unique<Longrun>(std::get<Longrun>(service));
-    return 0;
-}
-
-auto tt::cli::SerializeCommand::SerializeLongrun() -> int {
-    std::fstream longrun_file{filename_.Get(), std::fstream::binary |
-                                                   std::fstream::trunc |
-                                                   std::fstream::out};
-    if (!longrun_file.is_open()) {
-        spdlog::error("Cannot open longrun_file {} for writing",
-                      filename_.Get());
-        return 255;
-    }
-    std::ostream_iterator<uint8_t> longrun_file_iterator(longrun_file);
-
-    using Buffer = std::vector<uint8_t>;
-    Buffer buffer;
-
-    auto written_size =
-        bitsery::quickSerialization<bitsery::OutputBufferAdapter<Buffer>>(
-            buffer, *longrun_);
-    auto end = buffer.begin();
-    std::advance(end, written_size);
-    std::copy(buffer.begin(), end, longrun_file_iterator);
     return 0;
 }
