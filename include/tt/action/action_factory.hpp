@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Danilo Spinella <danyspin97@protonmail.com>.
+ * Copyright (c) 2020 Danilo Spinella <oss@danyspin97.org>.
  *
  * This file is part of tt
  * (see https://github.com/danyspin97/tt).
