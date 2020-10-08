@@ -36,10 +36,10 @@
 #include "bitsery/bitsery.h"
 #include <bitsery/adapter/buffer.h>
 
-#include "tt/dirs.hpp"
 #include "tt/environment_generator.hpp"
 #include "tt/exception.hpp"
 #include "tt/serialize.hpp"
+#include "tt/user_dirs.hpp"
 
 tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun) : longrun_(longrun) {
     auto filename = GetScriptFilename();
@@ -60,6 +60,12 @@ void tt::SpawnSupervise::Spawn(const std::string &filename) {
 
 auto tt::SpawnSupervise::GetScriptFilename() -> std::string {
     auto &dirs = Dirs::GetInstance();
+    std::filesystem::path livedir;
+    if (geteuid() > 0) {
+        livedir = UserDirs::GetInstance().livedir();
+    } else {
+        livedir = Dirs::GetInstance().livedir();
+    }
     std::filesystem::path filename(dirs.livedir());
     filename /= "supervise";
     filename /= longrun_.name();
