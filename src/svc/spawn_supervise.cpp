@@ -37,11 +37,10 @@
 #include <bitsery/adapter/buffer.h>
 
 #include "tt/dirs.hpp"
+#include "tt/environment_generator.hpp"
 #include "tt/exception.hpp"
 
-tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun,
-                                   std::vector<const char *> environment)
-    : longrun_(longrun), environment_(std::move(environment)) {
+tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun) : longrun_(longrun) {
     auto filename = GetScriptFilename();
     WriteScriptToFile(filename);
     Spawn(filename);
@@ -50,7 +49,8 @@ tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun,
 void tt::SpawnSupervise::Spawn(const std::string &filename) {
     if (int pid = fork(); pid == 0) {
         execve("tt", const_cast<char **>(GetExecArgs(filename).data()),
-               const_cast<char *const *>(environment_.data()));
+               const_cast<char *const *>(
+                   EnvironmentGenerator::GetEnvironment().data()));
         spdlog::critical("An error had happened while running execve: {}",
                          strerror(errno));
         std::exit(1);
