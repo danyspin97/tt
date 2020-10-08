@@ -28,6 +28,7 @@
 
 #include "tt/cli/command/parse_command.hpp"
 #include "tt/cli/command/serialize_command.hpp"
+#include "tt/cli/command/service_control_command.hpp"
 #include "tt/cli/command/supervise_command.hpp"
 
 auto main(int argc, char *argv[]) -> int {
@@ -53,6 +54,13 @@ auto main(int argc, char *argv[]) -> int {
     //                   "Show the status and the configuration of a service");
 
     args::Group system(parser, "System commands");
+    args::Command svc(
+        system, "svc", "Run service control",
+        [common_options](args::Subparser &subparser) {
+            tt::cli::Command::Dispatch<tt::cli::ServiceControlCommand>(
+                subparser, common_options);
+        });
+
     args::Command supervise(
         system, "supervise", "Supervise a process [Do not run manually]",
         [common_options](args::Subparser &subparser) {
