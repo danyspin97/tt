@@ -31,7 +31,7 @@ namespace tt {
 
 class ServiceParser {
 public:
-    auto service() -> Service &;
+    auto service() -> Service;
     explicit ServiceParser(std::string path);
 
 protected:
