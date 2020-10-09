@@ -35,8 +35,8 @@ template <typename T> void Serialize(T obj, const std::filesystem::path &path) {
     std::fstream file{path, std::fstream::binary | std::fstream::trunc |
                                 std::fstream::out};
     if (!file.is_open()) {
-        throw tt::Exception(fmt::format(
-            "Cannot open longrun_file {} for writing", path.c_str()));
+        throw tt::Exception(
+            fmt::format("Cannot open file {} for writing", path.c_str()));
     }
     std::ostream_iterator<uint8_t> file_iterator(file);
 
