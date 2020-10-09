@@ -76,6 +76,7 @@ void ServicesParser::ParseService(const std::string &service_name) {
 
     auto path = GetPathForServiceName(service_name);
     service_map_.emplace(service_name, ServiceParser(path).service());
+    assert(!std::holds_alternative<std::monostate>(service_map_[service_name]));
     ParseDependenciesOfService(service_map_.at(service_name));
 }
 
@@ -125,6 +126,7 @@ auto tt::ServicesParser::services() -> std::vector<Service> {
     auto services = std::vector<Service>(service_map_.size());
     for (auto &elem : service_map_) {
         services.push_back(elem.second);
+        assert(!std::holds_alternative<std::monostate>(services.back()));
     }
     return services;
 }
