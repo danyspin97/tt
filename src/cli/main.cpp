@@ -26,6 +26,7 @@
 
 #include "tt/define.h"
 
+#include "tt/cli/command/enable_command.hpp"
 #include "tt/cli/command/parse_command.hpp"
 #include "tt/cli/command/serialize_command.hpp"
 #include "tt/cli/command/service_control_command.hpp"
@@ -40,7 +41,11 @@ auto main(int argc, char *argv[]) -> int {
     // TODO: Decomment them when they have an action assigned each
     // args::Command(manage, "start", "Start/restart one or more services");
     // args::Command(manage, "stop", "Stop one or more services");
-    // args::Command(manage, "enable", "Enable one or more services");
+    args::Command enable(manage, "enable", "Enable one or more services",
+                         [common_options](args::Subparser &subparser) {
+                             tt::cli::Command::Dispatch<tt::cli::EnableCommand>(
+                                 subparser, common_options);
+                         });
     // args::Command(manage, "disable", "Disable one or more services");
     // args::Command(manage, "edit-config", "Edit the config of a service");
 
