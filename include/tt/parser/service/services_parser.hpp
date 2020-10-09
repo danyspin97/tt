@@ -31,7 +31,7 @@ namespace tt {
 
 class ServicesParser {
 public:
-    auto services() -> std::vector<Service>;
+    auto services() const -> std::vector<Service>;
     void ParseServices(const std::vector<std::string> &service_names);
 
 protected:

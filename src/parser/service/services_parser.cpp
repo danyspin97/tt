@@ -122,7 +122,7 @@ void ServicesParser::ParseDependenciesOfService(const Service &service) {
                                    [&](auto name) { ParseService(name); });
 }
 
-auto tt::ServicesParser::services() -> std::vector<Service> {
+auto tt::ServicesParser::services() const -> std::vector<Service> {
     auto services = std::vector<Service>(service_map_.size());
     for (auto &elem : service_map_) {
         services.push_back(elem.second);
