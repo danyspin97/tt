@@ -40,9 +40,10 @@ protected:
 private:
     void ParseService(const std::string &service_name);
     void ParseDependenciesOfService(const Service &service);
-    static auto GetInstanceTokenIndex(const std::string &service_name) -> size_t;
+    static auto GetInstanceTokenIndex(const std::string &service_name)
+        -> size_t;
     static auto SplitServiceNameFromInstance(std::string &service,
-                                                    size_t token_index) -> std::string;
+                                             size_t token_index) -> std::string;
     auto GetPathForServiceName(const std::string &name) -> std::string;
 
 protected:

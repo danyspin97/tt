@@ -35,14 +35,16 @@ public:
     explicit ServiceParser(std::string path);
 
 protected:
-    static auto GenerateListFrom(const std::string &path) -> std::vector<std::string>;
+    static auto GenerateListFrom(const std::string &path)
+        -> std::vector<std::string>;
 
 private:
-    auto
-    GetTypeFromService(const std::vector<std::string> &service_lines) -> std::string;
+    auto GetTypeFromService(const std::vector<std::string> &service_lines)
+        -> std::string;
 
     [[nodiscard]] auto
-    GetMainSectionIndex(const std::vector<std::string> &service_lines) const -> size_t;
+    GetMainSectionIndex(const std::vector<std::string> &service_lines) const
+        -> size_t;
     [[nodiscard]] auto ParseService() -> Service;
 
     std::string path_;
