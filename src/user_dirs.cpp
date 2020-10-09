@@ -45,4 +45,17 @@ tt::UserDirs::UserDirs() {
     confdir(dirs.ConfigHome() / "tt");
     statedir(dirs.DataHome() / "tt" / "state");
     logdir(dirs.DataHome() / "tt" / "log");
+
+    if (!std::filesystem::exists(livedir())) {
+        std::filesystem::create_directories(livedir());
+    }
+    if (!std::filesystem::exists(confdir())) {
+        std::filesystem::create_directories(confdir());
+    }
+    if (!std::filesystem::exists(statedir())) {
+        std::filesystem::create_directories(statedir());
+    }
+    if (!std::filesystem::exists(logdir())) {
+        std::filesystem::create_directories(logdir());
+    }
 }
