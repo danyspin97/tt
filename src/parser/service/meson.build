@@ -8,5 +8,6 @@ tt_src += files(
     'service_parser.cpp',
     'services_parser.cpp',
     'system_services_parser.cpp',
+    'user_services_parser.cpp',
     'utils.cpp',
 )
