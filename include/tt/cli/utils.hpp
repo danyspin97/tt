@@ -27,7 +27,7 @@
 
 namespace tt::cli {
 
-auto ReadBufferFromFile(std::filesystem::path &&filename)
+auto ReadBufferFromFile(const std::filesystem::path &filename)
     -> std::vector<uint8_t>;
 
 }

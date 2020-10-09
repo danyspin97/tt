@@ -24,7 +24,7 @@
 
 #include "spdlog/spdlog.h"
 
-auto tt::cli::ReadBufferFromFile(std::filesystem::path &&filename)
+auto tt::cli::ReadBufferFromFile(const std::filesystem::path &filename)
     -> std::vector<uint8_t> {
     if (!std::filesystem::exists(filename)) {
         spdlog::error("File {} does not exist", filename.c_str());
