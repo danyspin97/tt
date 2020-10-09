@@ -24,6 +24,12 @@
 
 #include "xdg.hpp"
 
+auto tt::UserDirs::GetInstance() -> tt::Dirs & {
+    static tt::UserDirs instance;
+
+    return instance;
+}
+
 tt::UserDirs::UserDirs() {
     // This exe has not been run as root
     assert(geteuid() > 0);

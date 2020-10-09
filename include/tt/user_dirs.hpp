@@ -27,6 +27,7 @@ namespace tt {
 class UserDirs : public Dirs {
 public:
     UserDirs();
+    static auto GetInstance() -> tt::Dirs &;
 };
 
 } // namespace tt
