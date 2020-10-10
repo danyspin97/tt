@@ -48,6 +48,8 @@ protected:
     void SetupUidGid();
     auto TrySpawn(Timeout timeout) -> ScriptStatus;
 
+    void InitLogger();
+
 private:
     const std::string &service_name_;
     Script script_;
