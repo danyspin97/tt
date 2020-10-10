@@ -50,7 +50,7 @@ protected:
 
 private:
     const std::string &service_name_;
-    const Script &script_;
+    Script script_;
     const Environment &environment_;
 
     redi::ipstream proc_;
