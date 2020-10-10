@@ -47,7 +47,7 @@ auto tt::cli::EnableCommand::Execute() -> int { return EnableServices(); }
 auto tt::cli::EnableCommand::EnableServices() -> int {
     const auto &services_list = args::get(service_list_);
     parser_->ParseServices(services_list);
-    std::vector<tt::Service> services = parser_->services();
+    const std::vector<tt::Service> services = parser_->services();
 
     auto graph_path = GetGraphPath();
     DependencyGraph graph;
