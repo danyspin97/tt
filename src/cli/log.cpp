@@ -39,4 +39,6 @@ void tt::cli::setupConsoleLoggers(const std::string &verbosity,
     auto console_sink =
         std::make_shared<spdlog::logger>("console", begin(sinks), end(sinks));
     spdlog::set_default_logger(console_sink);
+
+    spdlog::flush_every(std::chrono::seconds(3));
 }
