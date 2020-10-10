@@ -28,7 +28,6 @@
 #include <unistd.h>
 
 #include <cstdio>
-#include <future>
 
 #include "spdlog/async.h"
 #include "spdlog/sinks/basic_file_sink.h"
@@ -51,13 +50,8 @@ auto tt::SpawnScript::Spawn() -> ScriptStatus {
     auto max_death = script_.max_death();
     decltype(max_death) time_tried = 0;
     while (time_tried != max_death) {
-        // This method is already running in a different thread than tt-svc
-        // Use std::launch::deferred to not use a third thread
-        std::future<ScriptStatus> future =
-            std::async(std::launch::deferred, &SpawnScript::TrySpawn, this,
-                       Timeout(std::chrono::milliseconds(script_.timeout())));
-
-        if (future.get() == ScriptStatus::Success) {
+        if (TrySpawn(Timeout{std::chrono::milliseconds(script_.timeout())}) ==
+            ScriptStatus::Success) {
             return ScriptStatus::Success;
         }
         time_tried++;
