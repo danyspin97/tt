@@ -28,6 +28,7 @@
 #include "tt/cli/utils.hpp"
 #include "tt/dependency_graph/dependency_graph_serializer.hpp"
 #include "tt/dependency_graph/dependency_reader.hpp"
+#include "tt/status.hpp"
 #include "tt/svc/service_status_manager.hpp"
 #include "tt/svc/spawn_service.hpp"
 #include "tt/user_dirs.hpp"
@@ -48,11 +49,13 @@ auto tt::cli::ServiceControlCommand::StartUserServices() -> int {
     auto &user_dirs = UserDirs::GetInstance();
     // auto &dirs = Dirs::GetInstance();
 
-    // Start action listener
-    auto graph = ReadGraphFromFile(user_dirs.statedir() / "graph");
+    // Store the graph inside Status class
+    Status::SetupInstance(ReadGraphFromFile(user_dirs.statedir() / "graph"));
+    const auto &graph = Status::GetInstance().graph();
     auto services = graph.GetActiveServices();
     ServiceStatusManager::GetInstance().Initialize(services);
 
+    // Start action listener
     auto action_listener = std::thread(&ActionListener::Listen);
 
     // TODO: Calculate an optimal order of services to start
