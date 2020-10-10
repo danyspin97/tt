@@ -86,7 +86,8 @@ void tt::cli::ServiceControlCommand::SpawnNode(const ServiceNode &node) {
         manager.WaitOnService(dep);
     }
 
-    SpawnService(node.service());
+    SpawnService spawn{};
+    std::visit(std::ref(spawn), node.service());
 }
 
 auto tt::cli::ServiceControlCommand::ReadGraphFromFile(

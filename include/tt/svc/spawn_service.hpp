@@ -20,13 +20,22 @@
 
 #pragma once
 
-#include "tt/data/service.hpp"
+#include <variant>
 
 namespace tt {
 
+class Bundle;
+class Longrun;
+class Oneshot;
+
 class SpawnService {
 public:
-    explicit SpawnService(const Service &service);
+    SpawnService() = default;
+
+    void operator()(const Bundle &bundle);
+    void operator()(const Longrun &longrun);
+    void operator()(const Oneshot &oneshot);
+    void operator()(std::monostate /*unused*/);
 };
 
 } // namespace tt

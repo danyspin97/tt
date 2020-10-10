@@ -24,19 +24,18 @@
 
 #include <filesystem>
 
-#include "tt/serialize.hpp"
+#include "tt/data/service.hpp"
 #include "tt/svc/spawn_oneshot.hpp"
 #include "tt/svc/spawn_supervise.hpp"
-#include "tt/user_dirs.hpp"
 
-tt::SpawnService::SpawnService(const Service &service) {
-    if constexpr (std::is_same_v<std::decay_t<decltype(service)>, Longrun>) {
-        SpawnSupervise(std::get<Longrun>(service));
-    } else if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
-                                        Oneshot>) {
-        SpawnOneshot(std::get<Oneshot>(service));
-    } else if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
-                                        std::monostate>) {
-        assert(false);
-    }
+void tt::SpawnService::operator()(const Bundle & /*bundle*/) {}
+
+void tt::SpawnService::operator()(const Longrun &longrun) {
+    SpawnSupervise{longrun};
 }
+
+void tt::SpawnService::operator()(const Oneshot &oneshot) {
+    SpawnOneshot{oneshot};
+}
+
+void tt::SpawnService::operator()(std::monostate /*unused*/) { assert(false); }
