@@ -119,14 +119,16 @@ auto ServicesParser::GetPathForServiceName(const string &name) -> string {
 
 void ServicesParser::ParseDependenciesOfService(const Service &service) {
     tt::ForEachDependencyOfService(service,
-                                   [&](auto name) { ParseService(name); });
+                                   [this](auto name) { ParseService(name); });
 }
 
 auto tt::ServicesParser::services() const -> std::vector<Service> {
-    auto services = std::vector<Service>(service_map_.size());
-    for (auto &elem : service_map_) {
-        services.push_back(elem.second);
-        assert(!std::holds_alternative<std::monostate>(services.back()));
-    }
+    std::vector<Service> services{};
+    services.reserve(service_map_.size());
+    std::transform(std::begin(service_map_), std::end(service_map_),
+                   std::back_inserter(services),
+                   [](std::pair<std::string, Service> &&elem) {
+                       return std::move(elem.second);
+                   });
     return services;
 }
