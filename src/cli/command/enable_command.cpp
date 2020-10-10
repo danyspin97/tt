@@ -56,11 +56,6 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
         graph = DependencyGraphSerializer::Deserialize(buffer, buffer.size());
     }
 
-    std::for_each(std::begin(services), std::end(services),
-                  [](const auto &service) {
-                      assert(!std::holds_alternative<std::monostate>(service));
-                  });
-
     // TODO: Check if the service is already enabled
     // and if it is different
     graph.AddServices(services_list, services);
