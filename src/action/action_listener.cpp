@@ -28,8 +28,9 @@
 
 #include "tt/action/action.hpp"
 #include "tt/action/action_factory.hpp"
+#include "tt/exception.hpp"
 
-void tt::ActionListener::Listen() {
+void tt::ActionListener::Listen() try {
     nng::socket socket = nng::rep::open();
     socket.listen("tcp://localhost:8000");
 
@@ -42,4 +43,9 @@ void tt::ActionListener::Listen() {
 
         (void)std::async(std::launch::async, &Action::Apply, action_ptr.get());
     }
+} catch (nng::exception &e) {
+    throw tt::Exception(
+        std::string{
+            "Couldn't listen on nng socket due to the following error: "} +
+        std::string{e.what()});
 }
