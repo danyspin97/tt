@@ -22,35 +22,33 @@
 
 #include "catch2/catch.hpp"
 
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/spdlog.h"
-
 #include <unistd.h>
 
 #include <chrono>
 #include <filesystem>
 #include <thread>
 
+#include "spdlog/sinks/stdout_color_sinks.h"
+
 bool logger_set = false;
 
 TEST_CASE("SpawnScript") {
-    if (!logger_set) {
-        spdlog::set_level(spdlog::level::debug);
-        spdlog::stdout_color_mt("oneshot");
-        logger_set = true;
-    }
     tt::Environment env;
 
     SECTION("Spawn sucessfull script") {
         tt::Script script{tt::Script::Type::Bash, "exit 0"};
-        tt::SpawnScript spawn_script("test-script", script, env);
+        auto test_name = "test-script";
+        auto console = spdlog::stdout_color_mt(test_name);
+        tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Success);
     }
 
     SECTION("Spawn failing script") {
         tt::Script script{tt::Script::Type::Bash, "exit 1"};
-        tt::SpawnScript spawn_script("failing-script", script, env);
+        auto test_name = "failing-script";
+        auto console = spdlog::stdout_color_mt(test_name);
+        tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
     }
@@ -58,7 +56,9 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn script within timeout") {
         tt::Script script{tt::Script::Type::Bash, "sleep 1"};
         script.timeout(2000);
-        tt::SpawnScript spawn_script("timeout-success", script, env);
+        auto test_name = "timeout-success";
+        auto console = spdlog::stdout_color_mt(test_name);
+        tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Success);
     }
@@ -66,7 +66,9 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn script that exceed timeout") {
         tt::Script script{tt::Script::Type::Bash, "sleep 10"};
         script.timeout(50);
-        tt::SpawnScript spawn_script("timeout-fail", script, env);
+        auto test_name = "timeout_fail";
+        auto console = spdlog::stdout_color_mt(test_name);
+        tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
     }
@@ -74,21 +76,31 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn script within timeout and fail") {
         tt::Script script{tt::Script::Type::Bash, "sleep 1 && exit 1"};
         script.timeout(2000);
-        tt::SpawnScript spawn_script("timeout-fail", script, env);
+
+        auto test_name = "timeout-fail";
+        auto console = spdlog::stdout_color_mt(test_name);
+
+        tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
     }
 
     SECTION("Check time tried") {
+        // Cleanup previous test
         std::filesystem::path testfile{"TIME_TRIED"};
         if (std::filesystem::exists(testfile)) {
             std::filesystem::remove(testfile);
         }
+
         constexpr auto time_to_try = 3;
         const auto *command = "echo 1 >> TIME_TRIED ; exit 1";
         tt::Script script{tt::Script::Type::Bash, command};
         script.max_death(time_to_try);
-        tt::SpawnScript spawn_script("time-tried", script, env);
+
+        auto test_name = "time-tried";
+        auto console = spdlog::stdout_color_mt(test_name);
+        tt::SpawnScript spawn_script(test_name, script, env);
+
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
         REQUIRE(std::filesystem::exists(testfile));
@@ -97,17 +109,23 @@ TEST_CASE("SpawnScript") {
     }
 
     SECTION("Check process is killed") {
+        // Cleanup previous test
         std::filesystem::path testfile{"PROCESS_EXISTS"};
         if (std::filesystem::exists(testfile)) {
             std::filesystem::remove(testfile);
         }
+
         const auto *command = "sleep 1 && touch PROCESS_EXISTS";
         tt::Script script{tt::Script::Type::Bash, command};
         script.timeout(50);
         script.max_death(1);
-        tt::SpawnScript spawn_script("timeout-fail", script, env);
+
+        auto test_name = "timeout-fail2";
+        auto console = spdlog::stdout_color_mt(test_name);
+        tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
         CHECK(status == tt::ScriptStatus::Failure);
         CHECK_FALSE(std::filesystem::exists(testfile));
     }
