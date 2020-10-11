@@ -21,12 +21,17 @@
 #pragma once
 
 #include <chrono>
+#include <memory>
 
 #include "pstream.h"
 
 #include "tt/data/service.hpp"
 #include "tt/svc/spawn_supervise.hpp"
 #include "tt/svc/types.hpp"
+
+namespace spdlog {
+class logger;
+}
 
 namespace tt {
 
@@ -54,6 +59,7 @@ private:
     const std::string &service_name_;
     Script script_;
     const Environment &environment_;
+    std::shared_ptr<spdlog::logger> logger_;
 
     redi::ipstream proc_;
 };

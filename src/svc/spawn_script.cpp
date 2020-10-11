@@ -67,12 +67,10 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
     std::array<bool, 2> finished = {false, false};
     uint_fast8_t count = 0;
     uint_fast8_t max_lines = 10;
-    auto out_log = spdlog::get(service_name_);
-    auto err_log = spdlog::get(service_name_);
     while (!finished[0] || !finished[1]) {
         if (!finished[0]) {
             while (getline_async(proc_.err(), line) && count != max_lines) {
-                err_log->error("[stderr] {}", line);
+                logger_->error("[stderr] {}", line);
                 count++;
             }
             if (proc_.err().eof()) {
@@ -84,7 +82,7 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
         }
         if (!finished[1]) {
             while (getline_async(proc_.out(), line) && count != max_lines) {
-                out_log->info("[stdout] {}", line);
+                logger_->info("[stdout] {}", line);
                 count++;
             }
             if (proc_.out().eof()) {
@@ -150,7 +148,7 @@ void tt::SpawnScript::SetupUidGid() {
 
 void tt::SpawnScript::InitLogger() {
     // Check if the logger has already been added
-    if (spdlog::get(service_name_)) {
+    if ((logger_ = spdlog::get(service_name_))) {
         return;
     }
 
@@ -160,9 +158,9 @@ void tt::SpawnScript::InitLogger() {
     } else {
         logdir = Dirs::GetInstance().logdir();
     }
-    auto async_file = spdlog::basic_logger_mt<spdlog::async_factory>(
+    logger_ = spdlog::basic_logger_mt<spdlog::async_factory>(
         service_name_,
         logdir / std::filesystem::path{service_name_ + std::string{".log"}});
 
-    async_file->set_pattern("{%d:%m:%Y %T} %v");
+    logger_->set_pattern("{%d:%m:%Y %T} %v");
 }
