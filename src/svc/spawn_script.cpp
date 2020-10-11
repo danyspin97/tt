@@ -149,6 +149,11 @@ void tt::SpawnScript::SetupUidGid() {
 }
 
 void tt::SpawnScript::InitLogger() {
+    // Check if the logger has already been added
+    if (spdlog::get(service_name_)) {
+        return;
+    }
+
     std::filesystem::path logdir;
     if (geteuid() > 0) {
         logdir = UserDirs::GetInstance().logdir();
