@@ -164,3 +164,7 @@ void tt::SpawnScript::InitLogger() {
 
     logger_->set_pattern("{%d:%m:%Y %T} %v");
 }
+
+auto tt::SpawnScript::service_name() const -> const std::string & {
+    return service_name_;
+}

@@ -44,6 +44,7 @@ public:
     virtual ~SpawnScript() = default;
 
     auto Spawn() -> ScriptStatus;
+    [[nodiscard]] auto service_name() const -> const std::string &;
     void Kill();
     virtual void Signal(int signum);
 
