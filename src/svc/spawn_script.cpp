@@ -32,12 +32,13 @@
 #include "spdlog/async.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
-#include "tt/user_dirs.hpp"
 
 #include "pstream.h"
 
+#include "tt/status.hpp"
 #include "tt/svc/timeout.hpp"
 #include "tt/svc/utils.hpp"
+#include "tt/user_dirs.hpp"
 
 tt::SpawnScript::SpawnScript(const std::string &service_name,
                              const Script &script,
@@ -152,12 +153,7 @@ void tt::SpawnScript::InitLogger() {
         return;
     }
 
-    std::filesystem::path logdir;
-    if (geteuid() > 0) {
-        logdir = UserDirs::GetInstance().logdir();
-    } else {
-        logdir = Dirs::GetInstance().logdir();
-    }
+    std::filesystem::path logdir = Status::GetInstance().dirs().logdir();
     logger_ = spdlog::basic_logger_mt<spdlog::async_factory>(
         service_name_,
         logdir / std::filesystem::path{service_name_ + std::string{".log"}});
