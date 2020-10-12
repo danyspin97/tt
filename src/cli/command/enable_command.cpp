@@ -56,7 +56,7 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
     // and if it is different
     graph.AddServices(services_list, services);
 
-    auto graph_path = status.dirs().logdir() / "graph";
+    auto graph_path = status.dirs().statedir() / "graph";
     utils::Serialize(graph, graph_path);
     return 0;
 }
