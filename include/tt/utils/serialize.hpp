@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <filesystem>
 #include <fstream>
 
 #include "bitsery/adapter/buffer.h"

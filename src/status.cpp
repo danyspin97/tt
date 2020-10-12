@@ -43,7 +43,7 @@ auto tt::Status::graph() -> const DependencyGraph & { return graph_; }
 
 auto tt::Status::IsSystem() const -> bool { return is_system_; }
 
-auto tt::Status::ReadGraphFromFile(std::filesystem::path &&graph_path) const
+auto tt::Status::ReadGraphFromFile(std::filesystem::path &&graph_path) 
     -> tt::DependencyGraph {
     std::vector<uint8_t> buffer = utils::ReadBufferFromFile(graph_path);
     return utils::Deserialize<tt::DependencyGraph>(std::move(buffer));

@@ -32,7 +32,7 @@ class Action;
 
 class ActionFactory {
 public:
-    static auto GetActionFromBuffer(nng::buffer buffer)
+    static auto GetActionFromBuffer(const nng::buffer& buffer)
         -> std::unique_ptr<Action>;
 };
 

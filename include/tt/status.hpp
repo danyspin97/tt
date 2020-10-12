@@ -44,8 +44,8 @@ public:
 private:
     Status();
 
-    [[nodiscard]] auto
-    ReadGraphFromFile(std::filesystem::path &&graph_path) const
+    [[nodiscard]] static auto
+    ReadGraphFromFile(std::filesystem::path &&graph_path) 
         -> tt::DependencyGraph;
 
     bool is_system_;

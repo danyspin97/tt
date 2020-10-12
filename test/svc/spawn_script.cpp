@@ -37,7 +37,7 @@ TEST_CASE("SpawnScript") {
 
     SECTION("Spawn sucessfull script") {
         tt::Script script{tt::Script::Type::Bash, "exit 0"};
-        auto test_name = "test-script";
+        const auto *test_name = "test-script";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
@@ -46,7 +46,7 @@ TEST_CASE("SpawnScript") {
 
     SECTION("Spawn failing script") {
         tt::Script script{tt::Script::Type::Bash, "exit 1"};
-        auto test_name = "failing-script";
+        const auto *test_name = "failing-script";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
@@ -56,7 +56,7 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn script within timeout") {
         tt::Script script{tt::Script::Type::Bash, "sleep 1"};
         script.timeout(2000);
-        auto test_name = "timeout-success";
+        const auto *test_name = "timeout-success";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
@@ -66,7 +66,7 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn script that exceed timeout") {
         tt::Script script{tt::Script::Type::Bash, "sleep 10"};
         script.timeout(50);
-        auto test_name = "timeout_fail";
+        const auto *test_name = "timeout_fail";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();
@@ -77,7 +77,7 @@ TEST_CASE("SpawnScript") {
         tt::Script script{tt::Script::Type::Bash, "sleep 1 && exit 1"};
         script.timeout(2000);
 
-        auto test_name = "timeout-fail";
+        const auto *test_name = "timeout-fail";
         auto console = spdlog::stdout_color_mt(test_name);
 
         tt::SpawnScript spawn_script(test_name, script, env);
@@ -97,7 +97,7 @@ TEST_CASE("SpawnScript") {
         tt::Script script{tt::Script::Type::Bash, command};
         script.max_death(time_to_try);
 
-        auto test_name = "time-tried";
+        const auto *test_name = "time-tried";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
 
@@ -120,7 +120,7 @@ TEST_CASE("SpawnScript") {
         script.timeout(50);
         script.max_death(1);
 
-        auto test_name = "timeout-fail2";
+        const auto *test_name = "timeout-fail2";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
         tt::ScriptStatus status = spawn_script.Spawn();

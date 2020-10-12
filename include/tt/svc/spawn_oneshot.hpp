@@ -32,12 +32,12 @@ namespace tt {
 
 class SpawnOneshot {
 public:
-    explicit SpawnOneshot(const Oneshot &oneshot);
+    explicit SpawnOneshot(Oneshot oneshot);
 
     void Spawn();
 
 private:
-    void InitLogger();
+    static void InitLogger();
 
     static std::shared_ptr<spdlog::logger> logger_;
     Oneshot oneshot_;

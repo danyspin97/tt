@@ -29,7 +29,7 @@ namespace tt {
 
 class NotifyUpAction : public Action {
 public:
-    explicit NotifyUpAction(std::string &&service, bool succeeded);
+    explicit NotifyUpAction(std::string &&service, bool succeded);
     NotifyUpAction() = delete;
 
     [[nodiscard]] auto service() const -> std::string;

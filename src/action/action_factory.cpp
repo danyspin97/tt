@@ -27,7 +27,7 @@
 #include "tt/action/adapter/notify_up_action_adapter.hpp"
 #include "tt/action/notify_up_action.hpp"
 
-auto tt::ActionFactory::GetActionFromBuffer(nng::buffer buffer)
+auto tt::ActionFactory::GetActionFromBuffer(const nng::buffer& buffer)
     -> std::unique_ptr<Action> {
     msgpack::unpacker pac;
     // Copy the buffer data to the unpacker object

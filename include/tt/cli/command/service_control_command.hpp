@@ -40,7 +40,7 @@ protected:
 
 private:
     static void SpawnNode(const ServiceNode &node);
-    auto StartSystemServices() -> int;
+    static auto StartSystemServices() -> int;
     auto StartUserServices() -> int;
 };
 

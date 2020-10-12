@@ -35,7 +35,7 @@ public:
 private:
     static auto GetExecArgs(const std::string &filename) -> std::vector<char *>;
     auto GetScriptFilename() -> std::string;
-    void Spawn(const std::string &filename);
+    static void Spawn(const std::string &filename);
 
     const Longrun &longrun_;
     std::vector<const char *> environment_;

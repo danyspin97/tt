@@ -18,6 +18,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <utility>
+
 #include "tt/svc/spawn_oneshot.hpp"
 
 #include "spdlog/spdlog.h"
@@ -28,7 +30,7 @@
 std::shared_ptr<spdlog::logger> tt::SpawnOneshot::logger_ =
     std::shared_ptr<spdlog::logger>();
 
-tt::SpawnOneshot::SpawnOneshot(const Oneshot &oneshot) : oneshot_(oneshot) {
+tt::SpawnOneshot::SpawnOneshot(Oneshot oneshot) : oneshot_(std::move(oneshot)) {
     InitLogger();
 }
 
