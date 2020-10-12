@@ -35,7 +35,7 @@ auto tt::Status::GetInstance() -> tt::Status & {
 tt::Status::Status()
     : is_system_(!(geteuid() > 0)),
       dirs_(is_system_ ? Dirs::GetInstance() : UserDirs::GetInstance()),
-      graph_(ReadGraphFromFile(dirs_.statedir() / "graph")) {}
+      graph_(ReadGraphFromFileOrNew(dirs_.statedir() / "graph")) {}
 
 auto tt::Status::dirs() const -> const Dirs & { return dirs_; }
 
@@ -43,8 +43,11 @@ auto tt::Status::graph() -> const DependencyGraph & { return graph_; }
 
 auto tt::Status::IsSystem() const -> bool { return is_system_; }
 
-auto tt::Status::ReadGraphFromFile(std::filesystem::path &&graph_path) 
+auto tt::Status::ReadGraphFromFileOrNew(std::filesystem::path &&graph_path)
     -> tt::DependencyGraph {
+    if (!std::filesystem::exists(graph_path)) {
+        return DependencyGraph{};
+    }
     std::vector<uint8_t> buffer = utils::ReadBufferFromFile(graph_path);
     return utils::Deserialize<tt::DependencyGraph>(std::move(buffer));
 }
