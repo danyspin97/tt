@@ -20,22 +20,43 @@
 
 #include "tt/svc/spawn_oneshot.hpp"
 
+#include "spdlog/spdlog.h"
+
 #include "tt/svc/service_status_manager.hpp"
 #include "tt/svc/spawn_script.hpp"
 
-tt::SpawnOneshot::SpawnOneshot(const Oneshot &oneshot) {
-    const auto &name = oneshot.name();
-    SpawnScript spawn_start{name, oneshot.start(), oneshot.environment()};
+std::shared_ptr<spdlog::logger> tt::SpawnOneshot::logger_ =
+    std::shared_ptr<spdlog::logger>();
+
+tt::SpawnOneshot::SpawnOneshot(const Oneshot &oneshot) : oneshot_(oneshot) {
+    InitLogger();
+}
+
+void tt::SpawnOneshot::Spawn() {
+    auto manager = ServiceStatusManager::GetInstance();
+    const auto &name = oneshot_.name();
+    SpawnScript spawn_start{name, oneshot_.start(), oneshot_.environment()};
+    logger_->info("Starting oneshot {}", name);
     if (spawn_start.Spawn() == ScriptStatus::Success) {
         // Notify the service started up successfully
-        auto manager = ServiceStatusManager::GetInstance();
-        manager.ServiceHasStarted(name);
+        manager.ServiceStartUpdate(name, true);
+        logger_->info("Done oneshot {}", name);
         return;
     }
-    if (oneshot.stop()) {
-        SpawnScript spawn_stop{name, oneshot.stop().value(),
-                               oneshot.environment()};
+
+    manager.ServiceStartUpdate(name, false);
+    logger_->error("Error on oneshot {}", name);
+    if (oneshot_.stop()) {
+        logger_->info("Stopping oneshot {}", name);
+        SpawnScript spawn_stop{name, oneshot_.stop().value(),
+                               oneshot_.environment()};
         // We don't care if the stop script failed
         spawn_stop.Spawn();
+    }
+}
+
+void tt::SpawnOneshot::InitLogger() {
+    if (!logger_) {
+        logger_ = spdlog::get("status");
     }
 }

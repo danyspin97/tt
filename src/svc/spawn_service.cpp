@@ -35,7 +35,8 @@ void tt::SpawnService::operator()(const Longrun &longrun) {
 }
 
 void tt::SpawnService::operator()(const Oneshot &oneshot) {
-    SpawnOneshot{oneshot};
+    SpawnOneshot spawn{oneshot};
+    spawn.Spawn();
 }
 
 void tt::SpawnService::operator()(std::monostate /*unused*/) { assert(false); }

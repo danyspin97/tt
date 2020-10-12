@@ -20,13 +20,27 @@
 
 #pragma once
 
+#include <memory>
+
 #include "tt/data/oneshot.hpp"
+
+namespace spdlog {
+class logger;
+}
 
 namespace tt {
 
 class SpawnOneshot {
 public:
     explicit SpawnOneshot(const Oneshot &oneshot);
+
+    void Spawn();
+
+private:
+    void InitLogger();
+
+    static std::shared_ptr<spdlog::logger> logger_;
+    Oneshot oneshot_;
 };
 
 } // namespace tt
