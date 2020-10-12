@@ -97,8 +97,10 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
             break;
         }
         if (count == 0) {
-            std::this_thread::sleep_for(
-                std::chrono::milliseconds(script_.timeout() / 100));
+            // This introduces some dead time
+            // Do not wait since oneshots usually run fast
+            // std::this_thread::sleep_for(
+            //    std::chrono::milliseconds(script_.timeout() / 100));
         }
         count = 0;
     }
