@@ -22,11 +22,9 @@
 
 #include <unistd.h>
 
-#include "bitsery/adapter/buffer.h"
-#include "bitsery/bitsery.h"
-
 #include "tt/exception.hpp"
 #include "tt/user_dirs.hpp"
+#include "tt/utils/deserialize.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 
 auto tt::Status::GetInstance() -> tt::Status & {
@@ -47,13 +45,6 @@ auto tt::Status::IsSystem() const -> bool { return is_system_; }
 
 auto tt::Status::ReadGraphFromFile(std::filesystem::path &&graph_path) const
     -> tt::DependencyGraph {
-    tt::DependencyGraph graph;
-    auto buffer = utils::ReadBufferFromFile(std::move(graph_path));
-    auto state = bitsery::quickDeserialization<
-        bitsery::InputBufferAdapter<std::vector<uint8_t>>>(
-        {buffer.begin(), buffer.size()}, graph);
-    if (state.first == bitsery::ReaderError::NoError && state.second) {
-        return graph;
-    }
-    throw tt::Exception("Error reading from serialized data");
+    std::vector<uint8_t> buffer = utils::ReadBufferFromFile(graph_path);
+    return utils::Deserialize<tt::DependencyGraph>(std::move(buffer));
 }
