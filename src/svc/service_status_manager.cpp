@@ -27,11 +27,7 @@
 #include "tt/exception.hpp"
 #include "tt/svc/service_status.hpp"
 
-tt::ServiceStatusManager::~ServiceStatusManager() {
-    for (auto &pair : up_status_) {
-        delete pair.second;
-    }
-}
+std::shared_mutex tt::ServiceStatusManager::mutex_;
 
 auto tt::ServiceStatusManager::GetInstance() -> ServiceStatusManager & {
     static ServiceStatusManager instance;
@@ -41,26 +37,47 @@ auto tt::ServiceStatusManager::GetInstance() -> ServiceStatusManager & {
 void tt::ServiceStatusManager::Initialize(std::vector<std::string> &services) {
     for (auto &service : services) {
         // TODO: Use a vector to allocate the ServiceStatus objects
-        up_status_.emplace(service, new ServiceStatus());
+        up_status_.emplace(service, std::make_shared<ServiceStatus>());
+        down_status_.emplace(service, std::make_shared<ServiceStatus>());
     }
 }
 
-void tt::ServiceStatusManager::ServiceHasStarted(const std::string &service) {
-    auto status = up_status_.find(service);
-    if (status == up_status_.end()) {
+auto tt::ServiceStatusManager::GetStatus(
+    const std::map<std::string, ServiceStatusPtr> &services_status,
+    const std::string &service) -> ServiceStatusPtr {
+    auto status = services_status.find(service);
+    if (status == services_status.end()) {
         auto err_msg = fmt::format("Unexpected service {}", service);
         throw Exception(err_msg);
     }
+
     assert(status->second);
-    status->second->ServiceUp();
+    return status->second;
 }
 
-void tt::ServiceStatusManager::WaitOnService(const std::string &service) {
-    auto status = up_status_.find(service);
-    if (status == up_status_.end()) {
-        auto err_msg = fmt::format("Unexpected service {}", service);
-        throw Exception(err_msg);
-    }
-    assert(status->second);
-    status->second->Wait();
+void tt::ServiceStatusManager::ServiceStartUpdate(const std::string &service,
+                                                  bool succeeded) {
+    // Use a shared lock to prevent other methods on writing on the map
+    std::shared_lock lock{mutex_};
+    GetStatus(up_status_, service)->Update(succeeded);
+}
+
+void tt::ServiceStatusManager::ServiceDownUpdate(const std::string &service,
+                                                 bool succeeded) {
+    std::shared_lock lock{mutex_};
+    GetStatus(down_status_, service)->Update(succeeded);
+}
+
+auto tt::ServiceStatusManager::WaitOnServiceStart(const std::string &service)
+    -> bool {
+    // Use a shared lock to prevent other methods on writing on the map
+    std::shared_lock lock{mutex_};
+    return GetStatus(up_status_, service)->Wait();
+}
+
+auto tt::ServiceStatusManager::WaitOnServiceDown(const std::string &service)
+    -> bool {
+    // Use a shared lock to prevent other methods on writing on the map
+    std::shared_lock lock{mutex_};
+    return GetStatus(down_status_, service)->Wait();
 }

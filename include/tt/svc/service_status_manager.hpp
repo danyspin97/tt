@@ -20,24 +20,34 @@
 
 #pragma once
 
-#include <condition_variable>
 #include <map>
+#include <shared_mutex>
 #include <vector>
 
 namespace tt {
 
+class ServiceStatus;
+
 class ServiceStatusManager {
 public:
-    ~ServiceStatusManager();
-
     static auto GetInstance() -> ServiceStatusManager &;
 
     void Initialize(std::vector<std::string> &services);
-    void ServiceHasStarted(const std::string &service);
-    void WaitOnService(const std::string &service);
+    void ServiceStartUpdate(const std::string &service, bool succeeded);
+    void ServiceDownUpdate(const std::string &service, bool succeeded);
+    auto WaitOnServiceStart(const std::string &service) -> bool;
+    auto WaitOnServiceDown(const std::string &service) -> bool;
 
 private:
-    std::map<std::string, class ServiceStatus *> up_status_;
+    using ServiceStatusPtr = std::shared_ptr<ServiceStatus>;
+
+    static auto
+    GetStatus(const std::map<std::string, ServiceStatusPtr> &services_status,
+              const std::string &service) -> ServiceStatusPtr;
+
+    static std::shared_mutex mutex_;
+    std::map<std::string, ServiceStatusPtr> up_status_;
+    std::map<std::string, ServiceStatusPtr> down_status_;
 };
 
 } // namespace tt
