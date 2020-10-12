@@ -35,6 +35,8 @@
 
 #include "pstream.h"
 
+#include "tt/script/script_builder_factory.hpp"
+#include "tt/script/shell_script_builder.hpp"
 #include "tt/status.hpp"
 #include "tt/svc/timeout.hpp"
 #include "tt/svc/utils.hpp"
@@ -61,8 +63,9 @@ auto tt::SpawnScript::Spawn() -> ScriptStatus {
 }
 
 auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
-    std::string command{script_.execute()};
-    proc_ = redi::ipstream(command,
+    auto builder = ScriptBuilderFactory::GetScriptBuilder(script_.type());
+    auto command = builder->script(script_.execute(), environment_);
+    proc_ = redi::ipstream(command.first, command.second,
                            redi::pstreams::pstdout | redi::pstreams::pstderr);
     std::string line;
     std::array<bool, 2> finished = {false, false};
