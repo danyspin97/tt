@@ -24,7 +24,10 @@
 
 namespace tt {
 
-class BashScriptBuilder : public ShellScripterBuilder {
+class BashScriptBuilder : public ShellScriptBuilder {
+public:
+    using ShellScriptBuilder::ShellScriptBuilder;
+
 protected:
     void ApplyModifiers() override;
     [[nodiscard]] std::filesystem::path GetFileToExecute() override;

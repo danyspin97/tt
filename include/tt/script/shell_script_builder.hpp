@@ -28,17 +28,17 @@
 
 namespace tt {
 
-class ShellScripterBuilder {
+class ShellScriptBuilder {
 public:
-    ShellScripterBuilder(const std::string &execute,
-                         const Environment &environment);
-    virtual ~ShellScripterBuilder();
+    ShellScriptBuilder() = default;
+    virtual ~ShellScriptBuilder();
 
     [[nodiscard]] auto environment() const -> const Environment &;
 
     // Returns the file to run (i.e. /bin/sh) and its arguments
     // (i.e. "sh", "-c", "execute...")
-    [[nodiscard]] auto script()
+    [[nodiscard]] auto script(const std::string &execute,
+                              const Environment &environment)
         -> std::pair<const char *, std::array<const char *, 3>>;
 
 protected:
@@ -55,8 +55,6 @@ protected:
 private:
     std::string script_;
     Environment env_;
-
-    bool builded_ = false;
 };
 
 } // namespace tt

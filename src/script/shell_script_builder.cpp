@@ -22,25 +22,20 @@
 
 #include "fmt/format.h"
 
-tt::ShellScripterBuilder::ShellScripterBuilder(const std::string &execute,
-                                               const Environment &environment)
-    : script_(execute), env_(environment) {}
-
-auto tt::ShellScripterBuilder::environment() const -> const Environment & {
+auto tt::ShellScriptBuilder::environment() const -> const Environment & {
     return env_;
 }
 
-auto tt::ShellScripterBuilder::script()
+auto tt::ShellScriptBuilder::script(const std::string &execute,
+                                    const Environment &environment)
     -> std::pair<const char *, std::array<const char *, 3>> {
-    if (!builded_) {
-        ApplyModifiers();
-        builded_ = true;
-    }
+    script_ = execute;
+    env_ = environment;
+    ApplyModifiers();
 
     // This leaks, but it will be passed to execvp
     auto *bin = new std::filesystem::path{GetFileToExecute()};
     assert(bin->is_absolute());
-
     auto shell = new std::filesystem::path{bin->filename()};
     return std::make_pair(
         bin->c_str(),
@@ -48,10 +43,11 @@ auto tt::ShellScripterBuilder::script()
                                     (new std::string{script_})->c_str()});
 }
 
-void tt::ShellScripterBuilder::AppendCode(const std::string &code) {
+void tt::ShellScriptBuilder::AppendCode(const std::string &code) {
     fmt::format_to(std::back_inserter(script_), "{}", code);
 }
-void tt::ShellScripterBuilder::PrependCode(const std::string &code) {
+
+void tt::ShellScriptBuilder::PrependCode(const std::string &code) {
     std::string new_script;
     fmt::format_to(std::back_inserter(new_script), "{}{}", code, script_);
     script_ = std::move(new_script);
