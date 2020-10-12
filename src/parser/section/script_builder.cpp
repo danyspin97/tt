@@ -87,10 +87,10 @@ auto ScriptBuilder::GetCodeAttributeForKey(const string &key) -> string & {
 
 auto tt::ScriptBuilder::GetParsedType() const -> Script::Type {
     // TODO: add "path" type
-    if (type_ == "auto" || type_ == "execline") {
+    if (type_ == "execline") {
         return Script::Type::Execline;
     }
-    if (type_ == "bash") {
+    if (type_ == "auto" || type_ == "bash") {
         return Script::Type::Bash;
     }
 
