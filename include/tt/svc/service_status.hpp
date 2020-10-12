@@ -21,7 +21,6 @@
 #pragma once
 
 #include <condition_variable>
-#include <mutex>
 
 namespace tt {
 
@@ -31,13 +30,15 @@ public:
     // std::mutex and std::condition_variable does not have this constructor
     ServiceStatus(const tt::ServiceStatus &) = delete;
 
-    void Wait();
-    void ServiceUp();
+    [[nodiscard]] auto Wait() -> bool;
+    void Update(bool succeeded);
 
 private:
+    // TODO c++20: use atomic_flag::wait
     std::mutex mutex_;
     std::condition_variable condition_;
-    bool up_ = false;
+    bool success_ = false;
+    bool ended_ = false;
 };
 
 } // namespace tt

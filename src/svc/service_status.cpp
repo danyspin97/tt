@@ -20,15 +20,18 @@
 
 #include "tt/svc/service_status.hpp"
 
-void tt::ServiceStatus::Wait() {
+auto tt::ServiceStatus::Wait() -> bool {
     std::unique_lock<std::mutex> lock(mutex_);
-    condition_.wait(lock, [this]() { return up_; });
-    lock.unlock();
+    if (ended_) {
+        return success_;
+    }
+    condition_.wait(lock, [this]() { return ended_; });
+    return success_;
 }
 
-void tt::ServiceStatus::ServiceUp() {
+void tt::ServiceStatus::Update(bool succeeded) {
     std::unique_lock<std::mutex> lock(mutex_);
-    up_ = true;
+    ended_ = true;
+    success_ = succeeded;
     condition_.notify_all();
-    lock.unlock();
 }
