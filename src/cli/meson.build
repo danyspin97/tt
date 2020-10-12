@@ -2,7 +2,6 @@ tt_cli_src += files(
     'global_options.cpp',
     'log.cpp',
     'main.cpp',
-    'utils.cpp',
 )
 
 subdir('command')

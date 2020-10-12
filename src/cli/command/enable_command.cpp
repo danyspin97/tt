@@ -24,7 +24,6 @@
 
 #include "spdlog/spdlog.h"
 
-#include "tt/cli/utils.hpp"
 #include "tt/dependency_graph/dependency_graph.hpp"
 #include "tt/dependency_graph/dependency_graph_serializer.hpp"
 #include "tt/exception.hpp"
@@ -32,6 +31,7 @@
 #include "tt/parser/service/user_services_parser.hpp"
 #include "tt/serialize.hpp"
 #include "tt/user_dirs.hpp"
+#include "tt/utils/read_buffer_from_file.hpp"
 
 tt::cli::EnableCommand::EnableCommand(
     args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
@@ -52,7 +52,7 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
     auto graph_path = GetGraphPath();
     DependencyGraph graph;
     if (std::filesystem::exists(graph_path)) {
-        auto buffer = ReadBufferFromFile(graph_path);
+        auto buffer = utils::ReadBufferFromFile(graph_path);
         graph = DependencyGraphSerializer::Deserialize(buffer, buffer.size());
     }
 

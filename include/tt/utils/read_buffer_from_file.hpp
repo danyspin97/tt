@@ -25,7 +25,7 @@
 
 #include <cinttypes>
 
-namespace tt::cli {
+namespace tt::utils {
 
 auto ReadBufferFromFile(const std::filesystem::path &filename)
     -> std::vector<uint8_t>;

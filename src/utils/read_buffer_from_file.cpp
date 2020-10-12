@@ -18,13 +18,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/cli/utils.hpp"
+#include "tt/utils/read_buffer_from_file.hpp"
 
 #include <fstream>
 
 #include "spdlog/spdlog.h"
 
-auto tt::cli::ReadBufferFromFile(const std::filesystem::path &filename)
+auto tt::utils::ReadBufferFromFile(const std::filesystem::path &filename)
     -> std::vector<uint8_t> {
     if (!std::filesystem::exists(filename)) {
         spdlog::error("File {} does not exist", filename.c_str());

@@ -36,8 +36,8 @@
 #include "bitsery/bitsery.h"
 
 #include "tt/cli/global_options.hpp"
-#include "tt/cli/utils.hpp"
 #include "tt/svc/supervise_longrun.hpp"
+#include "tt/utils/read_buffer_from_file.hpp"
 
 tt::cli::SuperviseCommand::SuperviseCommand(
     args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
@@ -46,7 +46,7 @@ tt::cli::SuperviseCommand::SuperviseCommand(
 
 auto tt::cli::SuperviseCommand::Execute() -> int {
     Longrun longrun;
-    auto buffer = ReadBufferFromFile(args::get(filename_));
+    auto buffer = utils::ReadBufferFromFile(args::get(filename_));
 
     auto state = bitsery::quickDeserialization<
         bitsery::InputBufferAdapter<std::vector<uint8_t>>>(

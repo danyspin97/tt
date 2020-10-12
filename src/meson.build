@@ -14,6 +14,7 @@ subdir('data')
 subdir('dependency_graph')
 subdir('parser')
 subdir('svc')
+subdir('utils')
 
 tt_soversion = 0
 
