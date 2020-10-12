@@ -31,7 +31,7 @@ namespace tt {
 class ShellScriptBuilder {
 public:
     ShellScriptBuilder() = default;
-    virtual ~ShellScriptBuilder();
+    virtual ~ShellScriptBuilder() = default;
 
     [[nodiscard]] auto environment() const -> const Environment &;
 
@@ -39,7 +39,7 @@ public:
     // (i.e. "sh", "-c", "execute...")
     [[nodiscard]] auto script(const std::string &execute,
                               const Environment &environment)
-        -> std::pair<const char *, std::array<const char *, 3>>;
+        -> std::pair<std::string, std::vector<std::string>>;
 
 protected:
     // No newline are applied

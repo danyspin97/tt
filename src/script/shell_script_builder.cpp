@@ -28,19 +28,16 @@ auto tt::ShellScriptBuilder::environment() const -> const Environment & {
 
 auto tt::ShellScriptBuilder::script(const std::string &execute,
                                     const Environment &environment)
-    -> std::pair<const char *, std::array<const char *, 3>> {
+    -> std::pair<std::string, std::vector<std::string>> {
     script_ = execute;
     env_ = environment;
     ApplyModifiers();
 
     // This leaks, but it will be passed to execvp
-    auto *bin = new std::filesystem::path{GetFileToExecute()};
-    assert(bin->is_absolute());
-    auto shell = new std::filesystem::path{bin->filename()};
-    return std::make_pair(
-        bin->c_str(),
-        std::array<const char *, 3>{shell->c_str(), "-c",
-                                    (new std::string{script_})->c_str()});
+    auto bin = GetFileToExecute();
+    assert(bin.is_absolute());
+    auto shell = bin.filename();
+    return std::make_pair(bin, std::vector<std::string>{shell, "-c", script_});
 }
 
 void tt::ShellScriptBuilder::AppendCode(const std::string &code) {
