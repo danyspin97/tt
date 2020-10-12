@@ -20,8 +20,15 @@
 
 #include "tt/cli/log.hpp"
 
+#include <filesystem>
+
+#include "spdlog/async.h"
+#include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
+
+#include "tt/dirs.hpp"
+#include "tt/status.hpp"
 
 void tt::cli::setupConsoleLoggers(const std::string &verbosity,
                                   bool silence_stderr) {
@@ -39,6 +46,10 @@ void tt::cli::setupConsoleLoggers(const std::string &verbosity,
     auto console_sink =
         std::make_shared<spdlog::logger>("console", begin(sinks), end(sinks));
     spdlog::set_default_logger(console_sink);
+
+    std::filesystem::path logdir = Status::GetInstance().dirs().logdir();
+    auto status_logger = spdlog::basic_logger_mt<spdlog::async_factory>(
+        "status", logdir / "status.log");
 
     spdlog::flush_every(std::chrono::seconds(3));
 }
