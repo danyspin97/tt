@@ -28,10 +28,10 @@
 #include "tt/exception.hpp"
 #include "tt/parser/service/system_services_parser.hpp"
 #include "tt/parser/service/user_services_parser.hpp"
-#include "tt/serialize.hpp"
 #include "tt/status.hpp"
 #include "tt/user_dirs.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
+#include "tt/utils/serialize.hpp"
 
 tt::cli::EnableCommand::EnableCommand(
     args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)

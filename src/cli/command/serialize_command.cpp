@@ -33,7 +33,7 @@
 #include "tt/data/service.hpp"
 #include "tt/dirs.hpp"
 #include "tt/parser/service/service_parser.hpp"
-#include "tt/serialize.hpp"
+#include "tt/utils/serialize.hpp"
 
 #include "tt/cli/global_options.hpp"
 

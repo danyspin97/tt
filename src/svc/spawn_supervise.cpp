@@ -38,8 +38,8 @@
 
 #include "tt/environment_generator.hpp"
 #include "tt/exception.hpp"
-#include "tt/serialize.hpp"
 #include "tt/user_dirs.hpp"
+#include "tt/utils/serialize.hpp"
 
 tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun) : longrun_(longrun) {
     auto filename = GetScriptFilename();
