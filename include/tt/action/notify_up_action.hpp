@@ -29,15 +29,17 @@ namespace tt {
 
 class NotifyUpAction : public Action {
 public:
-    explicit NotifyUpAction(std::string &&service);
+    explicit NotifyUpAction(std::string &&service, bool succeeded);
     NotifyUpAction() = delete;
 
     [[nodiscard]] auto service() const -> std::string;
+    [[nodiscard]] auto succeded() const -> bool;
 
     void Apply() override;
 
 private:
     std::string service_;
+    bool succeeded_;
 };
 
 } // namespace tt

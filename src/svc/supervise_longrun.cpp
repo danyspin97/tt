@@ -82,11 +82,15 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
 
 void tt::SuperviseLongrun::SetupLogger() {}
 
-void tt::SuperviseLongrun::NotifyStatus(ScriptStatus /*status*/) {
+void tt::SuperviseLongrun::NotifyStatus(ScriptStatus status) {
     nng::socket socket = nng::req::open();
     socket.dial("tcp://localhost:8000");
 
-    NotifyUpAction action(longrun_.name());
+    bool succeded = false;
+    if (status == ScriptStatus::Success) {
+        succeded = true;
+    }
+    NotifyUpAction action(longrun_.name(), succeded);
     auto buffer = ActionPacker::Pack(std::move(action));
     socket.send(buffer);
 }

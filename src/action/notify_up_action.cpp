@@ -23,12 +23,14 @@
 #include "tt/svc/service_status.hpp"
 #include "tt/svc/service_status_manager.hpp"
 
-tt::NotifyUpAction::NotifyUpAction(std::string &&service)
-    : service_(std::move(service)) {}
+tt::NotifyUpAction::NotifyUpAction(std::string &&service, bool succeded)
+    : service_(std::move(service)), succeeded_(succeded) {}
 
 auto tt::NotifyUpAction::service() const -> std::string { return service_; }
 
+auto tt::NotifyUpAction::succeded() const -> bool { return succeeded_; }
+
 void tt::NotifyUpAction::Apply() {
     auto service_status_manager = tt::ServiceStatusManager::GetInstance();
-    service_status_manager.ServiceHasStarted(service_);
+    service_status_manager.ServiceStartUpdate(service_, succeded());
 }

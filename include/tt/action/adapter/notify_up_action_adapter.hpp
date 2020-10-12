@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <map>
+
 #include "msgpack.hpp"
 
 #include "tt/action/notify_up_action.hpp"
@@ -34,11 +36,12 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
             if (o.type != msgpack::type::MAP) {
                 throw msgpack::type_error();
             }
-            if (o.via.array.size != 2) {
+            if (o.via.map.size != 2) {
                 throw msgpack::type_error();
             }
-            auto service = o.as<std::string>();
-            return tt::NotifyUpAction{std::move(service)};
+            auto service = o.via.map.ptr[0].val.as<std::string>();
+            auto succeded = o.via.map.ptr[1].val.as<bool>();
+            return tt::NotifyUpAction{std::move(service), succeded};
         }
     };
 
@@ -48,8 +51,16 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
                         tt::NotifyUpAction const &v) const
             -> msgpack::packer<Stream> & {
             auto service = v.service();
+            o.pack_map(2);
+            o.pack("service");
             o.pack_str(service.size());
             o.pack_str_body(service.c_str(), service.size());
+            o.pack("succeded");
+            if (v.succeded()) {
+                o.pack_true();
+            } else {
+                o.pack_false();
+            }
             return o;
         }
     };
