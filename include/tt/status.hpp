@@ -37,7 +37,7 @@ public:
     [[nodiscard]] static auto GetInstance() -> Status &;
 
     [[nodiscard]] auto dirs() const -> const Dirs &;
-    [[nodiscard]] auto graph() const -> const DependencyGraph &;
+    [[nodiscard]] auto graph() -> const DependencyGraph &;
 
     [[nodiscard]] auto IsSystem() const -> bool;
 

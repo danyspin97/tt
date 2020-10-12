@@ -25,11 +25,11 @@
 #include "spdlog/spdlog.h"
 
 #include "tt/dependency_graph/dependency_graph.hpp"
-#include "tt/dependency_graph/dependency_graph_serializer.hpp"
 #include "tt/exception.hpp"
 #include "tt/parser/service/system_services_parser.hpp"
 #include "tt/parser/service/user_services_parser.hpp"
 #include "tt/serialize.hpp"
+#include "tt/status.hpp"
 #include "tt/user_dirs.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 
@@ -49,25 +49,14 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
     parser_->ParseServices(services_list);
     const std::vector<tt::Service> services = parser_->services();
 
-    auto graph_path = GetGraphPath();
-    DependencyGraph graph;
-    if (std::filesystem::exists(graph_path)) {
-        auto buffer = utils::ReadBufferFromFile(graph_path);
-        graph = DependencyGraphSerializer::Deserialize(buffer, buffer.size());
-    }
+    auto &status = Status::GetInstance();
+    auto graph = status.graph();
 
     // TODO: Check if the service is already enabled
     // and if it is different
     graph.AddServices(services_list, services);
 
+    auto graph_path = status.dirs().logdir() / "graph";
     utils::Serialize(graph, graph_path);
     return 0;
-}
-
-auto tt::cli::EnableCommand::GetGraphPath() -> std::filesystem::path {
-    if (is_root_) {
-        return Dirs::GetInstance().statedir() / "graph";
-    }
-
-    return UserDirs::GetInstance().statedir() / "graph";
 }
