@@ -22,19 +22,28 @@
 
 #include <unistd.h>
 
+#include "tt/dependency_graph/dependency_graph_serializer.hpp"
 #include "tt/user_dirs.hpp"
+#include "tt/utils/read_buffer_from_file.hpp"
 
 auto tt::Status::GetInstance() -> tt::Status & {
-    return SetupInstance(DependencyGraph{});
-}
-
-auto tt::Status::SetupInstance(tt::DependencyGraph &&graph) -> tt::Status & {
-    static Status status(std::move(graph));
+    static Status status;
     return status;
 }
 
-tt::Status::Status(DependencyGraph &&graph)
-    : graph_(std::move(graph)), is_system_(!(geteuid() > 0)),
-      dirs_(is_system_ ? Dirs::GetInstance() : UserDirs::GetInstance()) {}
+tt::Status::Status()
+    : is_system_(!(geteuid() > 0)),
+      dirs_(is_system_ ? Dirs::GetInstance() : UserDirs::GetInstance()),
+      graph_(ReadGraphFromFile(dirs_.statedir() / "graph")) {}
 
-auto tt::Status::graph() -> const DependencyGraph & { return graph_; }
+auto tt::Status::dirs() const -> const Dirs & { return dirs_; }
+
+auto tt::Status::graph() const -> const DependencyGraph & { return graph_; }
+
+auto tt::Status::IsSystem() const -> bool { return is_system_; }
+
+auto tt::Status::ReadGraphFromFile(std::filesystem::path &&graph_path) const
+    -> tt::DependencyGraph {
+    auto buffer = utils::ReadBufferFromFile(std::move(graph_path));
+    return DependencyGraphSerializer::Deserialize(buffer, buffer.size());
+}

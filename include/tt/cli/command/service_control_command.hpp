@@ -42,8 +42,6 @@ private:
     static void SpawnNode(const ServiceNode &node);
     auto StartSystemServices() -> int;
     auto StartUserServices() -> int;
-    [[nodiscard]] static auto ReadGraphFromFile(std::filesystem::path &&)
-        -> tt::DependencyGraph;
 };
 
 } // namespace tt::cli

@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <filesystem>
+
 #include "tt/dependency_graph/dependency_graph.hpp"
 
 namespace tt {
@@ -32,17 +34,23 @@ public:
     Status(const Status &) = delete;
     auto operator=(const Status &) -> Status & = delete;
 
-    static auto GetInstance() -> Status &;
-    static auto SetupInstance(DependencyGraph &&graph) -> Status &;
+    [[nodiscard]] static auto GetInstance() -> Status &;
 
-    auto graph() -> const DependencyGraph &;
+    [[nodiscard]] auto dirs() const -> const Dirs &;
+    [[nodiscard]] auto graph() const -> const DependencyGraph &;
+
+    [[nodiscard]] auto IsSystem() const -> bool;
 
 private:
-    explicit Status(DependencyGraph &&graph);
+    Status();
 
-    DependencyGraph graph_;
+    [[nodiscard]] auto
+    ReadGraphFromFile(std::filesystem::path &&graph_path) const
+        -> tt::DependencyGraph;
+
     bool is_system_;
     Dirs &dirs_;
+    DependencyGraph graph_;
 };
 
 } // namespace tt

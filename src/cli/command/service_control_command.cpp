@@ -25,7 +25,6 @@
 #include <future>
 
 #include "tt/action/action_listener.hpp"
-#include "tt/dependency_graph/dependency_graph_serializer.hpp"
 #include "tt/dependency_graph/dependency_reader.hpp"
 #include "tt/status.hpp"
 #include "tt/svc/service_status_manager.hpp"
@@ -45,11 +44,6 @@ auto tt::cli::ServiceControlCommand::Execute() -> int {
 }
 
 auto tt::cli::ServiceControlCommand::StartUserServices() -> int {
-    auto &user_dirs = UserDirs::GetInstance();
-    // auto &dirs = Dirs::GetInstance();
-
-    // Store the graph inside Status class
-    Status::SetupInstance(utils::ReadGraphFromFile(user_dirs.statedir() / "graph"));
     const auto &graph = Status::GetInstance().graph();
     auto services = graph.GetActiveServices();
     ServiceStatusManager::GetInstance().Initialize(services);
@@ -73,8 +67,8 @@ auto tt::cli::ServiceControlCommand::StartUserServices() -> int {
 }
 
 auto tt::cli::ServiceControlCommand::StartSystemServices() -> int {
-    auto &dirs = Dirs::GetInstance();
-    auto graph = ReadGraphFromFile(dirs.statedir() / "graph");
+    // auto &dirs = Dirs::GetInstance();
+    // auto graph = ReadGraphFromFile(dirs.statedir() / "graph");
     return 0;
 }
 
@@ -84,16 +78,19 @@ void tt::cli::ServiceControlCommand::SpawnNode(const ServiceNode &node) {
     auto deps = dep_reader.dependencies();
 
     auto &manager = ServiceStatusManager::GetInstance();
+    auto deps_satisfied = true;
     for (auto &dep : deps) {
-        manager.WaitOnService(dep);
+        if (!manager.WaitOnServiceStart(dep)) {
+            deps_satisfied = false;
+            break;
+        }
+    }
+
+    if (!deps_satisfied) {
+        manager.ServiceStartUpdate(node.name(), false);
+        return;
     }
 
     SpawnService spawn{};
     std::visit(std::ref(spawn), node.service());
-}
-
-auto tt::cli::ServiceControlCommand::ReadGraphFromFile(
-    std::filesystem::path &&graph_path) -> tt::DependencyGraph {
-    auto buffer = ReadBufferFromFile(std::move(graph_path));
-    return DependencyGraphSerializer::Deserialize(buffer, buffer.size());
 }
