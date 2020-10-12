@@ -43,10 +43,11 @@ public:
                          const Environment &environment);
     virtual ~SpawnScript() = default;
 
-    auto Spawn() -> ScriptStatus;
     [[nodiscard]] auto service_name() const -> const std::string &;
+
     void Kill();
     virtual void Signal(int signum);
+    auto Spawn() -> ScriptStatus;
 
 protected:
     auto GetEnviromentFromScript() -> std::vector<const char *>;
