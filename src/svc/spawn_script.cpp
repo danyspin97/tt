@@ -108,14 +108,18 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
         count = 0;
     }
     proc_.close();
+    while (!HasExited() && !timeout.TimedOut()) {
+        std::this_thread::sleep_for(
+            std::chrono::milliseconds(script_.timeout() / 300));
+    }
     if (HasExited()) {
         if (proc_.rdbuf()->status() != 0) {
             return ScriptStatus::Failure;
         }
         return ScriptStatus::Success;
     }
-    Kill();
 
+    Kill();
     return ScriptStatus::Failure;
 }
 
