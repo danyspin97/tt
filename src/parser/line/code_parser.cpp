@@ -24,7 +24,7 @@
 
 #include "tt/parser/define.hpp"
 #include "tt/parser/line/exception.hpp"
-#include "tt/parser/utils.hpp"
+#include "tt/utils/trim.hpp"
 
 using std::string;
 
@@ -37,7 +37,7 @@ auto CodeParser::StartParsing(const string &line) -> bool {
     if (IsParsing()) {
         throw tt::CodeParserIsStillParsingException();
     }
-    auto trimmed_line = trim_copy(line);
+    auto trimmed_line = utils::trim_copy(line);
     auto equal_token_pos = trimmed_line.find(kAssignmentToken);
     if (equal_token_pos == string::npos) {
         return false;
@@ -54,12 +54,12 @@ auto CodeParser::StartParsing(const string &line) -> bool {
     }
 
     key_ = trimmed_line.substr(0, equal_token_pos - 1);
-    rtrim(key_);
+    utils::rtrim(key_);
     return is_parsing_ = true;
 }
 
 void CodeParser::ParseLine(const string &line) {
-    auto trimmed_line = trim_copy(line);
+    auto trimmed_line = utils::trim_copy(line);
     if (trimmed_line == string{kCodeCloseToken}) {
         is_parsing_ = false;
         return;

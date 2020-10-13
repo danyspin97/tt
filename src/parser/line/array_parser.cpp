@@ -29,7 +29,7 @@
 
 #include "tt/parser/define.hpp"
 #include "tt/parser/line/exception.hpp"
-#include "tt/parser/utils.hpp"
+#include "tt/utils/trim.hpp"
 
 using std::string;
 
@@ -56,13 +56,13 @@ auto ArrayParser::StartParsing(const string &line) -> bool {
 
     auto tmp =
         line.substr(equal_token_pos + 1, parenthesis_pos - equal_token_pos - 1);
-    trim(tmp);
+    utils::trim(tmp);
     if (!tmp.empty()) {
         return false;
     }
 
     key_ = line.substr(0, equal_token_pos);
-    trim(key_);
+    utils::trim(key_);
     if (key_.empty()) {
         throw EmptyKeyException();
     }
@@ -80,7 +80,7 @@ void ArrayParser::ParseLine(const string &line) {
 }
 
 void ArrayParser::UpdateStatus(const string &line) {
-    auto trimmed_line = trim_copy(line);
+    auto trimmed_line = utils::trim_copy(line);
     if (line.empty()) {
         return;
     }

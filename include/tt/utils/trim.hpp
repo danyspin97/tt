@@ -18,8 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TT_PARSER_UTILS_HPP_
-#define TT_PARSER_UTILS_HPP_
+#pragma once
 
 // Thanks StackOverflow!
 // https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
@@ -28,9 +27,7 @@
 #include <cctype>
 #include <locale>
 
-namespace tt {
-
-auto ParseBoolean(const std::string &value) -> bool;
+namespace tt::utils {
 
 // trim from start (in place)
 static inline void ltrim(std::string &s) {
@@ -67,6 +64,4 @@ static inline auto trim_copy(std::string s) -> std::string {
     return s;
 }
 
-} // namespace tt
-
-#endif // TT_PARSER_UTILS_HPP_
+} // namespace tt::utils

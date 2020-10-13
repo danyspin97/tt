@@ -22,7 +22,7 @@
 
 #include "tt/parser/define.hpp"
 #include "tt/parser/line/exception.hpp"
-#include "tt/parser/utils.hpp"
+#include "tt/utils/trim.hpp"
 
 using std::string;
 
@@ -55,8 +55,8 @@ auto tt::KeyValueParser::TryParseLine() -> bool {
         return false;
     }
     key_ = line_.substr(0, token_pos);
-    trim(key_);
+    utils::trim(key_);
     value_ = line_.substr(token_pos + 1, string::npos);
-    trim(value_);
+    utils::trim(value_);
     return true;
 }

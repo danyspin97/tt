@@ -25,7 +25,7 @@
 
 #include "tt/parser/section/exception.hpp"
 #include "tt/parser/section/section_builder.hpp"
-#include "tt/parser/utils.hpp"
+#include "tt/utils/trim.hpp"
 
 namespace tt {
 
@@ -34,7 +34,7 @@ void AttributeNotFound(const std::string &attribute,
 
 // Is called many times during parsing, allow inlining
 inline auto IsEmptyLine(const std::string &line) -> bool {
-    const auto strippedLine = trim_copy(line);
+    const auto strippedLine = utils::trim_copy(line);
     return strippedLine.empty() || strippedLine[0] == '#';
 }
 
