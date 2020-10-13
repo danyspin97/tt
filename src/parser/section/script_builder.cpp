@@ -93,6 +93,9 @@ auto tt::ScriptBuilder::GetParsedType() const -> Script::Type {
     if (type_ == "auto" || type_ == "bash") {
         return Script::Type::Bash;
     }
+    if (type_ == "path") {
+        return Script::Type::Path;
+    }
 
     auto error_message = "Type " + type_ + " is not allowed.";
     throw tt::ScriptTypeNotValidException(error_message);

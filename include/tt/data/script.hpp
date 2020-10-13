@@ -38,6 +38,7 @@ public:
     enum class Type : uint16_t {
         Bash,
         Execline,
+        Path,
     };
 
     [[nodiscard]] auto type() const noexcept -> Type { return type_; }
