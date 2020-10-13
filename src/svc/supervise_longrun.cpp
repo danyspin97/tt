@@ -31,6 +31,7 @@
 #include "tt/svc/spawn_long_lived_script.hpp"
 #include "tt/svc/spawn_script.hpp"
 #include "tt/svc/supervision_signal_handler.hpp"
+#include "tt/svc/timeout.hpp"
 
 tt::SuperviseLongrun::SuperviseLongrun(Longrun &&longrun)
     : longrun_(std::move(longrun)),
@@ -63,7 +64,8 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
     pause();
 
     if (SupervisionSignalHandler::HasReceivedDeathSignal()) {
-        spawn_.Kill();
+        spawn_.Kill(
+            Timeout{std::chrono::milliseconds{longrun_.run().timeout_kill()}});
         NotifyStatus(ScriptStatus::Failure);
         exit(255);
     }

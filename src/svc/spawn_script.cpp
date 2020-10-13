@@ -100,17 +100,13 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
             break;
         }
         if (count == 0) {
-            // This introduces some dead time
-            // Do not wait since oneshots usually run fast
-            // std::this_thread::sleep_for(
-            //    std::chrono::milliseconds(script_.timeout() / 100));
+            std::this_thread::yield();
         }
         count = 0;
     }
     proc_.close();
     while (!HasExited() && !timeout.TimedOut()) {
-        std::this_thread::sleep_for(
-            std::chrono::milliseconds(script_.timeout() / 300));
+        std::this_thread::yield();
     }
     if (HasExited()) {
         if (proc_.rdbuf()->status() != 0) {
@@ -119,22 +115,17 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
         return ScriptStatus::Success;
     }
 
-    Kill();
+    Kill(Timeout{std::chrono::milliseconds(script_.timeout_kill())});
     return ScriptStatus::Failure;
 }
 
-void tt::SpawnScript::Kill() {
+void tt::SpawnScript::Kill(Timeout timeout) {
     Signal(static_cast<int>(script_.down_signal()));
+    while (!HasExited() && !timeout.TimedOut()) {
+        std::this_thread::yield();
+    }
     if (!HasExited()) {
-        auto wait = script_.timeout_kill() / 100;
-        std::this_thread::sleep_for(std::chrono::milliseconds(wait));
-        if (!HasExited()) {
-            std::this_thread::sleep_for(
-                std::chrono::milliseconds(script_.timeout_kill() - wait));
-            if (!HasExited()) {
-                Signal(static_cast<int>(Signal::kSigKill));
-            }
-        }
+        Signal(static_cast<int>(Signal::kSigKill));
     }
 }
 

@@ -45,7 +45,7 @@ public:
 
     [[nodiscard]] auto service_name() const -> const std::string &;
 
-    void Kill();
+    void Kill(Timeout timeout);
     virtual void Signal(int signum);
     auto Spawn() -> ScriptStatus;
 
