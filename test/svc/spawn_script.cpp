@@ -36,7 +36,7 @@ TEST_CASE("SpawnScript") {
     tt::Environment env;
 
     SECTION("Spawn sucessfull script") {
-        tt::Script script{tt::Script::Type::Bash, "exit 0"};
+        tt::Script script{tt::Script::Type::Bash, "true"};
         const auto *test_name = "test-script";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
@@ -45,7 +45,7 @@ TEST_CASE("SpawnScript") {
     }
 
     SECTION("Spawn failing script") {
-        tt::Script script{tt::Script::Type::Bash, "exit 1"};
+        tt::Script script{tt::Script::Type::Bash, "false"};
         const auto *test_name = "failing-script";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
@@ -74,7 +74,7 @@ TEST_CASE("SpawnScript") {
     }
 
     SECTION("Spawn script within timeout and fail") {
-        tt::Script script{tt::Script::Type::Bash, "sleep 1 && exit 1"};
+        tt::Script script{tt::Script::Type::Bash, "sleep 1 && false"};
         script.timeout(2000);
 
         const auto *test_name = "timeout-fail";
