@@ -1763,7 +1763,9 @@ namespace redi
           default :
             // process has exited
             ppid_ = 0;
-            status_ = exit_status;
+            if (WIFEXITED(exit_status)) {
+                status_ = WEXITSTATUS(exit_status);
+            }
             child_exited = 1;
             // Close wpipe, would get SIGPIPE if we used it.
             destroy_buffers(pstdin);
