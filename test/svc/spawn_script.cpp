@@ -131,7 +131,7 @@ TEST_CASE("SpawnScript") {
     }
 
     SECTION("Spawn sucessfull path") {
-        tt::Script script{tt::Script::Type::Path, "exit 0"};
+        tt::Script script{tt::Script::Type::Path, "sleep 0"};
         const auto *test_name = "test-path";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
