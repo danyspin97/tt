@@ -26,6 +26,7 @@
 #include "tt/dirs.hpp"
 #include "tt/parser/section/exception.hpp"
 #include "tt/parser/section/utils.hpp"
+#include "tt/utils/parse_boolean.hpp"
 
 auto tt::MainScriptBuilder::GetAttributeForKey(const std::string &key)
     -> std::string & {
@@ -38,7 +39,7 @@ auto tt::MainScriptBuilder::GetAttributeForKey(const std::string &key)
 void tt::MainScriptBuilder::SetOptionalAttributeForMainScript(
     MainScript &main_script) {
     if (!autostart_.empty()) {
-        main_script.autostart(tt::ParseBoolean(autostart_));
+        main_script.autostart(tt::utils::ParseBoolean(autostart_));
     }
 }
 

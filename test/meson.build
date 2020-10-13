@@ -4,6 +4,7 @@ tt_test_src = files(
 
 subdir('dependency_graph')
 subdir('parser')
+subdir('utils')
 
 # Available from 0.53.0
 fs = import('fs')

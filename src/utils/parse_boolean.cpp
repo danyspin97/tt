@@ -18,21 +18,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "catch2/catch.hpp"
+#include "tt/utils/parse_boolean.hpp"
 
-#include "tt/parser/exception.hpp"
-#include "tt/parser/utils.hpp"
+#include <string>
 
-using tt::BooleanParseException;
-using tt::ParseBoolean;
+using std::string;
 
-TEST_CASE("ParseBoolean") {
-    SECTION("Parse valid values") {
-        CHECK(ParseBoolean("yes"));
-        CHECK_FALSE(ParseBoolean("no"));
+auto tt::utils::ParseBoolean(const string &value) -> bool {
+    if (value == "yes") {
+        return true;
+    }
+    if (value == "no") {
+        return false;
     }
 
-    SECTION("Parse invalid values") {
-        CHECK_THROWS_AS(ParseBoolean("foo"), BooleanParseException);
-    }
+    const auto msg =
+        "A boolean value shall be either 'yes' or 'no' the value given was '" +
+        value + "'";
+    throw BooleanParseException(msg);
 }

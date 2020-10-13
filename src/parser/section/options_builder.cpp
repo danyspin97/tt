@@ -20,16 +20,15 @@
 
 #include "tt/parser/section/options_builder.hpp"
 
-#include "tt/parser/exception.hpp"
 #include "tt/parser/line/exception.hpp"
 #include "tt/parser/line/key_value_parser.hpp"
 #include "tt/parser/section/exception.hpp"
 #include "tt/parser/section/utils.hpp"
+#include "tt/utils/parse_boolean.hpp"
 
 using std::string;
 
 using tt::AttributeNotFoundException;
-using tt::BooleanParseException;
 using tt::EmptyArrayException;
 using tt::EmptyKeyException;
 using tt::IsEmptyLine;
@@ -108,7 +107,7 @@ void OptionsBuilder::SetAttributeForKey(const string &key,
         TrySetAttributeForKey(key, value);
     } catch (AttributeNotFoundException &e) {
         throw SectionBuilderException(e.msg());
-    } catch (BooleanParseException &e) {
+    } catch (tt::utils::BooleanParseException &e) {
         const auto msg = e.msg() + " while parsing key '" + key + "'";
         throw SectionBuilderException(msg + section_err_msg);
     } catch (std::invalid_argument &e) {

@@ -23,7 +23,7 @@
 #include "tt/data/oneshot_options.hpp"
 #include "tt/parser/section/options_builder.hpp"
 #include "tt/parser/section/utils.hpp"
-#include "tt/parser/utils.hpp"
+#include "tt/utils/parse_boolean.hpp"
 
 using std::string;
 
@@ -31,7 +31,6 @@ using tt::ArrayParser;
 using tt::AttributeNotFound;
 using tt::OneshotOptions;
 using tt::OneshotOptionsBuilder;
-using tt::ParseBoolean;
 
 OneshotOptionsBuilder::OneshotOptionsBuilder(OneshotOptions &options)
     : options_(options) {}
@@ -39,7 +38,7 @@ OneshotOptionsBuilder::OneshotOptionsBuilder(OneshotOptions &options)
 void OneshotOptionsBuilder::TrySetAttributeForKey(const string &key,
                                                   const string &value) {
     if (key == "optional") {
-        options_.optional(ParseBoolean(value));
+        options_.optional(utils::ParseBoolean(value));
         return;
     }
 

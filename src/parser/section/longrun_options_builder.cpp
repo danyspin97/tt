@@ -21,8 +21,8 @@
 #include "tt/parser/section/longrun_options_builder.hpp"
 
 #include "tt/parser/section/utils.hpp"
-#include "tt/parser/utils.hpp"
 #include "tt/signal.hpp"
+#include "tt/utils/parse_boolean.hpp"
 
 using std::string;
 
@@ -46,7 +46,7 @@ void LongrunOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
 void LongrunOptionsBuilder::TrySetAttributeForKey(const string &key,
                                                   const string &value) {
     if (key == "optional") {
-        options_.optional(ParseBoolean(value));
+        options_.optional(utils::ParseBoolean(value));
     } else {
         AttributeNotFound(key, "options");
     }

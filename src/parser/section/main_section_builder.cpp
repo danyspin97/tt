@@ -25,7 +25,6 @@
 #include "tt/parser/line/key_value_parser.hpp"
 #include "tt/parser/section/exception.hpp"
 #include "tt/parser/section/utils.hpp"
-#include "tt/parser/utils.hpp"
 
 using std::string;
 
