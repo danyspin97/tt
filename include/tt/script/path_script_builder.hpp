@@ -18,21 +18,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/script/script_builder_factory.hpp"
+#pragma once
 
-#include "tt/script/bash_script_builder.hpp"
-#include "tt/script/path_script_builder.hpp"
+#include "tt/script/shell_script_builder.hpp"
 
-auto tt::ScriptBuilderFactory::GetScriptBuilder(Script::Type type)
-    -> std::unique_ptr<ShellScriptBuilder> {
-    switch (type) {
-    case Script::Type::Bash:
-        return std::make_unique<BashScriptBuilder>();
-    case Script::Type::Execline:
-        // TODO
-    case Script::Type::Path:
-        return std::make_unique<PathScriptBuilder>();
-    default:
-        assert(false);
-    }
-}
+namespace tt {
+
+class PathScriptBuilder : public ShellScriptBuilder {
+public:
+    using ShellScriptBuilder::ShellScriptBuilder;
+
+    [[nodiscard]] auto script(const std::string &execute,
+                              const Environment &environment)
+        -> std::pair<std::string, std::vector<std::string>> override;
+
+protected:
+    void ApplyModifiers() override;
+    [[nodiscard]] std::filesystem::path GetFileToExecute() override;
+};
+
+} // namespace tt

@@ -37,8 +37,8 @@ public:
 
     // Returns the file to run (i.e. /bin/sh) and its arguments
     // (i.e. "sh", "-c", "execute...")
-    [[nodiscard]] auto script(const std::string &execute,
-                              const Environment &environment)
+    [[nodiscard]] virtual auto script(const std::string &execute,
+                                      const Environment &environment)
         -> std::pair<std::string, std::vector<std::string>>;
 
 protected:
