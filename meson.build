@@ -3,7 +3,7 @@ project('tt', 'cpp',
     license: 'GPL3',
     meson_version: '>=0.50.0',
     default_options: [
-        'cpp_std=c++2a',
+        'cpp_std=c++17',
         'warning_level=3',
     ],
 )
