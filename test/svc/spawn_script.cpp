@@ -129,4 +129,23 @@ TEST_CASE("SpawnScript") {
         CHECK(status == tt::ScriptStatus::Failure);
         CHECK_FALSE(std::filesystem::exists(testfile));
     }
+
+    SECTION("Spawn sucessfull path") {
+        tt::Script script{tt::Script::Type::Path, "exit 0"};
+        const auto *test_name = "test-path";
+        auto console = spdlog::stdout_color_mt(test_name);
+        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::ScriptStatus status = spawn_script.Spawn();
+        CHECK(status == tt::ScriptStatus::Success);
+    }
+
+    SECTION("Spawn sucessfull sleep as path") {
+        tt::Script script{tt::Script::Type::Path, "sleep 2"};
+        script.timeout(5000);
+        const auto *test_name = "test-path-sleep";
+        auto console = spdlog::stdout_color_mt(test_name);
+        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::ScriptStatus status = spawn_script.Spawn();
+        CHECK(status == tt::ScriptStatus::Success);
+    }
 }
