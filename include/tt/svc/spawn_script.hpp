@@ -51,7 +51,9 @@ public:
 
 protected:
     auto GetEnviromentFromScript() -> std::vector<const char *>;
+    void ExecuteScript();
     virtual auto HasExited() -> bool;
+    void ReadOutput(Timeout &timeout);
     void SetupUidGid();
     auto TrySpawn(Timeout timeout) -> ScriptStatus;
 

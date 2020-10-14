@@ -63,10 +63,30 @@ auto tt::SpawnScript::Spawn() -> ScriptStatus {
 }
 
 auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
+    ExecuteScript();
+    ReadOutput(timeout);
+    while (!HasExited() && !timeout.TimedOut()) {
+        std::this_thread::yield();
+    }
+    if (HasExited()) {
+        if (proc_.rdbuf()->status() != 0) {
+            return ScriptStatus::Failure;
+        }
+        return ScriptStatus::Success;
+    }
+
+    Kill(Timeout{std::chrono::milliseconds(script_.timeout_kill())});
+    return ScriptStatus::Failure;
+}
+
+void tt::SpawnScript::ExecuteScript() {
     auto builder = ScriptBuilderFactory::GetScriptBuilder(script_.type());
     auto command = builder->script(script_.execute(), environment_);
     proc_ = redi::ipstream(command.first, command.second,
                            redi::pstreams::pstdout | redi::pstreams::pstderr);
+}
+
+void tt::SpawnScript::ReadOutput(Timeout &timeout) {
     std::string line;
     std::array<bool, 2> finished = {false, false};
     uint_fast8_t count = 0;
@@ -105,18 +125,6 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
         count = 0;
     }
     proc_.close();
-    while (!HasExited() && !timeout.TimedOut()) {
-        std::this_thread::yield();
-    }
-    if (HasExited()) {
-        if (proc_.rdbuf()->status() != 0) {
-            return ScriptStatus::Failure;
-        }
-        return ScriptStatus::Success;
-    }
-
-    Kill(Timeout{std::chrono::milliseconds(script_.timeout_kill())});
-    return ScriptStatus::Failure;
 }
 
 void tt::SpawnScript::Kill(Timeout timeout) {
