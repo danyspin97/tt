@@ -31,7 +31,8 @@
 void tt::SpawnService::operator()(const Bundle & /*bundle*/) {}
 
 void tt::SpawnService::operator()(const Longrun &longrun) {
-    SpawnSupervise{longrun};
+    SpawnSupervise supervise{longrun};
+    supervise.Spawn();
 }
 
 void tt::SpawnService::operator()(const Oneshot &oneshot) {

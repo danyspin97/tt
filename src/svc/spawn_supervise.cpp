@@ -32,52 +32,34 @@
 
 #include "spdlog/spdlog.h"
 
+#include "bitsery/adapter/buffer.h"
 #include "bitsery/adapter/stream.h"
 #include "bitsery/bitsery.h"
-#include <bitsery/adapter/buffer.h>
 
+#include "pstream.h"
+
+#include "tt/dirs.hpp"
 #include "tt/environment_generator.hpp"
 #include "tt/exception.hpp"
-#include "tt/user_dirs.hpp"
+#include "tt/status.hpp"
 #include "tt/utils/serialize.hpp"
 
 tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun) : longrun_(longrun) {
     auto filename = GetScriptFilename();
     utils::Serialize(longrun, filename);
-    Spawn(filename);
 }
 
-void tt::SpawnSupervise::Spawn(const std::string &filename) {
-    if (int pid = fork(); pid == 0) {
-        execve("tt", const_cast<char **>(GetExecArgs(filename).data()),
-               const_cast<char *const *>(
-                   EnvironmentGenerator::GetEnvironment().data()));
-        spdlog::critical("An error had happened while running execve: {}",
-                         strerror(errno));
-        std::exit(1);
-    }
+void tt::SpawnSupervise::Spawn() {
+    // pstdout mode is the default
+    redi::ipstream supervise{
+        "tt", std::vector<std::string>{"tt", "supervise", GetScriptFilename()}};
 }
 
 auto tt::SpawnSupervise::GetScriptFilename() -> std::string {
-    auto &dirs = Dirs::GetInstance();
-    std::filesystem::path livedir;
-    if (geteuid() > 0) {
-        livedir = UserDirs::GetInstance().livedir();
-    } else {
-        livedir = Dirs::GetInstance().livedir();
-    }
+    const auto &dirs = Status::GetInstance().dirs();
     std::filesystem::path filename(dirs.livedir());
     filename /= "supervise";
+    std::filesystem::create_directories(filename);
     filename /= longrun_.name();
     return filename;
-}
-
-auto tt::SpawnSupervise::GetExecArgs(const std::string &filename)
-    -> std::vector<char *> {
-    std::vector<char *> args{};
-    args.push_back(const_cast<char *>("tt"));
-    args.push_back(const_cast<char *>("supervise"));
-    args.push_back(const_cast<char *>(filename.data()));
-    args.push_back(0);
-    return args;
 }
