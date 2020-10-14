@@ -23,12 +23,13 @@
 #include <poll.h>
 
 #include <chrono>
-#include <thread>
+#include <future>
 
 #include "spdlog/spdlog.h"
 
 #include "pstream.h"
 
+#include "tt/svc/fake_timeout.hpp"
 #include "tt/svc/supervision_signal_handler.hpp"
 
 tt::SpawnLongLivedScript::SpawnLongLivedScript(const std::string &service_name,
@@ -38,11 +39,13 @@ tt::SpawnLongLivedScript::SpawnLongLivedScript(const std::string &service_name,
       long_lived_script_(script) {}
 
 auto tt::SpawnLongLivedScript::Spawn() -> ScriptStatus {
-    child_pid_ = 0;
     if (long_lived_script_.notify()) {
         SetupNotifyFd();
     }
-    RunScript();
+    ExecuteScript();
+    FakeTimeout timeout{};
+    (void)std::async(std::launch::async, &SpawnLongLivedScript::ReadOutput,
+                     this, std::ref(timeout));
     if (long_lived_script_.notify()) {
         return ListenOnNotifyFd();
     }
@@ -50,29 +53,12 @@ auto tt::SpawnLongLivedScript::Spawn() -> ScriptStatus {
     std::this_thread::sleep_for(
         std::chrono::milliseconds(long_lived_script_.timeout()));
     waiting_on_startup_ = false;
-    return ScriptStatus::Success;
-}
-
-void tt::SpawnLongLivedScript::RunScript() {
-    int pid = fork();
-    if (pid == 0) {
-        execve("/bin/sh", const_cast<char **>(GetExecArgs().data()), nullptr);
-        spdlog::critical("An error had happened while running execve: {}",
-                         strerror(errno));
-        exit(1);
+    bool success_ = true;
+    if (success_) {
+        return ScriptStatus::Success;
+    } else {
+        return ScriptStatus::Failure;
     }
-    child_pid_ = pid;
-}
-
-auto tt::SpawnLongLivedScript::GetExecArgs() -> std::vector<char *> {
-    std::vector<char *> args{};
-    args.push_back(const_cast<char *>("/bin/sh"));
-    args.push_back(const_cast<char *>("-c"));
-    // This leaks, but it doesn't matter since it is an argument for execve
-    std::string *execute = new std::string(long_lived_script_.execute());
-    args.push_back(const_cast<char *>(execute->c_str()));
-    args.push_back(nullptr);
-    return args;
 }
 
 auto tt::SpawnLongLivedScript::ListenOnNotifyFd() -> ScriptStatus {
@@ -98,12 +84,6 @@ void tt::SpawnLongLivedScript::SetupNotifyFd() {
     notify_fd_ = dup(fd[0]);
     close(dup(fd[0]));
     dup2(fd[1], long_lived_script_.notify().value());
-}
-
-void tt::SpawnLongLivedScript::Signal(int signum) { kill(child_pid_, signum); }
-
-auto tt::SpawnLongLivedScript::HasExited() -> bool {
-    return SupervisionSignalHandler::HasChildExited();
 }
 
 auto tt::SpawnLongLivedScript::HasStarted() const -> bool {

@@ -30,25 +30,16 @@ public:
                                   const LongLivedScript &script,
                                   const Environment &environment);
 
+    auto HasStarted() const -> bool;
     auto Spawn() -> ScriptStatus;
 
-    void SignalChild(int signum);
-    auto HasStarted() const -> bool;
-    void Signal(int signum) override;
-
-protected:
-    auto HasExited() -> bool override;
-
 private:
-    auto GetExecArgs() -> std::vector<char *>;
     auto ListenOnNotifyFd() -> ScriptStatus;
-    void RunScript();
     void SetupNotifyFd();
 
     LongLivedScript long_lived_script_;
     bool waiting_on_startup_ = false;
     int notify_fd_ = 0;
-    int child_pid_ = 0;
 };
 
 } // namespace tt
