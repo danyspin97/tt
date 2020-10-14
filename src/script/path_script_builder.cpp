@@ -40,6 +40,9 @@ void tt::PathScriptBuilder::ApplyModifiers() {}
     std::string path{script.substr(0, i)};
     std::vector<std::string> argv;
     argv.push_back(path);
+    if (i == std::string::npos) {
+        return std::make_pair(path, argv);
+    }
     bool backslash = false;
     char quote_char = 0;
     std::string res{};
