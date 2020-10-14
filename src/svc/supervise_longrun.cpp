@@ -20,6 +20,8 @@
 
 #include "tt/svc/supervise_longrun.hpp"
 
+#include <future>
+
 #include <unistd.h>
 
 #include "nngpp/socket.h"
@@ -45,8 +47,9 @@ void tt::SuperviseLongrun::Spawn() {
     while (time_tried < time_to_try) {
         if (TrySpawn() == ScriptStatus::Failure) {
             time_tried++;
+            continue;
         }
-        // Should never reach here
+        // Assert that when ScriptStatus::Success, the code doesn't reach there
         assert(false);
     }
 }
@@ -55,11 +58,11 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
     SupervisionSignalHandler::ResetStatus();
 
     // Runs in another thread
-    if (int pid = fork(); pid == 0) {
+    (void)std::async(std::launch::async, [this]() {
         if (spawn_.Spawn() == ScriptStatus::Success) {
             NotifyStatus(ScriptStatus::Success);
         }
-    }
+    });
 
     pause();
 
