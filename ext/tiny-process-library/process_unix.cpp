@@ -145,7 +145,7 @@ Process::id_type Process::open(const std::vector<string_type> &arguments, const 
     }
 
     if(!environment)
-      execvp(arguments[0].c_str(), const_cast<char *const *>(argv_ptrs.data()));
+      execv(arguments[0].c_str(), const_cast<char *const *>(argv_ptrs.data()));
     else {
       std::vector<std::string> env_strs;
       std::vector<const char *> env_ptrs;
@@ -157,7 +157,7 @@ Process::id_type Process::open(const std::vector<string_type> &arguments, const 
       }
       env_ptrs.emplace_back(nullptr);
 
-      execvpe(arguments[0].c_str(), const_cast<char *const *>(argv_ptrs.data()), const_cast<char *const *>(env_ptrs.data()));
+      execve(arguments[0].c_str(), const_cast<char *const *>(argv_ptrs.data()), const_cast<char *const *>(env_ptrs.data()));
     }
   });
 }
