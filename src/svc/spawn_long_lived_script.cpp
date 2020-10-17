@@ -21,13 +21,12 @@
 #include "tt/svc/spawn_long_lived_script.hpp"
 
 #include <poll.h>
+#include <unistd.h>
 
 #include <chrono>
 #include <future>
 
 #include "spdlog/spdlog.h"
-
-#include "pstream.h"
 
 #include "tt/svc/fake_timeout.hpp"
 #include "tt/svc/supervision_signal_handler.hpp"
