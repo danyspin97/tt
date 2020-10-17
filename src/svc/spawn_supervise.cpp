@@ -36,7 +36,7 @@
 #include "bitsery/adapter/stream.h"
 #include "bitsery/bitsery.h"
 
-#include "pstream.h"
+#include "process.hpp"
 
 #include "tt/dirs.hpp"
 #include "tt/environment_generator.hpp"
@@ -51,8 +51,8 @@ tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun) : longrun_(longrun) {
 
 void tt::SpawnSupervise::Spawn() {
     // pstdout mode is the default
-    redi::ipstream supervise{
-        "tt", std::vector<std::string>{"tt", "supervise", GetScriptFilename()}};
+    TinyProcessLib::Process supervise{
+        std::vector<std::string>{"tt", "supervise", GetScriptFilename()}};
 }
 
 auto tt::SpawnSupervise::GetScriptFilename() -> std::string {
