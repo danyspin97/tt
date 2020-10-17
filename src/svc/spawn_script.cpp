@@ -33,7 +33,7 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
-#include "pstream.h"
+#include "process.hpp"
 
 #include "tt/script/script_builder_factory.hpp"
 #include "tt/script/shell_script_builder.hpp"
@@ -52,24 +52,22 @@ tt::SpawnScript::SpawnScript(const std::string &service_name,
 auto tt::SpawnScript::Spawn() -> ScriptStatus {
     auto max_death = script_.max_death();
     decltype(max_death) time_tried = 0;
-    while (time_tried != max_death) {
-        if (TrySpawn(Timeout{std::chrono::milliseconds(script_.timeout())}) ==
-            ScriptStatus::Success) {
-            return ScriptStatus::Success;
-        }
+    ScriptStatus status = ScriptStatus::Failure;
+    do {
+        status =
+            TrySpawn(Timeout{std::chrono::milliseconds(script_.timeout())});
         time_tried++;
-    }
-    return ScriptStatus::Failure;
+    } while (time_tried != max_death && status != ScriptStatus::Success);
+    return status;
 }
 
 auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
     ExecuteScript();
-    ReadOutput(timeout);
     while (!HasExited() && !timeout.TimedOut()) {
         std::this_thread::yield();
     }
     if (HasExited()) {
-        if (proc_.rdbuf()->status() != 0) {
+        if (GetExitStatus() != 0) {
             return ScriptStatus::Failure;
         }
         return ScriptStatus::Success;
@@ -82,49 +80,48 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
 void tt::SpawnScript::ExecuteScript() {
     auto builder = ScriptBuilderFactory::GetScriptBuilder(script_.type());
     auto command = builder->script(script_.execute(), environment_);
-    proc_ = redi::ipstream(command.first, command.second,
-                           redi::pstreams::pstdout | redi::pstreams::pstderr);
+    process_ = std::make_unique<TinyProcessLib::Process>(
+        command.second, "",
+        [this](const char *bytes, size_t size) {
+            Read("stdout", stdout_line_, bytes, size);
+        },
+        [this](const char *bytes, size_t size) {
+            Read("stderr", stderr_line_, bytes, size);
+        });
 }
 
-void tt::SpawnScript::ReadOutput(Timeout &timeout) {
-    std::string line;
-    std::array<bool, 2> finished = {false, false};
-    uint_fast8_t count = 0;
-    uint_fast8_t max_lines = 10;
-    while (!finished[0] || !finished[1]) {
-        if (!finished[0]) {
-            while (getline_async(proc_.err(), line) && count != max_lines) {
-                logger_->error("[stderr] {}", line);
-                count++;
-            }
-            if (proc_.err().eof()) {
-                finished[0] = true;
-                if (!finished[1]) {
-                    proc_.clear();
-                }
-            }
-        }
-        if (!finished[1]) {
-            while (getline_async(proc_.out(), line) && count != max_lines) {
-                logger_->info("[stdout] {}", line);
-                count++;
-            }
-            if (proc_.out().eof()) {
-                finished[1] = true;
-                if (!finished[0]) {
-                    proc_.clear();
-                }
-            }
-        }
-        if (timeout.TimedOut()) {
-            break;
-        }
-        if (count == 0) {
-            std::this_thread::yield();
-        }
-        count = 0;
+void tt::SpawnScript::Read(std::string type, std::string &last_line,
+                           const char *bytes, size_t size) {
+    if (size == 0) {
+        return;
     }
-    proc_.close();
+    std::string line;
+    size_t index = 0;
+    size_t last_index = index;
+    while (index != size) {
+        if (bytes[index] != '\n') {
+            index++;
+            continue;
+        }
+
+        const char *start = &bytes[last_index];
+        size_t count = last_index - index;
+        if (!last_line.empty()) {
+            fmt::format_to(std::back_inserter(last_line), "{}",
+                           std::string_view{start, count});
+            last_line.clear();
+        } else {
+            logger_->info("[stdout] {}", std::string_view{start, count});
+        }
+        index++;
+        last_index = index;
+    }
+    const char *start = &bytes[last_index];
+    if (last_index != index) {
+        fmt::format_to(std::back_inserter(last_line), "{}",
+                       std::string_view{start, size - last_index});
+    }
+    logger_->info("[{}] {}", type, line);
 }
 
 void tt::SpawnScript::Kill(Timeout timeout) {
@@ -137,9 +134,29 @@ void tt::SpawnScript::Kill(Timeout timeout) {
     }
 }
 
-void tt::SpawnScript::Signal(int signum) { proc_.rdbuf()->kill(signum); }
+void tt::SpawnScript::Signal(int signum) { process_->signal(signum); }
 
-auto tt::SpawnScript::HasExited() -> bool { return proc_.rdbuf()->exited(); }
+auto tt::SpawnScript::HasExited() -> bool {
+    if (exit_status_ != -1) {
+        return true;
+    }
+
+    int exit_status = 0;
+    if (process_->try_get_exit_status(exit_status)) {
+        exit_status_ = exit_status;
+        return true;
+    }
+
+    return false;
+}
+
+auto tt::SpawnScript::GetExitStatus() -> int {
+    if (exit_status_ != -1) {
+        return exit_status_;
+    }
+
+    return exit_status_ = process_->get_exit_status();
+}
 
 auto tt::SpawnScript::GetEnviromentFromScript() -> std::vector<const char *> {
     auto environment_vec = environment_.Vector();

@@ -23,7 +23,7 @@
 #include <chrono>
 #include <memory>
 
-#include "pstream.h"
+#include "process.hpp"
 
 #include "tt/data/service.hpp"
 #include "tt/svc/spawn_supervise.hpp"
@@ -50,10 +50,12 @@ public:
     auto Spawn() -> ScriptStatus;
 
 protected:
-    auto GetEnviromentFromScript() -> std::vector<const char *>;
     void ExecuteScript();
+    auto GetEnviromentFromScript() -> std::vector<const char *>;
+    auto GetExitStatus() -> int;
     virtual auto HasExited() -> bool;
-    void ReadOutput(Timeout &timeout);
+    void Read(std::string type, std::string &last_line, const char *bytes,
+              size_t size);
     void SetupUidGid();
     auto TrySpawn(Timeout timeout) -> ScriptStatus;
 
@@ -65,7 +67,10 @@ private:
     const Environment &environment_;
     std::shared_ptr<spdlog::logger> logger_;
 
-    redi::ipstream proc_;
+    std::string stdout_line_;
+    std::string stderr_line_;
+    std::unique_ptr<TinyProcessLib::Process> process_;
+    int exit_status_ = -1;
 };
 
 } // namespace tt

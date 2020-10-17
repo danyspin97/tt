@@ -36,7 +36,7 @@ tt_spawn_script_exe = executable(
         '../src/svc/spawn_script.cpp',
         '../src/svc/utils.cpp',
     ],
-    dependencies: [tt_dep, catch2_dep, spdlog_dep],
+    dependencies: [tt_dep, catch2_dep, spdlog_dep, tiny_process_dep],
     cpp_args: [
         '-DCATCH_CONFIG_MAIN',
         '-DCATCH_CONFIG_FAST_COMPILE',

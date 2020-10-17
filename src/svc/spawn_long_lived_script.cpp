@@ -43,9 +43,6 @@ auto tt::SpawnLongLivedScript::Spawn() -> ScriptStatus {
         SetupNotifyFd();
     }
     ExecuteScript();
-    FakeTimeout timeout{};
-    (void)std::async(std::launch::async, &SpawnLongLivedScript::ReadOutput,
-                     this, std::ref(timeout));
     if (long_lived_script_.notify()) {
         return ListenOnNotifyFd();
     }
