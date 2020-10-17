@@ -93,9 +93,6 @@ void tt::SpawnScript::ExecuteScript() {
 
 void tt::SpawnScript::Read(std::string type, std::string &last_line,
                            const char *bytes, size_t size) {
-    if (size == 0) {
-        return;
-    }
     std::string line;
     size_t index = 0;
     size_t last_index = index;
@@ -106,23 +103,23 @@ void tt::SpawnScript::Read(std::string type, std::string &last_line,
         }
 
         const char *start = &bytes[last_index];
-        size_t count = last_index - index;
-        if (!last_line.empty()) {
+        size_t line_size = last_index - index;
+        if (!last_line.empty() && line_size != 0) {
             fmt::format_to(std::back_inserter(last_line), "{}",
-                           std::string_view{start, count});
+                           std::string{start, line_size});
             last_line.clear();
         } else {
-            logger_->info("[stdout] {}", std::string_view{start, count});
+            logger_->info("[{}] {}", type, std::string{start, line_size});
         }
         index++;
         last_index = index;
     }
-    const char *start = &bytes[last_index];
     if (last_index != index) {
+        const char *start = &bytes[last_index];
+        size_t line_size = size - last_index;
         fmt::format_to(std::back_inserter(last_line), "{}",
-                       std::string_view{start, size - last_index});
+                       std::string{start, line_size});
     }
-    logger_->info("[{}] {}", type, line);
 }
 
 void tt::SpawnScript::Kill(Timeout timeout) {
