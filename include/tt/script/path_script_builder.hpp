@@ -34,6 +34,7 @@ public:
 
 protected:
     void ApplyModifiers() override;
+    auto GetAbsolutePath(const std::string &path) -> std::filesystem::path;
     [[nodiscard]] std::filesystem::path GetFileToExecute() override;
 };
 

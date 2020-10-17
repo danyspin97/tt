@@ -20,13 +20,12 @@
 
 #include "tt/script/path_script_builder.hpp"
 
-#include "spdlog/spdlog.h"
-
 #include "fmt/format.h"
 
 #include "tt/data/environment.hpp"
 #include "tt/dirs.hpp"
 #include "tt/status.hpp"
+#include "tt/utils/split_path.hpp"
 #include "tt/utils/trim.hpp"
 
 void tt::PathScriptBuilder::ApplyModifiers() {}
@@ -39,7 +38,7 @@ void tt::PathScriptBuilder::ApplyModifiers() {}
     auto i = script.find(' ');
     std::string path{script.substr(0, i)};
     std::vector<std::string> argv;
-    argv.push_back(path);
+    argv.push_back(GetAbsolutePath(path));
     if (i == std::string::npos) {
         return argv;
     }
@@ -80,6 +79,36 @@ void tt::PathScriptBuilder::ApplyModifiers() {}
     argv.emplace_back(std::string{res});
 
     return argv;
+}
+
+auto tt::PathScriptBuilder::GetAbsolutePath(const std::string &path)
+    -> std::filesystem::path {
+    std::filesystem::path filepath{path};
+
+    if (filepath.is_absolute()) {
+        return filepath;
+    }
+
+    // TODO: Use tt.env or Status::env()
+    const char *env_path = getenv("PATH");
+    std::string path_to_search;
+    if (env_path != nullptr) {
+        path_to_search = std::string{env_path};
+    } else {
+        path_to_search = "/bin";
+    }
+    auto paths = utils::SplitPath(path_to_search);
+    for (const auto &p : paths) {
+        std::filesystem::path new_path{p / filepath};
+        if (std::filesystem::exists(new_path)) {
+            // TODO: Check file is executable
+            return new_path;
+        }
+    }
+
+    // This will fail and the user will get notified
+    // TODO: Generate an exception
+    return filepath;
 }
 
 auto tt::PathScriptBuilder::GetFileToExecute() -> std::filesystem::path {
