@@ -28,7 +28,6 @@
 
 #include "spdlog/spdlog.h"
 
-#include "tt/svc/fake_timeout.hpp"
 #include "tt/svc/supervision_signal_handler.hpp"
 
 tt::SpawnLongLivedScript::SpawnLongLivedScript(const std::string &service_name,
