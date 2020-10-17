@@ -34,14 +34,14 @@ void tt::PathScriptBuilder::ApplyModifiers() {}
 [[nodiscard]] auto tt::PathScriptBuilder::script(const std::string &execute,
                                                  const tt::Environment &
                                                  /*environment*/)
-    -> std::pair<std::string, std::vector<std::string>> {
+    -> std::vector<std::string> {
     auto script = utils::trim_copy(execute);
     auto i = script.find(' ');
     std::string path{script.substr(0, i)};
     std::vector<std::string> argv;
     argv.push_back(path);
     if (i == std::string::npos) {
-        return std::make_pair(path, argv);
+        return argv;
     }
     bool backslash = false;
     char quote_char = 0;
@@ -79,7 +79,7 @@ void tt::PathScriptBuilder::ApplyModifiers() {}
     }
     argv.emplace_back(std::string{res});
 
-    return std::make_pair(path, argv);
+    return argv;
 }
 
 auto tt::PathScriptBuilder::GetFileToExecute() -> std::filesystem::path {

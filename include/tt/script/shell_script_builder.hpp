@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <array>
 #include <filesystem>
 #include <string>
 
@@ -39,7 +38,7 @@ public:
     // (i.e. "sh", "-c", "execute...")
     [[nodiscard]] virtual auto script(const std::string &execute,
                                       const Environment &environment)
-        -> std::pair<std::string, std::vector<std::string>>;
+        -> std::vector<std::string>;
 
 protected:
     // No newline are applied

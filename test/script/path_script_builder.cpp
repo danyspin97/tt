@@ -27,41 +27,34 @@ TEST_CASE("PathScriptBuilder") {
         std::string execute = "mkdir /tmp/tt";
         tt::PathScriptBuilder builder{};
         auto script = builder.script(execute, tt::Environment{});
-        CHECK(script.first == "mkdir");
-        CHECK(script.second == std::vector<std::string>{"mkdir", "/tmp/tt"});
+        CHECK(script == std::vector<std::string>{"mkdir", "/tmp/tt"});
     }
 
     SECTION("Parse unquoted execute with multiple spaces") {
         std::string execute = "mkdir      /tmp/tt";
         tt::PathScriptBuilder builder{};
         auto script = builder.script(execute, tt::Environment{});
-        CHECK(script.first == "mkdir");
-        CHECK(script.second == std::vector<std::string>{"mkdir", "/tmp/tt"});
+        CHECK(script == std::vector<std::string>{"mkdir", "/tmp/tt"});
     }
 
     SECTION("Parse quoted execute") {
         std::string execute = "mkdir \"/tmp/tt\"";
         tt::PathScriptBuilder builder{};
         auto script = builder.script(execute, tt::Environment{});
-        CHECK(script.first == "mkdir");
-        CHECK(script.second == std::vector<std::string>{"mkdir", "/tmp/tt"});
+        CHECK(script == std::vector<std::string>{"mkdir", "/tmp/tt"});
     }
 
     SECTION("Parse quoted execute with no spaces") {
         std::string execute = R"(mkdir "/tmp/tt"/mytest)";
         tt::PathScriptBuilder builder{};
         auto script = builder.script(execute, tt::Environment{});
-        CHECK(script.first == "mkdir");
-        CHECK(script.second ==
-              std::vector<std::string>{"mkdir", "/tmp/tt/mytest"});
+        CHECK(script == std::vector<std::string>{"mkdir", "/tmp/tt/mytest"});
     }
 
     SECTION("Parse quoted execute with backslash") {
         std::string execute = R"(mkdir \"/tmp/tt\")";
         tt::PathScriptBuilder builder{};
         auto script = builder.script(execute, tt::Environment{});
-        CHECK(script.first == "mkdir");
-        CHECK(script.second ==
-              std::vector<std::string>{"mkdir", R"(\"/tmp/tt\")"});
+        CHECK(script == std::vector<std::string>{"mkdir", R"(\"/tmp/tt\")"});
     }
 }

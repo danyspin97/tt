@@ -82,7 +82,7 @@ void tt::SpawnScript::ExecuteScript() {
     auto builder = ScriptBuilderFactory::GetScriptBuilder(script_.type());
     auto command = builder->script(script_.execute(), environment_);
     process_ = std::make_unique<TinyProcessLib::Process>(
-        command.second, "",
+        command, "",
         [this](const char *bytes, size_t size) {
             Read("stdout", stdout_line_, bytes, size);
         },

@@ -28,7 +28,7 @@ auto tt::ShellScriptBuilder::environment() const -> const Environment & {
 
 auto tt::ShellScriptBuilder::script(const std::string &execute,
                                     const Environment &environment)
-    -> std::pair<std::string, std::vector<std::string>> {
+    -> std::vector<std::string> {
     script_ = execute;
     env_ = environment;
     ApplyModifiers();
@@ -37,7 +37,7 @@ auto tt::ShellScriptBuilder::script(const std::string &execute,
     auto bin = GetFileToExecute();
     assert(bin.is_absolute());
     auto shell = bin.filename();
-    return std::make_pair(bin, std::vector<std::string>{shell, "-c", script_});
+    return std::vector<std::string>{shell, "-c", script_};
 }
 
 void tt::ShellScriptBuilder::AppendCode(const std::string &code) {

@@ -30,7 +30,7 @@ public:
 
     [[nodiscard]] auto script(const std::string &execute,
                               const Environment &environment)
-        -> std::pair<std::string, std::vector<std::string>> override;
+        -> std::vector<std::string> override;
 
 protected:
     void ApplyModifiers() override;
