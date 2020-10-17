@@ -30,5 +30,7 @@ void tt::BashScriptBuilder::ApplyModifiers() {
 }
 
 auto tt::BashScriptBuilder::GetFileToExecute() -> std::filesystem::path {
-    return Status::GetInstance().dirs().bindir() / "bash";
+    // return Status::GetInstance().dirs().bindir() / "bash";
+    // TODO: Remove this hardcoded value
+    return "/bin/bash";
 }
