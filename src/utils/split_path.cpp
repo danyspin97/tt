@@ -30,7 +30,7 @@ auto tt::utils::SplitPath(const std::string &path)
     while ((pos = path.find_first_of(':', start)) != std::string::npos) {
         std::filesystem::path current_path{path.substr(start, pos - start)};
         if (current_path.is_absolute() &&
-            std::find(std::begin(paths), std::end(paths), current_path) !=
+            std::find(std::begin(paths), std::end(paths), current_path) ==
                 paths.end()) {
             paths.emplace_back(current_path);
         }
@@ -38,7 +38,7 @@ auto tt::utils::SplitPath(const std::string &path)
     }
     std::filesystem::path current_path{path.substr(start, pos - start)};
     if (current_path.is_absolute() &&
-        std::find(std::begin(paths), std::end(paths), current_path) !=
+        std::find(std::begin(paths), std::end(paths), current_path) ==
             paths.end()) {
         paths.emplace_back(current_path);
     }
