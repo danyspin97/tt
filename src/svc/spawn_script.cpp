@@ -20,9 +20,10 @@
 
 #include "tt/svc/spawn_script.hpp"
 
+#include <csignal>
+
 #include <fcntl.h>
 #include <poll.h>
-#include <signal.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
