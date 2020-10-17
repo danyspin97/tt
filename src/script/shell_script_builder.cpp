@@ -33,11 +33,9 @@ auto tt::ShellScriptBuilder::script(const std::string &execute,
     env_ = environment;
     ApplyModifiers();
 
-    // This leaks, but it will be passed to execvp
     auto bin = GetFileToExecute();
     assert(bin.is_absolute());
-    auto shell = bin.filename();
-    return std::vector<std::string>{shell, "-c", script_};
+    return std::vector<std::string>{bin, "-c", script_};
 }
 
 void tt::ShellScriptBuilder::AppendCode(const std::string &code) {
