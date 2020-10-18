@@ -36,7 +36,7 @@ auto main(int argc, char *argv[]) -> int {
     args::ArgumentParser parser("tt init/rc manager.");
     auto common_options = std::make_shared<tt::cli::GlobalOptions>();
 
-    args::Group manage(parser, "Manage services");
+    args::Group manage{(args::Group &)parser, "Manage services"};
 
     // TODO: Decomment them when they have an action assigned each
     // args::Command(manage, "start", "Start/restart one or more services");
@@ -58,7 +58,7 @@ auto main(int argc, char *argv[]) -> int {
     // args::Command show(query, "show",
     //                   "Show the status and the configuration of a service");
 
-    args::Group system(parser, "System commands");
+    args::Group system((args::Group &)parser, "System commands");
     args::Command svc(
         system, "svc", "Run service control",
         [common_options](args::Subparser &subparser) {
@@ -73,7 +73,7 @@ auto main(int argc, char *argv[]) -> int {
                 subparser, common_options);
         });
 
-    args::Group testing(parser, "Test services files");
+    args::Group testing((args::Group &)parser, "Test services files");
     args::Command parse(testing, "parse",
                         "Parse one or more services for testing purposes.",
                         [common_options](args::Subparser &subparser) {
