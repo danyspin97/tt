@@ -30,8 +30,6 @@
 #include <fstream>
 #include <utility>
 
-#include "spdlog/spdlog.h"
-
 #include "bitsery/adapter/buffer.h"
 #include "bitsery/adapter/stream.h"
 #include "bitsery/bitsery.h"
@@ -41,6 +39,7 @@
 #include "tt/dirs.hpp"
 #include "tt/environment_generator.hpp"
 #include "tt/exception.hpp"
+#include "tt/script/path_script_builder.hpp"
 #include "tt/status.hpp"
 #include "tt/utils/serialize.hpp"
 
@@ -51,8 +50,11 @@ tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun) : longrun_(longrun) {
 
 void tt::SpawnSupervise::Spawn() {
     // pstdout mode is the default
-    TinyProcessLib::Process supervise{
-        std::vector<std::string>{"tt", "supervise", GetScriptFilename()}};
+    std::string execute{"tt supervise " + GetScriptFilename()};
+    PathScriptBuilder builder;
+    tt::Environment env;
+    auto command = builder.script(execute, env);
+    TinyProcessLib::Process supervise{command};
 }
 
 auto tt::SpawnSupervise::GetScriptFilename() -> std::string {
