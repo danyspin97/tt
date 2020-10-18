@@ -40,8 +40,7 @@ protected:
 
 private:
     static void SpawnNode(const ServiceNode &node);
-    static auto StartSystemServices() -> int;
-    auto StartUserServices() -> int;
+    [[nodiscard]] static auto StartServices() -> int;
 };
 
 } // namespace tt::cli

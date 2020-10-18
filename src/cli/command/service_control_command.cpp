@@ -36,14 +36,10 @@ tt::cli::ServiceControlCommand::ServiceControlCommand(
     : Command(parser, std::move(common_options)) {}
 
 auto tt::cli::ServiceControlCommand::Execute() -> int {
-    if (geteuid() > 0) {
-        return StartUserServices();
-    }
-
-    return StartSystemServices();
+    return StartServices();
 }
 
-auto tt::cli::ServiceControlCommand::StartUserServices() -> int {
+auto tt::cli::ServiceControlCommand::StartServices() -> int {
     const auto &graph = Status::GetInstance().graph();
     auto services = graph.GetActiveServices();
     ServiceStatusManager::GetInstance().Initialize(services);
@@ -56,19 +52,14 @@ auto tt::cli::ServiceControlCommand::StartUserServices() -> int {
     for (auto &node : nodes) {
         // https://stackoverflow.com/questions/23454793/whats-the-c-11-way-to-fire-off-an-asynchronous-task-and-forget-about-it
         auto futptr = std::make_shared<std::future<void>>();
-        *futptr = std::async(std::launch::async,
-                             [*this, futptr, node]() { SpawnNode(node); });
+        *futptr = std::async(std::launch::async, [futptr, node]() {
+            ServiceControlCommand::SpawnNode(node);
+        });
     }
 
     // Runs indefinitely
     action_listener.join();
 
-    return 0;
-}
-
-auto tt::cli::ServiceControlCommand::StartSystemServices() -> int {
-    // auto &dirs = Dirs::GetInstance();
-    // auto graph = ReadGraphFromFile(dirs.statedir() / "graph");
     return 0;
 }
 
