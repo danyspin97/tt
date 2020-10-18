@@ -38,7 +38,7 @@ void TestOutput(bool is_stdout) {
     std::string type = is_stdout ? "stdout" : "stderr";
     std::string line{"Write line to " + type};
     std::string command = std::string{is_stdout ? "" : ">&2 "} + "echo " + line;
-    tt::Script script{tt::Script::Type::Bash, std::move(command)};
+    tt::Script script{tt::Script::Type::SH, std::move(command)};
     std::string test_name = "test-write-" + type;
     const auto logfile = std::string{test_name} + ".log";
     if (std::filesystem::exists(logfile)) {
@@ -67,7 +67,7 @@ TEST_CASE("SpawnScript") {
     tt::Environment env;
 
     SECTION("Spawn sucessfull script") {
-        tt::Script script{tt::Script::Type::Bash, "true"};
+        tt::Script script{tt::Script::Type::SH, "true"};
         const auto *test_name = "test-script";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
@@ -76,7 +76,7 @@ TEST_CASE("SpawnScript") {
     }
 
     SECTION("Spawn failing script") {
-        tt::Script script{tt::Script::Type::Bash, "false"};
+        tt::Script script{tt::Script::Type::SH, "false"};
         const auto *test_name = "failing-script";
         auto console = spdlog::stdout_color_mt(test_name);
         tt::SpawnScript spawn_script(test_name, script, env);
@@ -85,7 +85,7 @@ TEST_CASE("SpawnScript") {
     }
 
     SECTION("Spawn script within timeout") {
-        tt::Script script{tt::Script::Type::Bash, "sleep 1"};
+        tt::Script script{tt::Script::Type::SH, "sleep 1"};
         script.timeout(2000);
         const auto *test_name = "timeout-success";
         auto console = spdlog::stdout_color_mt(test_name);
@@ -95,7 +95,7 @@ TEST_CASE("SpawnScript") {
     }
 
     SECTION("Spawn script that exceed timeout") {
-        tt::Script script{tt::Script::Type::Bash, "sleep 10"};
+        tt::Script script{tt::Script::Type::SH, "sleep 10"};
         script.timeout(50);
         const auto *test_name = "timeout_fail";
         auto console = spdlog::stdout_color_mt(test_name);
@@ -105,7 +105,7 @@ TEST_CASE("SpawnScript") {
     }
 
     SECTION("Spawn script within timeout and fail") {
-        tt::Script script{tt::Script::Type::Bash, "sleep 1 && false"};
+        tt::Script script{tt::Script::Type::SH, "sleep 1 && false"};
         script.timeout(2000);
 
         const auto *test_name = "timeout-fail";
@@ -125,7 +125,7 @@ TEST_CASE("SpawnScript") {
 
         constexpr auto time_to_try = 3;
         const auto *command = "echo 1 >> TIME_TRIED ; exit 1";
-        tt::Script script{tt::Script::Type::Bash, command};
+        tt::Script script{tt::Script::Type::SH, command};
         script.max_death(time_to_try);
 
         const auto *test_name = "time-tried";
@@ -148,7 +148,7 @@ TEST_CASE("SpawnScript") {
         }
 
         const auto *command = "sleep 1 && touch PROCESS_EXISTS";
-        tt::Script script{tt::Script::Type::Bash, command};
+        tt::Script script{tt::Script::Type::SH, command};
         script.timeout(50);
         script.max_death(1);
 
