@@ -105,6 +105,7 @@ TEST_CASE("SpawnScript") {
 
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         REQUIRE(std::filesystem::exists(testfile));
         const auto size = std::filesystem::file_size(testfile);
         CHECK(size == time_to_try * 2);
