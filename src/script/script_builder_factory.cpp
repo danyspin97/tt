@@ -22,6 +22,7 @@
 
 #include "tt/script/bash_script_builder.hpp"
 #include "tt/script/path_script_builder.hpp"
+#include "tt/script/sh_script_builder.hpp"
 
 auto tt::ScriptBuilderFactory::GetScriptBuilder(Script::Type type)
     -> std::unique_ptr<ShellScriptBuilder> {
@@ -32,6 +33,8 @@ auto tt::ScriptBuilderFactory::GetScriptBuilder(Script::Type type)
         // TODO
     case Script::Type::Path:
         return std::make_unique<PathScriptBuilder>();
+    case Script::Type::SH:
+        return std::make_unique<ShScriptBuilder>();
     default:
         assert(false);
     }

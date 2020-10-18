@@ -39,6 +39,7 @@ public:
         Bash,
         Execline,
         Path,
+        SH,
     };
 
     [[nodiscard]] auto type() const noexcept -> Type { return type_; }

@@ -90,7 +90,10 @@ auto tt::ScriptBuilder::GetParsedType() const -> Script::Type {
     if (type_ == "execline") {
         return Script::Type::Execline;
     }
-    if (type_ == "auto" || type_ == "bash") {
+    if (type_ == "auto" || type_ == "sh") {
+        return Script::Type::SH;
+    }
+    if (type_ == "bash") {
         return Script::Type::Bash;
     }
     if (type_ == "path") {
