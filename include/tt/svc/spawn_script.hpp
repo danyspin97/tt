@@ -54,8 +54,7 @@ protected:
     auto GetEnviromentFromScript() -> std::vector<const char *>;
     auto GetExitStatus() -> int;
     virtual auto HasExited() -> bool;
-    void Read(std::string type, std::string &last_line, const char *bytes,
-              size_t size);
+    void Read(bool is_stdout, const char *bytes, size_t size);
     void SetupUidGid();
     auto TrySpawn(Timeout timeout) -> ScriptStatus;
 

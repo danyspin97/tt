@@ -83,42 +83,47 @@ void tt::SpawnScript::ExecuteScript() {
     auto command = builder->script(script_.execute(), environment_);
     process_ = std::make_unique<TinyProcessLib::Process>(
         command, "",
-        [this](const char *bytes, size_t size) {
-            Read("stdout", stdout_line_, bytes, size);
-        },
-        [this](const char *bytes, size_t size) {
-            Read("stderr", stderr_line_, bytes, size);
-        });
+        [this](const char *bytes, size_t size) { Read(true, bytes, size); },
+        [this](const char *bytes, size_t size) { Read(false, bytes, size); });
 }
 
-void tt::SpawnScript::Read(std::string type, std::string &last_line,
-                           const char *bytes, size_t size) {
-    std::string line;
-    size_t index = 0;
-    size_t last_index = index;
-    while (index != size) {
-        if (bytes[index] != '\n') {
-            index++;
-            continue;
+void tt::SpawnScript::Read(bool is_stdout, const char *bytes, size_t size) {
+    std::string &last_line = is_stdout ? stdout_line_ : stderr_line_;
+    std::string output{bytes, size};
+    size_t index = output.find('\n');
+    size_t last_index = 0;
+
+    // If there is output remaining from the latest Read call
+    // Append to it and log
+    if (index != std::string::npos && !last_line.empty() &&
+        output[index] == '\n') {
+        // Lock is not needed because this function is called synchronously
+        // from a thread in Process
+        size_t count = index - last_index;
+        if (count != 0) {
+            fmt::format_to(std::back_inserter(last_line), "{}",
+                           output.substr(last_index, count));
         }
 
-        const char *start = &bytes[last_index];
-        size_t line_size = last_index - index;
-        if (!last_line.empty() && line_size != 0) {
-            fmt::format_to(std::back_inserter(last_line), "{}",
-                           std::string{start, line_size});
-            last_line.clear();
-        } else {
-            logger_->info("[{}] {}", type, std::string{start, line_size});
-        }
-        index++;
-        last_index = index;
+        logger_->info("[{}] {}", is_stdout ? "stdout" : "stderr", last_line);
+        last_line.clear();
+        last_index = index + 1;
+        index = output.find('\n', last_index);
     }
+
+    // Parse all the remaining output
+    // TODO: Optimize by sending all the output from last_index to
+    // string::find_last('\n') to logger_ and the last chars to last_line
+    while (index != std::string::npos) {
+        logger_->info("[{}] {}", is_stdout ? "stdout" : "stderr",
+                      output.substr(last_index, index - last_index));
+        last_index = index + 1;
+        index = output.find('\n', last_index);
+    }
+
     if (last_index != index) {
-        const char *start = &bytes[last_index];
-        size_t line_size = size - last_index;
         fmt::format_to(std::back_inserter(last_line), "{}",
-                       std::string{start, line_size});
+                       output.substr(last_index, size - last_index));
     }
 }
 
