@@ -47,7 +47,8 @@ void TestOutput(bool is_stdout) {
     auto logger =
         spdlog::basic_logger_mt<spdlog::async_factory>(test_name, logfile);
     logger->set_pattern("%v");
-    tt::SpawnScript spawn_script(test_name, script, tt::Environment{});
+    tt::Environment env;
+    tt::SpawnScript spawn_script(test_name, script, env);
     tt::ScriptStatus status = spawn_script.Spawn();
     REQUIRE(status == tt::ScriptStatus::Success);
     REQUIRE(std::filesystem::exists(logfile));
