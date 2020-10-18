@@ -32,7 +32,35 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
-bool logger_set = false;
+namespace tt::test {
+
+void TestOutput(bool is_stdout) {
+    std::string type = is_stdout ? "stdout" : "stderr";
+    std::string line{"Write line to " + type};
+    std::string command = std::string{is_stdout ? "" : ">&2 "} + "echo " + line;
+    tt::Script script{tt::Script::Type::Bash, std::move(command)};
+    std::string test_name = "test-write-" + type;
+    const auto logfile = std::string{test_name} + ".log";
+    if (std::filesystem::exists(logfile)) {
+        std::filesystem::remove(logfile);
+    }
+    auto logger =
+        spdlog::basic_logger_mt<spdlog::async_factory>(test_name, logfile);
+    logger->set_pattern("%v");
+    tt::SpawnScript spawn_script(test_name, script, tt::Environment{});
+    tt::ScriptStatus status = spawn_script.Spawn();
+    REQUIRE(status == tt::ScriptStatus::Success);
+    REQUIRE(std::filesystem::exists(logfile));
+
+    logger->flush();
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::ifstream ifs(logfile);
+    std::string content((std::istreambuf_iterator<char>(ifs)),
+                        (std::istreambuf_iterator<char>()));
+    CHECK(content == "[" + type + "] " + line + "\n");
+}
+
+} // namespace tt::test
 
 TEST_CASE("SpawnScript") {
     tt::Environment env;
@@ -152,53 +180,7 @@ TEST_CASE("SpawnScript") {
         CHECK(status == tt::ScriptStatus::Success);
     }
 
-    SECTION("Write to stdout") {
-        std::string line{"Write line to stdout."};
-        auto command = "echo " + line;
-        tt::Script script{tt::Script::Type::Bash, std::move(command)};
-        const auto *test_name = "test-write-stdout";
-        const auto logfile = std::string{test_name} + ".log";
-        if (std::filesystem::exists(logfile)) {
-            std::filesystem::remove(logfile);
-        }
-        auto logger =
-            spdlog::basic_logger_mt<spdlog::async_factory>(test_name, logfile);
-        logger->set_pattern("%v");
-        tt::SpawnScript spawn_script(test_name, script, env);
-        tt::ScriptStatus status = spawn_script.Spawn();
-        REQUIRE(status == tt::ScriptStatus::Success);
-        REQUIRE(std::filesystem::exists(logfile));
+    SECTION("Write to stdout") { tt::test::TestOutput(true); }
 
-        logger->flush();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        std::ifstream ifs(logfile);
-        std::string content((std::istreambuf_iterator<char>(ifs)),
-                            (std::istreambuf_iterator<char>()));
-        CHECK(content == "[stdout] " + line + "\n");
-    }
-
-    SECTION("Write to stderr") {
-        std::string line{"Write line to stderr."};
-        auto command = ">&2 echo " + line;
-        tt::Script script{tt::Script::Type::Bash, std::move(command)};
-        const auto *test_name = "test-write-stderr";
-        const auto logfile = std::string{test_name} + ".log";
-        if (std::filesystem::exists(logfile)) {
-            std::filesystem::remove(logfile);
-        }
-        auto logger =
-            spdlog::basic_logger_mt<spdlog::async_factory>(test_name, logfile);
-        logger->set_pattern("%v");
-        tt::SpawnScript spawn_script(test_name, script, env);
-        tt::ScriptStatus status = spawn_script.Spawn();
-        REQUIRE(status == tt::ScriptStatus::Success);
-        REQUIRE(std::filesystem::exists(logfile));
-
-        logger->flush();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        std::ifstream ifs(logfile);
-        std::string content((std::istreambuf_iterator<char>(ifs)),
-                            (std::istreambuf_iterator<char>()));
-        CHECK(content == "[stderr] " + line + "\n");
-    }
+    SECTION("Write to stderr") { tt::test::TestOutput(false); }
 }
