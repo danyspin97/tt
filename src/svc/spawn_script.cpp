@@ -95,8 +95,7 @@ void tt::SpawnScript::Read(bool is_stdout, const char *bytes, size_t size) {
 
     // If there is output remaining from the latest Read call
     // Append to it and log
-    if (index != std::string::npos && !last_line.empty() &&
-        output[index] == '\n') {
+    if (index != std::string::npos && !last_line.empty()) {
         // Lock is not needed because this function is called synchronously
         // from a thread in Process
         size_t count = index - last_index;
