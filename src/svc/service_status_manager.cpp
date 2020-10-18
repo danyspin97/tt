@@ -56,27 +56,27 @@ auto tt::ServiceStatusManager::GetStatus(
 }
 
 void tt::ServiceStatusManager::ServiceStartUpdate(const std::string &service,
-                                                  bool succeeded) {
+                                                  bool succeeded) const {
     // Use a shared lock to prevent other methods on writing on the map
     std::shared_lock lock{mutex_};
     GetStatus(up_status_, service)->Update(succeeded);
 }
 
 void tt::ServiceStatusManager::ServiceDownUpdate(const std::string &service,
-                                                 bool succeeded) {
+                                                 bool succeeded) const {
     std::shared_lock lock{mutex_};
     GetStatus(down_status_, service)->Update(succeeded);
 }
 
-auto tt::ServiceStatusManager::WaitOnServiceStart(const std::string &service)
-    -> bool {
+auto tt::ServiceStatusManager::WaitOnServiceStart(
+    const std::string &service) const -> bool {
     // Use a shared lock to prevent other methods on writing on the map
     std::shared_lock lock{mutex_};
     return GetStatus(up_status_, service)->Wait();
 }
 
-auto tt::ServiceStatusManager::WaitOnServiceDown(const std::string &service)
-    -> bool {
+auto tt::ServiceStatusManager::WaitOnServiceDown(
+    const std::string &service) const -> bool {
     // Use a shared lock to prevent other methods on writing on the map
     std::shared_lock lock{mutex_};
     return GetStatus(down_status_, service)->Wait();

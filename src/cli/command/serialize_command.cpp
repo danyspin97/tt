@@ -51,7 +51,7 @@ auto tt::cli::SerializeCommand::Execute() -> int {
 
     try {
         utils::Serialize(*longrun_, filename_.Get());
-    } catch (Exception &e) {
+    } catch (const Exception & /*e*/) {
         return 255;
     }
     return 0;

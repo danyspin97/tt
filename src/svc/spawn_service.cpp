@@ -28,7 +28,8 @@
 #include "tt/svc/spawn_oneshot.hpp"
 #include "tt/svc/spawn_supervise.hpp"
 
-void tt::SpawnService::operator()(const Bundle & /*bundle*/) {}
+// Bundles are only used at compile time
+void tt::SpawnService::operator()(const Bundle & /*bundle*/) { assert(false); }
 
 void tt::SpawnService::operator()(const Longrun &longrun) {
     SpawnSupervise supervise{longrun};

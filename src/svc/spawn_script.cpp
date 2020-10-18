@@ -160,7 +160,8 @@ auto tt::SpawnScript::GetExitStatus() -> int {
     return exit_status_ = process_->get_exit_status();
 }
 
-auto tt::SpawnScript::GetEnviromentFromScript() -> std::vector<const char *> {
+auto tt::SpawnScript::GetEnviromentFromScript() const
+    -> std::vector<const char *> {
     auto environment_vec = environment_.Vector();
     std::vector<const char *> environment_vec_cstr{environment_vec.size()};
     std::for_each(environment_vec.begin(), environment_vec.end(),

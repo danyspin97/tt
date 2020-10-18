@@ -22,6 +22,8 @@
 
 #include <filesystem>
 
+#include <unistd.h>
+
 #include "tt/dependency_graph/dependency_graph.hpp"
 
 namespace tt {
@@ -37,7 +39,7 @@ public:
     [[nodiscard]] static auto GetInstance() -> Status &;
 
     [[nodiscard]] auto dirs() const -> const Dirs &;
-    [[nodiscard]] auto graph() -> const DependencyGraph &;
+    [[nodiscard]] auto graph() const -> const DependencyGraph &;
 
     [[nodiscard]] auto IsSystem() const -> bool;
 
@@ -45,10 +47,10 @@ private:
     Status();
 
     [[nodiscard]] static auto
-    ReadGraphFromFileOrNew(std::filesystem::path &&graph_path)
+    ReadGraphFromFileOrNew(const std::filesystem::path &graph_path)
         -> tt::DependencyGraph;
 
-    bool is_system_;
+    bool is_system_ = !(geteuid() > 0);
     Dirs &dirs_;
     DependencyGraph graph_;
 };

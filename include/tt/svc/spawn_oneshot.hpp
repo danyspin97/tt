@@ -34,7 +34,7 @@ class SpawnOneshot {
 public:
     explicit SpawnOneshot(Oneshot oneshot);
 
-    void Spawn();
+    void Spawn() const;
 
 private:
     static void InitLogger();

@@ -20,8 +20,6 @@
 
 #include "tt/status.hpp"
 
-#include <unistd.h>
-
 #include "tt/exception.hpp"
 #include "tt/user_dirs.hpp"
 #include "tt/utils/deserialize.hpp"
@@ -33,17 +31,16 @@ auto tt::Status::GetInstance() -> tt::Status & {
 }
 
 tt::Status::Status()
-    : is_system_(!(geteuid() > 0)),
-      dirs_(is_system_ ? Dirs::GetInstance() : UserDirs::GetInstance()),
+    : dirs_(is_system_ ? Dirs::GetInstance() : UserDirs::GetInstance()),
       graph_(ReadGraphFromFileOrNew(dirs_.statedir() / "graph")) {}
 
 auto tt::Status::dirs() const -> const Dirs & { return dirs_; }
 
-auto tt::Status::graph() -> const DependencyGraph & { return graph_; }
+auto tt::Status::graph() const -> const DependencyGraph & { return graph_; }
 
 auto tt::Status::IsSystem() const -> bool { return is_system_; }
 
-auto tt::Status::ReadGraphFromFileOrNew(std::filesystem::path &&graph_path)
+auto tt::Status::ReadGraphFromFileOrNew(const std::filesystem::path &graph_path)
     -> tt::DependencyGraph {
     if (!std::filesystem::exists(graph_path)) {
         return DependencyGraph{};

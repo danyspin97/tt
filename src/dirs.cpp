@@ -60,27 +60,33 @@ auto tt::Dirs::statedir() const -> const std::filesystem::path & {
     return statedir_;
 }
 
-void tt::Dirs::bindir(std::filesystem::path &&new_path) { bindir_ = new_path; }
+void tt::Dirs::bindir(std::filesystem::path &&new_path) {
+    bindir_ = std::move(new_path);
+}
 
 void tt::Dirs::confdir(std::filesystem::path &&new_path) {
-    confdir_ = new_path;}
+    confdir_ = std::move(new_path);
+}
 
 void tt::Dirs::execline_prefix(std::filesystem::path &&new_path) {
-    execline_prefix_ = new_path;
+    execline_prefix_ = std::move(new_path);
 }
 
 void tt::Dirs::libexecdir(std::filesystem::path &&new_path) {
-    libexecdir_ = new_path;
+    libexecdir_ = std::move(new_path);
 }
 
 void tt::Dirs::livedir(std::filesystem::path &&new_path) {
-    livedir_ = new_path;}
+    livedir_ = std::move(new_path);
+}
 
-void tt::Dirs::logdir(std::filesystem::path &&new_path) { logdir_ = new_path; }
+void tt::Dirs::logdir(std::filesystem::path &&new_path) {
+    logdir_ = std::move(new_path);}
 
 void tt::Dirs::servicedir(std::filesystem::path &&new_path) {
-    servicedir_ = new_path;
+    servicedir_ = std::move(new_path);
 }
 
 void tt::Dirs::statedir(std::filesystem::path &&new_path) {
-    statedir_ = new_path;}
+    statedir_ = std::move(new_path);
+}

@@ -84,25 +84,26 @@ void tt::DependencyGraph::CheckGraphIsAcyclic(
     enum class Color { White = 0, Gray = 1, Black = 2 };
 
     std::map<std::string_view, Color> colors{};
-    std::function<void(ServiceNode)> visit = [this, &visit, &colors](
-                                                 const ServiceNode &node) {
-        colors[node.name()] = Color::Gray;
+    std::function<void(ServiceNode)> visit =
+        [this, &visit, &colors](const ServiceNode &node) {
+            colors[node.name()] = Color::Gray;
 
-        ForEachDependencyOfNode(node, [visit, &colors](ServiceNode &dep_node) {
-            switch (colors.at(dep_node.name())) {
-            case Color::White:
-                visit(dep_node);
-                break;
-            case Color::Gray:
-                throw Exception("Cycle found while calculating the "
-                                "dependencies of the services");
-            case Color::Black:
-                assert(false);
-            }
-        });
+            ForEachDependencyOfNode(
+                node, [visit, &colors](const ServiceNode &dep_node) {
+                    switch (colors.at(dep_node.name())) {
+                    case Color::White:
+                        visit(dep_node);
+                        break;
+                    case Color::Gray:
+                        throw Exception("Cycle found while calculating the "
+                                        "dependencies of the services");
+                    case Color::Black:
+                        assert(false);
+                    }
+                });
 
-        colors[node.name()] = Color::Black;
-    };
+            colors[node.name()] = Color::Black;
+        };
 
     std::for_each(begin(nodes_), end(nodes_),
                   [&colors](const ServiceNode &node) {

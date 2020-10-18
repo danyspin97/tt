@@ -51,7 +51,8 @@ public:
 
 protected:
     void ExecuteScript();
-    auto GetEnviromentFromScript() -> std::vector<const char *>;
+    [[nodiscard]] auto GetEnviromentFromScript() const
+        -> std::vector<const char *>;
     auto GetExitStatus() -> int;
     virtual auto HasExited() -> bool;
     void Read(bool is_stdout, const char *bytes, size_t size);

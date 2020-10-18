@@ -33,7 +33,7 @@ using tt::SectionBuilder;
 using tt::SectionLineParser;
 using tt::ServiceDirector;
 
-auto ServiceDirector::ParseAndGetService(vector<string> &service_lines,
+auto ServiceDirector::ParseAndGetService(const vector<string> &service_lines,
                                          string &&path) -> tt::Service {
     service_lines_ = service_lines;
     ParseSections();
@@ -43,14 +43,14 @@ auto ServiceDirector::ParseAndGetService(vector<string> &service_lines,
 void ServiceDirector::ParseSections() {
     try {
         TryParseSections();
-    } catch (DummyBuilderException &e) {
+    } catch (const DummyBuilderException & /*e*/) {
         throw Exception("No line is allowed before [main] section");
     }
 }
 
 void ServiceDirector::TryParseSections() {
     SectionBuilder *current_builder = &dummy_builder_;
-    for (auto &line : service_lines_) {
+    for (const auto &line : service_lines_) {
         auto section_line_parser = SectionLineParser(line);
         if (section_line_parser.IsLineValid()) {
             current_builder->EndParsing();

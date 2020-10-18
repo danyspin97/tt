@@ -49,7 +49,7 @@ auto tt::cli::ServiceControlCommand::StartServices() -> int {
 
     // TODO: Calculate an optimal order of services to start
     auto nodes = graph.nodes();
-    for (auto &node : nodes) {
+    for (const auto &node : nodes) {
         // https://stackoverflow.com/questions/23454793/whats-the-c-11-way-to-fire-off-an-asynchronous-task-and-forget-about-it
         auto futptr = std::make_shared<std::future<void>>();
         *futptr = std::async(std::launch::async, [futptr, node]() {
@@ -70,7 +70,7 @@ void tt::cli::ServiceControlCommand::SpawnNode(const ServiceNode &node) {
 
     auto &manager = ServiceStatusManager::GetInstance();
     auto deps_satisfied = true;
-    for (auto &dep : deps) {
+    for (const auto &dep : deps) {
         if (!manager.WaitOnServiceStart(dep)) {
             deps_satisfied = false;
             break;

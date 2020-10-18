@@ -91,7 +91,7 @@ auto main(int argc, char *argv[]) -> int {
 
     try {
         parser.ParseCLI(argc, argv);
-    } catch (args::Help & /*e*/) {
+    } catch (const args::Help & /*e*/) {
         std::cout << parser;
     } catch (const args::Error &e) {
         std::cerr << e.what() << std::endl << parser;

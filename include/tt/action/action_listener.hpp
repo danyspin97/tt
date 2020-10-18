@@ -24,7 +24,7 @@ namespace tt {
 
 class ActionListener {
 public:
-    static void Listen();
+    [[noreturn]] static void Listen();
 };
 
 } // namespace tt

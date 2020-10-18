@@ -43,7 +43,7 @@ void tt::ActionListener::Listen() try {
 
         (void)std::async(std::launch::async, &Action::Apply, action_ptr.get());
     }
-} catch (nng::exception &e) {
+} catch (const nng::exception &e) {
     throw tt::Exception(
         std::string{
             "Couldn't listen on nng socket due to the following error: "} +

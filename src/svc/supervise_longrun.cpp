@@ -24,6 +24,7 @@
 
 #include <unistd.h>
 
+// This should be included before req0.h
 #include "nngpp/socket.h"
 
 #include "nngpp/protocol/req0.h"
@@ -84,8 +85,6 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
     // Should never reach here
     assert(false);
 }
-
-void tt::SuperviseLongrun::SetupLogger() {}
 
 void tt::SuperviseLongrun::NotifyStatus(ScriptStatus status) {
     nng::socket socket = nng::req::open();

@@ -98,4 +98,4 @@ auto ServiceParser::GetMainSectionIndex(
     throw Exception(msg);
 }
 
-auto ServiceParser::service() -> tt::Service { return service_; }
+auto ServiceParser::service() const -> tt::Service { return service_; }

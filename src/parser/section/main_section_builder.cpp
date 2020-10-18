@@ -38,7 +38,7 @@ using tt::SetThrowsIfNotEmpty;
 void MainSectionBuilder::ParseLine(const string &line) {
     try {
         TryParseLine(line);
-    } catch (const AttributeIsAlreadySetException &e) {
+    } catch (const AttributeIsAlreadySetException & /*e*/) {
         const auto msg =
             "\"" + key_ + "\" was already set while parsing [main] section";
         throw SectionBuilderException(msg);
@@ -69,7 +69,7 @@ auto MainSectionBuilder::GetAttributeForKey(const std::string &key)
     }
     if (key == "type") {
         return main_section_.type;
-    };
+    }
 
     AttributeNotFound(key, "main");
     return ret_;

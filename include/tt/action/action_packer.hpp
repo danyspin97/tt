@@ -31,7 +31,7 @@ class NotifyUpAction;
 
 class ActionPacker {
 public:
-    static auto Pack(NotifyUpAction &&action) -> nng::buffer;
+    static auto Pack(const NotifyUpAction &action) -> nng::buffer;
 
 private:
     static auto PackCommand(const char *command) -> std::stringstream;

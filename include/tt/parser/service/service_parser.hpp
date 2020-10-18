@@ -31,8 +31,9 @@ namespace tt {
 
 class ServiceParser {
 public:
-    auto service() -> Service;
     explicit ServiceParser(std::string path);
+
+    [[nodiscard]] auto service() const -> Service;
 
 protected:
     static auto GenerateListFrom(const std::string &path)

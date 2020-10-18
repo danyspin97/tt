@@ -36,7 +36,7 @@ public:
 
     virtual ~ServiceDirector() = default;
 
-    auto ParseAndGetService(std::vector<std::string> &service_lines,
+    auto ParseAndGetService(const std::vector<std::string> &service_lines,
                             std::string &&path) -> Service;
 
 protected:

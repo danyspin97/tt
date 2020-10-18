@@ -33,7 +33,7 @@ auto tt::ActionPacker::PackCommand(const char *command) -> std::stringstream {
     return stream;
 }
 
-auto tt::ActionPacker::Pack(tt::NotifyUpAction &&action) -> nng::buffer {
+auto tt::ActionPacker::Pack(const tt::NotifyUpAction &action) -> nng::buffer {
     auto stream = PackCommand("notify_up");
 
     msgpack::pack(stream, action);

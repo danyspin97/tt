@@ -34,7 +34,7 @@ tt::SpawnOneshot::SpawnOneshot(Oneshot oneshot) : oneshot_(std::move(oneshot)) {
     InitLogger();
 }
 
-void tt::SpawnOneshot::Spawn() {
+void tt::SpawnOneshot::Spawn() const {
     auto manager = ServiceStatusManager::GetInstance();
     const auto &name = oneshot_.name();
     SpawnScript spawn_start{name, oneshot_.start(), oneshot_.environment()};

@@ -43,13 +43,13 @@ EnvironmentBuilder::EnvironmentBuilder(Environment &environment)
 void EnvironmentBuilder::ParseLine(const string &line) {
     try {
         TryParseLine(line);
-    } catch (KeyValueParserLineInvalidException &e) {
+    } catch (const KeyValueParserLineInvalidException &e) {
         const string msg = e.msg() + " in [config] section";
         throw SectionBuilderException(msg);
-    } catch (EnvironmentKeyNotValidException &e) {
+    } catch (const EnvironmentKeyNotValidException &e) {
         const string msg = e.msg() + " in [config] section";
         throw SectionBuilderException(msg);
-    } catch (EnvironmentKeyAlreadySetException &e) {
+    } catch (const EnvironmentKeyAlreadySetException &e) {
         const string msg = e.msg() + " in [config] section";
         throw SectionBuilderException(msg);
     }

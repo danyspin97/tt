@@ -34,8 +34,9 @@ public:
 
 protected:
     void ApplyModifiers() override;
-    auto GetAbsolutePath(const std::string &path) -> std::filesystem::path;
-    [[nodiscard]] std::filesystem::path GetFileToExecute() override;
+    [[nodiscard]] static auto GetAbsolutePath(const std::string &path)
+        -> std::filesystem::path;
+    [[nodiscard]] auto GetFileToExecute() -> std::filesystem::path override;
 };
 
 } // namespace tt

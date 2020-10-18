@@ -47,4 +47,6 @@ void DependencyReader::operator()(const Oneshot &oneshot) {
     dependencies_ = options_.dependencies();
 }
 
-void DependencyReader::operator()(std::monostate /*unused*/) { assert(false); }
+void DependencyReader::operator()(std::monostate /*unused*/) const {
+    assert(false);
+}

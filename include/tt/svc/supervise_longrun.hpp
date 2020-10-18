@@ -32,7 +32,6 @@ public:
     void Spawn();
 
 private:
-    void SetupLogger();
     void NotifyStatus(ScriptStatus status);
     auto TrySpawn() -> ScriptStatus;
 

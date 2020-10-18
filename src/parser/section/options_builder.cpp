@@ -67,13 +67,13 @@ void OptionsBuilder::EndParsing() {
 auto OptionsBuilder::ParseMultilineValue(const string &line) -> bool {
     try {
         return TryParseMultilineValue(line);
-    } catch (AttributeNotFoundException &e) {
+    } catch (const AttributeNotFoundException &e) {
         throw SectionBuilderException(e.msg());
-    } catch (EmptyArrayException &e) {
+    } catch (const EmptyArrayException &e) {
         throw SectionBuilderException(e.msg() + " in section [options]");
-    } catch (EmptyKeyException &e) {
+    } catch (const EmptyKeyException &e) {
         throw SectionBuilderException(e.msg() + " in section [options]");
-    } catch (ValuesAfterEndingTokenException &e) {
+    } catch (const ValuesAfterEndingTokenException &e) {
         throw SectionBuilderException(e.msg() + " in section [options]");
     }
 }
@@ -105,12 +105,12 @@ void OptionsBuilder::SetAttributeForKey(const string &key,
     static const auto *const section_err_msg = " in section [options]";
     try {
         TrySetAttributeForKey(key, value);
-    } catch (AttributeNotFoundException &e) {
+    } catch (const AttributeNotFoundException &e) {
         throw SectionBuilderException(e.msg());
-    } catch (tt::utils::BooleanParseException &e) {
+    } catch (const tt::utils::BooleanParseException &e) {
         const auto msg = e.msg() + " while parsing key '" + key + "'";
         throw SectionBuilderException(msg + section_err_msg);
-    } catch (std::invalid_argument &e) {
+    } catch (const std::invalid_argument & /*e*/) {
         throw SectionBuilderException("Invalid integer found in '" + key +
                                       "' in section [options]");
     }

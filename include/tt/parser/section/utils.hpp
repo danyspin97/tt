@@ -29,8 +29,8 @@
 
 namespace tt {
 
-void AttributeNotFound(const std::string &attribute,
-                       const std::string &section);
+[[noreturn]] void AttributeNotFound(const std::string &attribute,
+                                    const std::string &section);
 
 // Is called many times during parsing, allow inlining
 inline auto IsEmptyLine(const std::string &line) -> bool {

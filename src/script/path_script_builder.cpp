@@ -28,6 +28,7 @@
 #include "tt/utils/split_path.hpp"
 #include "tt/utils/trim.hpp"
 
+// This function is never called
 void tt::PathScriptBuilder::ApplyModifiers() {}
 
 [[nodiscard]] auto tt::PathScriptBuilder::script(const std::string &execute,

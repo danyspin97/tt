@@ -81,7 +81,7 @@ void tt::cli::ParseCommand::ParseUserSystemServices() {
 
 auto tt::cli::ParseCommand::ParseForFileInDefaultDirs(const std::string &name)
     -> bool {
-    tt::Dirs &dirs = tt::Dirs::GetInstance();
+    const tt::Dirs &dirs = tt::Dirs::GetInstance();
     auto default_dirs =
         std::vector<std::string>{dirs.servicedir(), dirs.confdir() / "service"};
     for (auto i = default_dirs.rbegin(); i != default_dirs.rend(); ++i) {

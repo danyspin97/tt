@@ -61,15 +61,10 @@ auto tt::SpawnLongLivedScript::ListenOnNotifyFd() -> ScriptStatus {
     struct pollfd fd = {notify_fd_, POLLIN, revents};
     int res = poll(&fd, 1, long_lived_script_.timeout());
     // We got a revents on notify_fd_
-    if (res == 1) {
-        if ((revents | POLLIN) != 0) {
-            return ScriptStatus::Success;
-        }
-    };
-    // Timeout
-    if (res == 0) {
-        return ScriptStatus::Failure;
+    if (res == 1 && (revents | POLLIN) != 0) {
+        return ScriptStatus::Success;
     }
+    // Timeout or error
     return ScriptStatus::Failure;
 }
 
@@ -78,7 +73,7 @@ void tt::SpawnLongLivedScript::SetupNotifyFd() {
     pipe(fd.data());
     notify_fd_ = dup(fd[0]);
     close(dup(fd[0]));
-    dup2(fd[1], long_lived_script_.notify().value());
+    dup2(fd[1], static_cast<int>(long_lived_script_.notify().value()));
 }
 
 auto tt::SpawnLongLivedScript::HasStarted() const -> bool {
