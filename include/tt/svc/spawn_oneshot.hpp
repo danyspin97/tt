@@ -32,7 +32,7 @@ namespace tt {
 
 class SpawnOneshot {
 public:
-    explicit SpawnOneshot(Oneshot oneshot);
+    explicit SpawnOneshot(const Oneshot &oneshot);
 
     void Spawn() const;
 

@@ -32,7 +32,7 @@ public:
     void Spawn();
 
 private:
-    void NotifyStatus(ScriptStatus status);
+    void NotifyStatus(ScriptStatus status) const;
     auto TrySpawn() -> ScriptStatus;
 
     Longrun longrun_;

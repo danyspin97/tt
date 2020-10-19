@@ -32,10 +32,10 @@ class SpawnService {
 public:
     SpawnService() = default;
 
-    void operator()(const Bundle &bundle);
-    void operator()(const Longrun &longrun);
-    void operator()(const Oneshot &oneshot);
-    void operator()(std::monostate /*unused*/);
+    void operator()(const Bundle &bundle) const;
+    void operator()(const Longrun &longrun) const;
+    void operator()(const Oneshot &oneshot) const;
+    void operator()(std::monostate /*unused*/) const;
 };
 
 } // namespace tt

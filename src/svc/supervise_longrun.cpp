@@ -86,7 +86,7 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
     assert(false);
 }
 
-void tt::SuperviseLongrun::NotifyStatus(ScriptStatus status) {
+void tt::SuperviseLongrun::NotifyStatus(ScriptStatus status) const {
     nng::socket socket = nng::req::open();
     socket.dial("tcp://localhost:8000");
 

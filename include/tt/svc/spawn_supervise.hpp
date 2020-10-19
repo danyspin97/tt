@@ -34,7 +34,7 @@ public:
     void Spawn();
 
 private:
-    auto GetScriptFilename() -> std::string;
+    auto GetScriptFilename() const -> std::string;
 
     Longrun longrun_;
     std::vector<const char *> environment_;

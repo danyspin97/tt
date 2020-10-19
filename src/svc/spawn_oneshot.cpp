@@ -30,7 +30,7 @@
 std::shared_ptr<spdlog::logger> tt::SpawnOneshot::logger_ =
     std::shared_ptr<spdlog::logger>();
 
-tt::SpawnOneshot::SpawnOneshot(Oneshot oneshot) : oneshot_(std::move(oneshot)) {
+tt::SpawnOneshot::SpawnOneshot(const Oneshot &oneshot) : oneshot_(oneshot) {
     InitLogger();
 }
 

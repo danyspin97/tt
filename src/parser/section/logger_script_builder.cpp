@@ -104,7 +104,7 @@ auto LoggerScriptBuilder::GetDefaultExecute() const noexcept -> std::string {
 
 auto LoggerScriptBuilder::GetDefaultDestination() const noexcept
     -> std::string {
-    tt::Dirs &dirs = tt::Dirs::GetInstance();
+    const tt::Dirs &dirs = tt::Dirs::GetInstance();
     return string{dirs.logdir()} + "/" + service_name_;
 }
 

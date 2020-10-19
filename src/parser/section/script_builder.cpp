@@ -72,8 +72,6 @@ auto ScriptBuilder::GetAttributeForKey(const string &key) -> string & {
     }
 
     AttributeNotFound(key, section_);
-    // Never reached
-    return section_;
 }
 auto ScriptBuilder::GetCodeAttributeForKey(const string &key) -> string & {
     if (key == "execute") {
@@ -81,8 +79,6 @@ auto ScriptBuilder::GetCodeAttributeForKey(const string &key) -> string & {
     }
 
     AttributeNotFound(key, section_);
-    // Never reached
-    return section_;
 }
 
 auto tt::ScriptBuilder::GetParsedType() const -> Script::Type {

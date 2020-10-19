@@ -49,7 +49,7 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
     parser_->ParseServices(services_list);
     const std::vector<tt::Service> services = parser_->services();
 
-    auto &status = Status::GetInstance();
+    const auto &status = Status::GetInstance();
     auto graph = status.graph();
 
     // TODO: Check if the service is already enabled

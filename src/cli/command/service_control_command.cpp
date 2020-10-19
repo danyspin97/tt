@@ -68,7 +68,7 @@ void tt::cli::ServiceControlCommand::SpawnNode(const ServiceNode &node) {
     std::visit(dep_reader, node.service());
     auto deps = dep_reader.dependencies();
 
-    auto &manager = ServiceStatusManager::GetInstance();
+    const auto &manager = ServiceStatusManager::GetInstance();
     auto deps_satisfied = true;
     for (const auto &dep : deps) {
         if (!manager.WaitOnServiceStart(dep)) {

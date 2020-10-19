@@ -18,7 +18,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "tt/script/bash_script_builder.hpp"
 
 #include "tt/dirs.hpp"

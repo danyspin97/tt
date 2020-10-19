@@ -57,7 +57,7 @@ void tt::SpawnSupervise::Spawn() {
     TinyProcessLib::Process supervise{command};
 }
 
-auto tt::SpawnSupervise::GetScriptFilename() -> std::string {
+auto tt::SpawnSupervise::GetScriptFilename() const -> std::string {
     const auto &dirs = Status::GetInstance().dirs();
     std::filesystem::path filename(dirs.livedir());
     filename /= "supervise";

@@ -40,7 +40,6 @@ private:
     auto GetAttributeForKey(const std::string &key) -> std::string &;
     MainSection &main_section_;
 
-    std::string ret_;
     std::string key_;
     std::string value_;
 };
