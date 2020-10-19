@@ -29,14 +29,24 @@ foreach src : tt_test_src
     test(file_name, tt_test_exe)
 endforeach
 
+libtt_cli = library('tt_cli',
+    tt_cli_src,
+    include_directories: [ext_inc, tt_inc],
+    dependencies: [tt_dep, fmt_dep, spdlog_dep, nng_dep, tiny_process_dep],
+    install: false,
+    version: meson.project_version(),
+    soversion: tt_soversion,
+)
+
+tt_cli_dep = declare_dependency(
+    link_with: libtt_cli,
+    include_directories: [ext_inc, tt_inc],
+)
+
 tt_spawn_script_exe = executable(
     'test_spawn_script_cpp',
-    [
-        'svc/spawn_script.cpp',
-        '../src/svc/spawn_script.cpp',
-        '../src/svc/utils.cpp',
-    ],
-    dependencies: [tt_dep, catch2_dep, spdlog_dep, tiny_process_dep],
+    'svc/spawn_script.cpp',
+    dependencies: [tt_cli_dep, tt_dep, catch2_dep, spdlog_dep, nng_dep, fmt_dep, tiny_process_dep],
     cpp_args: [
         '-DCATCH_CONFIG_MAIN',
         '-DCATCH_CONFIG_FAST_COMPILE',
