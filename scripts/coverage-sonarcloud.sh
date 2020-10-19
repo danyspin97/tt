@@ -4,6 +4,9 @@ GCOV_DIR="${MESON_SOURCE_ROOT}/gcov"
 mkdir "${GCOV_DIR}"
 
 cd "${MESON_BUILD_ROOT}"
-gcov-9 -p src/*/*.gcno > /dev/null
-gcov-9 -p test/*/*.gcno > /dev/null
+# -r consider only relative paths
+# -s remove .. prefix (we are running gcov from build folder)
+gcov-9 -p -s '..' -r build/src/*/*.g* build/src/*/*/*.g* build/test/*/*.g
+# Remove coverage files for ext folder
+rm ext*.gcov
 mv *.gcov "${GCOV_DIR}"
