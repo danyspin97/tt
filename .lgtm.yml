@@ -13,7 +13,9 @@ extraction:
   cpp:
     configure:
       command:
-        - meson -Dtests=enabled build
+        # lgtm ships meson version 0.51.2 which doesn't support fs module
+        # needed for generating tests file in test/meson.build
+        - meson -Dtests=disabled build
     index:
       build_command:
         - ninja -C build
