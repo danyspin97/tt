@@ -23,6 +23,7 @@
 #include <memory>
 
 #include "tt/data/oneshot.hpp"
+#include "tt/log/oneshot_logger.hpp"
 
 namespace spdlog {
 class logger;
@@ -32,15 +33,15 @@ namespace tt {
 
 class SpawnOneshot {
 public:
-    explicit SpawnOneshot(const Oneshot &oneshot);
+    explicit SpawnOneshot(Oneshot oneshot);
 
     void Spawn() const;
 
 private:
     static void InitLogger();
 
-    static std::shared_ptr<spdlog::logger> logger_;
     Oneshot oneshot_;
+    OneshotLogger logger_;
 };
 
 } // namespace tt
