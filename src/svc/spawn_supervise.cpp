@@ -39,6 +39,7 @@
 #include "tt/dirs.hpp"
 #include "tt/environment_generator.hpp"
 #include "tt/exception.hpp"
+#include "tt/log/longrun_logger.hpp"
 #include "tt/script/path_script_builder.hpp"
 #include "tt/status.hpp"
 #include "tt/utils/serialize.hpp"
@@ -54,6 +55,8 @@ void tt::SpawnSupervise::Spawn() {
     PathScriptBuilder builder;
     tt::Environment env;
     auto command = builder.script(execute, env);
+    LongrunLogger logger(longrun_.name());
+    logger.Start();
     TinyProcessLib::Process supervise{command};
 }
 
