@@ -37,7 +37,7 @@ class Timeout;
 class SpawnScript {
 public:
     explicit SpawnScript(const std::string &service_name, const Script &script,
-                         const Environment &environment, Logger logger);
+                         const Environment &environment, ScriptLogger logger);
     virtual ~SpawnScript() = default;
 
     [[nodiscard]] auto service_name() const -> const std::string &;
