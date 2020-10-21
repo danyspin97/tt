@@ -1,28 +1,7 @@
-# Compiled Object files
-*.o
-*.obj
+# Build directory
+build
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Compiled Static libraries
-*.a
-*.lib
-
-# Executables
-*.exe
-
-# DUB
-.dub
-docs.json
-__dummy.html
-docs/
-
-# Code coverage
-*.lst
-
-# tt executables from DUB
-src/tt/tt
-src/tt/tt-test-application
+# Subprojects downloaded
+subprojects/*
+# but include wrap files
+!subprojects/*.wrap
