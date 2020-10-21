@@ -23,7 +23,7 @@
 #include "tt/svc/service_status.hpp"
 #include "tt/svc/service_status_manager.hpp"
 
-tt::NotifyUpAction::NotifyUpAction(std::string &&service, bool succeded)
+tt::NotifyUpAction::NotifyUpAction(std::string service, bool succeded)
     : service_(std::move(service)), succeeded_(succeded) {}
 
 auto tt::NotifyUpAction::service() const -> std::string { return service_; }

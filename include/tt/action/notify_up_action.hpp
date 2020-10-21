@@ -20,16 +20,16 @@
 
 #pragma once
 
-#include "tt/action/action.hpp"
-
 #include <string>
 #include <vector>
+
+#include "tt/action/action.hpp"
 
 namespace tt {
 
 class NotifyUpAction : public Action {
 public:
-    explicit NotifyUpAction(std::string &&service, bool succeded);
+    explicit NotifyUpAction(std::string service, bool succeded);
     NotifyUpAction() = delete;
 
     [[nodiscard]] auto service() const -> std::string;
