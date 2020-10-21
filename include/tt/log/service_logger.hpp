@@ -30,7 +30,7 @@ class ScriptLogger;
 class ServiceLogger {
 public:
     explicit ServiceLogger(std::string service_name);
-    virtual ~ServiceLogger();
+    virtual ~ServiceLogger() = default;
 
     // Returns a new instance of ScriptLogger
     [[nodiscard]] auto GetScriptLogger() const -> ScriptLogger;
