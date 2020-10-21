@@ -27,8 +27,6 @@
 #include "tt/exception.hpp"
 #include "tt/svc/service_status.hpp"
 
-std::shared_mutex tt::ServiceStatusManager::mutex_;
-
 auto tt::ServiceStatusManager::GetInstance() -> ServiceStatusManager & {
     static ServiceStatusManager instance;
     return instance;

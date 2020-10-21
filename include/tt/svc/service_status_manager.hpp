@@ -45,7 +45,7 @@ private:
     GetStatus(const std::map<std::string, ServiceStatusPtr> &services_status,
               const std::string &service) -> ServiceStatusPtr;
 
-    static std::shared_mutex mutex_;
+    static inline std::shared_mutex mutex_;
     std::map<std::string, ServiceStatusPtr> up_status_;
     std::map<std::string, ServiceStatusPtr> down_status_;
 };
