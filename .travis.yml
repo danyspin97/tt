@@ -22,13 +22,18 @@ install:
   - pip3 install meson ninja gcovr cpp-coveralls
 
 script:
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then meson -Dtests=enabled -Db_coverage=true build; fi
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory ninja -C build; fi
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ninja -C build test; fi
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ninja -C build coverage-text; fi
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then coveralls -e ext -e subprojects -e test -b build --gcov /usr/bin/gcov-9 --gcov-options '\-lp'; fi
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then ninja -C build coverage-sonarcloud; fi
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then sonar-scanner; fi
+  - |
+    if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then
+        meson -Dtests=enabled -Db_coverage=true build
+        build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory \
+            ninja -C build || exit 1
+        ninja -C build test
+        ninja -C build coverage-text
+        coveralls -e ext -e subprojects -e test -b build \
+            --gcov /usr/bin/gcov-9 --gcov-options '\-lp'
+        ninja -C build coverage-sonarcloud
+        sonar-scanner
+    fi
 
 addons:
   apt:
