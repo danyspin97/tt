@@ -20,6 +20,8 @@
 
 #include "tt/status.hpp"
 
+#include "spdlog/spdlog.h"
+
 #include "tt/exception.hpp"
 #include "tt/user_dirs.hpp"
 #include "tt/utils/deserialize.hpp"
@@ -32,11 +34,18 @@ auto tt::Status::GetInstance() -> tt::Status & {
 
 tt::Status::Status()
     : dirs_(is_system_ ? Dirs::GetInstance() : UserDirs::GetInstance()),
-      graph_(ReadGraphFromFileOrNew(dirs_.statedir() / "graph")) {}
+      graph_(ReadGraphFromFileOrNew(dirs_.statedir() / "graph")),
+      service_status_logger_(spdlog::get("service_status_logger")) {
+    assert(service_status_logger_);
+}
 
 auto tt::Status::dirs() const -> const Dirs & { return dirs_; }
 
 auto tt::Status::graph() const -> const DependencyGraph & { return graph_; }
+
+auto tt::Status::service_status_logger() const -> spdlog::logger * {
+    return service_status_logger_.get();
+}
 
 auto tt::Status::IsSystem() const -> bool { return is_system_; }
 

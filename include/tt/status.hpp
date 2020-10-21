@@ -26,6 +26,10 @@
 
 #include "tt/dependency_graph/dependency_graph.hpp"
 
+namespace spdlog {
+class logger;
+}
+
 namespace tt {
 
 class Dirs;
@@ -36,10 +40,13 @@ public:
     Status(const Status &) = delete;
     auto operator=(const Status &) -> Status & = delete;
 
+    // a "service_status_logger" spdlog logger shall already be created
+    // before calling GetInstance() for the first time
     [[nodiscard]] static auto GetInstance() -> Status &;
 
     [[nodiscard]] auto dirs() const -> const Dirs &;
     [[nodiscard]] auto graph() const -> const DependencyGraph &;
+    [[nodiscard]] auto service_status_logger() const -> spdlog::logger *;
 
     [[nodiscard]] auto IsSystem() const -> bool;
 
@@ -53,6 +60,7 @@ private:
     bool is_system_ = !(geteuid() > 0);
     Dirs &dirs_;
     DependencyGraph graph_;
+    std::shared_ptr<spdlog::logger> service_status_logger_;
 };
 
 } // namespace tt
