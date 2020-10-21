@@ -18,25 +18,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/action/action_packer.hpp"
+#pragma once
 
-#include "msgpack.hpp"
-
-#include "nngpp/buffer.h"
-
-#include "tt/action/adapter/notify_up_action_adapter.hpp"
-#include "tt/action/notify_up_action.hpp"
-
-auto tt::ActionPacker::PackCommand(const char *command) -> std::stringstream {
-    std::stringstream stream;
-    msgpack::pack(stream, command);
-    return stream;
+namespace nng {
+struct buffer;
 }
 
-auto tt::ActionPacker::Pack(const tt::NotifyUpAction &action) -> nng::buffer {
-    auto stream = PackCommand("notify_up");
+namespace tt {
+class Action;
 
-    msgpack::pack(stream, action);
-    nng::buffer buffer{stream.str().c_str(), stream.str().size()};
-    return buffer;
-}
+auto PackAction(const Action &action) -> nng::buffer;
+
+} // namespace tt

@@ -95,6 +95,5 @@ void tt::SuperviseLongrun::NotifyStatus(ScriptStatus status) const {
         succeded = true;
     }
     NotifyUpAction action(longrun_.name(), succeded);
-    auto buffer = ActionPacker::Pack(std::move(action));
-    socket.send(buffer);
+    socket.send(PackAction(action));
 }
