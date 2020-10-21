@@ -40,3 +40,7 @@ auto tt::cli::Command::InitAndExecute() -> int {
     logger_ = std::make_unique<CliLogger>(verbosity, global_options_->quiet());
     return Execute();
 }
+
+auto tt::cli::Command::logger() const -> std::shared_ptr<CliLogger> {
+    return logger_;
+}

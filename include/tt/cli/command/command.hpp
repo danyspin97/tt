@@ -54,6 +54,8 @@ public:
 protected:
     virtual auto Execute() -> int = 0;
 
+    [[nodiscard]] auto logger() const -> std::shared_ptr<CliLogger>;
+
     args::Subparser &parser_;
     std::shared_ptr<GlobalOptions> global_options_;
 
