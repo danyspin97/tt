@@ -45,10 +45,9 @@
 
 tt::SpawnScript::SpawnScript(const std::string &service_name,
                              const Script &script,
-                             const Environment &environment)
-    : service_name_(service_name), script_(script), environment_(environment) {
-    InitLogger();
-}
+                             const Environment &environment, Logger logger)
+    : service_name_(service_name), script_(script), environment_(environment),
+      logger_(std::move(logger)) {}
 
 auto tt::SpawnScript::Spawn() -> ScriptStatus {
     auto max_death = script_.max_death();
@@ -83,47 +82,12 @@ void tt::SpawnScript::ExecuteScript() {
     auto command = builder->script(script_.execute(), environment_);
     process_ = std::make_unique<TinyProcessLib::Process>(
         command, "",
-        [this](const char *bytes, size_t size) { Read(true, bytes, size); },
-        [this](const char *bytes, size_t size) { Read(false, bytes, size); });
-}
-
-void tt::SpawnScript::Read(bool is_stdout, const char *bytes, size_t size) {
-    std::string &last_line = is_stdout ? stdout_line_ : stderr_line_;
-    std::string output{bytes, size};
-    size_t index = output.find('\n');
-    size_t last_index = 0;
-
-    // If there is output remaining from the latest Read call
-    // Append to it and log
-    if (index != std::string::npos && !last_line.empty()) {
-        // Lock is not needed because this function is called synchronously
-        // from a thread in Process
-        size_t count = index - last_index;
-        if (count != 0) {
-            fmt::format_to(std::back_inserter(last_line), "{}",
-                           output.substr(last_index, count));
-        }
-
-        logger_->info("[{}] {}", is_stdout ? "stdout" : "stderr", last_line);
-        last_line.clear();
-        last_index = index + 1;
-        index = output.find('\n', last_index);
-    }
-
-    // Parse all the remaining output
-    // TODO: Optimize by sending all the output from last_index to
-    // string::find_last('\n') to logger_ and the last chars to last_line
-    while (index != std::string::npos) {
-        logger_->info("[{}] {}", is_stdout ? "stdout" : "stderr",
-                      output.substr(last_index, index - last_index));
-        last_index = index + 1;
-        index = output.find('\n', last_index);
-    }
-
-    if (last_index != index) {
-        fmt::format_to(std::back_inserter(last_line), "{}",
-                       output.substr(last_index, size - last_index));
-    }
+        [this](const char *bytes, size_t size) {
+            logger_.Log(ScriptLogger::Type::STDOUT, bytes, size);
+        },
+        [this](const char *bytes, size_t size) {
+            logger_.Log(ScriptLogger::Type::STDERR, bytes, size);
+        });
 }
 
 void tt::SpawnScript::Kill(Timeout timeout) {
@@ -173,20 +137,6 @@ auto tt::SpawnScript::GetEnviromentFromScript() const
 
 void tt::SpawnScript::SetupUidGid() {
     // TODO: implement
-}
-
-void tt::SpawnScript::InitLogger() {
-    // Check if the logger has already been added
-    if ((logger_ = spdlog::get(service_name_))) {
-        return;
-    }
-
-    std::filesystem::path logdir = Status::GetInstance().dirs().logdir();
-    logger_ = spdlog::basic_logger_mt<spdlog::async_factory>(
-        service_name_,
-        logdir / std::filesystem::path{service_name_ + std::string{".log"}});
-
-    logger_->set_pattern("{%d:%m:%Y %T} %v");
 }
 
 auto tt::SpawnScript::service_name() const -> const std::string & {

@@ -26,12 +26,9 @@
 #include "process.hpp"
 
 #include "tt/data/service.hpp"
+#include "tt/log/script_logger.hpp"
 #include "tt/svc/spawn_supervise.hpp"
 #include "tt/svc/types.hpp"
-
-namespace spdlog {
-class logger;
-}
 
 namespace tt {
 
@@ -40,7 +37,7 @@ class Timeout;
 class SpawnScript {
 public:
     explicit SpawnScript(const std::string &service_name, const Script &script,
-                         const Environment &environment);
+                         const Environment &environment, Logger logger);
     virtual ~SpawnScript() = default;
 
     [[nodiscard]] auto service_name() const -> const std::string &;
@@ -55,22 +52,17 @@ protected:
         -> std::vector<const char *>;
     auto GetExitStatus() -> int;
     virtual auto HasExited() -> bool;
-    void Read(bool is_stdout, const char *bytes, size_t size);
     void SetupUidGid();
     auto TrySpawn(Timeout timeout) -> ScriptStatus;
-
-    void InitLogger();
 
 private:
     const std::string &service_name_;
     Script script_;
     const Environment &environment_;
-    std::shared_ptr<spdlog::logger> logger_;
 
-    std::string stdout_line_;
-    std::string stderr_line_;
     std::unique_ptr<TinyProcessLib::Process> process_;
     int exit_status_ = -1;
+    ScriptLogger logger_;
 };
 
 } // namespace tt
