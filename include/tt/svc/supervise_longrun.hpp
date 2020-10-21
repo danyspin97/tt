@@ -21,6 +21,7 @@
 #pragma once
 
 #include "tt/data/longrun.hpp"
+#include "tt/log/longrun_logger.hpp"
 #include "tt/svc/spawn_long_lived_script.hpp"
 #include "tt/svc/spawn_script.hpp"
 
@@ -36,6 +37,7 @@ private:
     auto TrySpawn() -> ScriptStatus;
 
     Longrun longrun_;
+    LongrunLogger logger_;
     SpawnLongLivedScript spawn_;
 };
 

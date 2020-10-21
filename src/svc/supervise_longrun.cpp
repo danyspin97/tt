@@ -37,8 +37,9 @@
 #include "tt/svc/timeout.hpp"
 
 tt::SuperviseLongrun::SuperviseLongrun(Longrun &&longrun)
-    : longrun_(std::move(longrun)),
-      spawn_(longrun_.name(), longrun_.run(), longrun_.environment()) {}
+    : longrun_(std::move(longrun)), logger_(longrun_.name()),
+      spawn_(longrun_.name(), longrun_.run(), longrun_.environment(),
+             logger_.GetScriptLogger()) {}
 
 void tt::SuperviseLongrun::Spawn() {
     SupervisionSignalHandler::SetupSignals();
@@ -77,7 +78,7 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
     if (SupervisionSignalHandler::HasChildExited()) {
         if (longrun_.finish()) {
             SpawnScript(longrun_.name(), longrun_.finish().value(),
-                        longrun_.environment());
+                        longrun_.environment(), logger_.GetScriptLogger());
         }
         return ScriptStatus::Failure;
     }
