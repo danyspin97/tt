@@ -46,14 +46,15 @@ void tt::SuperviseLongrun::Spawn() {
 
     auto time_to_try = longrun_.run().max_death();
     decltype(time_to_try) time_tried = 0;
-    while (time_tried < time_to_try) {
-        if (TrySpawn() == ScriptStatus::Failure) {
-            time_tried++;
-            continue;
-        }
-        // Assert that when ScriptStatus::Success, the code doesn't reach there
-        assert(false);
-    }
+    auto status = ScriptStatus::Failure;
+    do {
+        status = TrySpawn();
+        time_tried++;
+        continue;
+    } while (time_tried < time_to_try && status != ScriptStatus::Success);
+
+    NotifyStatus(ScriptStatus::Failure);
+    exit(1);
 }
 
 auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
@@ -66,25 +67,23 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
         }
     });
 
-    pause();
+    while (true) {
+        pause();
 
-    if (SupervisionSignalHandler::HasReceivedDeathSignal()) {
-        spawn_.Kill(
-            Timeout{std::chrono::milliseconds{longrun_.run().timeout_kill()}});
-        NotifyStatus(ScriptStatus::Failure);
-        exit(255);
-    }
+        if (SupervisionSignalHandler::HasReceivedDeathSignal()) {
+            spawn_.Kill(Timeout{
+                std::chrono::milliseconds{longrun_.run().timeout_kill()}});
+            NotifyStatus(ScriptStatus::Failure);
+            exit(255);
+        }
 
-    if (SupervisionSignalHandler::HasChildExited()) {
+        assert(SupervisionSignalHandler::HasChildExited());
         if (longrun_.finish()) {
             SpawnScript(longrun_.name(), longrun_.finish().value(),
                         longrun_.environment(), logger_.GetScriptLogger());
         }
         return ScriptStatus::Failure;
     }
-
-    // Should never reach here
-    assert(false);
 }
 
 void tt::SuperviseLongrun::NotifyStatus(ScriptStatus status) const {
