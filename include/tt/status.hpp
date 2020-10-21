@@ -26,10 +26,6 @@
 
 #include "tt/dependency_graph/dependency_graph.hpp"
 
-namespace spdlog {
-class logger;
-}
-
 namespace tt {
 
 class Dirs;
@@ -46,7 +42,6 @@ public:
 
     [[nodiscard]] auto dirs() const -> const Dirs &;
     [[nodiscard]] auto graph() const -> const DependencyGraph &;
-    [[nodiscard]] auto service_status_logger() const -> spdlog::logger *;
 
     [[nodiscard]] auto IsSystem() const -> bool;
 
@@ -60,7 +55,6 @@ private:
     bool is_system_ = !(geteuid() > 0);
     Dirs &dirs_;
     DependencyGraph graph_;
-    std::shared_ptr<spdlog::logger> service_status_logger_;
 };
 
 } // namespace tt
