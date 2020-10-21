@@ -34,8 +34,8 @@
 
 namespace tt {
 
-namespace cli {
-class SuperviseCommand;
+namespace utils {
+template <typename T> auto Deserialize(std::vector<uint8_t> &&) -> T;
 }
 
 class Longrun : public ServiceImpl {
@@ -71,7 +71,7 @@ public:
 
 private:
     friend class bitsery::Access;
-    friend class tt::cli::SuperviseCommand;
+    friend auto utils::Deserialize<Longrun>(std::vector<uint8_t> &&) -> Longrun;
     Longrun() = default;
 
     template <typename S> void serialize(S &serializer) {
