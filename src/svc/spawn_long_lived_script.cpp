@@ -32,8 +32,9 @@
 
 tt::SpawnLongLivedScript::SpawnLongLivedScript(const std::string &service_name,
                                                const LongLivedScript &script,
-                                               const Environment &environment)
-    : SpawnScript(service_name, script, environment),
+                                               const Environment &environment,
+                                               ScriptLogger logger)
+    : SpawnScript(service_name, script, environment, std::move(logger)),
       long_lived_script_(script) {}
 
 auto tt::SpawnLongLivedScript::Spawn() -> ScriptStatus {

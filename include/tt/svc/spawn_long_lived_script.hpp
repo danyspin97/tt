@@ -28,7 +28,8 @@ class SpawnLongLivedScript : public SpawnScript {
 public:
     explicit SpawnLongLivedScript(const std::string &service_name,
                                   const LongLivedScript &script,
-                                  const Environment &environment);
+                                  const Environment &environment,
+                                  ScriptLogger logger);
 
     auto HasStarted() const -> bool;
     auto Spawn() -> ScriptStatus;
