@@ -48,7 +48,8 @@ void TestOutput(bool is_stdout) {
         spdlog::basic_logger_mt<spdlog::async_factory>(test_name, logfile);
     logger->set_pattern("%v");
     tt::Environment env;
-    tt::SpawnScript spawn_script(test_name, script, env);
+    tt::SpawnScript spawn_script(test_name, script, env,
+                                 tt::ScriptLogger(logger));
     tt::ScriptStatus status = spawn_script.Spawn();
     REQUIRE(status == tt::ScriptStatus::Success);
     REQUIRE(std::filesystem::exists(logfile));
@@ -63,23 +64,22 @@ void TestOutput(bool is_stdout) {
 
 } // namespace tt::test
 
+auto console = spdlog::stdout_color_mt("spawn_script_test");
+tt::ScriptLogger logger{console};
+
 TEST_CASE("SpawnScript") {
     tt::Environment env;
 
     SECTION("Spawn sucessfull script") {
         tt::Script script{tt::Script::Type::SH, "true"};
-        const auto *test_name = "test-script";
-        auto console = spdlog::stdout_color_mt(test_name);
-        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::SpawnScript spawn_script("test-path-sleep", script, env, logger);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Success);
     }
 
     SECTION("Spawn failing script") {
         tt::Script script{tt::Script::Type::SH, "false"};
-        const auto *test_name = "failing-script";
-        auto console = spdlog::stdout_color_mt(test_name);
-        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::SpawnScript spawn_script("test-path-sleep", script, env, logger);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
     }
@@ -87,9 +87,7 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn script within timeout") {
         tt::Script script{tt::Script::Type::SH, "sleep 1"};
         script.timeout(2000);
-        const auto *test_name = "timeout-success";
-        auto console = spdlog::stdout_color_mt(test_name);
-        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::SpawnScript spawn_script("test-path-sleep", script, env, logger);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Success);
     }
@@ -97,9 +95,7 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn script that exceed timeout") {
         tt::Script script{tt::Script::Type::SH, "sleep 10"};
         script.timeout(50);
-        const auto *test_name = "timeout_fail";
-        auto console = spdlog::stdout_color_mt(test_name);
-        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::SpawnScript spawn_script("test-path-sleep", script, env, logger);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
     }
@@ -108,10 +104,7 @@ TEST_CASE("SpawnScript") {
         tt::Script script{tt::Script::Type::SH, "sleep 1 && false"};
         script.timeout(2000);
 
-        const auto *test_name = "timeout-fail";
-        auto console = spdlog::stdout_color_mt(test_name);
-
-        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::SpawnScript spawn_script("test-path-sleep", script, env, logger);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
     }
@@ -128,9 +121,7 @@ TEST_CASE("SpawnScript") {
         tt::Script script{tt::Script::Type::SH, command};
         script.max_death(time_to_try);
 
-        const auto *test_name = "time-tried";
-        auto console = spdlog::stdout_color_mt(test_name);
-        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::SpawnScript spawn_script("test-path-sleep", script, env, logger);
 
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Failure);
@@ -152,9 +143,7 @@ TEST_CASE("SpawnScript") {
         script.timeout(50);
         script.max_death(1);
 
-        const auto *test_name = "timeout-fail2";
-        auto console = spdlog::stdout_color_mt(test_name);
-        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::SpawnScript spawn_script("test-path-sleep", script, env, logger);
         tt::ScriptStatus status = spawn_script.Spawn();
         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
@@ -164,9 +153,7 @@ TEST_CASE("SpawnScript") {
 
     SECTION("Spawn sucessfull path") {
         tt::Script script{tt::Script::Type::Path, "sleep 0"};
-        const auto *test_name = "test-path";
-        auto console = spdlog::stdout_color_mt(test_name);
-        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::SpawnScript spawn_script("test-path-sleep", script, env, logger);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Success);
     }
@@ -174,9 +161,7 @@ TEST_CASE("SpawnScript") {
     SECTION("Spawn sucessfull sleep as path") {
         tt::Script script{tt::Script::Type::Path, "sleep 2"};
         script.timeout(5000);
-        const auto *test_name = "test-path-sleep";
-        auto console = spdlog::stdout_color_mt(test_name);
-        tt::SpawnScript spawn_script(test_name, script, env);
+        tt::SpawnScript spawn_script("test-path-sleep", script, env, logger);
         tt::ScriptStatus status = spawn_script.Spawn();
         CHECK(status == tt::ScriptStatus::Success);
     }
