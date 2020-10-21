@@ -28,6 +28,11 @@ static constexpr const char *kDefaultLogUser = "@default_log_user@";
 static constexpr const char *kDefaultLogGroup = "@default_log_group@";
 static constexpr const char *kVersion = "@version@";
 
+// spdlog logger name for services startup/shutdown status
+static constexpr const char *kServiceStatusLog = "service_status_log";
+// filename relative to dirs::logdir() for the above logger
+static constexpr const char *kServiceStatusLogFile = "services.log";
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus

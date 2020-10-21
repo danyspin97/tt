@@ -22,6 +22,7 @@
 
 #include "spdlog/spdlog.h"
 
+#include "tt/define.h"
 #include "tt/exception.hpp"
 #include "tt/user_dirs.hpp"
 #include "tt/utils/deserialize.hpp"
@@ -35,7 +36,7 @@ auto tt::Status::GetInstance() -> tt::Status & {
 tt::Status::Status()
     : dirs_(is_system_ ? Dirs::GetInstance() : UserDirs::GetInstance()),
       graph_(ReadGraphFromFileOrNew(dirs_.statedir() / "graph")),
-      service_status_logger_(spdlog::get("service_status_logger")) {
+      service_status_logger_(spdlog::get(kServiceStatusLog)) {
     assert(service_status_logger_);
 }
 

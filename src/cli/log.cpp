@@ -27,6 +27,7 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 
+#include "tt/define.h"
 #include "tt/dirs.hpp"
 #include "tt/status.hpp"
 
@@ -49,7 +50,7 @@ void tt::cli::setupConsoleLoggers(const std::string &verbosity,
 
     std::filesystem::path logdir = Status::GetInstance().dirs().logdir();
     auto status_logger = spdlog::basic_logger_mt<spdlog::async_factory>(
-        "status", logdir / "status.log");
+        kServiceStatusLog, logdir / kServiceStatusLogFile);
 
     spdlog::flush_every(std::chrono::seconds(3));
 }
