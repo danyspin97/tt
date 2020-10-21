@@ -37,6 +37,7 @@
 
 #include "tt/cli/global_options.hpp"
 #include "tt/svc/supervise_longrun.hpp"
+#include "tt/utils/deserialize.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 
 tt::cli::SuperviseCommand::SuperviseCommand(
@@ -45,18 +46,8 @@ tt::cli::SuperviseCommand::SuperviseCommand(
       filename_(parser, "filename", "Filename to read the longrun from") {}
 
 auto tt::cli::SuperviseCommand::Execute() -> int {
-    Longrun longrun;
     auto buffer = utils::ReadBufferFromFile(args::get(filename_));
-
-    auto state = bitsery::quickDeserialization<
-        bitsery::InputBufferAdapter<std::vector<uint8_t>>>(
-        {buffer.begin(), buffer.size()}, longrun);
-
-    if (state.first != bitsery::ReaderError::NoError || !state.second) {
-        spdlog::error("Could not deserialize longrun in file {}",
-                      args::get(filename_));
-        return 255;
-    }
+    auto longrun = utils::Deserialize<Longrun>(std::move(buffer));
 
     auto supervise = SuperviseLongrun{std::move(longrun)};
     supervise.Spawn();
