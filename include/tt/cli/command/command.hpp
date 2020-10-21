@@ -28,6 +28,10 @@ namespace args {
 class Subparser;
 }
 
+namespace tt {
+class CliLogger;
+}
+
 namespace tt::cli {
 
 class Command {
@@ -52,6 +56,9 @@ protected:
 
     args::Subparser &parser_;
     std::shared_ptr<GlobalOptions> global_options_;
+
+private:
+    std::shared_ptr<CliLogger> logger_;
 };
 
 } // namespace tt::cli

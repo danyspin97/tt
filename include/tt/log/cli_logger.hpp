@@ -22,8 +22,11 @@
 
 #include <string>
 
-namespace tt::cli {
+namespace tt {
 
-void setupConsoleLoggers(const std::string &verbosity, bool silence_stderr);
+class CliLogger {
+public:
+    CliLogger(const std::string &verbosity, bool silence_stderr);
+};
 
-} // namespace tt::cli
+} // namespace tt

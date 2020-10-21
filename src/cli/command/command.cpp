@@ -26,7 +26,7 @@
 #include "args.hxx"
 
 #include "tt/cli/define.hpp"
-#include "tt/cli/log.hpp"
+#include "tt/log/cli_logger.hpp"
 
 tt::cli::Command::Command(args::Subparser &parser,
                           std::shared_ptr<GlobalOptions> global_options)
@@ -37,6 +37,6 @@ auto tt::cli::Command::InitAndExecute() -> int {
     auto verbosity = global_options_->verbosity().Matched()
                          ? global_options_->verbosity().Get()
                          : tt::cli::DEFAULT_VERBOSITY;
-    tt::cli::setupConsoleLoggers(verbosity, global_options_->quiet());
+    logger_ = std::make_unique<CliLogger>(verbosity, global_options_->quiet());
     return Execute();
 }

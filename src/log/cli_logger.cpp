@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/cli/log.hpp"
+#include "tt/log/cli_logger.hpp"
 
 #include <filesystem>
 
@@ -29,12 +29,10 @@
 
 #include "tt/define.h"
 #include "tt/dirs.hpp"
+#include "tt/log/cli_logger.hpp"
 #include "tt/status.hpp"
 
-void tt::cli::setupConsoleLoggers(const std::string &verbosity,
-                                  bool silence_stderr) {
-    spdlog::drop_all();
-
+tt::CliLogger::CliLogger(const std::string &verbosity, bool silence_stderr) {
     auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 
     console->set_level(spdlog::level::from_str(verbosity));
@@ -44,13 +42,20 @@ void tt::cli::setupConsoleLoggers(const std::string &verbosity,
 
     std::vector<spdlog::sink_ptr> sinks;
     sinks.push_back(console);
-    auto console_sink =
-        std::make_shared<spdlog::logger>("console", begin(sinks), end(sinks));
-    spdlog::set_default_logger(console_sink);
 
     std::filesystem::path logdir = Status::GetInstance().dirs().logdir();
+
+    if (isatty(STDOUT_FILENO) == 0) {
+        auto cli_file_sink =
+            std::make_shared<spdlog::sinks::basic_file_sink_mt>(logdir /
+                                                                "cli.log");
+        sinks.push_back(cli_file_sink);
+    }
+
+    auto cli_sinks =
+        std::make_shared<spdlog::logger>("cli", begin(sinks), end(sinks));
+    spdlog::set_default_logger(cli_sinks);
+
     auto status_logger = spdlog::basic_logger_mt<spdlog::async_factory>(
         kServiceStatusLog, logdir / kServiceStatusLogFile);
-
-    spdlog::flush_every(std::chrono::seconds(3));
 }
