@@ -23,7 +23,7 @@
 #include "tt/data/longrun.hpp"
 #include "tt/log/longrun_logger.hpp"
 #include "tt/supervision/spawn_long_lived_script.hpp"
-#include "tt/supervision/spawn_script.hpp"
+#include "tt/supervision/script_supervisor.hpp"
 
 namespace tt {
 

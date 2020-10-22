@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/supervision/spawn_script.hpp"
+#include "tt/supervision/script_supervisor.hpp"
 
 #include <csignal>
 
@@ -43,14 +43,14 @@
 #include "tt/supervision/utils.hpp"
 #include "tt/user_dirs.hpp"
 
-tt::SpawnScript::SpawnScript(const std::string &service_name,
-                             const Script &script,
-                             const Environment &environment,
-                             ScriptLogger logger)
+tt::ScriptSupervisor::ScriptSupervisor(const std::string &service_name,
+                                       const Script &script,
+                                       const Environment &environment,
+                                       ScriptLogger logger)
     : service_name_(service_name), script_(script), environment_(environment),
       logger_(std::move(logger)) {}
 
-auto tt::SpawnScript::Spawn() -> ScriptStatus {
+auto tt::ScriptSupervisor::Spawn() -> ScriptStatus {
     auto max_death = script_.max_death();
     decltype(max_death) time_tried = 0;
     ScriptStatus status = ScriptStatus::Failure;
@@ -62,7 +62,7 @@ auto tt::SpawnScript::Spawn() -> ScriptStatus {
     return status;
 }
 
-auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
+auto tt::ScriptSupervisor::TrySpawn(Timeout timeout) -> ScriptStatus {
     ExecuteScript();
     while (!HasExited() && !timeout.TimedOut()) {
         std::this_thread::yield();
@@ -78,7 +78,7 @@ auto tt::SpawnScript::TrySpawn(Timeout timeout) -> ScriptStatus {
     return ScriptStatus::Failure;
 }
 
-void tt::SpawnScript::ExecuteScript() {
+void tt::ScriptSupervisor::ExecuteScript() {
     auto builder = ScriptBuilderFactory::GetScriptBuilder(script_.type());
     auto command = builder->script(script_.execute(), environment_);
     process_ = std::make_unique<TinyProcessLib::Process>(
@@ -91,7 +91,7 @@ void tt::SpawnScript::ExecuteScript() {
         });
 }
 
-void tt::SpawnScript::Kill(Timeout timeout) {
+void tt::ScriptSupervisor::Kill(Timeout timeout) {
     Signal(static_cast<int>(script_.down_signal()));
     while (!HasExited() && !timeout.TimedOut()) {
         std::this_thread::yield();
@@ -101,9 +101,9 @@ void tt::SpawnScript::Kill(Timeout timeout) {
     }
 }
 
-void tt::SpawnScript::Signal(int signum) { process_->signal(signum); }
+void tt::ScriptSupervisor::Signal(int signum) { process_->signal(signum); }
 
-auto tt::SpawnScript::HasExited() -> bool {
+auto tt::ScriptSupervisor::HasExited() -> bool {
     if (exit_status_ != -1) {
         return true;
     }
@@ -117,7 +117,7 @@ auto tt::SpawnScript::HasExited() -> bool {
     return false;
 }
 
-auto tt::SpawnScript::GetExitStatus() -> int {
+auto tt::ScriptSupervisor::GetExitStatus() -> int {
     if (exit_status_ != -1) {
         return exit_status_;
     }
@@ -125,7 +125,7 @@ auto tt::SpawnScript::GetExitStatus() -> int {
     return exit_status_ = process_->get_exit_status();
 }
 
-auto tt::SpawnScript::GetEnviromentFromScript() const
+auto tt::ScriptSupervisor::GetEnviromentFromScript() const
     -> std::vector<const char *> {
     auto environment_vec = environment_.Vector();
     std::vector<const char *> environment_vec_cstr{environment_vec.size()};
@@ -136,10 +136,10 @@ auto tt::SpawnScript::GetEnviromentFromScript() const
     return environment_vec_cstr;
 }
 
-void tt::SpawnScript::SetupUidGid() {
+void tt::ScriptSupervisor::SetupUidGid() {
     // TODO: implement
 }
 
-auto tt::SpawnScript::service_name() const -> const std::string & {
+auto tt::ScriptSupervisor::service_name() const -> const std::string & {
     return service_name_;
 }

@@ -34,11 +34,13 @@ namespace tt {
 
 class Timeout;
 
-class SpawnScript {
+class ScriptSupervisor {
 public:
-    explicit SpawnScript(const std::string &service_name, const Script &script,
-                         const Environment &environment, ScriptLogger logger);
-    virtual ~SpawnScript() = default;
+    explicit ScriptSupervisor(const std::string &service_name,
+                              const Script &script,
+                              const Environment &environment,
+                              ScriptLogger logger);
+    virtual ~ScriptSupervisor() = default;
 
     [[nodiscard]] auto service_name() const -> const std::string &;
 

@@ -25,7 +25,7 @@
 #include "spdlog/spdlog.h"
 
 #include "tt/supervision/service_status_manager.hpp"
-#include "tt/supervision/spawn_script.hpp"
+#include "tt/supervision/script_supervisor.hpp"
 
 tt::SpawnOneshot::SpawnOneshot(Oneshot oneshot)
     : oneshot_(std::move(oneshot)), logger_(oneshot.name()) {}
@@ -34,7 +34,7 @@ void tt::SpawnOneshot::Spawn() const {
     auto manager = ServiceStatusManager::GetInstance();
     const auto &name = oneshot_.name();
     logger_.Start();
-    SpawnScript spawn_start{name, oneshot_.start(), oneshot_.environment(),
+    ScriptSupervisor spawn_start{name, oneshot_.start(), oneshot_.environment(),
                             logger_.GetScriptLogger()};
     if (spawn_start.Spawn() == ScriptStatus::Success) {
         // Notify the service started up successfully
@@ -46,7 +46,7 @@ void tt::SpawnOneshot::Spawn() const {
     manager.ServiceStartUpdate(name, false);
     logger_.Fail();
     if (oneshot_.stop()) {
-        SpawnScript spawn_stop{name, oneshot_.stop().value(),
+        ScriptSupervisor spawn_stop{name, oneshot_.stop().value(),
                                oneshot_.environment(),
                                logger_.GetScriptLogger()};
         // We don't care if the stop script failed

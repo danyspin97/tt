@@ -20,11 +20,11 @@
 
 #pragma once
 
-#include "tt/supervision/spawn_script.hpp"
+#include "tt/supervision/script_supervisor.hpp"
 
 namespace tt {
 
-class SpawnLongLivedScript : public SpawnScript {
+class SpawnLongLivedScript : public ScriptSupervisor {
 public:
     explicit SpawnLongLivedScript(const std::string &service_name,
                                   const LongLivedScript &script,

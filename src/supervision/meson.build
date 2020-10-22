@@ -5,12 +5,12 @@ tt_src += files (
 )
 
 tt_cli_src += files (
+    'script_supervisor.cpp',
     'supervise_longrun.cpp',
     'supervision_signal_handler.cpp',
     'spawn_long_lived_script.cpp',
     'spawn_oneshot.cpp',
     'spawn_service.cpp',
-    'spawn_script.cpp',
     'spawn_supervise.cpp',
     'utils.cpp',
 )

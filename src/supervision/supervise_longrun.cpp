@@ -32,7 +32,7 @@
 #include "tt/action/notify_up_action.hpp"
 #include "tt/action/pack_action.hpp"
 #include "tt/supervision/spawn_long_lived_script.hpp"
-#include "tt/supervision/spawn_script.hpp"
+#include "tt/supervision/script_supervisor.hpp"
 #include "tt/supervision/supervision_signal_handler.hpp"
 #include "tt/supervision/timeout.hpp"
 
@@ -80,7 +80,7 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
 
         if (SupervisionSignalHandler::HasChildExited()) {
             if (longrun_.finish()) {
-                SpawnScript(longrun_.name(), longrun_.finish().value(),
+                ScriptSupervisor(longrun_.name(), longrun_.finish().value(),
                             longrun_.environment(), logger_.GetScriptLogger());
             }
             return ScriptStatus::Failure;
