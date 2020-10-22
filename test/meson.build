@@ -18,17 +18,21 @@ catch_cxxflags = [
 fs = import('fs')
 foreach src : tt_test_src
     fmt = '@0@'
-    file_name = fmt.format(src).underscorify()
-    file_name = fs.replace_suffix(file_name, '')
+    # Convert file to string
+    filename = fmt.format(src)
+    # Remove cpp suffix
+    filename = fs.replace_suffix(filename, '')
+    # Replace path separators ('/') with underscore
+    filename = filename.underscorify()
 
     tt_test_exe = executable(
-        file_name,
+        filename,
         src,
         dependencies: [ tt_dep, deps ],
         cpp_args: catch_cxxflags,
     )
 
-    test(file_name, tt_test_exe)
+    test(filename, tt_test_exe)
 endforeach
 
 libtt_cli = library('tt_cli',
