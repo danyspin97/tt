@@ -46,8 +46,7 @@ tt::cli::SuperviseCommand::SuperviseCommand(
       filename_(parser, "filename", "Filename to read the longrun from") {}
 
 auto tt::cli::SuperviseCommand::Execute() -> int {
-    auto buffer = utils::ReadBufferFromFile(args::get(filename_));
-    auto longrun = utils::Deserialize<Longrun>(std::move(buffer));
+    auto longrun = utils::Deserialize<Longrun>(args::get(filename_));
 
     auto supervise = SuperviseLongrun{std::move(longrun)};
     supervise.Spawn();

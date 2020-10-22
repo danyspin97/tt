@@ -48,6 +48,5 @@ auto tt::Status::ReadGraphFromFileOrNew(const std::filesystem::path &graph_path)
     if (!std::filesystem::exists(graph_path)) {
         return DependencyGraph{};
     }
-    std::vector<uint8_t> buffer = utils::ReadBufferFromFile(graph_path);
-    return utils::Deserialize<tt::DependencyGraph>(std::move(buffer));
+    return utils::Deserialize<tt::DependencyGraph>(graph_path);
 }

@@ -21,6 +21,7 @@
 #ifndef TT_LONGRUN_HPP_
 #define TT_LONGRUN_HPP_
 
+#include <filesystem>
 #include <optional>
 #include <string>
 
@@ -35,7 +36,7 @@
 namespace tt {
 
 namespace utils {
-template <typename T> auto Deserialize(std::vector<uint8_t> &&) -> T;
+template <typename T> auto Deserialize(const std::filesystem::path &) -> T;
 }
 
 class Longrun : public ServiceImpl {
@@ -71,7 +72,8 @@ public:
 
 private:
     friend class bitsery::Access;
-    friend auto utils::Deserialize<Longrun>(std::vector<uint8_t> &&) -> Longrun;
+    friend auto utils::Deserialize<Longrun>(const std::filesystem::path &)
+        -> Longrun;
     Longrun() = default;
 
     template <typename S> void serialize(S &serializer) {

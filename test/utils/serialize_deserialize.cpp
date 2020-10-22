@@ -42,9 +42,8 @@ TEST_CASE("Serialize and Deserialize") {
     tt::utils::Serialize(graph, graph_test_file);
     REQUIRE(std::filesystem::exists(graph_test_file));
 
-    auto buffer = tt::utils::ReadBufferFromFile(graph_test_file);
     auto deserialized_graph =
-        tt::utils::Deserialize<tt::DependencyGraph>(std::move(buffer));
+        tt::utils::Deserialize<tt::DependencyGraph>(graph_test_file);
 
     CHECK(graph.enabled_services() == deserialized_graph.enabled_services());
     CHECK(graph.nodes() == deserialized_graph.nodes());

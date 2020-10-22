@@ -19,15 +19,19 @@
  */
 #pragma once
 
+#include <filesystem>
+
 #include "bitsery/adapter/buffer.h"
 #include "bitsery/bitsery.h"
 
 #include "tt/exception.hpp"
+#include "tt/utils/read_buffer_from_file.hpp"
 
 namespace tt::utils {
 
-template <typename T> auto Deserialize(std::vector<uint8_t> &&buffer) -> T {
+template <typename T> auto Deserialize(const std::filesystem::path &path) -> T {
     T obj;
+    auto buffer = ReadBufferFromFile(path);
     auto state = bitsery::quickDeserialization<
         bitsery::InputBufferAdapter<std::vector<uint8_t>>>(
         {buffer.begin(), buffer.size()}, obj);
