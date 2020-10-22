@@ -50,20 +50,21 @@ tt::ScriptSupervisor::ScriptSupervisor(const std::string &service_name,
     : service_name_(service_name), script_(script), environment_(environment),
       logger_(std::move(logger)) {}
 
-auto tt::ScriptSupervisor::Spawn() -> ScriptStatus {
+auto tt::ScriptSupervisor::Execute() -> ScriptStatus {
     auto max_death = script_.max_death();
     decltype(max_death) time_tried = 0;
     ScriptStatus status = ScriptStatus::Failure;
     do {
-        status =
-            TrySpawn(Timeout{std::chrono::milliseconds(script_.timeout())});
+        status = ExecuteUntilTimeout(
+            Timeout{std::chrono::milliseconds(script_.timeout())});
         time_tried++;
     } while (time_tried != max_death && status != ScriptStatus::Success);
     return status;
 }
 
-auto tt::ScriptSupervisor::TrySpawn(Timeout timeout) -> ScriptStatus {
-    ExecuteScript();
+auto tt::ScriptSupervisor::ExecuteUntilTimeout(Timeout timeout)
+    -> ScriptStatus {
+    LaunchProcess();
     while (!HasExited() && !timeout.TimedOut()) {
         std::this_thread::yield();
     }
@@ -74,11 +75,11 @@ auto tt::ScriptSupervisor::TrySpawn(Timeout timeout) -> ScriptStatus {
         return ScriptStatus::Success;
     }
 
-    Kill(Timeout{std::chrono::milliseconds(script_.timeout_kill())});
+    Kill();
     return ScriptStatus::Failure;
 }
 
-void tt::ScriptSupervisor::ExecuteScript() {
+void tt::ScriptSupervisor::LaunchProcess() {
     auto builder = ScriptBuilderFactory::GetScriptBuilder(script_.type());
     auto command = builder->script(script_.execute(), environment_);
     process_ = std::make_unique<TinyProcessLib::Process>(
@@ -91,7 +92,8 @@ void tt::ScriptSupervisor::ExecuteScript() {
         });
 }
 
-void tt::ScriptSupervisor::Kill(Timeout timeout) {
+void tt::ScriptSupervisor::Kill() {
+    Timeout timeout{std::chrono::milliseconds(script_.timeout_kill())};
     Signal(static_cast<int>(script_.down_signal()));
     while (!HasExited() && !timeout.TimedOut()) {
         std::this_thread::yield();
@@ -134,10 +136,6 @@ auto tt::ScriptSupervisor::GetEnviromentFromScript() const
                       environment_vec_cstr.push_back(key_value.c_str());
                   });
     return environment_vec_cstr;
-}
-
-void tt::ScriptSupervisor::SetupUidGid() {
-    // TODO: implement
 }
 
 auto tt::ScriptSupervisor::service_name() const -> const std::string & {

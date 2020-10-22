@@ -44,18 +44,27 @@ public:
 
     [[nodiscard]] auto service_name() const -> const std::string &;
 
-    void Kill(Timeout timeout);
-    virtual void Signal(int signum);
-    auto Spawn() -> ScriptStatus;
+    // Execute the script and returns ScriptStatus::Success if it exited
+    // successfully if it exits with non 0 status code or it takes more than
+    // timeout milliseconds to run, returns ScriptStatus::Failure
+    auto Execute() -> ScriptStatus;
+    // send script.down_signal to the process and if it hasn't exited
+    // in script.timeout_kill milliseconds, send SIGKILL
+    void Kill();
+    // Send signum to the process
+    void Signal(int signum);
 
 protected:
-    void ExecuteScript();
+    [[nodiscard]] auto ExecuteUntilTimeout(Timeout timeout) -> ScriptStatus;
     [[nodiscard]] auto GetEnviromentFromScript() const
         -> std::vector<const char *>;
-    auto GetExitStatus() -> int;
-    virtual auto HasExited() -> bool;
-    void SetupUidGid();
-    auto TrySpawn(Timeout timeout) -> ScriptStatus;
+    // Get the exit status of the process, block if it hasn't exited
+    [[nodiscard]] auto GetExitStatus() -> int;
+    // Has the process exited? Non-blocking call
+    [[nodiscard]] auto HasExited() -> bool;
+    // Create a new instance of TinyProcessLib::Process that will fork and
+    // execute the script using execv
+    void LaunchProcess();
 
 private:
     const std::string &service_name_;

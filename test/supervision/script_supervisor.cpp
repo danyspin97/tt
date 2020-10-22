@@ -50,7 +50,7 @@ void TestOutput(bool is_stdout) {
     tt::Environment env;
     tt::ScriptSupervisor spawn_script(test_name, script, env,
                                  tt::ScriptLogger(logger));
-    tt::ScriptStatus status = spawn_script.Spawn();
+    tt::ScriptStatus status = spawn_script.Execute();
     REQUIRE(status == tt::ScriptStatus::Success);
     REQUIRE(std::filesystem::exists(logfile));
 
@@ -70,42 +70,42 @@ tt::ScriptLogger logger{console};
 TEST_CASE("ScriptSupervisor") {
     tt::Environment env;
 
-    SECTION("Spawn sucessfull script") {
+    SECTION("Execute sucessfull script") {
         tt::Script script{tt::Script::Type::SH, "true"};
         tt::ScriptSupervisor spawn_script("test-path-sleep", script, env, logger);
-        tt::ScriptStatus status = spawn_script.Spawn();
+        tt::ScriptStatus status = spawn_script.Execute();
         CHECK(status == tt::ScriptStatus::Success);
     }
 
-    SECTION("Spawn failing script") {
+    SECTION("Execute failing script") {
         tt::Script script{tt::Script::Type::SH, "false"};
         tt::ScriptSupervisor spawn_script("test-path-sleep", script, env, logger);
-        tt::ScriptStatus status = spawn_script.Spawn();
+        tt::ScriptStatus status = spawn_script.Execute();
         CHECK(status == tt::ScriptStatus::Failure);
     }
 
-    SECTION("Spawn script within timeout") {
+    SECTION("Execute script within timeout") {
         tt::Script script{tt::Script::Type::SH, "sleep 1"};
         script.timeout(2000);
         tt::ScriptSupervisor spawn_script("test-path-sleep", script, env, logger);
-        tt::ScriptStatus status = spawn_script.Spawn();
+        tt::ScriptStatus status = spawn_script.Execute();
         CHECK(status == tt::ScriptStatus::Success);
     }
 
-    SECTION("Spawn script that exceed timeout") {
+    SECTION("Execute script that exceed timeout") {
         tt::Script script{tt::Script::Type::SH, "sleep 10"};
         script.timeout(50);
         tt::ScriptSupervisor spawn_script("test-path-sleep", script, env, logger);
-        tt::ScriptStatus status = spawn_script.Spawn();
+        tt::ScriptStatus status = spawn_script.Execute();
         CHECK(status == tt::ScriptStatus::Failure);
     }
 
-    SECTION("Spawn script within timeout and fail") {
+    SECTION("Execute script within timeout and fail") {
         tt::Script script{tt::Script::Type::SH, "sleep 1 && false"};
         script.timeout(2000);
 
         tt::ScriptSupervisor spawn_script("test-path-sleep", script, env, logger);
-        tt::ScriptStatus status = spawn_script.Spawn();
+        tt::ScriptStatus status = spawn_script.Execute();
         CHECK(status == tt::ScriptStatus::Failure);
     }
 
@@ -123,7 +123,7 @@ TEST_CASE("ScriptSupervisor") {
 
         tt::ScriptSupervisor spawn_script("test-path-sleep", script, env, logger);
 
-        tt::ScriptStatus status = spawn_script.Spawn();
+        tt::ScriptStatus status = spawn_script.Execute();
         CHECK(status == tt::ScriptStatus::Failure);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
         REQUIRE(std::filesystem::exists(testfile));
@@ -144,25 +144,25 @@ TEST_CASE("ScriptSupervisor") {
         script.max_death(1);
 
         tt::ScriptSupervisor spawn_script("test-path-sleep", script, env, logger);
-        tt::ScriptStatus status = spawn_script.Spawn();
+        tt::ScriptStatus status = spawn_script.Execute();
         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
         CHECK(status == tt::ScriptStatus::Failure);
         CHECK_FALSE(std::filesystem::exists(testfile));
     }
 
-    SECTION("Spawn sucessfull path") {
+    SECTION("Execute sucessfull path") {
         tt::Script script{tt::Script::Type::Path, "sleep 0"};
         tt::ScriptSupervisor spawn_script("test-path-sleep", script, env, logger);
-        tt::ScriptStatus status = spawn_script.Spawn();
+        tt::ScriptStatus status = spawn_script.Execute();
         CHECK(status == tt::ScriptStatus::Success);
     }
 
-    SECTION("Spawn sucessfull sleep as path") {
+    SECTION("Execute sucessfull sleep as path") {
         tt::Script script{tt::Script::Type::Path, "sleep 2"};
         script.timeout(5000);
         tt::ScriptSupervisor spawn_script("test-path-sleep", script, env, logger);
-        tt::ScriptStatus status = spawn_script.Spawn();
+        tt::ScriptStatus status = spawn_script.Execute();
         CHECK(status == tt::ScriptStatus::Success);
     }
 

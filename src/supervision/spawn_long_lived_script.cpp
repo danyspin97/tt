@@ -41,7 +41,7 @@ auto tt::SpawnLongLivedScript::Spawn() -> ScriptStatus {
     if (long_lived_script_.notify()) {
         SetupNotifyFd();
     }
-    ExecuteScript();
+    LaunchProcess();
     if (long_lived_script_.notify()) {
         return ListenOnNotifyFd();
     }

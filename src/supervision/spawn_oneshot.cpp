@@ -36,7 +36,7 @@ void tt::SpawnOneshot::Spawn() const {
     logger_.Start();
     ScriptSupervisor spawn_start{name, oneshot_.start(), oneshot_.environment(),
                             logger_.GetScriptLogger()};
-    if (spawn_start.Spawn() == ScriptStatus::Success) {
+    if (spawn_start.Execute() == ScriptStatus::Success) {
         // Notify the service started up successfully
         manager.ServiceStartUpdate(name, true);
         logger_.Success();
@@ -50,6 +50,6 @@ void tt::SpawnOneshot::Spawn() const {
                                oneshot_.environment(),
                                logger_.GetScriptLogger()};
         // We don't care if the stop script failed
-        spawn_stop.Spawn();
+        spawn_stop.Execute();
     }
 }
