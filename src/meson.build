@@ -15,7 +15,7 @@ subdir('data')
 subdir('dependency_graph')
 subdir('log')
 subdir('parser')
-subdir('svc')
+subdir('supervision')
 subdir('utils')
 
 tt_soversion = 0

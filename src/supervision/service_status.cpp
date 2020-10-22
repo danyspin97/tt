@@ -18,26 +18,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "tt/supervision/service_status.hpp"
 
-#include <string>
-#include <vector>
+auto tt::ServiceStatus::Wait() -> bool {
+    std::unique_lock<std::mutex> lock(mutex_);
+    if (ended_) {
+        return success_;
+    }
+    condition_.wait(lock, [this]() { return ended_; });
+    return success_;
+}
 
-#include "tt/data/service.hpp"
-#include "tt/svc/types.hpp"
-
-namespace tt {
-
-class SpawnSupervise {
-public:
-    explicit SpawnSupervise(const Longrun &longrun);
-    void Spawn();
-
-private:
-    [[nodiscard]] auto GetScriptFilename() const -> std::string;
-
-    Longrun longrun_;
-    std::vector<const char *> environment_;
-};
-
-} // namespace tt
+void tt::ServiceStatus::Update(bool succeeded) {
+    std::unique_lock<std::mutex> lock(mutex_);
+    ended_ = true;
+    success_ = succeeded;
+    condition_.notify_all();
+}

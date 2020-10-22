@@ -27,8 +27,8 @@
 #include "tt/action/action_listener.hpp"
 #include "tt/dependency_graph/dependency_reader.hpp"
 #include "tt/status.hpp"
-#include "tt/svc/service_status_manager.hpp"
-#include "tt/svc/spawn_service.hpp"
+#include "tt/supervision/service_status_manager.hpp"
+#include "tt/supervision/spawn_service.hpp"
 #include "tt/user_dirs.hpp"
 
 tt::cli::ServiceControlCommand::ServiceControlCommand(

@@ -18,14 +18,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/svc/service_status_manager.hpp"
+#include "tt/supervision/service_status_manager.hpp"
 
 #include <cassert>
 
 #include "fmt/format.h"
 
 #include "tt/exception.hpp"
-#include "tt/svc/service_status.hpp"
+#include "tt/supervision/service_status.hpp"
 
 auto tt::ServiceStatusManager::GetInstance() -> ServiceStatusManager & {
     static ServiceStatusManager instance;

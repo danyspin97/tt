@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/svc/spawn_script.hpp"
+#include "tt/supervision/spawn_script.hpp"
 
 #include "catch2/catch.hpp"
 

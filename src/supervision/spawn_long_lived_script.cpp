@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/svc/spawn_long_lived_script.hpp"
+#include "tt/supervision/spawn_long_lived_script.hpp"
 
 #include <poll.h>
 #include <unistd.h>
@@ -28,7 +28,7 @@
 
 #include "spdlog/spdlog.h"
 
-#include "tt/svc/supervision_signal_handler.hpp"
+#include "tt/supervision/supervision_signal_handler.hpp"
 
 tt::SpawnLongLivedScript::SpawnLongLivedScript(const std::string &service_name,
                                                const LongLivedScript &script,

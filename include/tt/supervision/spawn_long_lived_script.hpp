@@ -20,25 +20,27 @@
 
 #pragma once
 
-#include "tt/data/longrun.hpp"
-#include "tt/log/longrun_logger.hpp"
-#include "tt/svc/spawn_long_lived_script.hpp"
-#include "tt/svc/spawn_script.hpp"
+#include "tt/supervision/spawn_script.hpp"
 
 namespace tt {
 
-class SuperviseLongrun {
+class SpawnLongLivedScript : public SpawnScript {
 public:
-    explicit SuperviseLongrun(Longrun &&longrun);
-    void Spawn();
+    explicit SpawnLongLivedScript(const std::string &service_name,
+                                  const LongLivedScript &script,
+                                  const Environment &environment,
+                                  ScriptLogger logger);
+
+    auto HasStarted() const -> bool;
+    auto Spawn() -> ScriptStatus;
 
 private:
-    void NotifyStatus(ScriptStatus status) const;
-    auto TrySpawn() -> ScriptStatus;
+    auto ListenOnNotifyFd() -> ScriptStatus;
+    void SetupNotifyFd();
 
-    Longrun longrun_;
-    LongrunLogger logger_;
-    SpawnLongLivedScript spawn_;
+    LongLivedScript long_lived_script_;
+    bool waiting_on_startup_ = false;
+    int notify_fd_ = 0;
 };
 
 } // namespace tt

@@ -20,12 +20,12 @@
 
 #include <utility>
 
-#include "tt/svc/spawn_oneshot.hpp"
+#include "tt/supervision/spawn_oneshot.hpp"
 
 #include "spdlog/spdlog.h"
 
-#include "tt/svc/service_status_manager.hpp"
-#include "tt/svc/spawn_script.hpp"
+#include "tt/supervision/service_status_manager.hpp"
+#include "tt/supervision/spawn_script.hpp"
 
 tt::SpawnOneshot::SpawnOneshot(Oneshot oneshot)
     : oneshot_(std::move(oneshot)), logger_(oneshot.name()) {}

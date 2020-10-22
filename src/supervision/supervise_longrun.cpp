@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/svc/supervise_longrun.hpp"
+#include "tt/supervision/supervise_longrun.hpp"
 
 #include <future>
 
@@ -31,10 +31,10 @@
 
 #include "tt/action/notify_up_action.hpp"
 #include "tt/action/pack_action.hpp"
-#include "tt/svc/spawn_long_lived_script.hpp"
-#include "tt/svc/spawn_script.hpp"
-#include "tt/svc/supervision_signal_handler.hpp"
-#include "tt/svc/timeout.hpp"
+#include "tt/supervision/spawn_long_lived_script.hpp"
+#include "tt/supervision/spawn_script.hpp"
+#include "tt/supervision/supervision_signal_handler.hpp"
+#include "tt/supervision/timeout.hpp"
 
 tt::SuperviseLongrun::SuperviseLongrun(Longrun &&longrun)
     : longrun_(std::move(longrun)), logger_(longrun_.name()),
@@ -61,7 +61,8 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
     SupervisionSignalHandler::ResetStatus();
 
     // Runs in another thread
-    (void)std::async(std::launch::async, [this]() {
+    auto futptr = std::make_shared<std::future<void>>();
+    *futptr = std::async(std::launch::async, [futptr, this]() {
         if (spawn_.Spawn() == ScriptStatus::Success) {
             NotifyStatus(ScriptStatus::Success);
         }

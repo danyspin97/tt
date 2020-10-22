@@ -18,15 +18,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/svc/spawn_service.hpp"
+#include "tt/supervision/spawn_service.hpp"
 
 #include <unistd.h>
 
 #include <filesystem>
 
 #include "tt/data/service.hpp"
-#include "tt/svc/spawn_oneshot.hpp"
-#include "tt/svc/spawn_supervise.hpp"
+#include "tt/supervision/spawn_oneshot.hpp"
+#include "tt/supervision/spawn_supervise.hpp"
 
 // Bundles are only used at compile time
 void tt::SpawnService::operator()(const Bundle & /*bundle*/) const {

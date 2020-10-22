@@ -46,7 +46,7 @@ tt_test_multiple_src = []
 subdir('dependency_graph')
 subdir('parser')
 subdir('script')
-subdir('svc')
+subdir('supervision')
 subdir('utils')
 
 # Adapt tt_test_src (which is a flat array) to tt_test_multiple_src format

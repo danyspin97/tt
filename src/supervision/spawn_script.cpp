@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/svc/spawn_script.hpp"
+#include "tt/supervision/spawn_script.hpp"
 
 #include <csignal>
 
@@ -39,8 +39,8 @@
 #include "tt/script/script_builder_factory.hpp"
 #include "tt/script/shell_script_builder.hpp"
 #include "tt/status.hpp"
-#include "tt/svc/timeout.hpp"
-#include "tt/svc/utils.hpp"
+#include "tt/supervision/timeout.hpp"
+#include "tt/supervision/utils.hpp"
 #include "tt/user_dirs.hpp"
 
 tt::SpawnScript::SpawnScript(const std::string &service_name,

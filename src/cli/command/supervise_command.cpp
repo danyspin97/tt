@@ -36,7 +36,7 @@
 #include "bitsery/bitsery.h"
 
 #include "tt/cli/global_options.hpp"
-#include "tt/svc/supervise_longrun.hpp"
+#include "tt/supervision/supervise_longrun.hpp"
 #include "tt/utils/deserialize.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 

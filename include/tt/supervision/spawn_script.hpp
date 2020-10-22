@@ -27,8 +27,8 @@
 
 #include "tt/data/service.hpp"
 #include "tt/log/script_logger.hpp"
-#include "tt/svc/spawn_supervise.hpp"
-#include "tt/svc/types.hpp"
+#include "tt/supervision/spawn_supervise.hpp"
+#include "tt/supervision/types.hpp"
 
 namespace tt {
 

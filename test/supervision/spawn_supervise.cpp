@@ -18,8 +18,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/svc/spawn_supervise.hpp"
-#include "tt/svc/types.hpp"
+#include "tt/supervision/spawn_supervise.hpp"
+#include "tt/supervision/types.hpp"
 
 #include "catch2/catch.hpp"
 
