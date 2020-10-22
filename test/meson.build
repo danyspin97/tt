@@ -20,6 +20,9 @@ foreach src : tt_test_src
     fmt = '@0@'
     # Convert file to string
     filename = fmt.format(src)
+    # Remove test_ prefix
+    # From 0.56.0
+    # filename = filename.substring(5)
     # Remove cpp suffix
     filename = fs.replace_suffix(filename, '')
     # Replace path separators ('/') with underscore
