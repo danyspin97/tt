@@ -77,12 +77,13 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
             exit(255);
         }
 
-        assert(SupervisionSignalHandler::HasChildExited());
-        if (longrun_.finish()) {
-            SpawnScript(longrun_.name(), longrun_.finish().value(),
-                        longrun_.environment(), logger_.GetScriptLogger());
+        if (SupervisionSignalHandler::HasChildExited()) {
+            if (longrun_.finish()) {
+                SpawnScript(longrun_.name(), longrun_.finish().value(),
+                            longrun_.environment(), logger_.GetScriptLogger());
+            }
+            return ScriptStatus::Failure;
         }
-        return ScriptStatus::Failure;
     }
 }
 
