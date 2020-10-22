@@ -22,7 +22,7 @@
 
 #include "tt/data/longrun.hpp"
 #include "tt/log/longrun_logger.hpp"
-#include "tt/supervision/spawn_long_lived_script.hpp"
+#include "tt/supervision/long_lived_script_supervisor.hpp"
 #include "tt/supervision/script_supervisor.hpp"
 
 namespace tt {
@@ -38,7 +38,7 @@ private:
 
     Longrun longrun_;
     LongrunLogger logger_;
-    SpawnLongLivedScript spawn_;
+    LongLivedScriptSupervisor spawn_;
 };
 
 } // namespace tt

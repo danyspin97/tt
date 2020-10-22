@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/supervision/spawn_long_lived_script.hpp"
+#include "tt/supervision/long_lived_script_supervisor.hpp"
 
 #include <poll.h>
 #include <unistd.h>
@@ -30,14 +30,14 @@
 
 #include "tt/supervision/supervision_signal_handler.hpp"
 
-tt::SpawnLongLivedScript::SpawnLongLivedScript(const std::string &service_name,
+tt::LongLivedScriptSupervisor::LongLivedScriptSupervisor(const std::string &service_name,
                                                const LongLivedScript &script,
                                                const Environment &environment,
                                                ScriptLogger logger)
     : ScriptSupervisor(service_name, script, environment, std::move(logger)),
       long_lived_script_(script) {}
 
-auto tt::SpawnLongLivedScript::Spawn() -> ScriptStatus {
+auto tt::LongLivedScriptSupervisor::Spawn() -> ScriptStatus {
     if (long_lived_script_.notify()) {
         SetupNotifyFd();
     }
@@ -57,7 +57,7 @@ auto tt::SpawnLongLivedScript::Spawn() -> ScriptStatus {
     }
 }
 
-auto tt::SpawnLongLivedScript::ListenOnNotifyFd() -> ScriptStatus {
+auto tt::LongLivedScriptSupervisor::ListenOnNotifyFd() -> ScriptStatus {
     short revents = 0;
     struct pollfd fd = {notify_fd_, POLLIN, revents};
     int res = poll(&fd, 1, long_lived_script_.timeout());
@@ -69,7 +69,7 @@ auto tt::SpawnLongLivedScript::ListenOnNotifyFd() -> ScriptStatus {
     return ScriptStatus::Failure;
 }
 
-void tt::SpawnLongLivedScript::SetupNotifyFd() {
+void tt::LongLivedScriptSupervisor::SetupNotifyFd() {
     std::array<int, 2> fd{};
     pipe(fd.data());
     notify_fd_ = dup(fd[0]);
@@ -77,6 +77,6 @@ void tt::SpawnLongLivedScript::SetupNotifyFd() {
     dup2(fd[1], static_cast<int>(long_lived_script_.notify().value()));
 }
 
-auto tt::SpawnLongLivedScript::HasStarted() const -> bool {
+auto tt::LongLivedScriptSupervisor::HasStarted() const -> bool {
     return waiting_on_startup_;
 }

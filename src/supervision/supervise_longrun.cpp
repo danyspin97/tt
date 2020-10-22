@@ -32,7 +32,7 @@
 #include "tt/action/notify_up_action.hpp"
 #include "tt/action/pack_action.hpp"
 #include "tt/supervision/script_supervisor.hpp"
-#include "tt/supervision/spawn_long_lived_script.hpp"
+#include "tt/supervision/long_lived_script_supervisor.hpp"
 #include "tt/supervision/supervision_signal_handler.hpp"
 #include "tt/supervision/timeout.hpp"
 

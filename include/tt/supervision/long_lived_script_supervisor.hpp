@@ -24,9 +24,9 @@
 
 namespace tt {
 
-class SpawnLongLivedScript : public ScriptSupervisor {
+class LongLivedScriptSupervisor : public ScriptSupervisor {
 public:
-    explicit SpawnLongLivedScript(const std::string &service_name,
+    explicit LongLivedScriptSupervisor(const std::string &service_name,
                                   const LongLivedScript &script,
                                   const Environment &environment,
                                   ScriptLogger logger);

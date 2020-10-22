@@ -28,7 +28,7 @@
 
 #include <array>
 
-#include "tt/supervision/spawn_long_lived_script.hpp"
+#include "tt/supervision/long_lived_script_supervisor.hpp"
 
 #if __linux__
 constexpr std::array<int, 23> deathsigs = {
