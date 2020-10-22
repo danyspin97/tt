@@ -30,14 +30,13 @@
 
 #include "tt/supervision/supervision_signal_handler.hpp"
 
-tt::LongLivedScriptSupervisor::LongLivedScriptSupervisor(const std::string &service_name,
-                                               const LongLivedScript &script,
-                                               const Environment &environment,
-                                               ScriptLogger logger)
+tt::LongLivedScriptSupervisor::LongLivedScriptSupervisor(
+    const std::string &service_name, const LongLivedScript &script,
+    const Environment &environment, ScriptLogger logger)
     : ScriptSupervisor(service_name, script, environment, std::move(logger)),
       long_lived_script_(script) {}
 
-auto tt::LongLivedScriptSupervisor::Spawn() -> ScriptStatus {
+auto tt::LongLivedScriptSupervisor::ExecuteScript() -> ScriptStatus {
     if (long_lived_script_.notify()) {
         SetupNotifyFd();
     }

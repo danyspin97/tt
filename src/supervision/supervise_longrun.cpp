@@ -63,7 +63,7 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
     // Runs in another thread
     auto futptr = std::make_shared<std::future<void>>();
     *futptr = std::async(std::launch::async, [futptr, this]() {
-        if (spawn_.Spawn() == ScriptStatus::Success) {
+        if (spawn_.ExecuteScript() == ScriptStatus::Success) {
             NotifyStatus(ScriptStatus::Success);
         }
     });

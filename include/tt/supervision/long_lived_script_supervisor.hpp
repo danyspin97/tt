@@ -27,15 +27,15 @@ namespace tt {
 class LongLivedScriptSupervisor : public ScriptSupervisor {
 public:
     explicit LongLivedScriptSupervisor(const std::string &service_name,
-                                  const LongLivedScript &script,
-                                  const Environment &environment,
-                                  ScriptLogger logger);
+                                       const LongLivedScript &script,
+                                       const Environment &environment,
+                                       ScriptLogger logger);
 
-    auto HasStarted() const -> bool;
-    auto Spawn() -> ScriptStatus;
+    [[nodiscard]] auto HasStarted() const -> bool;
+    auto ExecuteScript() -> ScriptStatus;
 
 private:
-    auto ListenOnNotifyFd() -> ScriptStatus;
+    [[nodiscard]] auto ListenOnNotifyFd() -> ScriptStatus;
     void SetupNotifyFd();
 
     LongLivedScript long_lived_script_;
