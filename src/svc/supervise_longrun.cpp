@@ -91,10 +91,7 @@ void tt::SuperviseLongrun::NotifyStatus(ScriptStatus status) const {
     nng::socket socket = nng::req::open();
     socket.dial("tcp://localhost:8000");
 
-    bool succeded = false;
-    if (status == ScriptStatus::Success) {
-        succeded = true;
-    }
+    bool succeded = status == ScriptStatus::Success;
     NotifyUpAction action(longrun_.name(), succeded);
     socket.send(PackAction(action));
 }
