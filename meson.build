@@ -35,6 +35,16 @@ spdlog_dep = dependency('spdlog', fallback: ['spdlog', 'spdlog_dep'])
 catch2_dep = dependency('catch2', required: get_option('tests'), fallback: ['catch2', 'catch2_dep'])
 nng_dep = dependency('nng', method : 'cmake', modules : ['nng::nng'], fallback: ['nng', 'nng_dep'])
 
+deps = [
+    # It's safe to include catch2 because it will be disabled
+    # with the 'tests' option
+    catch2_dep,
+    fmt_dep,
+    nng_dep,
+    spdlog_dep,
+    tiny_process_dep,
+]
+
 prefix = get_option('prefix')
 bindir = get_option('bindir')
 datadir = get_option('datadir')
