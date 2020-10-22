@@ -108,8 +108,9 @@ subdir('src')
 
 if catch2_dep.found()
     subdir('test')
+
+    if get_option('b_coverage')
+        run_target('coverage-sonarcloud',
+            command: ['scripts/coverage-sonarcloud.sh'])
+    endif
 endif
-
-run_target('coverage-sonarcloud',
-    command: ['scripts/coverage-sonarcloud.sh'])
-
