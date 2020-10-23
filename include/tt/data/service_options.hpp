@@ -66,6 +66,7 @@ private:
 
 } // namespace tt
 
-auto operator<<(std::ostream &oss, tt::ServiceOptions const &options) -> std::ostream &;
+auto operator<<(std::ostream &oss, tt::ServiceOptions const &options)
+    -> std::ostream &;
 
 #endif // TT_SERVICE_OPTIONS_HPP_

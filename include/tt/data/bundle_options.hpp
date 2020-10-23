@@ -31,7 +31,9 @@ namespace tt {
 
 class BundleOptions : public ServiceOptions {
 public:
-    [[nodiscard]] auto contents() const -> std::vector<std::string> { return contents_; }
+    [[nodiscard]] auto contents() const -> std::vector<std::string> {
+        return contents_;
+    }
 
     void contents(std::vector<std::string> contents) {
         contents_ = std::move(contents);

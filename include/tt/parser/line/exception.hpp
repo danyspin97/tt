@@ -51,7 +51,8 @@ public:
 
 class ValuesAfterEndingTokenException : public Exception {
 public:
-    explicit ValuesAfterEndingTokenException(const std::string &msg) : Exception(msg) {}
+    explicit ValuesAfterEndingTokenException(const std::string &msg)
+        : Exception(msg) {}
 };
 
 } // namespace tt

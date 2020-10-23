@@ -81,7 +81,8 @@ void tt::Dirs::livedir(std::filesystem::path &&new_path) {
 }
 
 void tt::Dirs::logdir(std::filesystem::path &&new_path) {
-    logdir_ = std::move(new_path);}
+    logdir_ = std::move(new_path);
+}
 
 void tt::Dirs::servicedir(std::filesystem::path &&new_path) {
     servicedir_ = std::move(new_path);

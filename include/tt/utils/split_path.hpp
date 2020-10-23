@@ -27,4 +27,4 @@ namespace tt::utils {
 
 auto SplitPath(const std::string &paths) -> std::vector<std::filesystem::path>;
 
-}
+} // namespace tt::utils

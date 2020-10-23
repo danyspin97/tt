@@ -28,7 +28,9 @@ namespace tt {
 
 class ArrayParser {
 public:
-    [[nodiscard]] auto IsParsing() const noexcept -> bool { return is_parsing_; }
+    [[nodiscard]] auto IsParsing() const noexcept -> bool {
+        return is_parsing_;
+    }
 
     [[nodiscard]] auto key() const noexcept -> std::string { return key_; }
 

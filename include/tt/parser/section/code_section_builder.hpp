@@ -34,8 +34,10 @@ public:
 protected:
     explicit CodeSectionBuilder(std::string section);
 
-    virtual auto GetCodeAttributeForKey(const std::string &key) -> std::string & = 0;
-    virtual auto GetAttributeForKey(const std::string &key) -> std::string & = 0;
+    virtual auto GetCodeAttributeForKey(const std::string &key)
+        -> std::string & = 0;
+    virtual auto GetAttributeForKey(const std::string &key)
+        -> std::string & = 0;
 
     std::string section_;
 

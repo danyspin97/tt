@@ -26,7 +26,8 @@ namespace tt {
 
 class ServiceNotFoundParserException : public Exception {
 public:
-    explicit ServiceNotFoundParserException(const std::string &msg) : Exception(msg) {}
+    explicit ServiceNotFoundParserException(const std::string &msg)
+        : Exception(msg) {}
 };
 
 } // namespace tt

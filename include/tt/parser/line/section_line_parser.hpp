@@ -35,7 +35,8 @@ public:
         ParseLine();
     }
 
-    [[nodiscard]] auto GetSectionOrDefault(std::string _default) const -> std::string {
+    [[nodiscard]] auto GetSectionOrDefault(std::string _default) const
+        -> std::string {
         if (IsLineValid()) {
             return section_;
         }
