@@ -50,7 +50,7 @@ tt::ScriptSupervisor::ScriptSupervisor(const std::string &service_name,
     : service_name_(service_name), script_(script), environment_(environment),
       logger_(std::move(logger)) {}
 
-auto tt::ScriptSupervisor::Execute() -> ScriptStatus {
+auto tt::ScriptSupervisor::ExecuteScript() -> ScriptStatus {
     auto max_death = script_.max_death();
     decltype(max_death) time_tried = 0;
     ScriptStatus status = ScriptStatus::Failure;

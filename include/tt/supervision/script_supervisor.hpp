@@ -47,7 +47,7 @@ public:
     // Execute the script and returns ScriptStatus::Success if it exited
     // successfully if it exits with non 0 status code or it takes more than
     // timeout milliseconds to run, returns ScriptStatus::Failure
-    auto Execute() -> ScriptStatus;
+    auto ExecuteScript() -> ScriptStatus;
     // send script.down_signal to the process and if it hasn't exited
     // in script.timeout_kill milliseconds, send SIGKILL
     void Kill();
