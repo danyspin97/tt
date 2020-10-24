@@ -20,17 +20,17 @@
 
 #include <utility>
 
-#include "tt/supervision/spawn_oneshot.hpp"
+#include "tt/supervision/oneshot_supervisor.hpp"
 
 #include "spdlog/spdlog.h"
 
 #include "tt/supervision/script_supervisor.hpp"
 #include "tt/supervision/service_status_manager.hpp"
 
-tt::SpawnOneshot::SpawnOneshot(Oneshot oneshot)
+tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot)
     : oneshot_(std::move(oneshot)), logger_(oneshot.name()) {}
 
-void tt::SpawnOneshot::Spawn() const {
+void tt::OneshotSupervisor::Spawn() const {
     auto manager = ServiceStatusManager::GetInstance();
     const auto &name = oneshot_.name();
     logger_.Start();

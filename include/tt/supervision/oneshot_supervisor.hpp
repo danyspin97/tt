@@ -31,9 +31,9 @@ class logger;
 
 namespace tt {
 
-class SpawnOneshot {
+class OneshotSupervisor {
 public:
-    explicit SpawnOneshot(Oneshot oneshot);
+    explicit OneshotSupervisor(Oneshot oneshot);
 
     void Spawn() const;
 

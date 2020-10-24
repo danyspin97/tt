@@ -25,7 +25,7 @@
 #include <filesystem>
 
 #include "tt/data/service.hpp"
-#include "tt/supervision/spawn_oneshot.hpp"
+#include "tt/supervision/oneshot_supervisor.hpp"
 #include "tt/supervision/spawn_supervise.hpp"
 
 // Bundles are only used at compile time
@@ -39,7 +39,7 @@ void tt::SpawnService::operator()(const Longrun &longrun) const {
 }
 
 void tt::SpawnService::operator()(const Oneshot &oneshot) const {
-    SpawnOneshot spawn{oneshot};
+    OneshotSupervisor spawn{oneshot};
     spawn.Spawn();
 }
 
