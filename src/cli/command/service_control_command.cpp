@@ -28,7 +28,7 @@
 #include "tt/dependency_graph/dependency_reader.hpp"
 #include "tt/status.hpp"
 #include "tt/supervision/service_status_manager.hpp"
-#include "tt/supervision/spawn_service.hpp"
+#include "tt/supervision/supervise_service.hpp"
 #include "tt/user_dirs.hpp"
 
 tt::cli::ServiceControlCommand::ServiceControlCommand(
@@ -82,6 +82,5 @@ void tt::cli::ServiceControlCommand::SpawnNode(const ServiceNode &node) {
         return;
     }
 
-    SpawnService spawn{};
-    std::visit(std::ref(spawn), node.service());
+    std::visit(SuperviseService{}, node.service());
 }

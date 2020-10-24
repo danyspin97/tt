@@ -18,24 +18,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "tt/supervision/supervise_service.hpp"
 
-#include <variant>
+#include <unistd.h>
 
-namespace tt {
+#include <filesystem>
 
-class Bundle;
-class Longrun;
-class Oneshot;
+#include "tt/data/service.hpp"
+#include "tt/supervision/longrun_supervisor_launcher.hpp"
+#include "tt/supervision/oneshot_supervisor.hpp"
 
-class SpawnService {
-public:
-    SpawnService() = default;
+// Bundles are only used at compile time
+void tt::SuperviseService::operator()(const Bundle & /*bundle*/) const {
+    assert(false);
+}
 
-    void operator()(const Bundle &bundle) const;
-    void operator()(const Longrun &longrun) const;
-    void operator()(const Oneshot &oneshot) const;
-    void operator()(std::monostate /*unused*/) const;
-};
+void tt::SuperviseService::operator()(const Longrun &longrun) const {
+    LongrunSupervisorLauncher supervise{longrun};
+    supervise.Launch();
+}
 
-} // namespace tt
+void tt::SuperviseService::operator()(const Oneshot &oneshot) const {
+    OneshotSupervisor spawn{oneshot};
+    spawn.Run();
+}
+
+void tt::SuperviseService::operator()(std::monostate /*unused*/) const {
+    assert(false);
+}
