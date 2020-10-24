@@ -1,0 +1,44 @@
+
+#pragma once
+
+#include "tt/path/dirs.hpp"
+
+namespace tt {
+
+class SystemDirs : public Dirs {
+public:
+    [[nodiscard]] auto bindir() const -> std::filesystem::path override {
+        return "@bindir@";
+    }
+
+    [[nodiscard]] auto confdir() const -> std::filesystem::path override {
+        return "@confdir@";
+    }
+
+    [[nodiscard]] auto execline_prefix() const
+        -> std::filesystem::path override {
+        return "@execline_prefix@";
+    }
+
+    [[nodiscard]] auto libexecdir() const -> std::filesystem::path override {
+        return "@libexecdir@";
+    }
+
+    [[nodiscard]] auto livedir() const -> std::filesystem::path override {
+        return "@livedir@";
+    }
+
+    [[nodiscard]] auto logdir() const -> std::filesystem::path override {
+        return "@logdir@";
+    }
+
+    [[nodiscard]] auto servicedir() const -> std::filesystem::path override {
+        return "@servicedir@";
+    }
+
+    [[nodiscard]] auto statedir() const -> std::filesystem::path override {
+        return "@statedir@";
+    }
+};
+
+} // namespace tt

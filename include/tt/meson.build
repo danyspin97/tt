@@ -22,3 +22,5 @@ dirs_config = configuration_data({
     'libexecdir': libexecdir,
     'execline_prefix': execline_prefix
 })
+
+subdir('path')
