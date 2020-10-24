@@ -30,7 +30,7 @@
 tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot)
     : oneshot_(std::move(oneshot)), logger_(oneshot.name()) {}
 
-void tt::OneshotSupervisor::Spawn() const {
+void tt::OneshotSupervisor::Run() const {
     auto manager = ServiceStatusManager::GetInstance();
     const auto &name = oneshot_.name();
     logger_.Start();

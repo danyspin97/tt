@@ -40,7 +40,7 @@ void tt::SpawnService::operator()(const Longrun &longrun) const {
 
 void tt::SpawnService::operator()(const Oneshot &oneshot) const {
     OneshotSupervisor spawn{oneshot};
-    spawn.Spawn();
+    spawn.Run();
 }
 
 void tt::SpawnService::operator()(std::monostate /*unused*/) const {

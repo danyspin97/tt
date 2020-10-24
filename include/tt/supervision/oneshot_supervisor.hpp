@@ -35,7 +35,7 @@ class OneshotSupervisor {
 public:
     explicit OneshotSupervisor(Oneshot oneshot);
 
-    void Spawn() const;
+    void Run() const;
 
 private:
     static void InitLogger();
