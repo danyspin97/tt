@@ -25,8 +25,8 @@
 #include <filesystem>
 
 #include "tt/data/service.hpp"
+#include "tt/supervision/longrun_supervisor_launcher.hpp"
 #include "tt/supervision/oneshot_supervisor.hpp"
-#include "tt/supervision/spawn_supervise.hpp"
 
 // Bundles are only used at compile time
 void tt::SpawnService::operator()(const Bundle & /*bundle*/) const {
@@ -34,7 +34,7 @@ void tt::SpawnService::operator()(const Bundle & /*bundle*/) const {
 }
 
 void tt::SpawnService::operator()(const Longrun &longrun) const {
-    SpawnSupervise supervise{longrun};
+    LongrunSupervisorLauncher supervise{longrun};
     supervise.Spawn();
 }
 

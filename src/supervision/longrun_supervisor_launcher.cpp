@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/supervision/spawn_supervise.hpp"
+#include "tt/supervision/longrun_supervisor_launcher.hpp"
 
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -44,13 +44,13 @@
 #include "tt/status.hpp"
 #include "tt/utils/serialize.hpp"
 
-tt::SpawnSupervise::SpawnSupervise(const Longrun &longrun) : longrun_(longrun) {
+tt::LongrunSupervisorLauncher::LongrunSupervisorLauncher(const Longrun &longrun)
+    : longrun_(longrun) {
     auto filename = GetScriptFilename();
     utils::Serialize(longrun, filename);
 }
 
-void tt::SpawnSupervise::Spawn() {
-    // pstdout mode is the default
+void tt::LongrunSupervisorLauncher::Spawn() {
     std::string execute{"tt supervise " + GetScriptFilename()};
     PathScriptBuilder builder;
     tt::Environment env;
@@ -60,7 +60,7 @@ void tt::SpawnSupervise::Spawn() {
     TinyProcessLib::Process supervise{command};
 }
 
-auto tt::SpawnSupervise::GetScriptFilename() const -> std::string {
+auto tt::LongrunSupervisorLauncher::GetScriptFilename() const -> std::string {
     const auto &dirs = Status::GetInstance().dirs();
     std::filesystem::path filename(dirs.livedir());
     filename /= "supervise";

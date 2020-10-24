@@ -28,9 +28,9 @@
 
 namespace tt {
 
-class SpawnSupervise {
+class LongrunSupervisorLauncher {
 public:
-    explicit SpawnSupervise(const Longrun &longrun);
+    explicit LongrunSupervisorLauncher(const Longrun &longrun);
     void Spawn();
 
 private:
