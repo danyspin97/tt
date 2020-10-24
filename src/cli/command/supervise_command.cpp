@@ -36,7 +36,7 @@
 #include "bitsery/bitsery.h"
 
 #include "tt/cli/global_options.hpp"
-#include "tt/supervision/supervise_longrun.hpp"
+#include "tt/supervision/longrun_supervisor.hpp"
 #include "tt/utils/deserialize.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 
@@ -48,7 +48,7 @@ tt::cli::SuperviseCommand::SuperviseCommand(
 auto tt::cli::SuperviseCommand::Execute() -> int {
     auto longrun = utils::Deserialize<Longrun>(args::get(filename_));
 
-    auto supervise = SuperviseLongrun{std::move(longrun)};
+    auto supervise = LongrunSupervisor{std::move(longrun)};
     supervise.Spawn();
     return 0;
 }

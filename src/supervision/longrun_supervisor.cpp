@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/supervision/supervise_longrun.hpp"
+#include "tt/supervision/longrun_supervisor.hpp"
 
 #include <future>
 
@@ -31,17 +31,17 @@
 
 #include "tt/action/notify_up_action.hpp"
 #include "tt/action/pack_action.hpp"
-#include "tt/supervision/script_supervisor.hpp"
 #include "tt/supervision/long_lived_script_supervisor.hpp"
+#include "tt/supervision/script_supervisor.hpp"
 #include "tt/supervision/supervision_signal_handler.hpp"
 #include "tt/supervision/timeout.hpp"
 
-tt::SuperviseLongrun::SuperviseLongrun(Longrun &&longrun)
+tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun)
     : longrun_(std::move(longrun)), logger_(longrun_.name()),
       spawn_(longrun_.name(), longrun_.run(), longrun_.environment(),
              logger_.GetScriptLogger()) {}
 
-void tt::SuperviseLongrun::Spawn() {
+void tt::LongrunSupervisor::Spawn() {
     SupervisionSignalHandler::SetupSignals();
 
     auto time_to_try = longrun_.run().max_death();
@@ -57,7 +57,7 @@ void tt::SuperviseLongrun::Spawn() {
     exit(1);
 }
 
-auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
+auto tt::LongrunSupervisor::TrySpawn() -> ScriptStatus {
     SupervisionSignalHandler::ResetStatus();
 
     // Runs in another thread
@@ -88,7 +88,7 @@ auto tt::SuperviseLongrun::TrySpawn() -> ScriptStatus {
     }
 }
 
-void tt::SuperviseLongrun::NotifyStatus(ScriptStatus status) const {
+void tt::LongrunSupervisor::NotifyStatus(ScriptStatus status) const {
     nng::socket socket = nng::req::open();
     socket.dial("tcp://localhost:8000");
 

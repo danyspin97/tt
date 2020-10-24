@@ -27,9 +27,9 @@
 
 namespace tt {
 
-class SuperviseLongrun {
+class LongrunSupervisor {
 public:
-    explicit SuperviseLongrun(Longrun &&longrun);
+    explicit LongrunSupervisor(Longrun &&longrun);
     void Spawn();
 
 private:
