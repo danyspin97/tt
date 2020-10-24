@@ -41,14 +41,14 @@ tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun)
       spawn_(longrun_.name(), longrun_.run(), longrun_.environment(),
              logger_.GetScriptLogger()) {}
 
-void tt::LongrunSupervisor::Spawn() {
+void tt::LongrunSupervisor::ExecuteScript() {
     SupervisionSignalHandler::SetupSignals();
 
     auto time_to_try = longrun_.run().max_death();
     decltype(time_to_try) time_tried = 0;
     auto status = ScriptStatus::Failure;
     do {
-        status = TrySpawn();
+        status = TryExecute();
         time_tried++;
         continue;
     } while (time_tried < time_to_try && status != ScriptStatus::Success);
@@ -57,7 +57,7 @@ void tt::LongrunSupervisor::Spawn() {
     exit(1);
 }
 
-auto tt::LongrunSupervisor::TrySpawn() -> ScriptStatus {
+auto tt::LongrunSupervisor::TryExecute() -> ScriptStatus {
     SupervisionSignalHandler::ResetStatus();
 
     // Runs in another thread

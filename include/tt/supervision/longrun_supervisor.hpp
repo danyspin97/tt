@@ -30,11 +30,11 @@ namespace tt {
 class LongrunSupervisor {
 public:
     explicit LongrunSupervisor(Longrun &&longrun);
-    void Spawn();
+    void ExecuteScript();
 
 private:
     void NotifyStatus(ScriptStatus status) const;
-    auto TrySpawn() -> ScriptStatus;
+    auto TryExecute() -> ScriptStatus;
 
     Longrun longrun_;
     LongrunLogger logger_;
