@@ -20,7 +20,7 @@
 
 #include "tt/parser/service/system_services_parser.hpp"
 
-#include "tt/dirs.hpp"
+#include "tt/path/dirs.hpp"
 
 using std::string;
 using std::vector;

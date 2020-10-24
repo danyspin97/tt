@@ -20,7 +20,7 @@
 
 #include "tt/parser/service/user_services_parser.hpp"
 
-#include "tt/user_dirs.hpp"
+#include "tt/path/user_dirs.hpp"
 
 tt::UserServicesParser::UserServicesParser()
     : ServicesParser(std::string{".user"},

@@ -41,7 +41,7 @@
 #include "tt/status.hpp"
 #include "tt/supervision/timeout.hpp"
 #include "tt/supervision/utils.hpp"
-#include "tt/user_dirs.hpp"
+#include "tt/path/user_dirs.hpp"
 
 tt::ScriptSupervisor::ScriptSupervisor(const std::string &service_name,
                                        const Script &script,

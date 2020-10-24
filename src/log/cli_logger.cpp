@@ -28,7 +28,7 @@
 #include "spdlog/spdlog.h"
 
 #include "tt/define.h"
-#include "tt/dirs.hpp"
+#include "tt/path/dirs.hpp"
 #include "tt/log/cli_logger.hpp"
 #include "tt/status.hpp"
 

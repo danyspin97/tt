@@ -24,7 +24,7 @@
 
 #include "tt/define.h"
 #include "tt/exception.hpp"
-#include "tt/user_dirs.hpp"
+#include "tt/path/user_dirs.hpp"
 #include "tt/utils/deserialize.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 

@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/user_dirs.hpp"
+#include "tt/path/user_dirs.hpp"
 
 #include <cassert>
 

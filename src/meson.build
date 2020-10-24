@@ -1,9 +1,7 @@
 tt_src = files(
-    'dirs.cpp',
     'environment_generator.cpp',
     'signal.cpp',
     'status.cpp',
-    'user_dirs.cpp',
 )
 
 tt_cli_src = []
@@ -15,6 +13,7 @@ subdir('data')
 subdir('dependency_graph')
 subdir('log')
 subdir('parser')
+subdir('path')
 subdir('supervision')
 subdir('utils')
 

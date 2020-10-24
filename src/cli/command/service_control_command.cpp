@@ -29,7 +29,7 @@
 #include "tt/status.hpp"
 #include "tt/supervision/service_status_manager.hpp"
 #include "tt/supervision/supervise_service.hpp"
-#include "tt/user_dirs.hpp"
+#include "tt/path/user_dirs.hpp"
 
 tt::cli::ServiceControlCommand::ServiceControlCommand(
     args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)

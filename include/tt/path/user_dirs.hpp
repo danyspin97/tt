@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include "tt/dirs.hpp"
+#include "tt/path/dirs.hpp"
 
 namespace tt {
 

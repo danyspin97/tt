@@ -24,7 +24,7 @@
 
 #include "tt/data/long_lived_script.hpp"
 #include "tt/define.h"
-#include "tt/dirs.hpp"
+#include "tt/path/dirs.hpp"
 #include "tt/parser/section/exception.hpp"
 
 auto tt::LongLivedScriptBuilder::GetAttributeForKey(const std::string &key)

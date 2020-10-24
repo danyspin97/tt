@@ -31,7 +31,7 @@
 #include "fmt/ostream.h" // Needed to use operator<< on custom class
 #include "spdlog/spdlog.h"
 
-#include "tt/dirs.hpp"
+#include "tt/path/dirs.hpp"
 #include "tt/parser/service/service_parser.hpp"
 
 #include "tt/cli/global_options.hpp"

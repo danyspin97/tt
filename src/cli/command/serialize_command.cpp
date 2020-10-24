@@ -31,7 +31,7 @@
 #include "spdlog/spdlog.h"
 
 #include "tt/data/service.hpp"
-#include "tt/dirs.hpp"
+#include "tt/path/dirs.hpp"
 #include "tt/parser/service/service_parser.hpp"
 #include "tt/utils/serialize.hpp"
 

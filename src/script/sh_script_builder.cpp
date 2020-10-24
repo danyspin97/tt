@@ -20,7 +20,7 @@
 
 #include "tt/script/sh_script_builder.hpp"
 
-#include "tt/dirs.hpp"
+#include "tt/path/dirs.hpp"
 #include "tt/status.hpp"
 
 void tt::ShScriptBuilder::ApplyModifiers() {

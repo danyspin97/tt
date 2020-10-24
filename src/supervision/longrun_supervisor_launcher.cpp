@@ -36,7 +36,7 @@
 
 #include "process.hpp"
 
-#include "tt/dirs.hpp"
+#include "tt/path/dirs.hpp"
 #include "tt/environment_generator.hpp"
 #include "tt/exception.hpp"
 #include "tt/log/longrun_logger.hpp"

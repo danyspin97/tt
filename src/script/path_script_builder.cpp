@@ -23,7 +23,7 @@
 #include "fmt/format.h"
 
 #include "tt/data/environment.hpp"
-#include "tt/dirs.hpp"
+#include "tt/path/dirs.hpp"
 #include "tt/status.hpp"
 #include "tt/utils/split_path.hpp"
 #include "tt/utils/trim.hpp"

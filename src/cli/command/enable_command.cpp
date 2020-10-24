@@ -29,7 +29,7 @@
 #include "tt/parser/service/system_services_parser.hpp"
 #include "tt/parser/service/user_services_parser.hpp"
 #include "tt/status.hpp"
-#include "tt/user_dirs.hpp"
+#include "tt/path/user_dirs.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 #include "tt/utils/serialize.hpp"
 

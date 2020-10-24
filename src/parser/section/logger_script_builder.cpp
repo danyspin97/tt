@@ -23,7 +23,7 @@
 #include "tt/parser/section/logger_script_builder.hpp"
 
 #include "tt/define.h"
-#include "tt/dirs.hpp"
+#include "tt/path/dirs.hpp"
 #include "tt/parser/section/exception.hpp"
 
 using std::string;
