@@ -50,7 +50,7 @@ tt::LongrunSupervisorLauncher::LongrunSupervisorLauncher(const Longrun &longrun)
     utils::Serialize(longrun, filename);
 }
 
-void tt::LongrunSupervisorLauncher::Spawn() {
+void tt::LongrunSupervisorLauncher::Launch() {
     std::string execute{"tt supervise " + GetScriptFilename()};
     PathScriptBuilder builder;
     tt::Environment env;

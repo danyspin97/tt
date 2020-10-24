@@ -31,7 +31,7 @@ namespace tt {
 class LongrunSupervisorLauncher {
 public:
     explicit LongrunSupervisorLauncher(const Longrun &longrun);
-    void Spawn();
+    void Launch();
 
 private:
     [[nodiscard]] auto GetScriptFilename() const -> std::string;
