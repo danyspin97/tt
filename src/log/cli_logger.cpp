@@ -34,7 +34,7 @@
 #include "tt/log/cli_logger.hpp"
 #include "tt/path/dirs.hpp"
 
-tt::CliLogger::CliLogger(std::shared_ptr<Dirs> dirs,
+tt::CliLogger::CliLogger(const std::shared_ptr<Dirs> &dirs,
                          const std::string &verbosity, bool silence_stderr) {
     auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 

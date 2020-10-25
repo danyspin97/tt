@@ -21,6 +21,7 @@
 #include "tt/supervision/longrun_supervisor.hpp"
 
 #include <future>
+#include <utility>
 
 #include <unistd.h>
 
@@ -38,7 +39,7 @@
 
 tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
                                          std::shared_ptr<Dirs> dirs)
-    : longrun_(std::move(longrun)), logger_(longrun_.name(), dirs),
+    : longrun_(std::move(longrun)), logger_(longrun_.name(), std::move(dirs)),
       spawn_(longrun_.name(), longrun_.run(), longrun_.environment(),
              logger_.GetScriptLogger()) {}
 
@@ -51,7 +52,6 @@ void tt::LongrunSupervisor::ExecuteScript() {
     do {
         status = TryExecute();
         time_tried++;
-        continue;
     } while (time_tried < time_to_try && status != ScriptStatus::Success);
 
     NotifyStatus(ScriptStatus::Failure);

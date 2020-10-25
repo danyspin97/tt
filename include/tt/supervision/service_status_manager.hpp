@@ -35,8 +35,10 @@ public:
     void Initialize(std::vector<std::string> &services);
     void ServiceStartUpdate(const std::string &service, bool succeeded) const;
     void ServiceDownUpdate(const std::string &service, bool succeeded) const;
-    auto WaitOnServiceStart(const std::string &service) const -> bool;
-    auto WaitOnServiceDown(const std::string &service) const -> bool;
+    [[nodiscard]] auto WaitOnServiceStart(const std::string &service) const
+        -> bool;
+    [[nodiscard]] auto WaitOnServiceDown(const std::string &service) const
+        -> bool;
 
 private:
     using ServiceStatusPtr = std::shared_ptr<ServiceStatus>;

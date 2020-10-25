@@ -31,7 +31,7 @@ class ScriptLogger;
 
 class ServiceLogger {
 public:
-    ServiceLogger(std::string service_name, std::shared_ptr<Dirs> dirs);
+    ServiceLogger(std::string service_name, const std::shared_ptr<Dirs> &dirs);
     virtual ~ServiceLogger() = default;
 
     // Returns a new instance of ScriptLogger

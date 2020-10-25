@@ -49,7 +49,7 @@ protected:
     virtual void ApplyModifiers() = 0;
     // Return the shell to execute, like /bin/bash
     // Must be absolute
-    [[nodiscard]] virtual std::filesystem::path GetFileToExecute() = 0;
+    [[nodiscard]] virtual auto GetFileToExecute() -> std::filesystem::path = 0;
 
 private:
     std::string script_;

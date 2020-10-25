@@ -30,7 +30,7 @@
 #include "tt/path/dirs.hpp"
 
 tt::ServiceLogger::ServiceLogger(std::string service_name,
-                                 std::shared_ptr<Dirs> dirs)
+                                 const std::shared_ptr<Dirs> &dirs)
     : service_name_(std::move(service_name)) {
     // Check if the logger has already been added
     if ((logger_ = spdlog::get(service_name_))) {

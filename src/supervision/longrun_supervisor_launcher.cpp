@@ -44,7 +44,7 @@
 #include "tt/utils/serialize.hpp"
 
 tt::LongrunSupervisorLauncher::LongrunSupervisorLauncher(
-    const Longrun &longrun, std::shared_ptr<Dirs> dirs)
+    const Longrun &longrun, const std::shared_ptr<Dirs> &dirs)
     : longrun_(longrun), filename_(dirs->supervisedir() / longrun_.name()) {
     utils::Serialize(longrun, filename_);
 }

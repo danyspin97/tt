@@ -51,9 +51,8 @@ auto tt::LongLivedScriptSupervisor::ExecuteScript() -> ScriptStatus {
     bool success_ = true;
     if (success_) {
         return ScriptStatus::Success;
-    } else {
-        return ScriptStatus::Failure;
     }
+    return ScriptStatus::Failure;
 }
 
 auto tt::LongLivedScriptSupervisor::ListenOnNotifyFd() -> ScriptStatus {

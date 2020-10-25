@@ -30,7 +30,7 @@ public:
 
 protected:
     void ApplyModifiers() override;
-    [[nodiscard]] std::filesystem::path GetFileToExecute() override;
+    [[nodiscard]] auto GetFileToExecute() -> std::filesystem::path override;
 };
 
 } // namespace tt

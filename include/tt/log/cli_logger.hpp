@@ -29,7 +29,7 @@ class Dirs;
 
 class CliLogger {
 public:
-    CliLogger(std::shared_ptr<Dirs> dirs, const std::string &verbosity,
+    CliLogger(const std::shared_ptr<Dirs> &dirs, const std::string &verbosity,
               bool silence_stderr);
 };
 
