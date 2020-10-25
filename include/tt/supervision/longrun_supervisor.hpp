@@ -29,7 +29,7 @@ namespace tt {
 
 class LongrunSupervisor {
 public:
-    explicit LongrunSupervisor(Longrun &&longrun);
+    LongrunSupervisor(Longrun &&longrun, std::shared_ptr<Dirs> dirs);
     void ExecuteScript();
 
 private:

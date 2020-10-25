@@ -48,7 +48,7 @@ tt::cli::SuperviseCommand::SuperviseCommand(
 auto tt::cli::SuperviseCommand::Execute() -> int {
     auto longrun = utils::Deserialize<Longrun>(args::get(filename_));
 
-    auto supervise = LongrunSupervisor{std::move(longrun)};
+    auto supervise = LongrunSupervisor{std::move(longrun), dirs()};
     supervise.ExecuteScript();
     return 0;
 }

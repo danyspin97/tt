@@ -36,8 +36,9 @@
 #include "tt/supervision/supervision_signal_handler.hpp"
 #include "tt/supervision/timeout.hpp"
 
-tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun)
-    : longrun_(std::move(longrun)), logger_(longrun_.name()),
+tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
+                                         std::shared_ptr<Dirs> dirs)
+    : longrun_(std::move(longrun)), logger_(longrun_.name(), dirs),
       spawn_(longrun_.name(), longrun_.run(), longrun_.environment(),
              logger_.GetScriptLogger()) {}
 
