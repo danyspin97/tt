@@ -28,16 +28,18 @@
 
 namespace tt {
 
+class Dirs;
+
 class LongrunSupervisorLauncher {
 public:
-    explicit LongrunSupervisorLauncher(const Longrun &longrun);
+    LongrunSupervisorLauncher(const Longrun &longrun,
+                              std::shared_ptr<Dirs> dirs);
     void Launch();
 
 private:
-    [[nodiscard]] auto GetScriptFilename() const -> std::string;
-
     Longrun longrun_;
     std::vector<const char *> environment_;
+    std::filesystem::path filename_;
 };
 
 } // namespace tt

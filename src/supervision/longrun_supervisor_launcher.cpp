@@ -36,33 +36,24 @@
 
 #include "process.hpp"
 
-#include "tt/path/dirs.hpp"
 #include "tt/environment_generator.hpp"
 #include "tt/exception.hpp"
 #include "tt/log/longrun_logger.hpp"
+#include "tt/path/dirs.hpp"
 #include "tt/script/path_script_builder.hpp"
 #include "tt/status.hpp"
 #include "tt/utils/serialize.hpp"
 
-tt::LongrunSupervisorLauncher::LongrunSupervisorLauncher(const Longrun &longrun)
-    : longrun_(longrun) {
-    auto filename = GetScriptFilename();
-    utils::Serialize(longrun, filename);
+tt::LongrunSupervisorLauncher::LongrunSupervisorLauncher(
+    const Longrun &longrun, std::shared_ptr<Dirs> dirs)
+    : longrun_(longrun), filename_(dirs->supervisedir() / longrun_.name()) {
+    utils::Serialize(longrun, filename_);
 }
 
 void tt::LongrunSupervisorLauncher::Launch() {
-    std::string execute{"tt supervise " + GetScriptFilename()};
+    std::string execute{"tt supervise " + filename_.string()};
     PathScriptBuilder builder;
     tt::Environment env;
     auto command = builder.script(execute, env);
     TinyProcessLib::Process supervise{command};
-}
-
-auto tt::LongrunSupervisorLauncher::GetScriptFilename() const -> std::string {
-    const auto &dirs = Status::GetInstance().dirs();
-    std::filesystem::path filename(dirs.livedir());
-    filename /= "supervise";
-    std::filesystem::create_directories(filename);
-    filename /= longrun_.name();
-    return filename;
 }
