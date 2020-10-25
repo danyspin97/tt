@@ -35,6 +35,7 @@
 #include "tt/parser/service/exception.hpp"
 #include "tt/parser/service/instance_service_parser.hpp"
 #include "tt/parser/service/service_parser.hpp"
+#include "tt/path/dirs.hpp"
 
 using std::advance;
 using std::string;
@@ -45,9 +46,8 @@ using tt::ServiceNotFoundParserException;
 using tt::ServiceParser;
 using tt::ServicesParser;
 
-ServicesParser::ServicesParser(std::string suffix,
-                               std::vector<std::string> paths)
-    : suffix_(std::move(suffix)), paths_(std::move(paths)) {}
+ServicesParser::ServicesParser(const std::shared_ptr<Dirs> &dirs)
+    : suffix_(dirs->services_suffix()), paths_(dirs->servicedirs()) {}
 
 void ServicesParser::ParseServices(
     const std::vector<std::string> &service_names) {
@@ -96,10 +96,11 @@ auto ServicesParser::SplitServiceNameFromInstance(string &service_name,
 }
 
 auto ServicesParser::GetPathForServiceName(const string &name) -> string {
-    for (auto i = paths_.rbegin(); i != paths_.rend(); ++i) {
-        string service_path = *i + "/" + name + suffix_;
-        struct stat buffer {};
-        if (stat(service_path.c_str(), &buffer) == 0) {
+    for (const auto &service_dir : paths_) {
+        string service_path = service_dir / std::string{name + suffix_};
+        // TODO: Check if file is readable
+        if (std::filesystem::exists(service_path) &&
+            std::filesystem::is_regular_file(service_path)) {
             return service_path;
         }
     }

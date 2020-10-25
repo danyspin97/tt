@@ -28,14 +28,14 @@
 #include "tt/data/service.hpp"
 
 namespace tt {
+class Dirs;
 
 class ServicesParser {
 public:
+    explicit ServicesParser(const std::shared_ptr<Dirs> &dirs);
+
     auto services() const -> std::vector<Service>;
     void ParseServices(const std::vector<std::string> &service_names);
-
-protected:
-    ServicesParser(std::string suffix, std::vector<std::string> paths);
 
 private:
     void ParseService(const std::string &service_name);
@@ -46,11 +46,8 @@ private:
                                              size_t token_index) -> std::string;
     auto GetPathForServiceName(const std::string &name) -> std::string;
 
-protected:
     std::string suffix_;
-    std::vector<std::string> paths_;
-
-private:
+    std::vector<std::filesystem::path> paths_;
     std::unordered_map<std::string, Service> service_map_;
 };
 } // namespace tt
