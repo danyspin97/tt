@@ -39,6 +39,8 @@ public:
     [[nodiscard]] virtual auto statedir() const -> std::filesystem::path = 0;
     [[nodiscard]] virtual auto supervisedir() const
         -> std::filesystem::path = 0;
+
+    [[nodiscard]] virtual auto services_suffix() const -> std::string = 0;
 };
 
 } // namespace tt

@@ -73,3 +73,5 @@ auto tt::UserDirs::supervisedir() const -> std::filesystem::path {
     std::filesystem::create_directories(dir);
     return dir;
 }
+
+auto tt::UserDirs::services_suffix() const -> std::string { return ".user"; }

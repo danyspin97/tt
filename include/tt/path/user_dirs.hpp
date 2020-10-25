@@ -41,6 +41,8 @@ public:
 
     [[nodiscard]] auto supervisedir() const -> std::filesystem::path override;
 
+    [[nodiscard]] auto services_suffix() const -> std::string override;
+
 private:
     std::filesystem::path confdir_;
     std::filesystem::path livedir_;

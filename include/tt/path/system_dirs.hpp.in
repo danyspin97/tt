@@ -46,6 +46,10 @@ public:
         std::filesystem::create_directories(dir);
         return dir;
     }
+
+    [[nodiscard]] auto services_suffix() const -> std::string override {
+        return ".system";
+    }
 };
 
 } // namespace tt
