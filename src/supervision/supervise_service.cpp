@@ -28,18 +28,21 @@
 #include "tt/supervision/longrun_supervisor_launcher.hpp"
 #include "tt/supervision/oneshot_supervisor.hpp"
 
+tt::SuperviseService::SuperviseService(std::shared_ptr<Dirs> dirs)
+    : dirs_(std::move(dirs)) {}
+
 // Bundles are only used at compile time
 void tt::SuperviseService::operator()(const Bundle & /*bundle*/) const {
     assert(false);
 }
 
 void tt::SuperviseService::operator()(const Longrun &longrun) const {
-    LongrunSupervisorLauncher supervise{longrun};
+    LongrunSupervisorLauncher supervise{longrun, dirs_};
     supervise.Launch();
 }
 
 void tt::SuperviseService::operator()(const Oneshot &oneshot) const {
-    OneshotSupervisor spawn{oneshot};
+    OneshotSupervisor spawn{oneshot, dirs_};
     spawn.Run();
 }
 

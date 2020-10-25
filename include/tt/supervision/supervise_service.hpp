@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <memory>
 #include <variant>
 
 namespace tt {
@@ -27,15 +28,19 @@ namespace tt {
 class Bundle;
 class Longrun;
 class Oneshot;
+class Dirs;
 
 class SuperviseService {
 public:
-    SuperviseService() = default;
+    explicit SuperviseService(std::shared_ptr<Dirs> dirs);
 
     void operator()(const Bundle &bundle) const;
     void operator()(const Longrun &longrun) const;
     void operator()(const Oneshot &oneshot) const;
     void operator()(std::monostate /*unused*/) const;
+
+private:
+    std::shared_ptr<Dirs> dirs_;
 };
 
 } // namespace tt
