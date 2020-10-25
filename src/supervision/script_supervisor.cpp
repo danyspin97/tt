@@ -36,11 +36,11 @@
 
 #include "process.hpp"
 
+#include "tt/path/user_dirs.hpp"
 #include "tt/script/script_builder_factory.hpp"
 #include "tt/script/shell_script_builder.hpp"
 #include "tt/supervision/timeout.hpp"
 #include "tt/supervision/utils.hpp"
-#include "tt/path/user_dirs.hpp"
 
 tt::ScriptSupervisor::ScriptSupervisor(const std::string &service_name,
                                        const Script &script,

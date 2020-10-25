@@ -26,8 +26,8 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
-#include "tt/path/dirs.hpp"
 #include "tt/log/script_logger.hpp"
+#include "tt/path/dirs.hpp"
 
 tt::ServiceLogger::ServiceLogger(std::string service_name,
                                  std::shared_ptr<Dirs> dirs)

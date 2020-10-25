@@ -23,9 +23,9 @@
 #include "tt/parser/section/main_script_builder.hpp"
 
 #include "tt/define.h"
-#include "tt/path/dirs.hpp"
 #include "tt/parser/section/exception.hpp"
 #include "tt/parser/section/utils.hpp"
+#include "tt/path/dirs.hpp"
 #include "tt/utils/parse_boolean.hpp"
 
 auto tt::MainScriptBuilder::GetAttributeForKey(const std::string &key)
