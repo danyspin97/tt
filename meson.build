@@ -14,15 +14,6 @@ pkg = import('pkgconfig')
 
 fmt_dep = dependency('fmt', fallback: ['fmt', 'fmt_dep'])
 spdlog_dep = dependency('spdlog', version : '>=1.4.2', fallback: ['spdlog', 'spdlog_dep'])
-# Check that both fmt and spdlog are either installed on the system
-# or downloaded using the wrap files. This way spdlog can use the external fmt
-# instead of the embedded one
-is_system_fmt = fmt_dep.type_name() == 'pkgconfig'
-is_system_spdlog = spdlog_dep.type_name() == 'pkgconfig'
-if is_system_fmt == is_system_fmt
-    add_global_arguments('-DSPDLOG_FMT_EXTERNAL', language: 'cpp')
-endif
-
 catch2_dep = dependency('catch2', required: get_option('tests'), fallback: ['catch2', 'catch2_dep'])
 nng_dep = dependency('nng', method : 'cmake', modules : ['nng::nng'], fallback: ['nng', 'nng_dep'])
 
