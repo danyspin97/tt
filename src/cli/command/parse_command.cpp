@@ -31,8 +31,8 @@
 #include "fmt/ostream.h" // Needed to use operator<< on custom class
 #include "spdlog/spdlog.h"
 
-#include "tt/path/dirs.hpp"
 #include "tt/parser/service/service_parser.hpp"
+#include "tt/path/dirs.hpp"
 
 #include "tt/cli/global_options.hpp"
 
@@ -81,11 +81,9 @@ void tt::cli::ParseCommand::ParseUserSystemServices() {
 
 auto tt::cli::ParseCommand::ParseForFileInDefaultDirs(const std::string &name)
     -> bool {
-    const tt::Dirs &dirs = tt::Dirs::GetInstance();
-    auto default_dirs =
-        std::vector<std::string>{dirs.servicedir(), dirs.confdir() / "service"};
-    for (auto i = default_dirs.rbegin(); i != default_dirs.rend(); ++i) {
-        auto filename = *i + "/" + name;
+    auto servicedirs = dirs()->servicedirs();
+    for (const auto &servicedir : servicedirs) {
+        auto filename = servicedir / name;
         if (std::filesystem::exists(filename)) {
             auto parser = ServiceParser(filename);
             spdlog::info(parser.service());
