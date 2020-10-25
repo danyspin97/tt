@@ -24,27 +24,18 @@
 
 #include "xdg.hpp"
 
-auto tt::UserDirs::GetInstance() -> tt::Dirs & {
-    static tt::UserDirs instance;
-
-    return instance;
-}
-
 tt::UserDirs::UserDirs() {
-    // This exe has not been run as root
-    assert(geteuid() > 0);
-
-    xdg::BaseDirectories dirs{};
-    std::optional<std::filesystem::path> runtime_dir = dirs.Runtime();
+    xdg::BaseDirectories xdg_dirs{};
+    std::optional<std::filesystem::path> runtime_dir = xdg_dirs.Runtime();
     if (runtime_dir) {
-        livedir(runtime_dir.value() / "tt");
+        livedir_ = runtime_dir.value() / "tt";
     } else {
-        livedir(dirs.CacheHome() / "tt");
+        livedir_ = xdg_dirs.CacheHome() / "tt";
     }
 
-    confdir(dirs.ConfigHome() / "tt");
-    statedir(dirs.DataHome() / "tt" / "state");
-    logdir(dirs.DataHome() / "tt" / "log");
+    confdir_ = xdg_dirs.ConfigHome() / "tt";
+    statedir_ = xdg_dirs.DataHome() / "tt" / "state";
+    logdir_ = xdg_dirs.DataHome() / "tt" / "log";
 
     if (!std::filesystem::exists(livedir())) {
         std::filesystem::create_directories(livedir());
@@ -58,4 +49,14 @@ tt::UserDirs::UserDirs() {
     if (!std::filesystem::exists(logdir())) {
         std::filesystem::create_directories(logdir());
     }
+}
+
+auto tt::UserDirs::confdir() const -> std::filesystem::path { return confdir_; }
+
+auto tt::UserDirs::livedir() const -> std::filesystem::path { return livedir_; }
+
+auto tt::UserDirs::logdir() const -> std::filesystem::path { return logdir_; }
+
+auto tt::UserDirs::statedir() const -> std::filesystem::path {
+    return statedir_;
 }

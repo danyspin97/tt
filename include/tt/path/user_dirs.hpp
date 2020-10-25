@@ -20,14 +20,27 @@
 
 #pragma once
 
-#include "tt/path/dirs.hpp"
+#include "tt/path/system_dirs.hpp"
 
 namespace tt {
 
-class UserDirs : public Dirs {
+class UserDirs : public SystemDirs {
 public:
     UserDirs();
-    static auto GetInstance() -> tt::Dirs &;
+
+    [[nodiscard]] auto confdir() const -> std::filesystem::path override;
+
+    [[nodiscard]] auto livedir() const -> std::filesystem::path override;
+
+    [[nodiscard]] auto logdir() const -> std::filesystem::path override;
+
+    [[nodiscard]] auto statedir() const -> std::filesystem::path override;
+
+private:
+    std::filesystem::path confdir_;
+    std::filesystem::path livedir_;
+    std::filesystem::path logdir_;
+    std::filesystem::path statedir_;
 };
 
 } // namespace tt
