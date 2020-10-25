@@ -34,6 +34,9 @@ public:
 
     [[nodiscard]] auto logdir() const -> std::filesystem::path override;
 
+    [[nodiscard]] auto servicedirs() const
+        -> std::vector<std::filesystem::path> override;
+
     [[nodiscard]] auto statedir() const -> std::filesystem::path override;
 
 private:

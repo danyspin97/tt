@@ -27,8 +27,10 @@ public:
         return "@logdir@";
     }
 
-    [[nodiscard]] auto servicedir() const -> std::filesystem::path override {
-        return "@servicedir@";
+    [[nodiscard]] auto servicedirs() const
+        -> std::vector<std::filesystem::path> override {
+        // Do not call UserDirs::confdir
+        return {SystemDirs::confdir() / "service", "@servicedir@"};
     }
 
     [[nodiscard]] auto statedir() const -> std::filesystem::path override {

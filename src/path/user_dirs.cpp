@@ -57,6 +57,13 @@ auto tt::UserDirs::livedir() const -> std::filesystem::path { return livedir_; }
 
 auto tt::UserDirs::logdir() const -> std::filesystem::path { return logdir_; }
 
+auto tt::UserDirs::servicedirs() const -> std::vector<std::filesystem::path> {
+    std::vector<std::filesystem::path> dirs{confdir() / "service"};
+    auto system_dirs = SystemDirs::servicedirs();
+    dirs.insert(dirs.end(), system_dirs.begin(), system_dirs.end());
+    return dirs;
+}
+
 auto tt::UserDirs::statedir() const -> std::filesystem::path {
     return statedir_;
 }

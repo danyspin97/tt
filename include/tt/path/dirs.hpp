@@ -21,7 +21,7 @@
 #pragma once
 
 #include <filesystem>
-#include <string>
+#include <vector>
 
 namespace tt {
 
@@ -34,7 +34,8 @@ public:
     [[nodiscard]] virtual auto libexecdir() const -> std::filesystem::path = 0;
     [[nodiscard]] virtual auto livedir() const -> std::filesystem::path = 0;
     [[nodiscard]] virtual auto logdir() const -> std::filesystem::path = 0;
-    [[nodiscard]] virtual auto servicedir() const -> std::filesystem::path = 0;
+    [[nodiscard]] virtual auto servicedirs() const
+        -> std::vector<std::filesystem::path> = 0;
     [[nodiscard]] virtual auto statedir() const -> std::filesystem::path = 0;
 };
 
