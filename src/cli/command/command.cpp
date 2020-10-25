@@ -39,7 +39,8 @@ auto tt::cli::Command::InitAndExecute() -> int {
     auto verbosity = global_options_->verbosity().Matched()
                          ? global_options_->verbosity().Get()
                          : tt::cli::DEFAULT_VERBOSITY;
-    logger_ = std::make_shared<CliLogger>(verbosity, global_options_->quiet());
+    logger_ =
+        std::make_shared<CliLogger>(dirs_, verbosity, global_options_->quiet());
     return Execute();
 }
 

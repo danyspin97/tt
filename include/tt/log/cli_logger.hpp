@@ -20,13 +20,17 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 
 namespace tt {
 
+class Dirs;
+
 class CliLogger {
 public:
-    CliLogger(const std::string &verbosity, bool silence_stderr);
+    CliLogger(std::shared_ptr<Dirs> dirs, const std::string &verbosity,
+              bool silence_stderr);
 };
 
 } // namespace tt

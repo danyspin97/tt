@@ -22,17 +22,20 @@
 
 #include <filesystem>
 
+// For STDOUT_FILENO
+#include <unistd.h>
+
 #include "spdlog/async.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 
 #include "tt/define.h"
-#include "tt/path/dirs.hpp"
 #include "tt/log/cli_logger.hpp"
-#include "tt/status.hpp"
+#include "tt/path/dirs.hpp"
 
-tt::CliLogger::CliLogger(const std::string &verbosity, bool silence_stderr) {
+tt::CliLogger::CliLogger(std::shared_ptr<Dirs> dirs,
+                         const std::string &verbosity, bool silence_stderr) {
     auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 
     console->set_level(spdlog::level::from_str(verbosity));
@@ -43,7 +46,7 @@ tt::CliLogger::CliLogger(const std::string &verbosity, bool silence_stderr) {
     std::vector<spdlog::sink_ptr> sinks;
     sinks.push_back(console);
 
-    std::filesystem::path logdir = Status::GetInstance().dirs().logdir();
+    std::filesystem::path logdir = dirs->logdir();
 
     if (isatty(STDOUT_FILENO) == 0) {
         auto cli_file_sink =
