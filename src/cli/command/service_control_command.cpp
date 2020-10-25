@@ -26,7 +26,8 @@
 
 #include "tt/action/action_listener.hpp"
 #include "tt/dependency_graph/dependency_reader.hpp"
-#include "tt/status.hpp"
+#include "tt/dependency_graph/get_graph_filename.hpp"
+#include "tt/exception.hpp"
 #include "tt/supervision/service_status_manager.hpp"
 #include "tt/supervision/supervise_service.hpp"
 
@@ -39,7 +40,12 @@ auto tt::cli::ServiceControlCommand::Execute() -> int {
 }
 
 auto tt::cli::ServiceControlCommand::StartServices() -> int {
-    const auto &graph = Status::GetInstance().graph();
+    auto graph_filename = GetGraphFilename(dirs());
+    if (!std::filesystem::exists(graph_filename) ||
+        !std::filesystem::is_regular_file(graph_filename)) {
+        throw Exception("Could not find the serialized graph.");
+    }
+    auto graph = utils::Deserialize<DependencyGraph>(graph_filename);
     auto services = graph.GetActiveServices();
     ServiceStatusManager::GetInstance().Initialize(services);
 
