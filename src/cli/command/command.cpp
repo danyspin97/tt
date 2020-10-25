@@ -30,13 +30,9 @@
 
 tt::cli::Command::Command(args::Subparser &parser,
                           std::shared_ptr<GlobalOptions> global_options)
-    : parser_(parser), global_options_(std::move(global_options)) {
-    if (geteuid() > 0) {
-        dirs_ = std::make_shared<UserDirs>();
-    } else {
-        dirs_ = std::make_shared<SystemDirs>();
-    }
-}
+    : parser_(parser), global_options_(std::move(global_options)),
+      dirs_(geteuid() > 0 ? std::make_shared<UserDirs>()
+                          : std::make_shared<SystemDirs>()) {}
 
 auto tt::cli::Command::InitAndExecute() -> int {
     parser_.Parse();
