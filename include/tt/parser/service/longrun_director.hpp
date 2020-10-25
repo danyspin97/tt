@@ -21,11 +21,11 @@
 #pragma once
 
 #include "tt/data/environment.hpp"
-#include "tt/data/logger_script.hpp"
+#include "tt/data/long_lived_script.hpp"
 #include "tt/data/longrun_options.hpp"
 #include "tt/data/script.hpp"
 #include "tt/parser/section/environment_builder.hpp"
-#include "tt/parser/section/logger_script_builder.hpp"
+#include "tt/parser/section/long_lived_script_builder.hpp"
 #include "tt/parser/section/longrun_options_builder.hpp"
 #include "tt/parser/section/main_section_builder.hpp"
 #include "tt/parser/service/service_director.hpp"
@@ -48,7 +48,6 @@ private:
     MainSectionBuilder main_section_builder_;
     LongLivedScriptBuilder run_script_builder_;
     ScriptBuilder finish_script_builder_;
-    LoggerScriptBuilder logger_script_builder_;
     EnvironmentBuilder env_section_builder_;
     LongrunOptionsBuilder options_builder_;
 };

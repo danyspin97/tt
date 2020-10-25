@@ -25,7 +25,6 @@
 #include "tt/data/service.hpp"
 #include "tt/exception.hpp"
 #include "tt/parser/section/environment_builder.hpp"
-#include "tt/parser/section/logger_script_builder.hpp"
 #include "tt/parser/section/longrun_options_builder.hpp"
 #include "tt/parser/section/main_section_builder.hpp"
 #include "tt/parser/section/script_builder.hpp"
@@ -40,9 +39,8 @@ using tt::SectionBuilder;
 
 LongrunDirector::LongrunDirector()
     : main_section_builder_(main_section_), run_script_builder_("run"),
-      finish_script_builder_("finish"),
-      logger_script_builder_(main_section_.name),
-      env_section_builder_(environment_), options_builder_(options_) {}
+      finish_script_builder_("finish"), env_section_builder_(environment_),
+      options_builder_(options_) {}
 
 auto LongrunDirector::InstanceService(string &&path) -> tt::Service {
     if (!run_script_builder_.HasScript()) {
@@ -58,9 +56,6 @@ auto LongrunDirector::InstanceService(string &&path) -> tt::Service {
     if (finish_script_builder_.HasScript()) {
         service.finish(finish_script_builder_.script());
     }
-    if (logger_script_builder_.HasScript()) {
-        service.logger(logger_script_builder_.logger_script());
-    }
 
     return service;
 }
@@ -75,9 +70,6 @@ auto LongrunDirector::GetBuilderForSection(const string &section)
     }
     if (section == "finish") {
         return &finish_script_builder_;
-    }
-    if (section == "log") {
-        return &logger_script_builder_;
     }
     if (section == "config") {
         return &env_section_builder_;

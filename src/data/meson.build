@@ -5,7 +5,6 @@ tt_src += files(
     'long_lived_script.cpp',
     'longrun.cpp',
     'longrun_options.cpp',
-    'logger_script.cpp',
     'main_script.cpp',
     'oneshot.cpp',
     'oneshot_options.cpp',

@@ -29,7 +29,7 @@
 #include "bitsery/ext/inheritance.h"
 #include "bitsery/ext/std_optional.h"
 
-#include "tt/data/logger_script.hpp"
+#include "tt/data/long_lived_script.hpp"
 #include "tt/data/longrun_options.hpp"
 #include "tt/data/service_impl.hpp"
 
@@ -55,14 +55,6 @@ public:
     }
 
     void finish(const Script &finish) noexcept { finish_.emplace(finish); }
-
-    [[nodiscard]] auto logger() const noexcept -> std::optional<LoggerScript> {
-        return logger_;
-    }
-
-    void logger(const LoggerScript &logger) noexcept {
-        logger_.emplace(logger);
-    }
 
     [[nodiscard]] auto options() const noexcept -> LongrunOptions {
         return options_;
@@ -93,14 +85,6 @@ private:
                                               serializer.object(script);
                                           });
                        });
-        serializer.ext(logger_, bitsery::ext::StdOptional{},
-                       [](S &serializer, LoggerScript &logger_script) {
-                           serializer.ext(
-                               logger_script, bitsery::ext::Growable{},
-                               [](S &serializer, LoggerScript &logger_script) {
-                                   serializer.object(logger_script);
-                               });
-                       });
         serializer.object(options_);
     }
 
@@ -108,7 +92,6 @@ private:
     Environment environment_;
     LongLivedScript run_;
     std::optional<Script> finish_;
-    std::optional<LoggerScript> logger_;
 };
 
 } // namespace tt
