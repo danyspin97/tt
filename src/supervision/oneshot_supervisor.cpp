@@ -27,8 +27,9 @@
 #include "tt/supervision/script_supervisor.hpp"
 #include "tt/supervision/service_status_manager.hpp"
 
-tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot)
-    : oneshot_(std::move(oneshot)), logger_(oneshot.name()) {}
+tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot,
+                                         std::shared_ptr<Dirs> dirs)
+    : oneshot_(std::move(oneshot)), logger_(oneshot.name(), std::move(dirs)) {}
 
 void tt::OneshotSupervisor::Run() const {
     auto manager = ServiceStatusManager::GetInstance();

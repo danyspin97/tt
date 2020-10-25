@@ -31,9 +31,11 @@ class logger;
 
 namespace tt {
 
+class Dirs;
+
 class OneshotSupervisor {
 public:
-    explicit OneshotSupervisor(Oneshot oneshot);
+    OneshotSupervisor(Oneshot oneshot, std::shared_ptr<Dirs> dirs);
 
     void Run() const;
 
