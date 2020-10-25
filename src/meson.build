@@ -1,7 +1,6 @@
 tt_src = files(
     'environment_generator.cpp',
     'signal.cpp',
-    'status.cpp',
 )
 
 tt_cli_src = []
