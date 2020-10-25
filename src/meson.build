@@ -7,12 +7,12 @@ tt_cli_src = []
 
 # Add sources
 subdir('action')
-subdir('script')
 subdir('data')
 subdir('dependency_graph')
 subdir('log')
 subdir('parser')
 subdir('path')
+subdir('script')
 subdir('supervision')
 subdir('utils')
 
