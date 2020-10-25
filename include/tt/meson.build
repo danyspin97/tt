@@ -20,7 +20,6 @@ dirs_config = configuration_data({
     'servicedir': servicedir,
     'bindir': bindir,
     'libexecdir': libexecdir,
-    'execline_prefix': execline_prefix
 })
 
 subdir('path')

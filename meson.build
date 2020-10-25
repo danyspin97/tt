@@ -71,11 +71,6 @@ endif
 
 livedir = get_option('livedir')
 
-execline_prefix = get_option('execline_prefix')
-if execline_prefix == 'bindir'
-    execline_prefix = bindir
-endif
-
 confdir = get_option('confdir')
 if confdir == 'sysconfdir/tt'
    confdir = sysconfdir / 'tt'
