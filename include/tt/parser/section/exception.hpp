@@ -62,12 +62,6 @@ public:
         : Exception(msg) {}
 };
 
-class LoggerScriptInvalidSettingsException : public Exception {
-public:
-    explicit LoggerScriptInvalidSettingsException(const std::string &msg)
-        : Exception(msg) {}
-};
-
 class ParamIsNotEmptyException : public Exception {
 public:
     ParamIsNotEmptyException() : Exception("") {}
