@@ -38,7 +38,6 @@
 
 #include "tt/script/script_builder_factory.hpp"
 #include "tt/script/shell_script_builder.hpp"
-#include "tt/status.hpp"
 #include "tt/supervision/timeout.hpp"
 #include "tt/supervision/utils.hpp"
 #include "tt/path/user_dirs.hpp"

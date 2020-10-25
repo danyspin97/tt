@@ -21,7 +21,6 @@
 #include "tt/script/sh_script_builder.hpp"
 
 #include "tt/path/dirs.hpp"
-#include "tt/status.hpp"
 
 void tt::ShScriptBuilder::ApplyModifiers() {
     // Stop on error

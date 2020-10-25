@@ -21,7 +21,6 @@
 #include "tt/script/bash_script_builder.hpp"
 
 #include "tt/path/dirs.hpp"
-#include "tt/status.hpp"
 
 void tt::BashScriptBuilder::ApplyModifiers() {
     // Stop on error

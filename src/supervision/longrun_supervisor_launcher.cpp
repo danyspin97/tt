@@ -41,7 +41,6 @@
 #include "tt/log/longrun_logger.hpp"
 #include "tt/path/dirs.hpp"
 #include "tt/script/path_script_builder.hpp"
-#include "tt/status.hpp"
 #include "tt/utils/serialize.hpp"
 
 tt::LongrunSupervisorLauncher::LongrunSupervisorLauncher(
