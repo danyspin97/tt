@@ -25,11 +25,13 @@
 #include "tt/log/logger.hpp"
 
 namespace tt {
+
+class Dirs;
 class ScriptLogger;
 
 class ServiceLogger {
 public:
-    explicit ServiceLogger(std::string service_name);
+    ServiceLogger(std::string service_name, std::shared_ptr<Dirs> dirs);
     virtual ~ServiceLogger() = default;
 
     // Returns a new instance of ScriptLogger

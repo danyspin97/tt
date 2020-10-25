@@ -30,17 +30,19 @@
 #include "tt/log/script_logger.hpp"
 #include "tt/status.hpp"
 
-tt::ServiceLogger::ServiceLogger(std::string service_name)
+tt::ServiceLogger::ServiceLogger(std::string service_name,
+                                 std::shared_ptr<Dirs> dirs)
     : service_name_(std::move(service_name)) {
     // Check if the logger has already been added
     if ((logger_ = spdlog::get(service_name_))) {
         return;
     }
 
-    std::filesystem::path logdir = Status::GetInstance().dirs().logdir();
-    logger_ = spdlog::basic_logger_mt<spdlog::async_factory>(
-        service_name_,
-        logdir / std::filesystem::path{service_name_ + std::string{".log"}});
+    auto service_log_path =
+        dirs->logdir() /
+        std::filesystem::path{service_name_ + std::string{".log"}};
+    logger_ = spdlog::basic_logger_mt<spdlog::async_factory>(service_name_,
+                                                             service_log_path);
 
     logger_->set_pattern("{%d:%m:%Y %T} %v");
 }
