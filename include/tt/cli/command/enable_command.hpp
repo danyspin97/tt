@@ -47,9 +47,6 @@ private:
 
     args::PositionalList<std::string> service_list_;
     // TODO: Add more arguments
-
-    bool is_root_ = false;
-    std::unique_ptr<ServicesParser> parser_;
 };
 
 } // namespace tt::cli

@@ -27,8 +27,7 @@
 #include "tt/dependency_graph/dependency_graph.hpp"
 #include "tt/dependency_graph/get_graph_filename.hpp"
 #include "tt/exception.hpp"
-#include "tt/parser/service/system_services_parser.hpp"
-#include "tt/parser/service/user_services_parser.hpp"
+#include "tt/parser/service/services_parser.hpp"
 #include "tt/path/user_dirs.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 #include "tt/utils/serialize.hpp"
@@ -36,18 +35,15 @@
 tt::cli::EnableCommand::EnableCommand(
     args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
     : Command(parser, std::move(common_options)),
-      service_list_(parser, "services", "services to parse"),
-      is_root_(!(geteuid() > 0)),
-      parser_(is_root_
-                  ? std::make_unique<ServicesParser>(SystemServicesParser{})
-                  : std::make_unique<ServicesParser>(UserServicesParser{})) {}
+      service_list_(parser, "services", "services to parse") {}
 
 auto tt::cli::EnableCommand::Execute() -> int { return EnableServices(); }
 
 auto tt::cli::EnableCommand::EnableServices() -> int {
     const auto &services_list = args::get(service_list_);
-    parser_->ParseServices(services_list);
-    const std::vector<tt::Service> services = parser_->services();
+    ServicesParser parser(dirs());
+    parser.ParseServices(services_list);
+    const std::vector<tt::Service> services = parser.services();
 
     DependencyGraph graph;
     auto graph_filename = GetGraphFilename(dirs());
