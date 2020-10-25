@@ -67,3 +67,9 @@ auto tt::UserDirs::servicedirs() const -> std::vector<std::filesystem::path> {
 auto tt::UserDirs::statedir() const -> std::filesystem::path {
     return statedir_;
 }
+
+auto tt::UserDirs::supervisedir() const -> std::filesystem::path {
+    auto dir = AppendSuperviseDirectory(livedir());
+    std::filesystem::create_directories(dir);
+    return dir;
+}

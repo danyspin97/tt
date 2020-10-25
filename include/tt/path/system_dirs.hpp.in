@@ -38,11 +38,24 @@ public:
         return "@statedir@";
     }
 
+    [[nodiscard]] auto supervisedir() const -> std::filesystem::path override {
+        // Same as servicedirs()
+        auto dir = AppendSuperviseDirectory(SystemDirs::livedir());
+        std::filesystem::create_directories(dir);
+        return dir;
+    }
+
 protected:
     [[nodiscard]] static auto
     AppendServiceDirectory(const std::filesystem::path &path)
         -> std::filesystem::path {
         return path / "service";
+    }
+
+    [[nodiscard]] static auto
+    AppendSuperviseDirectory(const std::filesystem::path &path)
+        -> std::filesystem::path {
+        return path / "supervise";
     }
 };
 

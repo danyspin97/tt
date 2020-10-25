@@ -39,6 +39,8 @@ public:
 
     [[nodiscard]] auto statedir() const -> std::filesystem::path override;
 
+    [[nodiscard]] auto supervisedir() const -> std::filesystem::path override;
+
 private:
     std::filesystem::path confdir_;
     std::filesystem::path livedir_;
