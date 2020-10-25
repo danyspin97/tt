@@ -39,8 +39,8 @@ protected:
     auto Execute() -> int override;
 
 private:
-    static void SpawnNode(const ServiceNode &node);
-    [[nodiscard]] static auto StartServices() -> int;
+    void SpawnNode(const ServiceNode &node);
+    [[nodiscard]] auto StartServices() -> int;
 };
 
 } // namespace tt::cli

@@ -51,9 +51,8 @@ auto tt::cli::ServiceControlCommand::StartServices() -> int {
     for (const auto &node : nodes) {
         // https://stackoverflow.com/questions/23454793/whats-the-c-11-way-to-fire-off-an-asynchronous-task-and-forget-about-it
         auto futptr = std::make_shared<std::future<void>>();
-        *futptr = std::async(std::launch::async, [futptr, node]() {
-            ServiceControlCommand::SpawnNode(node);
-        });
+        *futptr = std::async(std::launch::async,
+                             [this, futptr, node]() { SpawnNode(node); });
     }
 
     // Runs indefinitely
@@ -80,6 +79,6 @@ void tt::cli::ServiceControlCommand::SpawnNode(const ServiceNode &node) {
         manager.ServiceStartUpdate(node.name(), false);
         return;
     }
-
-    std::visit(SuperviseService{}, node.service());
+    SuperviseService supervise{dirs()};
+    std::visit(supervise, node.service());
 }
