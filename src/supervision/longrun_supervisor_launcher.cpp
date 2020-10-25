@@ -55,8 +55,6 @@ void tt::LongrunSupervisorLauncher::Launch() {
     PathScriptBuilder builder;
     tt::Environment env;
     auto command = builder.script(execute, env);
-    LongrunLogger logger(longrun_.name());
-    logger.Start();
     TinyProcessLib::Process supervise{command};
 }
 
