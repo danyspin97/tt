@@ -28,6 +28,7 @@
 #include "tt/dependency_graph/get_graph_filename.hpp"
 #include "tt/parser/service/services_parser.hpp"
 #include "tt/path/dirs.hpp"
+#include "tt/utils/deserialize.hpp"
 #include "tt/utils/serialize.hpp"
 
 tt::cli::EnableCommand::EnableCommand(
