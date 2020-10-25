@@ -29,12 +29,20 @@ public:
 
     [[nodiscard]] auto servicedirs() const
         -> std::vector<std::filesystem::path> override {
-        // Do not call UserDirs::confdir
-        return {SystemDirs::confdir() / "service", "@servicedir@"};
+        // confdir will be overridden by UserDirs. By calling confdir we might
+        // call UserDirs::confdir which is not what we want
+        return {AppendServiceDirectory(SystemDirs::confdir()), "@servicedir@"};
     }
 
     [[nodiscard]] auto statedir() const -> std::filesystem::path override {
         return "@statedir@";
+    }
+
+protected:
+    [[nodiscard]] static auto
+    AppendServiceDirectory(const std::filesystem::path &path)
+        -> std::filesystem::path {
+        return path / "service";
     }
 };
 
