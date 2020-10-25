@@ -25,10 +25,10 @@
 #include "spdlog/spdlog.h"
 
 #include "tt/dependency_graph/dependency_graph.hpp"
+#include "tt/dependency_graph/get_graph_filename.hpp"
 #include "tt/exception.hpp"
 #include "tt/parser/service/system_services_parser.hpp"
 #include "tt/parser/service/user_services_parser.hpp"
-#include "tt/status.hpp"
 #include "tt/path/user_dirs.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 #include "tt/utils/serialize.hpp"
@@ -49,14 +49,16 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
     parser_->ParseServices(services_list);
     const std::vector<tt::Service> services = parser_->services();
 
-    const auto &status = Status::GetInstance();
-    auto graph = status.graph();
+    DependencyGraph graph;
+    auto graph_filename = GetGraphFilename(dirs());
+    if (std::filesystem::exists(graph_filename)) {
+        graph = utils::Deserialize<DependencyGraph>(graph_filename);
+    }
 
     // TODO: Check if the service is already enabled
     // and if it is different
     graph.AddServices(services_list, services);
 
-    auto graph_path = dirs()->statedir() / "graph";
-    utils::Serialize(graph, graph_path);
+    utils::Serialize(graph, graph_filename);
     return 0;
 }
