@@ -28,7 +28,6 @@
 
 #include "tt/path/dirs.hpp"
 #include "tt/log/script_logger.hpp"
-#include "tt/status.hpp"
 
 tt::ServiceLogger::ServiceLogger(std::string service_name,
                                  std::shared_ptr<Dirs> dirs)
