@@ -17,6 +17,10 @@ if fmt_dep.type_name() == 'pkgconfig'
     add_global_arguments('-DSPDLOG_FMT_EXTERNAL', language: 'cpp')
 endif
 
+spdlog_dep = dependency('spdlog', version : '>=1.4.2', fallback: ['spdlog', 'spdlog_dep'])
+catch2_dep = dependency('catch2', required: get_option('tests'), fallback: ['catch2', 'catch2_dep'])
+nng_dep = dependency('nng', method : 'cmake', modules : ['nng::nng'], fallback: ['nng', 'nng_dep'])
+
 tiny_process_inc = include_directories('ext/tiny-process-library')
 tiny_process_lib = static_library(
     'tiny-process-library',
@@ -30,10 +34,6 @@ tiny_process_dep = declare_dependency(
     link_with: tiny_process_lib,
     include_directories: tiny_process_inc
 )
-
-spdlog_dep = dependency('spdlog', fallback: ['spdlog', 'spdlog_dep'])
-catch2_dep = dependency('catch2', required: get_option('tests'), fallback: ['catch2', 'catch2_dep'])
-nng_dep = dependency('nng', method : 'cmake', modules : ['nng::nng'], fallback: ['nng', 'nng_dep'])
 
 deps = [
     # It's safe to include catch2 because it will be disabled
