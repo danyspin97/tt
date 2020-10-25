@@ -15,11 +15,6 @@ public:
         return "@confdir@";
     }
 
-    [[nodiscard]] auto execline_prefix() const
-        -> std::filesystem::path override {
-        return "@execline_prefix@";
-    }
-
     [[nodiscard]] auto libexecdir() const -> std::filesystem::path override {
         return "@libexecdir@";
     }

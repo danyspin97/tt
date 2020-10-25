@@ -31,8 +31,6 @@ public:
 
     [[nodiscard]] virtual auto bindir() const -> std::filesystem::path = 0;
     [[nodiscard]] virtual auto confdir() const -> std::filesystem::path = 0;
-    [[nodiscard]] virtual auto execline_prefix() const
-        -> std::filesystem::path = 0;
     [[nodiscard]] virtual auto libexecdir() const -> std::filesystem::path = 0;
     [[nodiscard]] virtual auto livedir() const -> std::filesystem::path = 0;
     [[nodiscard]] virtual auto logdir() const -> std::filesystem::path = 0;
