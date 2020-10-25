@@ -55,8 +55,6 @@ public:
 
 protected:
     [[nodiscard]] auto ExecuteUntilTimeout(Timeout timeout) -> ScriptStatus;
-    [[nodiscard]] auto GetEnviromentFromScript() const
-        -> std::vector<const char *>;
     // Get the exit status of the process, block if it hasn't exited
     [[nodiscard]] auto GetExitStatus() -> int;
     // Has the process exited? Non-blocking call

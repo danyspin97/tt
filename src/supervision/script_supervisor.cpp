@@ -126,17 +126,6 @@ auto tt::ScriptSupervisor::GetExitStatus() -> int {
     return exit_status_ = process_->get_exit_status();
 }
 
-auto tt::ScriptSupervisor::GetEnviromentFromScript() const
-    -> std::vector<const char *> {
-    auto environment_vec = environment_.Vector();
-    std::vector<const char *> environment_vec_cstr{environment_vec.size()};
-    std::for_each(environment_vec.begin(), environment_vec.end(),
-                  [&environment_vec_cstr](const std::string &key_value) {
-                      environment_vec_cstr.push_back(key_value.c_str());
-                  });
-    return environment_vec_cstr;
-}
-
 auto tt::ScriptSupervisor::service_name() const -> const std::string & {
     return service_name_;
 }
