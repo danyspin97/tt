@@ -3,6 +3,8 @@
 
 #include "tt/path/dirs.hpp"
 
+#include "tt/path/directory_names.hpp"
+
 namespace tt {
 
 class SystemDirs : public Dirs {
@@ -31,7 +33,7 @@ public:
         -> std::vector<std::filesystem::path> override {
         // confdir will be overridden by UserDirs. By calling confdir we might
         // call UserDirs::confdir which is not what we want
-        return {AppendServiceDirectory(SystemDirs::confdir()), "@servicedir@"};
+        return {SystemDirs::confdir() / kServiceDirectoryName, "@servicedir@"};
     }
 
     [[nodiscard]] auto statedir() const -> std::filesystem::path override {
@@ -40,22 +42,9 @@ public:
 
     [[nodiscard]] auto supervisedir() const -> std::filesystem::path override {
         // Same as servicedirs()
-        auto dir = AppendSuperviseDirectory(SystemDirs::livedir());
+        auto dir = SystemDirs::livedir() / kSuperviseDirectoryName;
         std::filesystem::create_directories(dir);
         return dir;
-    }
-
-protected:
-    [[nodiscard]] static auto
-    AppendServiceDirectory(const std::filesystem::path &path)
-        -> std::filesystem::path {
-        return path / "service";
-    }
-
-    [[nodiscard]] static auto
-    AppendSuperviseDirectory(const std::filesystem::path &path)
-        -> std::filesystem::path {
-        return path / "supervise";
     }
 };
 

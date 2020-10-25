@@ -58,7 +58,7 @@ auto tt::UserDirs::livedir() const -> std::filesystem::path { return livedir_; }
 auto tt::UserDirs::logdir() const -> std::filesystem::path { return logdir_; }
 
 auto tt::UserDirs::servicedirs() const -> std::vector<std::filesystem::path> {
-    std::vector<std::filesystem::path> dirs{AppendServiceDirectory(confdir())};
+    std::vector<std::filesystem::path> dirs{confdir() / kServiceDirectoryName};
     auto system_dirs = SystemDirs::servicedirs();
     dirs.insert(dirs.end(), system_dirs.begin(), system_dirs.end());
     return dirs;
@@ -69,7 +69,7 @@ auto tt::UserDirs::statedir() const -> std::filesystem::path {
 }
 
 auto tt::UserDirs::supervisedir() const -> std::filesystem::path {
-    auto dir = AppendSuperviseDirectory(livedir());
+    auto dir = livedir() / kSuperviseDirectoryName;
     std::filesystem::create_directories(dir);
     return dir;
 }
