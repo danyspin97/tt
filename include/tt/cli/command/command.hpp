@@ -30,7 +30,8 @@ class Subparser;
 
 namespace tt {
 class CliLogger;
-}
+class Dirs;
+} // namespace tt
 
 namespace tt::cli {
 
@@ -55,12 +56,14 @@ protected:
     virtual auto Execute() -> int = 0;
 
     [[nodiscard]] auto logger() const -> std::shared_ptr<CliLogger>;
+    [[nodiscard]] auto dirs() const -> std::shared_ptr<Dirs>;
 
     args::Subparser &parser_;
     std::shared_ptr<GlobalOptions> global_options_;
 
 private:
     std::shared_ptr<CliLogger> logger_;
+    std::shared_ptr<Dirs> dirs_;
 };
 
 } // namespace tt::cli

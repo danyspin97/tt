@@ -20,17 +20,23 @@
 
 #include "tt/cli/command/command.hpp"
 
-#include <memory>
-#include <utility>
+#include <unistd.h>
 
 #include "args.hxx"
 
 #include "tt/cli/define.hpp"
 #include "tt/log/cli_logger.hpp"
+#include "tt/path/user_dirs.hpp"
 
 tt::cli::Command::Command(args::Subparser &parser,
                           std::shared_ptr<GlobalOptions> global_options)
-    : parser_(parser), global_options_(std::move(global_options)) {}
+    : parser_(parser), global_options_(std::move(global_options)) {
+    if (geteuid() > 0) {
+        dirs_ = std::make_shared<UserDirs>();
+    } else {
+        dirs_ = std::make_shared<SystemDirs>();
+    }
+}
 
 auto tt::cli::Command::InitAndExecute() -> int {
     parser_.Parse();
@@ -44,3 +50,5 @@ auto tt::cli::Command::InitAndExecute() -> int {
 auto tt::cli::Command::logger() const -> std::shared_ptr<CliLogger> {
     return logger_;
 }
+
+auto tt::cli::Command::dirs() const -> std::shared_ptr<Dirs> { return dirs_; }
