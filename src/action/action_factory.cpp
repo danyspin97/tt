@@ -32,30 +32,25 @@
 #include "msgpack/v2/unpack.hpp"               // for unpacker
 #include "nngpp/buffer.h"                      // for buffer
 
-#include "tt/action/action.hpp"                           // for Action
-#include "tt/action/adapter/notify_up_action_adapter.hpp" // IWYU pragma: keep
-#include "tt/action/notify_up_action.hpp"                 // for NotifyUpAction
+#include "tt/action/action.hpp" // for Action
+#include "tt/action/adapter/notify_up_action_adapter.hpp"
+#include "tt/action/notify_up_action.hpp" // for NotifyUpAction
+#include "tt/exception.hpp"               // for Exception
 
 auto tt::ActionFactory::GetActionFromBuffer(const nng::buffer& buffer)
     -> std::unique_ptr<Action> {
-    msgpack::unpacker pac;
-    // Copy the buffer data to the unpacker object
-    pac.reserve_buffer(buffer.size());
-    memcpy(pac.buffer(), buffer.data(), buffer.size());
-    pac.buffer_consumed(buffer.size());
+    msgpack::object_handle result;
+    const char *data = static_cast<const char *>(buffer.data());
+    msgpack::unpack(result, data, buffer.size());
+    msgpack::object obj(result.get());
 
-    msgpack::unpacked msg;
-    pac.next(msg);
-    msgpack::object obj = msg.get();
-    std::string action_name;
-    obj.convert(action_name);
+    std::string action_name = obj.via.map.ptr[0].val.as<std::string>();
 
-    pac.next(msg);
-    obj = msg.get();
-    std::unique_ptr<Action> action_ptr;
+    std::unique_ptr<Action> action_ptr = nullptr;
     if (action_name == "notify_up") {
-        auto action = obj.as<NotifyUpAction>();
-        action_ptr = std::make_unique<NotifyUpAction>(action);
+        action_ptr = std::make_unique<NotifyUpAction>(obj.as<NotifyUpAction>());
+    } else {
+        throw tt::Exception("Action not supported");
     }
     return action_ptr;
 }
