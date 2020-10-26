@@ -22,6 +22,8 @@
 
 #include <string> // for string
 
+#include "msgpack.hpp"
+
 #include "tt/action/action.hpp" // for Action
 
 namespace tt {
@@ -35,6 +37,8 @@ public:
     [[nodiscard]] auto succeded() const -> bool;
 
     void Apply() override;
+
+    MSGPACK_DEFINE_MAP(MSGPACK_BASE_MAP(Action), service_, succeeded_)
 
 private:
     std::string service_;
