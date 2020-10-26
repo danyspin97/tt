@@ -20,10 +20,9 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include <string> // for string
 
-#include "tt/action/action.hpp"
+#include "tt/action/action.hpp" // for Action
 
 namespace tt {
 

@@ -20,6 +20,9 @@
 
 #include "tt/data/long_lived_script.hpp"
 
+#include <cstdint> // for uint_fast32_t
+#include <ostream> // for operator<<, ostream, basic_ostream
+
 auto tt::LongLivedScript::Dump(std::ostream &oss) const -> std::ostream & {
     MainScript::Dump(oss);
     if (notify()) {

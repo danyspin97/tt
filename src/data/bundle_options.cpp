@@ -20,8 +20,9 @@
 
 #include "tt/data/bundle_options.hpp"
 
-#include <algorithm>
-#include <iterator>
+#include <algorithm> // for copy
+#include <iterator>  // for ostream_iterator
+#include <ostream>   // for operator<<, ostream, basic_ostream
 
 using std::copy;
 using std::ostream;

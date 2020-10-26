@@ -20,9 +20,9 @@
 
 #include "tt/parser/section/main_script_builder.hpp"
 
-#include "catch2/catch.hpp"
+#include "catch2/catch.hpp" // for SourceLineInfo, Section, oper...
 
-#include "tt/parser/section/utils.hpp"
+#include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
 
 TEST_CASE("MainScriptBuilder") {
     auto builder = tt::MainScriptBuilder("test");

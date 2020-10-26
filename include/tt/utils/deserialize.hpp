@@ -23,6 +23,8 @@
 
 #include "bitsery/adapter/buffer.h"
 #include "bitsery/bitsery.h"
+#include "bitsery/traits/string.h"
+#include "bitsery/traits/vector.h"
 
 #include "tt/exception.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"

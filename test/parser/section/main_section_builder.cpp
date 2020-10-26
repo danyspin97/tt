@@ -20,9 +20,12 @@
 
 #include "tt/parser/section/main_section_builder.hpp"
 
-#include "catch2/catch.hpp"
-#include "tt/parser/section/main_section.hpp"
-#include "tt/parser/section/utils.hpp"
+#include <vector> // for vector
+
+#include "catch2/catch.hpp" // for operator""_catch_sr
+
+#include "tt/parser/section/main_section.hpp" // for MainSection
+#include "tt/parser/section/utils.hpp"        // for TestBuilderWithFile
 
 using std::string;
 using tt::MainSection;

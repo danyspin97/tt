@@ -20,9 +20,12 @@
 
 #include "tt/parser/section/script_builder.hpp"
 
-#include "catch2/catch.hpp"
+#include <optional> // for optional
 
-#include "tt/parser/section/utils.hpp"
+#include "catch2/catch.hpp" // for operator""_catch_sr, SourceLi...
+
+#include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
+#include "tt/signal.hpp"               // for Signal, Signal::kSigKill
 
 TEST_CASE("ScriptBuilder") {
     auto builder = tt::ScriptBuilder("test");

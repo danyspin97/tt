@@ -21,13 +21,13 @@
 #ifndef TT_PARSER_SECTION_UTILS_HPP_
 #define TT_PARSER_SECTION_UTILS_HPP_
 
-#include <string>
+#include <string> // for string, basic_string
 
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/section_builder.hpp"
-#include "tt/utils/trim.hpp"
+#include "tt/parser/section/exception.hpp" // for ParamIsNotEmptyException
+#include "tt/utils/trim.hpp"               // for trim_copy
 
 namespace tt {
+class SectionBuilder;
 
 [[noreturn]] void AttributeNotFound(const std::string &attribute,
                                     const std::string &section);

@@ -20,10 +20,18 @@
 
 #pragma once
 
-#include "tt/data/main_script.hpp"
+#include <iosfwd>   // for ostream
+#include <optional> // for optional
+#include <stdint.h> // for uint_fast32_t
 
-#include "bitsery/bitsery.h"
-#include "bitsery/ext/inheritance.h"
+#include "bitsery/ext/inheritance.h"  // for BaseClass
+#include "bitsery/ext/std_optional.h" // for StdOptional
+
+#include "tt/data/main_script.hpp" // for MainScript
+
+namespace bitsery {
+class Access;
+} // namespace bitsery
 
 namespace tt {
 

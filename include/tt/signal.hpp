@@ -21,8 +21,7 @@
 #ifndef TT_SIGNAL_HPP_
 #define TT_SIGNAL_HPP_
 
-#include <map>
-#include <string>
+#include <string> // for string
 
 namespace tt {
 

@@ -21,13 +21,16 @@
 #ifndef TT_ENVINRONMENT_HPP_
 #define TT_ENVINRONMENT_HPP_
 
-#include <istream>
-#include <map>
-#include <string>
+#include <istream> // for ostream
+#include <string>  // for string
+#include <tuple>   // for tuple
+#include <vector>  // for vector
 
-#include "bitsery/ext/std_tuple.h"
-#include "bitsery/traits/string.h"
-#include "bitsery/traits/vector.h"
+#include "bitsery/ext/std_tuple.h" // IWYU pragma: keep
+
+namespace bitsery {
+class Access;
+} // namespace bitsery
 
 namespace tt {
 

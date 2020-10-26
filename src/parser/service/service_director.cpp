@@ -20,10 +20,13 @@
 
 #include "tt/parser/service/service_director.hpp"
 
-#include "tt/exception.hpp"
-#include "tt/parser/line/section_line_parser.hpp"
-#include "tt/parser/section/dummy_builder.hpp"
-#include "tt/parser/section/section_builder.hpp"
+#include <utility> // for move
+
+#include "tt/exception.hpp"                       // for Exception
+#include "tt/parser/line/section_line_parser.hpp" // for SectionLineParser
+#include "tt/parser/section/dummy_builder.hpp"    // for DummyBuilder
+#include "tt/parser/section/exception.hpp"        // for DummyBuilderException
+#include "tt/parser/section/section_builder.hpp"  // for SectionBuilder
 
 using std::string;
 using std::vector;

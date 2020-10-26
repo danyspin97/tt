@@ -20,21 +20,25 @@
 
 #include "tt/cli/command/parse_command.hpp"
 
-#include <filesystem>
-#include <utility>
+#include <filesystem> // for operator!=, path
+#include <iosfwd>     // for streamsize
+#include <utility>    // for move
 
-#include "args.hxx"
+#include "args.hxx"        // for Flag, PositionalList
+#include "fmt/format.h"    // for format_to
+#include "fmt/ostream.h"   // for formatbuf<>::int_type
+#include "spdlog/spdlog.h" // for info, error
 
 // Include operator<<(ostream, Service) before ostream.h
-#include "tt/data/service.hpp"
+#include "tt/data/service.hpp"                  // for operator<<
+#include "tt/parser/service/service_parser.hpp" // for ServiceParser
+#include "tt/path/dirs.hpp"                     // for Dirs
 
-#include "fmt/ostream.h" // Needed to use operator<< on custom class
-#include "spdlog/spdlog.h"
-
-#include "tt/parser/service/service_parser.hpp"
-#include "tt/path/dirs.hpp"
-
-#include "tt/cli/global_options.hpp"
+namespace tt {
+namespace cli {
+class GlobalOptions;
+} // namespace cli
+} // namespace tt
 
 tt::cli::ParseCommand::ParseCommand(
     args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)

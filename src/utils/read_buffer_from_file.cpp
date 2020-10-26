@@ -20,21 +20,26 @@
 
 #include "tt/utils/read_buffer_from_file.hpp"
 
-#include <fstream>
+#include <algorithm> // for max
+#include <cstdint>   // for uint8_t
+#include <fstream>   // for ifstream, operator>>, ios, operator|
+#include <iterator>  // for istream_iterator, operator!=
 
-#include "spdlog/spdlog.h"
+#include "fmt/format.h" // for format
+
+#include "tt/exception.hpp" // for Exception
 
 auto tt::utils::ReadBufferFromFile(const std::filesystem::path &filename)
     -> std::vector<uint8_t> {
     if (!std::filesystem::exists(filename)) {
-        spdlog::error("File {} does not exist", filename.c_str());
-        // TODO: throw exception
+        throw tt::Exception(
+            fmt::format("File {} does not exist", filename.c_str()));
     }
 
     std::ifstream file{filename, std::ifstream::binary | std::ifstream::in};
     if (!file.is_open()) {
-        spdlog::error("Cannot open file {} for reading", filename.c_str());
-        // TODO: throw exception
+        throw tt::Exception(
+            fmt::format("Cannot open file {} for reading", filename.c_str()));
     }
     // Properly read binary file
     file.unsetf(std::ios::skipws);

@@ -20,27 +20,21 @@
 
 #include "tt/supervision/script_supervisor.hpp"
 
-#include <csignal>
+#include <chrono>  // for milliseconds
+#include <cstdio>  // for size_t
+#include <thread>  // for yield
+#include <utility> // for move
 
-#include <fcntl.h>
-#include <poll.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include "process.hpp" // for Process
 
-#include <cstdio>
+#include "tt/script/script_builder_factory.hpp" // for ScriptBuilderFactory
+#include "tt/script/shell_script_builder.hpp"   // for ShellScriptBuilder
+#include "tt/signal.hpp"                        // for Signal, Signal::kSig...
+#include "tt/supervision/timeout.hpp"           // for Timeout
 
-#include "spdlog/async.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/spdlog.h"
-
-#include "process.hpp"
-
-#include "tt/path/user_dirs.hpp"
-#include "tt/script/script_builder_factory.hpp"
-#include "tt/script/shell_script_builder.hpp"
-#include "tt/supervision/timeout.hpp"
-#include "tt/supervision/utils.hpp"
+namespace tt {
+class Environment;
+} // namespace tt
 
 tt::ScriptSupervisor::ScriptSupervisor(const std::string &service_name,
                                        const Script &script,

@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include <memory>
-
-#include "tt/cli/global_options.hpp"
+#include <memory>      // for shared_ptr
+#include <type_traits> // for is_base_of
+#include <utility>     // for move
 
 namespace args {
 class Subparser;
@@ -31,6 +31,9 @@ class Subparser;
 namespace tt {
 class CliLogger;
 class Dirs;
+namespace cli {
+class GlobalOptions;
+} // namespace cli
 } // namespace tt
 
 namespace tt::cli {

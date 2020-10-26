@@ -20,12 +20,14 @@
 
 #pragma once
 
-#include <string>
+#include <iosfwd> // for ostream
+#include <string> // for string
 
-#include "bitsery/bitsery.h"
+namespace bitsery {
+class Access;
+} // namespace bitsery
 
 namespace tt {
-class ServiceVisitor;
 
 class ServiceImpl {
 public:

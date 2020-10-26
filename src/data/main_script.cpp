@@ -20,6 +20,8 @@
 
 #include "tt/data/main_script.hpp"
 
+#include <ostream> // for ostream, operator<<, basic_ostream
+
 auto tt::MainScript::Dump(std::ostream &oss) const -> std::ostream & {
     Script::Dump(oss);
     oss << "\nautostart = " << autostart_;

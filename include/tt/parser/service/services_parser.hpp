@@ -20,12 +20,14 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
-#include <unordered_map>
-#include <vector>
+#include <filesystem>    // for path
+#include <memory>        // for shared_ptr
+#include <stddef.h>      // for size_t
+#include <string>        // for string, hash
+#include <unordered_map> // for unordered_map
+#include <vector>        // for vector
 
-#include "tt/data/service.hpp"
+#include "tt/data/service.hpp" // for Service
 
 namespace tt {
 class Dirs;

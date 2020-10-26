@@ -20,9 +20,14 @@
 
 #pragma once
 
-#include "tt/script/shell_script_builder.hpp"
+#include <filesystem> // for path
+#include <string>     // for string
+#include <vector>     // for vector
+
+#include "tt/script/shell_script_builder.hpp" // for ShellScriptBuilder
 
 namespace tt {
+class Environment;
 
 class PathScriptBuilder : public ShellScriptBuilder {
 public:

@@ -20,14 +20,16 @@
 
 #include "tt/log/service_logger.hpp"
 
-#include <filesystem>
+#include <filesystem> // for path, operator/
+#include <utility>    // for move
 
-#include "spdlog/async.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/spdlog.h"
+#include "spdlog/async.h"                 // for async_factory
+#include "spdlog/logger.h"                // for logger
+#include "spdlog/sinks/basic_file_sink.h" // for basic_logger_mt
+#include "spdlog/spdlog.h"                // for get
 
-#include "tt/log/script_logger.hpp"
-#include "tt/path/dirs.hpp"
+#include "tt/log/script_logger.hpp" // for ScriptLogger
+#include "tt/path/dirs.hpp"         // for Dirs
 
 tt::ServiceLogger::ServiceLogger(std::string service_name,
                                  const std::shared_ptr<Dirs> &dirs)

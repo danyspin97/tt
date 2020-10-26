@@ -20,7 +20,11 @@
 
 #include "tt/script/shell_script_builder.hpp"
 
-#include "fmt/format.h"
+#include <cassert>  // for assert
+#include <iterator> // for back_inserter
+#include <utility>  // for move
+
+#include "fmt/format.h" // for format_to
 
 auto tt::ShellScriptBuilder::environment() const -> const Environment & {
     return env_;

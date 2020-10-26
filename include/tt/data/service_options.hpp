@@ -21,13 +21,14 @@
 #ifndef TT_SERVICE_OPTIONS_HPP_
 #define TT_SERVICE_OPTIONS_HPP_
 
-#include <istream>
-#include <string>
-#include <utility>
-#include <vector>
+#include <istream> // for ostream
+#include <string>  // for string
+#include <utility> // for move
+#include <vector>  // for vector
 
-#include "bitsery/traits/string.h"
-#include "bitsery/traits/vector.h"
+namespace bitsery {
+class Access;
+} // namespace bitsery
 
 namespace tt {
 

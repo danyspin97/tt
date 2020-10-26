@@ -20,12 +20,14 @@
 
 #include "tt/dependency_graph/dependency_reader.hpp"
 
-#include "tt/data/bundle.hpp"
-#include "tt/data/bundle_options.hpp"
-#include "tt/data/longrun.hpp"
-#include "tt/data/longrun_options.hpp"
-#include "tt/data/oneshot.hpp"
-#include "tt/data/oneshot_options.hpp"
+#include <assert.h> // for assert
+
+#include "tt/data/bundle.hpp"          // for Bundle
+#include "tt/data/bundle_options.hpp"  // for BundleOptions
+#include "tt/data/longrun.hpp"         // for Longrun
+#include "tt/data/longrun_options.hpp" // for LongrunOptions
+#include "tt/data/oneshot.hpp"         // for Oneshot
+#include "tt/data/oneshot_options.hpp" // for OneshotOptions
 
 using tt::Bundle;
 using tt::DependencyReader;

@@ -20,13 +20,15 @@
 
 #include "tt/cli/command/command.hpp"
 
-#include <unistd.h>
+#include <unistd.h> // for geteuid
 
-#include "args.hxx"
+#include "args.hxx" // for ValueFlag, Subparser
 
-#include "tt/cli/define.hpp"
-#include "tt/log/cli_logger.hpp"
-#include "tt/path/user_dirs.hpp"
+#include "tt/cli/define.hpp"         // for DEFAULT_VERBOSITY
+#include "tt/cli/global_options.hpp" // for GlobalOptions
+#include "tt/log/cli_logger.hpp"     // for CliLogger
+#include "tt/path/system_dirs.hpp"   // for SystemDirs
+#include "tt/path/user_dirs.hpp"     // for UserDirs
 
 tt::cli::Command::Command(args::Subparser &parser,
                           std::shared_ptr<GlobalOptions> global_options)

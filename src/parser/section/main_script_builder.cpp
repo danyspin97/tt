@@ -18,15 +18,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <utility>
+#include <string>  // for string, operator==
+#include <utility> // for move
 
-#include "tt/parser/section/main_script_builder.hpp"
-
-#include "tt/define.h"
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/utils.hpp"
-#include "tt/path/dirs.hpp"
-#include "tt/utils/parse_boolean.hpp"
+#include "tt/data/main_script.hpp"                   // for MainScript
+#include "tt/parser/section/main_script_builder.hpp" // for MainScriptBuilder
+#include "tt/parser/section/script_builder.hpp"      // for ScriptBuilder
+#include "tt/utils/parse_boolean.hpp"                // for ParseBoolean
 
 auto tt::MainScriptBuilder::GetAttributeForKey(const std::string &key)
     -> std::string & {

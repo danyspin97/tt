@@ -21,10 +21,13 @@
 #ifndef TT_BUNDLE_OPTION_BUILDER_HPP_
 #define TT_BUNDLE_OPTION_BUILDER_HPP_
 
-#include "tt/data/bundle_options.hpp"
-#include "tt/parser/section/options_builder.hpp"
+#include <string> // for string
+
+#include "tt/parser/section/options_builder.hpp" // for OptionsBuilder
 
 namespace tt {
+class ArrayParser;
+class BundleOptions;
 
 class BundleOptionsBuilder : public OptionsBuilder {
 public:

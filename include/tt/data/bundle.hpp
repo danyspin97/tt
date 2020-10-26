@@ -21,16 +21,19 @@
 #ifndef TT_BUNDLE_HPP_
 #define TT_BUNDLE_HPP_
 
-#include <istream>
+#include <istream> // for ostream
+#include <string>  // for string
 
-#include "bitsery/ext/inheritance.h"
+#include "bitsery/ext/inheritance.h" // for BaseClass
 
-#include "tt/data/bundle_options.hpp"
-#include "tt/data/service_impl.hpp"
+#include "tt/data/bundle_options.hpp" // for BundleOptions
+#include "tt/data/service_impl.hpp"   // for ServiceImpl
+
+namespace bitsery {
+class Access;
+} // namespace bitsery
 
 namespace tt {
-
-class ServiceVisitor;
 
 class Bundle : public ServiceImpl {
 public:

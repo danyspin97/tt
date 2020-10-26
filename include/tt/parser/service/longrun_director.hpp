@@ -20,17 +20,21 @@
 
 #pragma once
 
-#include "tt/data/environment.hpp"
-#include "tt/data/long_lived_script.hpp"
-#include "tt/data/longrun_options.hpp"
-#include "tt/data/script.hpp"
-#include "tt/parser/section/environment_builder.hpp"
-#include "tt/parser/section/long_lived_script_builder.hpp"
-#include "tt/parser/section/longrun_options_builder.hpp"
-#include "tt/parser/section/main_section_builder.hpp"
-#include "tt/parser/service/service_director.hpp"
+#include <string> // for string
+
+#include "tt/data/environment.hpp"                         // for Environment
+#include "tt/data/longrun_options.hpp"                     // for LongrunOp...
+#include "tt/data/service.hpp"                             // for Service
+#include "tt/parser/section/environment_builder.hpp"       // for Environme...
+#include "tt/parser/section/long_lived_script_builder.hpp" // for LongLived...
+#include "tt/parser/section/longrun_options_builder.hpp"   // for LongrunOp...
+#include "tt/parser/section/main_section.hpp"              // for MainSection
+#include "tt/parser/section/main_section_builder.hpp"      // for MainSecti...
+#include "tt/parser/section/script_builder.hpp"            // for ScriptBui...
+#include "tt/parser/service/service_director.hpp"          // for ServiceDi...
 
 namespace tt {
+class SectionBuilder;
 
 class LongrunDirector : public ServiceDirector {
 public:

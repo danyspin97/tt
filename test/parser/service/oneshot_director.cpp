@@ -20,10 +20,12 @@
 
 #include "tt/parser/service/oneshot_director.hpp"
 
-#include "catch2/catch.hpp"
+#include <variant> // for get
 
-#include "tt/data/oneshot.hpp"
-#include "tt/parser/service/utils.hpp"
+#include "catch2/catch.hpp" // for operator""_catch_sr, SourceLi...
+
+#include "tt/data/oneshot.hpp"         // for Oneshot
+#include "tt/parser/service/utils.hpp" // for GetLinesFromFile
 
 TEST_CASE("OneshotDirector") {
     auto director = tt::OneshotDirector();

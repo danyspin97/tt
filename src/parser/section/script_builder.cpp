@@ -20,11 +20,12 @@
 
 #include "tt/parser/section/script_builder.hpp"
 
-#include <string>
+#include <string>  // for string, operator==, alloc...
+#include <utility> // for move
 
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/section_builder.hpp"
-#include "tt/parser/section/utils.hpp"
+#include "tt/parser/section/exception.hpp" // for CodeNotSuppliedInScriptPa...
+#include "tt/parser/section/utils.hpp"     // for AttributeNotFound
+#include "tt/signal.hpp"                   // for ParseSignalFromString
 
 using std::string;
 

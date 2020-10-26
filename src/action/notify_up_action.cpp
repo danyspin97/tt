@@ -20,8 +20,9 @@
 
 #include "tt/action/notify_up_action.hpp"
 
-#include "tt/supervision/service_status.hpp"
-#include "tt/supervision/service_status_manager.hpp"
+#include <utility> // for move
+
+#include "tt/supervision/service_status_manager.hpp" // for ServiceStatusMa...
 
 tt::NotifyUpAction::NotifyUpAction(std::string service, bool succeded)
     : service_(std::move(service)), succeeded_(succeded) {}

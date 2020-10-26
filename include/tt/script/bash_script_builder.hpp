@@ -20,7 +20,9 @@
 
 #pragma once
 
-#include "tt/script/shell_script_builder.hpp"
+#include <filesystem> // for path
+
+#include "tt/script/shell_script_builder.hpp" // for ShellScriptBuilder
 
 namespace tt {
 

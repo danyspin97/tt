@@ -20,9 +20,11 @@
 
 #include "tt/parser/line/key_value_parser.hpp"
 
-#include "tt/parser/define.hpp"
-#include "tt/parser/line/exception.hpp"
-#include "tt/utils/trim.hpp"
+#include <utility> // for move
+
+#include "tt/parser/define.hpp"         // for kAssignmentToken
+#include "tt/parser/line/exception.hpp" // for KeyValueParserLineInvalidExc...
+#include "tt/utils/trim.hpp"            // for trim
 
 using std::string;
 

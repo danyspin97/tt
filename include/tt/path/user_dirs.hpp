@@ -20,7 +20,11 @@
 
 #pragma once
 
-#include "tt/path/system_dirs.hpp"
+#include <filesystem> // for path
+#include <string>     // for string
+#include <vector>     // for vector
+
+#include "tt/path/system_dirs.hpp" // for SystemDirs
 
 namespace tt {
 

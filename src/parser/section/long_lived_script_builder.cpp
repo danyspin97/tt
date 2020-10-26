@@ -18,14 +18,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <utility>
+#include <string>  // for string
+#include <utility> // for move
 
-#include "tt/parser/section/long_lived_script_builder.hpp"
-
-#include "tt/data/long_lived_script.hpp"
-#include "tt/define.h"
-#include "tt/parser/section/exception.hpp"
-#include "tt/path/dirs.hpp"
+#include "tt/data/long_lived_script.hpp"                   // for LongLived...
+#include "tt/parser/section/long_lived_script_builder.hpp" // for LongLived...
+#include "tt/parser/section/main_script_builder.hpp"       // for MainScrip...
 
 auto tt::LongLivedScriptBuilder::GetAttributeForKey(const std::string &key)
     -> std::string & {

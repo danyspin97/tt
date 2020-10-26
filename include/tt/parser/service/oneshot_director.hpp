@@ -20,19 +20,21 @@
 
 #pragma once
 
-#include <optional>
+#include <string> // for string
 
-#include "tt/data/environment.hpp"
-#include "tt/data/oneshot_options.hpp"
-#include "tt/data/script.hpp"
-#include "tt/data/service.hpp"
-#include "tt/parser/section/environment_builder.hpp"
-#include "tt/parser/section/main_script_builder.hpp"
-#include "tt/parser/section/main_section_builder.hpp"
-#include "tt/parser/section/oneshot_options_builder.hpp"
-#include "tt/parser/service/service_director.hpp"
+#include "tt/data/environment.hpp"                       // for Environment
+#include "tt/data/oneshot_options.hpp"                   // for OneshotOptions
+#include "tt/data/service.hpp"                           // for Service
+#include "tt/parser/section/environment_builder.hpp"     // for Environment...
+#include "tt/parser/section/main_script_builder.hpp"     // for MainScriptB...
+#include "tt/parser/section/main_section.hpp"            // for MainSection
+#include "tt/parser/section/main_section_builder.hpp"    // for MainSection...
+#include "tt/parser/section/oneshot_options_builder.hpp" // for OneshotOpti...
+#include "tt/parser/section/script_builder.hpp"          // for ScriptBuilder
+#include "tt/parser/service/service_director.hpp"        // for ServiceDire...
 
 namespace tt {
+class SectionBuilder;
 
 class OneshotDirector : public ServiceDirector {
 public:

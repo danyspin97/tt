@@ -20,11 +20,13 @@
 
 #include "tt/parser/section/environment_builder.hpp"
 
-#include <map>
+#include <map>     // for allocator, map, map<>::mapped...
+#include <utility> // for pair
 
-#include "catch2/catch.hpp"
+#include "catch2/catch.hpp" // for SourceLineInfo, operator""_ca...
 
-#include "tt/parser/section/utils.hpp"
+#include "tt/data/environment.hpp"     // for Environment
+#include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
 
 using std::map;
 using std::string;

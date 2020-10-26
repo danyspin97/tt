@@ -20,16 +20,15 @@
 
 #include "tt/parser/line/array_parser.hpp"
 
-#include <algorithm>
-#include <cassert>
-#include <iterator>
-#include <sstream>
-#include <stdexcept>
-#include <string>
+#include <algorithm> // for max
+#include <cassert>   // for assert
+#include <iterator>  // for istream_iterator, operator!=
+#include <sstream>   // for basic_istream, istringstream
+#include <string>    // for string, allocator, operator+
 
-#include "tt/parser/define.hpp"
-#include "tt/parser/line/exception.hpp"
-#include "tt/utils/trim.hpp"
+#include "tt/parser/define.hpp"         // for kArrayCloseToken, kArrayOpen...
+#include "tt/parser/line/exception.hpp" // for EmptyArrayException, ValuesA...
+#include "tt/utils/trim.hpp"            // for trim, trim_copy
 
 using std::string;
 

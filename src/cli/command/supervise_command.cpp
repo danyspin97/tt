@@ -30,8 +30,6 @@
 
 #include "args.hxx"
 
-#include "spdlog/spdlog.h"
-
 #include "bitsery/adapter/buffer.h"
 #include "bitsery/bitsery.h"
 

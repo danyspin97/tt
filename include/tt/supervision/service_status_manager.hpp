@@ -20,9 +20,11 @@
 
 #pragma once
 
-#include <map>
-#include <shared_mutex>
-#include <vector>
+#include <map>          // for map
+#include <memory>       // for shared_ptr
+#include <shared_mutex> // for shared_mutex
+#include <string>       // for string
+#include <vector>       // for vector
 
 namespace tt {
 

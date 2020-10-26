@@ -21,9 +21,9 @@
 #ifndef TT_ONESHOT_OPTIONS_HPP_
 #define TT_ONESHOT_OPTIONS_HPP_
 
-#include <string>
+#include <iosfwd> // for ostream
 
-#include "tt/data/service_options.hpp"
+#include "tt/data/service_options.hpp" // for ServiceOptions
 
 namespace tt {
 

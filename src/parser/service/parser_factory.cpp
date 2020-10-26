@@ -20,10 +20,11 @@
 
 #include "tt/parser/service/parser_factory.hpp"
 
-#include "tt/exception.hpp"
-#include "tt/parser/service/bundle_director.hpp"
-#include "tt/parser/service/longrun_director.hpp"
-#include "tt/parser/service/oneshot_director.hpp"
+#include "tt/exception.hpp"                       // for Exception
+#include "tt/parser/service/bundle_director.hpp"  // for BundleDirector
+#include "tt/parser/service/longrun_director.hpp" // for LongrunDirector
+#include "tt/parser/service/oneshot_director.hpp" // for OneshotDirector
+#include "tt/parser/service/service_director.hpp" // for ServiceDirector
 
 using std::make_unique;
 using std::string;

@@ -20,10 +20,12 @@
 
 #include "tt/parser/service/longrun_director.hpp"
 
-#include "catch2/catch.hpp"
+#include <variant> // for get
 
-#include "tt/data/oneshot.hpp"
-#include "tt/parser/service/utils.hpp"
+#include "catch2/catch.hpp" // for operator""_catch_sr, SourceLi...
+
+#include "tt/data/longrun.hpp"         // for Longrun
+#include "tt/parser/service/utils.hpp" // for GetLinesFromFile
 
 TEST_CASE("OneshotDirector") {
     auto director = tt::LongrunDirector();

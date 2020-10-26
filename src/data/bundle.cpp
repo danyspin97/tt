@@ -20,8 +20,9 @@
 
 #include "tt/data/bundle.hpp"
 
-#include "tt/data/service_options.hpp"
-#include "tt/service_visitor.hpp"
+#include <utility> // for move
+
+#include "tt/data/service_options.hpp" // for operator<<
 
 using std::ostream;
 

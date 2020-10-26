@@ -20,7 +20,7 @@
 
 #include "tt/parser/service/service_parser.hpp"
 
-#include "catch2/catch.hpp"
+#include "catch2/catch.hpp" // for SourceLineInfo, Section, StringRef, oper...
 
 using tt::ServiceParser;
 

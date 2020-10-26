@@ -20,17 +20,21 @@
 
 #pragma once
 
-#include <map>
-#include <memory>
-#include <set>
-#include <vector>
+#include <cstddef> // for size_t
+#include <map>     // for map
+#include <set>     // for set
+#include <string>  // for string
+#include <vector>  // for vector
 
-#include "bitsery/ext/std_map.h"
-#include "bitsery/ext/std_set.h"
-#include "bitsery/traits/vector.h"
+#include "bitsery/ext/std_map.h" // for StdMap
+#include "bitsery/ext/std_set.h" // for StdSet
 
-#include "tt/data/service.hpp"
-#include "tt/dependency_graph/service_node.hpp"
+#include "tt/data/service.hpp"                  // for Service
+#include "tt/dependency_graph/service_node.hpp" // for ServiceNode
+
+namespace bitsery {
+class Access;
+} // namespace bitsery
 
 namespace tt {
 

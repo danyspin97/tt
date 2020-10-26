@@ -20,15 +20,20 @@
 
 #include "tt/parser/service/longrun_director.hpp"
 
-#include <memory>
+#include <utility> // for move
 
-#include "tt/data/service.hpp"
-#include "tt/exception.hpp"
-#include "tt/parser/section/environment_builder.hpp"
-#include "tt/parser/section/longrun_options_builder.hpp"
-#include "tt/parser/section/main_section_builder.hpp"
-#include "tt/parser/section/script_builder.hpp"
-#include "tt/parser/section/section_builder.hpp"
+#include "tt/data/long_lived_script.hpp"                 // for LongLivedSc...
+#include "tt/data/longrun.hpp"                           // for Longrun
+#include "tt/data/service.hpp"                           // for Service
+#include "tt/exception.hpp"                              // for Exception
+#include "tt/parser/section/environment_builder.hpp"     // for Environment...
+#include "tt/parser/section/longrun_options_builder.hpp" // for LongrunOpti...
+#include "tt/parser/section/main_section_builder.hpp"    // for MainSection...
+#include "tt/parser/section/script_builder.hpp"          // for ScriptBuilder
+
+namespace tt {
+class SectionBuilder;
+} // namespace tt
 
 using std::string;
 

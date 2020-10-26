@@ -20,14 +20,18 @@
 
 #include "tt/parser/service/oneshot_director.hpp"
 
-#include "tt/data/bundle.hpp"
-#include "tt/data/longrun.hpp"
-#include "tt/data/oneshot.hpp"
-#include "tt/exception.hpp"
-#include "tt/parser/section/environment_builder.hpp"
-#include "tt/parser/section/main_section_builder.hpp"
-#include "tt/parser/section/oneshot_options_builder.hpp"
-#include "tt/parser/section/script_builder.hpp"
+#include <utility> // for move
+
+#include "tt/data/oneshot.hpp"                           // for Oneshot
+#include "tt/exception.hpp"                              // for Exception
+#include "tt/parser/section/environment_builder.hpp"     // for Environment...
+#include "tt/parser/section/main_section_builder.hpp"    // for MainSection...
+#include "tt/parser/section/oneshot_options_builder.hpp" // for OneshotOpti...
+#include "tt/parser/section/script_builder.hpp"          // for ScriptBuilder
+
+namespace tt {
+class SectionBuilder;
+} // namespace tt
 
 using std::string;
 

@@ -20,11 +20,16 @@
 
 #include "tt/parser/section/oneshot_options_builder.hpp"
 
-#include "catch2/catch.hpp"
+#include <vector> // for vector, operator==
 
-#include "tt/data/oneshot_options.hpp"
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/utils.hpp"
+#include "catch2/catch.hpp" // for SourceLineInfo, operator""_ca...
+
+#include "tt/data/oneshot_options.hpp" // for OneshotOptions
+#include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
+
+namespace tt {
+class SectionBuilderException;
+} // namespace tt
 
 using std::string;
 using std::vector;

@@ -20,14 +20,10 @@
 
 #include "tt/dependency_graph/dependency_graph.hpp"
 
-#include "catch2/catch.hpp"
+#include "catch2/catch.hpp" // for operator""_catch_sr, Source...
 
-#include "tt/data/service.hpp"
-#include "tt/dependency_graph/service_node.hpp"
-#include "tt/dependency_graph/utils.hpp"
-#include "tt/exception.hpp"
-#include "tt/parser/service/service_parser.hpp"
-#include "tt/parser/service/services_parser.hpp"
+#include "tt/dependency_graph/utils.hpp" // for AddTestDependenciesToGraph
+#include "tt/exception.hpp"              // for Exception (ptr only)
 
 TEST_CASE("DependencyChecker") {
     tt::DependencyGraph graph;

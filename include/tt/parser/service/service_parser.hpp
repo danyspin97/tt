@@ -20,12 +20,11 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
-#include <vector>
+#include <stddef.h> // for size_t
+#include <string>   // for string
+#include <vector>   // for vector
 
-#include "tt/data/service.hpp"
-#include "tt/parser/service/parser_factory.hpp"
+#include "tt/data/service.hpp" // for Service
 
 namespace tt {
 

@@ -20,16 +20,34 @@
 
 #include "tt/cli/command/service_control_command.hpp"
 
-#include <unistd.h>
+#include <cxxabi.h>     // for __forced_unwind
+#include <filesystem>   // for exists, is_reg...
+#include <future>       // for future, async
+#include <string>       // for string
+#include <system_error> // for system_error
+#include <thread>       // for thread
+#include <utility>      // for move
+#include <variant>      // for visit
+#include <vector>       // for vector
 
-#include <future>
+#include "tt/action/action_listener.hpp"              // for ActionListener
+#include "tt/data/longrun.hpp"                        // for Deserialize
+#include "tt/dependency_graph/dependency_graph.hpp"   // for DependencyGraph
+#include "tt/dependency_graph/dependency_reader.hpp"  // for DependencyReader
+#include "tt/dependency_graph/get_graph_filename.hpp" // for GetGraphFilename
+#include "tt/dependency_graph/service_node.hpp"       // for ServiceNode
+#include "tt/exception.hpp"                           // for Exception
+#include "tt/supervision/service_status_manager.hpp"  // for ServiceStatusM...
+#include "tt/supervision/supervise_service.hpp"       // for SuperviseService
 
-#include "tt/action/action_listener.hpp"
-#include "tt/dependency_graph/dependency_reader.hpp"
-#include "tt/dependency_graph/get_graph_filename.hpp"
-#include "tt/exception.hpp"
-#include "tt/supervision/service_status_manager.hpp"
-#include "tt/supervision/supervise_service.hpp"
+namespace args {
+class Subparser;
+} // namespace args
+namespace tt {
+namespace cli {
+class GlobalOptions;
+} // namespace cli
+} // namespace tt
 
 tt::cli::ServiceControlCommand::ServiceControlCommand(
     args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)

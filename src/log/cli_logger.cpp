@@ -20,19 +20,21 @@
 
 #include "tt/log/cli_logger.hpp"
 
-#include <filesystem>
+#include <filesystem> // for operator/, path
+#include <iterator>   // for begin, end
+#include <unistd.h>   // for isatty, STDOUT_FILENO
+#include <vector>     // for vector
 
-// For STDOUT_FILENO
-#include <unistd.h>
+#include "spdlog/async.h"                    // for async_factory
+#include "spdlog/common.h"                   // for sink_ptr, from_str, off
+#include "spdlog/logger.h"                   // for logger
+#include "spdlog/sinks/ansicolor_sink.h"     // for ansicolor_stdout_sink
+#include "spdlog/sinks/basic_file_sink.h"    // for basic_file_sink_mt, bas...
+#include "spdlog/sinks/stdout_color_sinks.h" // for stdout_color_sink_mt
+#include "spdlog/spdlog.h"                   // for set_default_logger
 
-#include "spdlog/async.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include "spdlog/spdlog.h"
-
-#include "tt/define.h"
-#include "tt/log/cli_logger.hpp"
-#include "tt/path/dirs.hpp"
+#include "tt/define.h"      // for kServiceStatusLog, kSer...
+#include "tt/path/dirs.hpp" // for Dirs
 
 tt::CliLogger::CliLogger(const std::shared_ptr<Dirs> &dirs,
                          const std::string &verbosity, bool silence_stderr) {

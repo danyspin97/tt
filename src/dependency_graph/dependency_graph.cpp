@@ -20,13 +20,17 @@
 
 #include "tt/dependency_graph/dependency_graph.hpp"
 
-#include <algorithm>
-#include <cassert>
+#include <algorithm>   // for for_each, remove_if
+#include <cassert>     // for assert
+#include <functional>  // for function
+#include <iterator>    // for back_insert_iterator
+#include <string_view> // for string_view, operator<
+#include <variant>     // for holds_alternative
 
-#include "tt/data/service.hpp"
-#include "tt/dependency_graph/service_node.hpp"
-#include "tt/dependency_graph/utils.hpp"
-#include "tt/exception.hpp"
+#include "tt/data/service.hpp"                  // for Service
+#include "tt/dependency_graph/service_node.hpp" // for ServiceNode
+#include "tt/dependency_graph/utils.hpp"        // for ForEachDependencyOfS...
+#include "tt/exception.hpp"                     // for Exception
 
 void tt::DependencyGraph::AddServices(
     const std::vector<std::string> &services_to_enable,

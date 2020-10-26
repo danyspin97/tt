@@ -20,17 +20,20 @@
 
 #include "tt/supervision/script_supervisor.hpp"
 
-#include "catch2/catch.hpp"
+#include <chrono>     // for milliseconds
+#include <filesystem> // for exists, remove, file_size
+#include <istream>    // for basic_istream, ifstream
+#include <iterator>   // for istreambuf_iterator
+#include <thread>     // for sleep_for
+#include <utility>    // for move
 
-#include <unistd.h>
+#include "catch2/catch.hpp"                  // for operator""_catch_sr
+#include "spdlog/async.h"                    // for async_factory
+#include "spdlog/logger.h"                   // for logger
+#include "spdlog/sinks/basic_file_sink.h"    // for basic_logger_mt
+#include "spdlog/sinks/stdout_color_sinks.h" // for stdout_color_mt
 
-#include <chrono>
-#include <filesystem>
-#include <thread>
-
-#include "spdlog/async.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
+#include "tt/data/environment.hpp" // for Environment
 
 namespace tt::test {
 

@@ -20,18 +20,19 @@
 
 #pragma once
 
-#include <chrono>
-#include <memory>
+#include <memory> // for unique_ptr
+#include <string> // for string
 
-#include "process.hpp"
+#include "process.hpp" // for Process
 
-#include "tt/data/service.hpp"
-#include "tt/log/script_logger.hpp"
-#include "tt/supervision/types.hpp"
+#include "tt/data/script.hpp"       // for Script
+#include "tt/log/script_logger.hpp" // for ScriptLogger
+#include "tt/supervision/types.hpp" // for ScriptStatus
 
 namespace tt {
 
 class Timeout;
+class Environment;
 
 class ScriptSupervisor {
 public:

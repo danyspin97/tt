@@ -20,8 +20,10 @@
 
 #include "tt/parser/section/bundle_options_builder.hpp"
 
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/utils.hpp"
+#include "tt/data/bundle_options.hpp"      // for BundleOptions
+#include "tt/parser/line/array_parser.hpp" // for ArrayParser
+#include "tt/parser/section/exception.hpp" // for SectionBuilderException
+#include "tt/parser/section/utils.hpp"     // for AttributeNotFound, IsEmpt...
 
 using std::string;
 

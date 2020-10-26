@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <csignal>
+#include <bits/types/siginfo_t.h> // for siginfo_t
 
 namespace tt {
 

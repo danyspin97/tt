@@ -21,11 +21,12 @@
 #ifndef TT_MAIN_SECTION_BUILDER_HPP_
 #define TT_MAIN_SECTION_BUILDER_HPP_
 
-#include "tt/parser/section/main_section.hpp"
-#include "tt/parser/section/section_builder.hpp"
-#include <string>
+#include <string> // for string
+
+#include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
 namespace tt {
+struct MainSection;
 
 class MainSectionBuilder : public SectionBuilder {
 public:

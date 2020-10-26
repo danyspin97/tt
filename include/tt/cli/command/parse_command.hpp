@@ -20,13 +20,17 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
-#include <vector>
+#include <memory> // for shared_ptr
+#include <string> // for string
+#include <vector> // for vector
 
-#include "args.hxx"
+#include "args.hxx" // for Flag, PositionalList, Subparse...
 
-#include "tt/cli/command/command.hpp"
+#include "tt/cli/command/command.hpp" // for Command
+
+namespace tt::cli {
+class GlobalOptions;
+} // namespace tt::cli
 
 namespace tt::cli {
 

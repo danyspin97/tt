@@ -21,17 +21,24 @@
 #ifndef TT_LONGRUN_HPP_
 #define TT_LONGRUN_HPP_
 
-#include <filesystem>
-#include <optional>
-#include <string>
+#include <filesystem> // for path
+#include <iosfwd>     // for ostream
+#include <optional>   // for optional
+#include <string>     // for string
 
-#include "bitsery/ext/growable.h"
-#include "bitsery/ext/inheritance.h"
-#include "bitsery/ext/std_optional.h"
+#include "bitsery/ext/growable.h"     // for Growable
+#include "bitsery/ext/inheritance.h"  // for BaseClass
+#include "bitsery/ext/std_optional.h" // for StdOptional
 
-#include "tt/data/long_lived_script.hpp"
-#include "tt/data/longrun_options.hpp"
-#include "tt/data/service_impl.hpp"
+#include "tt/data/environment.hpp"       // for Environment
+#include "tt/data/long_lived_script.hpp" // for LongLivedScript
+#include "tt/data/longrun_options.hpp"   // for LongrunOptions
+#include "tt/data/script.hpp"            // for Script
+#include "tt/data/service_impl.hpp"      // for ServiceImpl
+
+namespace bitsery {
+class Access;
+} // namespace bitsery
 
 namespace tt {
 

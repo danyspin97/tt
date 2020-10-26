@@ -20,12 +20,19 @@
 
 #pragma once
 
-#include <filesystem>
+#include <memory> // for shared_ptr
 
-#include "args.hxx"
+#include "tt/cli/command/command.hpp" // for Command
 
-#include "tt/cli/command/command.hpp"
-#include "tt/dependency_graph/dependency_graph.hpp"
+namespace args {
+class Subparser;
+} // namespace args
+namespace tt {
+class ServiceNode;
+namespace cli {
+class GlobalOptions;
+} // namespace cli
+} // namespace tt
 
 namespace tt::cli {
 

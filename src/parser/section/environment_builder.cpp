@@ -20,12 +20,13 @@
 
 #include "tt/parser/section/environment_builder.hpp"
 
-#include <cctype>
+#include <cctype> // for isalnum, isdigit
 
-#include "tt/parser/line/exception.hpp"
-#include "tt/parser/line/key_value_parser.hpp"
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/utils.hpp"
+#include "tt/data/environment.hpp"             // for Environment
+#include "tt/parser/line/exception.hpp"        // for KeyValueParserLineInv...
+#include "tt/parser/line/key_value_parser.hpp" // for KeyValueParser
+#include "tt/parser/section/exception.hpp"     // for EnvironmentKeyNotVali...
+#include "tt/parser/section/utils.hpp"         // for IsEmptyLine
 
 using std::string;
 

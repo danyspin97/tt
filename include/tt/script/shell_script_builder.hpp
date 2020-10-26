@@ -20,10 +20,11 @@
 
 #pragma once
 
-#include <filesystem>
-#include <string>
+#include <filesystem> // for path
+#include <string>     // for string
+#include <vector>     // for vector
 
-#include "tt/data/environment.hpp"
+#include "tt/data/environment.hpp" // for Environment
 
 namespace tt {
 

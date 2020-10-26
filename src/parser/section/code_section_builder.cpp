@@ -20,12 +20,13 @@
 
 #include "tt/parser/section/code_section_builder.hpp"
 
-#include <string>
-#include <utility>
+#include <string>  // for allocator, operator+
+#include <utility> // for move
 
-#include "tt/parser/line/code_parser.hpp"
-#include "tt/parser/line/key_value_parser.hpp"
-#include "tt/parser/section/utils.hpp"
+#include "tt/parser/line/code_parser.hpp"      // for CodeParser
+#include "tt/parser/line/key_value_parser.hpp" // for KeyValueParser
+#include "tt/parser/section/exception.hpp"     // for SectionBuilderException
+#include "tt/parser/section/utils.hpp"         // for SetThrowsIfNotEmpty
 
 using std::string;
 using tt::CodeSectionBuilder;

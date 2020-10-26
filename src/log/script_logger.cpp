@@ -20,9 +20,12 @@
 
 #include "tt/log/script_logger.hpp"
 
-#include "fmt/format.h"
+#include <iterator> // for back_inserter
+#include <memory>   // for __shared_ptr_access
+#include <utility>  // for move
 
-#include "spdlog/spdlog.h"
+#include "fmt/format.h"    // for format_to
+#include "spdlog/logger.h" // for logger
 
 tt::ScriptLogger::ScriptLogger(Logger logger) : logger_(std::move(logger)) {}
 

@@ -25,6 +25,8 @@
 
 #include "bitsery/adapter/buffer.h"
 #include "bitsery/bitsery.h"
+#include "bitsery/traits/string.h"
+#include "bitsery/traits/vector.h"
 
 #include "fmt/format.h"
 

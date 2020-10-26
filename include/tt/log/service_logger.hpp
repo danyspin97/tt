@@ -20,9 +20,10 @@
 
 #pragma once
 
-#include <string>
+#include <memory> // for shared_ptr
+#include <string> // for string
 
-#include "tt/log/logger.hpp"
+#include "tt/log/logger.hpp" // for Logger
 
 namespace tt {
 

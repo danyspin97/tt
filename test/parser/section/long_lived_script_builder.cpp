@@ -19,11 +19,14 @@
  */
 
 #include "tt/parser/section/long_lived_script_builder.hpp"
-#include "tt/data/long_lived_script.hpp"
 
-#include "catch2/catch.hpp"
+#include <cstdint>  // for uint_fast32_t
+#include <optional> // for optional
 
-#include "tt/parser/section/utils.hpp"
+#include "catch2/catch.hpp" // for SourceLineInfo, operator""_...
+
+#include "tt/data/long_lived_script.hpp" // for LongLivedScript
+#include "tt/parser/section/utils.hpp"   // for TestBuilderWithFile
 
 TEST_CASE("LongLivedScriptBuilder") {
     auto builder = tt::LongLivedScriptBuilder("test");

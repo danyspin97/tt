@@ -20,11 +20,12 @@
 
 #include "tt/parser/section/main_section_builder.hpp"
 
-#include <string>
+#include <string> // for allocator, operator==
 
-#include "tt/parser/line/key_value_parser.hpp"
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/utils.hpp"
+#include "tt/parser/line/key_value_parser.hpp" // for KeyValueParser
+#include "tt/parser/section/exception.hpp"     // for SectionBuilderException
+#include "tt/parser/section/main_section.hpp"  // for MainSection
+#include "tt/parser/section/utils.hpp"         // for AttributeNotFound
 
 using std::string;
 

@@ -21,8 +21,10 @@
 #ifndef TT_OPTIONS_BUILDER_HPP_
 #define TT_OPTIONS_BUILDER_HPP_
 
-#include "tt/parser/line/array_parser.hpp"
-#include "tt/parser/section/section_builder.hpp"
+#include <string> // for string
+
+#include "tt/parser/line/array_parser.hpp"       // for ArrayParser
+#include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
 namespace tt {
 

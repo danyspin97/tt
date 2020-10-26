@@ -20,9 +20,12 @@
 
 #include "tt/path/user_dirs.hpp"
 
-#include <cassert>
+#include <algorithm> // for max
+#include <optional>  // for optional
 
-#include "xdg.hpp"
+#include "xdg.hpp" // for BaseDirectories
+
+#include "tt/path/directory_names.hpp" // for kServiceDirectoryName, kSuper...
 
 tt::UserDirs::UserDirs() {
     xdg::BaseDirectories xdg_dirs{};

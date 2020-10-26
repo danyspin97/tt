@@ -20,7 +20,10 @@
 
 #include "tt/signal.hpp"
 
-#include "tt/exception.hpp"
+#include <map>     // for map, operator!=, _Rb_tree_const_iterator
+#include <utility> // for pair
+
+#include "tt/exception.hpp" // for Exception, SignalNotValidExecption
 
 auto tt::GetSignalName(tt::Signal signal) -> std::string {
     switch (signal) {

@@ -20,7 +20,9 @@
 
 #pragma once
 
-#include "args.hxx"
+#include <string> // for string, allocator
+
+#include "args.hxx" // for ValueFlag, Flag, Group, HelpFlag
 
 namespace tt::cli {
 

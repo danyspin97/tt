@@ -20,6 +20,8 @@
 
 #include "tt/data/service.hpp"
 
+#include <type_traits> // for decay_t
+
 auto operator<<(std::ostream &oss, const tt::Service &service)
     -> std::ostream & {
     std::visit(

@@ -20,13 +20,17 @@
 
 #pragma once
 
-#include "tt/data/bundle_options.hpp"
-#include "tt/data/service.hpp"
-#include "tt/parser/section/bundle_options_builder.hpp"
-#include "tt/parser/section/main_section_builder.hpp"
-#include "tt/parser/service/service_director.hpp"
+#include <string> // for string
+
+#include "tt/data/bundle_options.hpp"                   // for BundleOptions
+#include "tt/data/service.hpp"                          // for Service
+#include "tt/parser/section/bundle_options_builder.hpp" // for BundleOption...
+#include "tt/parser/section/main_section.hpp"           // for MainSection
+#include "tt/parser/section/main_section_builder.hpp"   // for MainSectionB...
+#include "tt/parser/service/service_director.hpp"       // for ServiceDirector
 
 namespace tt {
+class SectionBuilder;
 
 class BundleDirector : public ServiceDirector {
 public:

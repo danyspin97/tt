@@ -20,10 +20,17 @@
 
 #include "tt/parser/service/bundle_director.hpp"
 
-#include "tt/data/service.hpp"
-#include "tt/exception.hpp"
-#include "tt/parser/section/bundle_options_builder.hpp"
-#include "tt/parser/section/main_section_builder.hpp"
+#include <utility> // for move
+
+#include "tt/data/bundle.hpp"                           // for Bundle
+#include "tt/data/service.hpp"                          // for Service
+#include "tt/exception.hpp"                             // for Exception
+#include "tt/parser/section/bundle_options_builder.hpp" // for BundleOption...
+#include "tt/parser/section/main_section_builder.hpp"   // for MainSectionB...
+
+namespace tt {
+class SectionBuilder;
+} // namespace tt
 
 using std::string;
 

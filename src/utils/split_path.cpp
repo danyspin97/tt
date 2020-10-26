@@ -20,7 +20,9 @@
 
 #include "tt/utils/split_path.hpp"
 
-#include <algorithm>
+#include <algorithm> // for find, max
+#include <cstddef>   // for size_t
+#include <iterator>  // for begin, end
 
 auto tt::utils::SplitPath(const std::string &path)
     -> std::vector<std::filesystem::path> {

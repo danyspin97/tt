@@ -20,7 +20,9 @@
 
 #include "tt/script/path_script_builder.hpp"
 
-#include "catch2/catch.hpp"
+#include "catch2/catch.hpp" // for SourceLineInfo, Section, operator...
+
+#include "tt/data/environment.hpp" // for Environment
 
 TEST_CASE("PathScriptBuilder") {
     SECTION("Parse unquoted execute") {

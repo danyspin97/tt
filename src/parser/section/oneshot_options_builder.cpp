@@ -20,10 +20,10 @@
 
 #include "tt/parser/section/oneshot_options_builder.hpp"
 
-#include "tt/data/oneshot_options.hpp"
-#include "tt/parser/section/options_builder.hpp"
-#include "tt/parser/section/utils.hpp"
-#include "tt/utils/parse_boolean.hpp"
+#include "tt/data/oneshot_options.hpp"     // for OneshotOptions
+#include "tt/parser/line/array_parser.hpp" // for ArrayParser
+#include "tt/parser/section/utils.hpp"     // for AttributeNotFound
+#include "tt/utils/parse_boolean.hpp"      // for ParseBoolean
 
 using std::string;
 

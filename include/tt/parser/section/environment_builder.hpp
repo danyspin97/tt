@@ -21,10 +21,12 @@
 #ifndef TT_ENVIRONMENT_BUILDER_HPP_
 #define TT_ENVIRONMENT_BUILDER_HPP_
 
-#include "tt/data/environment.hpp"
-#include "tt/parser/section/section_builder.hpp"
+#include <string> // for string
+
+#include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
 namespace tt {
+class Environment;
 
 class EnvironmentBuilder : public SectionBuilder {
 public:

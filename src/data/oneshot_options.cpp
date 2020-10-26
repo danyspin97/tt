@@ -20,6 +20,8 @@
 
 #include "tt/data/oneshot_options.hpp"
 
+#include <ostream> // for operator<<, ostream, basic_ostream
+
 auto tt::OneshotOptions::Dump(std::ostream &oss) const -> std::ostream & {
     ServiceOptions::Dump(oss) << "\n";
     return oss << "\noptional = " << optional();

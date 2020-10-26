@@ -21,11 +21,13 @@
 #ifndef TT_LONGRUN_OPTIONS_BUILDER_HPP_
 #define TT_LONGRUN_OPTIONS_BUILDER_HPP_
 
-#include "tt/data/longrun_options.hpp"
-#include "tt/parser/line/array_parser.hpp"
-#include "tt/parser/section/options_builder.hpp"
+#include <string> // for string
+
+#include "tt/parser/section/options_builder.hpp" // for OptionsBuilder
 
 namespace tt {
+class ArrayParser;
+class LongrunOptions;
 
 class LongrunOptionsBuilder : public OptionsBuilder {
 public:

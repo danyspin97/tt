@@ -21,15 +21,23 @@
 #ifndef TT_ONESHOT_HPP_
 #define TT_ONESHOT_HPP_
 
-#include <optional>
+#include <iosfwd>   // for ostream
+#include <optional> // for optional
+#include <string>   // for string
 
-#include "bitsery/ext/growable.h"
-#include "bitsery/ext/inheritance.h"
-#include "bitsery/ext/std_optional.h"
+#include "bitsery/ext/growable.h"     // for Growable
+#include "bitsery/ext/inheritance.h"  // for BaseClass
+#include "bitsery/ext/std_optional.h" // for StdOptional
 
-#include "tt/data/main_script.hpp"
-#include "tt/data/oneshot_options.hpp"
-#include "tt/data/service_impl.hpp"
+#include "tt/data/environment.hpp"     // for Environment
+#include "tt/data/main_script.hpp"     // for MainScript
+#include "tt/data/oneshot_options.hpp" // for OneshotOptions
+#include "tt/data/script.hpp"          // for Script
+#include "tt/data/service_impl.hpp"    // for ServiceImpl
+
+namespace bitsery {
+class Access;
+} // namespace bitsery
 
 namespace tt {
 

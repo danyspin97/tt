@@ -20,15 +20,20 @@
 
 #include "tt/supervision/long_lived_script_supervisor.hpp"
 
-#include <poll.h>
-#include <unistd.h>
+#include <array>    // for array
+#include <chrono>   // for milliseconds
+#include <cstdint>  // for uint_fast32_t
+#include <optional> // for optional
+#include <poll.h>   // for poll, POLLIN, pollfd
+#include <thread>   // for sleep_for
+#include <unistd.h> // for dup, close, dup2, pipe
+#include <utility>  // for move
 
-#include <chrono>
-#include <future>
+#include "tt/log/script_logger.hpp" // for ScriptLogger
 
-#include "spdlog/spdlog.h"
-
-#include "tt/supervision/supervision_signal_handler.hpp"
+namespace tt {
+class Environment;
+} // namespace tt
 
 tt::LongLivedScriptSupervisor::LongLivedScriptSupervisor(
     const std::string &service_name, const LongLivedScript &script,

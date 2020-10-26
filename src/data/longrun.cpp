@@ -20,7 +20,10 @@
 
 #include "tt/data/longrun.hpp"
 
-#include "tt/service_visitor.hpp"
+#include <ostream> // for operator<<, ostream, basic_os...
+#include <utility> // for move
+
+#include "tt/data/service_options.hpp" // for operator<<
 
 using std::ostream;
 

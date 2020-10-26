@@ -20,12 +20,19 @@
 
 #include "tt/script/path_script_builder.hpp"
 
-#include "fmt/format.h"
+#include <algorithm> // for max
+#include <cassert>   // for assert
+#include <cstdlib>   // for getenv
+#include <iterator>  // for back_inserter
 
-#include "tt/data/environment.hpp"
-#include "tt/path/dirs.hpp"
-#include "tt/utils/split_path.hpp"
-#include "tt/utils/trim.hpp"
+#include "fmt/format.h" // for format_to
+
+#include "tt/utils/split_path.hpp" // for SplitPath
+#include "tt/utils/trim.hpp"       // for trim_copy
+
+namespace tt {
+class Environment;
+} // namespace tt
 
 // This function is never called
 void tt::PathScriptBuilder::ApplyModifiers() {}

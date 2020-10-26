@@ -20,15 +20,20 @@
 
 #include "tt/action/action_listener.hpp"
 
-#include <future>
+#include <cxxabi.h>     // for __forced_unwind
+#include <future>       // for async, launch, launch::async
+#include <memory>       // for allocator, unique_ptr
+#include <string>       // for operator+, string
+#include <system_error> // for system_error
 
-#include "nngpp/protocol/rep0.h"
+#include "nngpp/buffer.h"        // for buffer
+#include "nngpp/error.h"         // for exception
+#include "nngpp/protocol/rep0.h" // for open
+#include "nngpp/socket.h"        // for socket
 
-#include "spdlog/spdlog.h"
-
-#include "tt/action/action.hpp"
-#include "tt/action/action_factory.hpp"
-#include "tt/exception.hpp"
+#include "tt/action/action.hpp"         // for Action
+#include "tt/action/action_factory.hpp" // for ActionFactory
+#include "tt/exception.hpp"             // for Exception
 
 void tt::ActionListener::Listen() try {
     nng::socket socket = nng::rep::open();

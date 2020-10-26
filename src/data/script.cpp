@@ -18,9 +18,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <utility>
+#include <optional>    // for optional
+#include <ostream>     // for operator<<, ostream, basic_ostream
+#include <string>      // for operator<<, string, basic_string, char...
+#include <type_traits> // for remove_reference<>::type
+#include <utility>     // for move
 
-#include "tt/data/script.hpp"
+#include "tt/data/script.hpp" // for Script, Script::Type, operator<<
+#include "tt/signal.hpp"      // for GetSignalName
 
 using std::ostream;
 

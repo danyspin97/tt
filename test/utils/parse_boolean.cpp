@@ -18,9 +18,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "catch2/catch.hpp"
+#include <memory> // for allocator
 
-#include "tt/utils/parse_boolean.hpp"
+#include "catch2/catch.hpp" // for SourceLineInfo, operator""_cat...
+
+#include "tt/utils/parse_boolean.hpp" // for ParseBoolean, BooleanParseExce...
 
 TEST_CASE("ParseBoolean") {
     SECTION("Parse valid values") {

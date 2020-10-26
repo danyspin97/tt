@@ -20,9 +20,10 @@
 
 #include "tt/dependency_graph/service_node.hpp"
 
-#include <algorithm>
+#include <ostream> // for operator<<, ostream, basic_...
+#include <utility> // for move
 
-#include "tt/dependency_graph/utils.hpp"
+#include "tt/dependency_graph/utils.hpp" // for GetName
 
 tt::ServiceNode::ServiceNode(tt::Service service)
     : service_(std::move(service)) {

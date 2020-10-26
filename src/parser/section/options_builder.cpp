@@ -20,11 +20,13 @@
 
 #include "tt/parser/section/options_builder.hpp"
 
-#include "tt/parser/line/exception.hpp"
-#include "tt/parser/line/key_value_parser.hpp"
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/utils.hpp"
-#include "tt/utils/parse_boolean.hpp"
+#include <stdexcept> // for invalid_argument
+
+#include "tt/parser/line/exception.hpp"        // for EmptyArrayException
+#include "tt/parser/line/key_value_parser.hpp" // for KeyValueParser
+#include "tt/parser/section/exception.hpp"     // for SectionBuilderException
+#include "tt/parser/section/utils.hpp"         // for IsEmptyLine
+#include "tt/utils/parse_boolean.hpp"          // for BooleanParseException
 
 using std::string;
 

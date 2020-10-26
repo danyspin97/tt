@@ -21,11 +21,12 @@
 #ifndef TT_BUNDLE_OPTIONS_HPP_
 #define TT_BUNDLE_OPTIONS_HPP_
 
-#include <string>
-#include <utility>
-#include <vector>
+#include <iosfwd>  // for ostream
+#include <string>  // for string
+#include <utility> // for move
+#include <vector>  // for vector
 
-#include "tt/data/service_options.hpp"
+#include "tt/data/service_options.hpp" // for ServiceOptions
 
 namespace tt {
 

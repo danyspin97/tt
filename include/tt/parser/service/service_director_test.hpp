@@ -20,10 +20,14 @@
 
 #pragma once
 
-#include "tt/data/bundle.hpp"
-#include "tt/data/service.hpp"
-#include "tt/parser/section/section_builder.hpp"
-#include "tt/parser/service/service_director.hpp"
+#include <string>  // for allocator, string
+#include <utility> // for move
+
+#include "tt/data/bundle.hpp"                     // for Bundle
+#include "tt/data/bundle_options.hpp"             // for BundleOptions
+#include "tt/data/service.hpp"                    // for Service
+#include "tt/parser/section/section_builder.hpp"  // for SectionBuilder
+#include "tt/parser/service/service_director.hpp" // for ServiceDirector
 
 namespace tt {
 

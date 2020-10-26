@@ -21,10 +21,9 @@
 #ifndef TT_LONGRUN_OPTIONS_HPP_
 #define TT_LONGRUN_OPTIONS_HPP_
 
-#include "tt/data/service_options.hpp"
-#include <cinttypes>
-#include <istream>
-#include <string>
+#include <istream> // for ostream
+
+#include "tt/data/service_options.hpp" // for ServiceOptions
 
 namespace tt {
 

@@ -20,9 +20,12 @@
 
 #include "tt/script/script_builder_factory.hpp"
 
-#include "tt/script/bash_script_builder.hpp"
-#include "tt/script/path_script_builder.hpp"
-#include "tt/script/sh_script_builder.hpp"
+#include <cassert> // for assert
+
+#include "tt/script/bash_script_builder.hpp"  // for BashScriptBuilder
+#include "tt/script/path_script_builder.hpp"  // for PathScriptBuilder
+#include "tt/script/sh_script_builder.hpp"    // for ShScriptBuilder
+#include "tt/script/shell_script_builder.hpp" // for ShellScriptBuilder
 
 auto tt::ScriptBuilderFactory::GetScriptBuilder(Script::Type type)
     -> std::unique_ptr<ShellScriptBuilder> {

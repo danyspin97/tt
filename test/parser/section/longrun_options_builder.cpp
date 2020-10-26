@@ -20,10 +20,17 @@
 
 #include "tt/parser/section/longrun_options_builder.hpp"
 
-#include "catch2/catch.hpp"
+#include <initializer_list> // for initializer_list
+#include <vector>           // for vector, operator==
 
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/utils.hpp"
+#include "catch2/catch.hpp" // for SourceLineInfo, operator""_ca...
+
+#include "tt/data/longrun_options.hpp" // for LongrunOptions
+#include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
+
+namespace tt {
+class SectionBuilderException;
+} // namespace tt
 
 using std::string;
 using std::vector;

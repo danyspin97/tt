@@ -20,8 +20,10 @@
 
 #pragma once
 
-#include "tt/data/main_script.hpp"
-#include "tt/parser/section/script_builder.hpp"
+#include <string> // for string
+
+#include "tt/data/main_script.hpp"              // for MainScript
+#include "tt/parser/section/script_builder.hpp" // for ScriptBuilder
 
 namespace tt {
 

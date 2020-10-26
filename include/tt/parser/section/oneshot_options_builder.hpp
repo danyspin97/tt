@@ -21,11 +21,13 @@
 #ifndef TT_ONESHOT_OPTIONS_BUILDER_HPP_
 #define TT_ONESHOT_OPTIONS_BUILDER_HPP_
 
-#include "tt/data/oneshot_options.hpp"
-#include "tt/parser/line/array_parser.hpp"
-#include "tt/parser/section/options_builder.hpp"
+#include <string> // for string
+
+#include "tt/parser/section/options_builder.hpp" // for OptionsBuilder
 
 namespace tt {
+class ArrayParser;
+class OneshotOptions;
 
 class OneshotOptionsBuilder : public OptionsBuilder {
 public:

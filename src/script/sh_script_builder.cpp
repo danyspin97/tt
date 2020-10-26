@@ -20,7 +20,7 @@
 
 #include "tt/script/sh_script_builder.hpp"
 
-#include "tt/path/dirs.hpp"
+#include <memory> // for allocator
 
 void tt::ShScriptBuilder::ApplyModifiers() {
     // Stop on error

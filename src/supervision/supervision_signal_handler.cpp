@@ -20,15 +20,9 @@
 
 #include "tt/supervision/supervision_signal_handler.hpp"
 
-#include <unistd.h>
-
-#include <cassert>
-#include <cstdlib>
-#include <cstring>
-
-#include <array>
-
-#include "tt/supervision/long_lived_script_supervisor.hpp"
+#include <array>   // for array
+#include <cassert> // for assert
+#include <csignal> // for sigaction, sigaddset, SIGCHLD, SIGTERM, SIGABRT
 
 #if __linux__
 constexpr std::array<int, 23> deathsigs = {

@@ -18,14 +18,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <utility>
+#include <memory>   // for shared_ptr
+#include <optional> // for optional
+#include <utility>  // for move
 
-#include "tt/supervision/oneshot_supervisor.hpp"
+#include "tt/data/main_script.hpp"                   // for MainScript
+#include "tt/data/oneshot.hpp"                       // for Oneshot
+#include "tt/data/script.hpp"                        // for Script
+#include "tt/log/oneshot_logger.hpp"                 // for OneshotLogger
+#include "tt/log/script_logger.hpp"                  // for ScriptLogger
+#include "tt/supervision/oneshot_supervisor.hpp"     // for OneshotSupervisor
+#include "tt/supervision/script_supervisor.hpp"      // for ScriptSupervisor
+#include "tt/supervision/service_status_manager.hpp" // for ServiceStatusMa...
+#include "tt/supervision/types.hpp"                  // for ScriptStatus
 
-#include "spdlog/spdlog.h"
-
-#include "tt/supervision/script_supervisor.hpp"
-#include "tt/supervision/service_status_manager.hpp"
+namespace tt {
+class Dirs;
+} // namespace tt
 
 tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot,
                                          std::shared_ptr<Dirs> dirs)

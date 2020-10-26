@@ -20,6 +20,8 @@
 
 #include "tt/data/environment.hpp"
 
+#include <algorithm> // for for_each, max
+
 auto tt::Environment::Get(const std::string &key) const -> std::string {
     for (const auto &pair : pairs_) {
         if (std::get<0>(pair) == key) {

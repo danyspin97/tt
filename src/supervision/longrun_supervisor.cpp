@@ -20,22 +20,34 @@
 
 #include "tt/supervision/longrun_supervisor.hpp"
 
-#include <future>
-#include <utility>
+#include <cstdlib>      // for exit
+#include <cxxabi.h>     // for __forced_...
+#include <future>       // for future
+#include <optional>     // for optional
+#include <system_error> // for system_error
+#include <unistd.h>     // for pause
+#include <utility>      // for move
 
-#include <unistd.h>
+#include "msgpack.hpp"                         // IWYU pragma: keep
+#include "msgpack/v1/adaptor/adaptor_base.hpp" // for operator<<
 
 // This should be included before req0.h
-#include "nngpp/socket.h"
+#include "nngpp/socket.h" // for socket
 
-#include "nngpp/protocol/req0.h"
+#include "nngpp/protocol/req0.h" // for open
 
-#include "tt/action/notify_up_action.hpp"
-#include "tt/action/pack_action.hpp"
-#include "tt/supervision/long_lived_script_supervisor.hpp"
-#include "tt/supervision/script_supervisor.hpp"
-#include "tt/supervision/supervision_signal_handler.hpp"
-#include "tt/supervision/timeout.hpp"
+#include "tt/action/notify_up_action.hpp"                  // for NotifyUpA...
+#include "tt/action/pack_action.hpp"                       // for PackAction
+#include "tt/data/long_lived_script.hpp"                   // for LongLived...
+#include "tt/data/script.hpp"                              // for Script
+#include "tt/log/script_logger.hpp"                        // for ScriptLogger
+#include "tt/supervision/long_lived_script_supervisor.hpp" // for LongLived...
+#include "tt/supervision/script_supervisor.hpp"            // for ScriptSup...
+#include "tt/supervision/supervision_signal_handler.hpp"   // for Supervisi...
+
+namespace tt {
+class Dirs;
+} // namespace tt
 
 tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
                                          std::shared_ptr<Dirs> dirs)

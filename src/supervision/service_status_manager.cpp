@@ -20,12 +20,13 @@
 
 #include "tt/supervision/service_status_manager.hpp"
 
-#include <cassert>
+#include <cassert> // for assert
+#include <utility> // for pair
 
-#include "fmt/format.h"
+#include "fmt/format.h" // for format
 
-#include "tt/exception.hpp"
-#include "tt/supervision/service_status.hpp"
+#include "tt/exception.hpp"                  // for Exception
+#include "tt/supervision/service_status.hpp" // for ServiceStatus
 
 auto tt::ServiceStatusManager::GetInstance() -> ServiceStatusManager & {
     static ServiceStatusManager instance;

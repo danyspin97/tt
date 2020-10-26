@@ -20,17 +20,24 @@
 
 #pragma once
 
-#include <memory>
-#include <vector>
+#include <iosfwd>   // for ostream
+#include <stdint.h> // for uint32_t
+#include <string>   // for string
+#include <variant>  // for monostate
 
-#include "bitsery/ext/growable.h"
-#include "bitsery/ext/std_variant.h"
+#include "bitsery/ext/growable.h"    // for Growable
+#include "bitsery/ext/std_variant.h" // IWYU pragma: keep for StdVariant
 
-#include "tt/data/service.hpp"
+#include "tt/data/service.hpp" // for Service
+
+namespace bitsery {
+class Access;
+} // namespace bitsery
 
 namespace tt {
-
-class ServiceNode;
+class Bundle;
+class Longrun;
+class Oneshot;
 
 class ServiceNode {
 public:

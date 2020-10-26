@@ -20,7 +20,11 @@
 
 #include "tt/log/oneshot_logger.hpp"
 
-#include "spdlog/spdlog.h"
+#include <memory> // for __shared_ptr_access
+
+#include "spdlog/logger.h" // for logger
+
+#include "tt/log/logger.hpp" // for Logger
 
 void tt::OneshotLogger::Start() const {
     logger()->info("Starting oneshot {}", service_name());

@@ -20,13 +20,12 @@
 
 #include "tt/parser/section/utils.hpp"
 
-#include <filesystem>
-#include <fstream>
-#include <sstream>
-#include <string>
+#include <filesystem> // for file_size
+#include <fstream>    // for basic_istream, ifst...
+#include <string>     // for allocator, string
 
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/section_builder.hpp"
+#include "tt/parser/section/exception.hpp"       // for AttributeNotFoundEx...
+#include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
 using std::getline;
 using std::ifstream;

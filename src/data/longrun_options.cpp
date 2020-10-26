@@ -20,8 +20,6 @@
 
 #include "tt/data/longrun_options.hpp"
 
-#include "tt/data/exception.hpp"
-
 using std::ostream;
 
 using tt::LongrunOptions;

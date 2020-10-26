@@ -20,10 +20,10 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
+#include <stddef.h> // for size_t
+#include <string>   // for string
 
-#include "tt/log/logger.hpp"
+#include "tt/log/logger.hpp" // for Logger
 
 namespace tt {
 

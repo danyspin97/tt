@@ -20,10 +20,9 @@
 
 #pragma once
 
-#include <filesystem>
-#include <vector>
-
-#include <cinttypes>
+#include <filesystem> // for path
+#include <stdint.h>   // for uint8_t
+#include <vector>     // for vector
 
 namespace tt::utils {
 

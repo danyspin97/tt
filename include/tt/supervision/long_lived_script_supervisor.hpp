@@ -20,9 +20,15 @@
 
 #pragma once
 
-#include "tt/supervision/script_supervisor.hpp"
+#include <string> // for string
+
+#include "tt/data/long_lived_script.hpp"        // for LongLivedScript
+#include "tt/supervision/script_supervisor.hpp" // for ScriptSupervisor
+#include "tt/supervision/types.hpp"             // for ScriptStatus
 
 namespace tt {
+class Environment;
+class ScriptLogger;
 
 class LongLivedScriptSupervisor : public ScriptSupervisor {
 public:

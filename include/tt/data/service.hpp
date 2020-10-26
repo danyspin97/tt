@@ -20,12 +20,13 @@
 
 #pragma once
 
-#include <ostream>
-#include <variant>
+#include <ostream> // for ostream
+#include <variant> // for monostate, variant
 
-#include "tt/data/bundle.hpp"
-#include "tt/data/longrun.hpp"
-#include "tt/data/oneshot.hpp"
+// Do not use fwd declarations for types contained by std::variant
+#include "tt/data/bundle.hpp"  // IWYU pragma: keep
+#include "tt/data/longrun.hpp" // IWYU pragma: keep
+#include "tt/data/oneshot.hpp" // IWYU pragma: keep
 
 namespace tt {
 
