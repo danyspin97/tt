@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <bits/types/siginfo_t.h> // for siginfo_t
+#include <csignal> // IWYU pragma: keep for siginfo_t
 
 namespace tt {
 
