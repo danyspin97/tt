@@ -20,12 +20,24 @@
 
 #pragma once
 
+#include <string>
+
 namespace tt {
 
 class Action {
 public:
     virtual ~Action() = default;
     virtual void Apply() = 0;
+
+    [[nodiscard]] auto name() const noexcept -> const std::string & {
+        return name_;
+    }
+
+protected:
+    void name(std::string name) noexcept { name_ = std::move(name); }
+
+private:
+    std::string name_;
 };
 
 } // namespace tt

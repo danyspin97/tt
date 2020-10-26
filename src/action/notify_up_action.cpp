@@ -25,7 +25,9 @@
 #include "tt/supervision/service_status_manager.hpp" // for ServiceStatusMa...
 
 tt::NotifyUpAction::NotifyUpAction(std::string service, bool succeded)
-    : service_(std::move(service)), succeeded_(succeded) {}
+    : service_(std::move(service)), succeeded_(succeded) {
+    name("notify_up");
+}
 
 auto tt::NotifyUpAction::service() const -> std::string { return service_; }
 
