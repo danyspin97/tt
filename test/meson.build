@@ -43,6 +43,7 @@ tt_test_src = files(
 # ]
 tt_test_multiple_src = []
 
+subdir('action')
 subdir('dependency_graph')
 subdir('parser')
 subdir('script')
