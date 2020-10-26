@@ -107,5 +107,6 @@ void tt::LongrunSupervisor::NotifyStatus(ScriptStatus status) const {
 
     bool succeded = status == ScriptStatus::Success;
     NotifyUpAction action(longrun_.name(), succeded);
-    socket.send(PackAction(action));
+    auto s = PackAction(action);
+    socket.send(nng::buffer{s.data(), s.size()});
 }

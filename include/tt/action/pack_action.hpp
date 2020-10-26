@@ -22,25 +22,17 @@
 
 #include <sstream>
 
-// Include our adapter of NotifyUpAction
-#include "tt/action/adapter/notify_up_action_adapter.hpp"
-
 #include "msgpack.hpp"
-
-#include "nngpp/buffer.h"
-
-#include "tt/action/notify_up_action.hpp"
 
 namespace tt {
 
-auto PackAction(const Action &action) -> nng::buffer;
+class Action;
 
-template <typename T> auto PackAction(const T &action) -> nng::buffer {
-    static_assert(std::is_base_of<Action, T>::value,
-                  "T must derive from Action");
+template <typename T> auto PackAction(const T &action) -> std::string {
+    static_assert(std::is_base_of_v<Action, T>, "T must derive from Action");
     std::stringstream stream;
     msgpack::pack(stream, action);
-    return nng::buffer{stream.str().c_str(), stream.str().size()};
+    return stream.str();
 }
 
 } // namespace tt
