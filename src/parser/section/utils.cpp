@@ -22,6 +22,7 @@
 
 #include <filesystem> // for file_size
 #include <fstream>    // for basic_istream, ifst...
+#include <sstream>    // for stringstream
 #include <string>     // for allocator, string
 
 #include "tt/parser/section/exception.hpp"       // for AttributeNotFoundEx...
