@@ -26,11 +26,13 @@
 
 #include "args.hxx"        // for Flag, PositionalList
 #include "fmt/format.h"    // for format_to
-#include "fmt/ostream.h"   // for formatbuf<>::int_type
 #include "spdlog/spdlog.h" // for info, error
 
 // Include operator<<(ostream, Service) before ostream.h
-#include "tt/data/service.hpp"                  // for operator<<
+#include "tt/data/service.hpp" // for operator<<
+
+#include "fmt/ostream.h" // for formatbuf<>::int_type
+
 #include "tt/parser/service/service_parser.hpp" // for ServiceParser
 #include "tt/path/dirs.hpp"                     // for Dirs
 
