@@ -37,11 +37,10 @@
 #include "tt/action/notify_up_action.hpp" // for NotifyUpAction
 #include "tt/exception.hpp"               // for Exception
 
-auto tt::ActionFactory::GetActionFromBuffer(const nng::buffer& buffer)
+auto tt::ActionFactory::GetActionFromBuffer(const std::string &buffer)
     -> std::unique_ptr<Action> {
     msgpack::object_handle result;
-    const char *data = static_cast<const char *>(buffer.data());
-    msgpack::unpack(result, data, buffer.size());
+    msgpack::unpack(result, buffer.data(), buffer.size());
     msgpack::object obj(result.get());
 
     std::string action_name = obj.via.map.ptr[0].val.as<std::string>();

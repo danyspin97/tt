@@ -22,17 +22,13 @@
 
 #include <memory>
 
-namespace nng {
-struct buffer;
-}
-
 namespace tt {
 
 class Action;
 
 class ActionFactory {
 public:
-    static auto GetActionFromBuffer(const nng::buffer& buffer)
+    static auto GetActionFromBuffer(const std::string &buffer)
         -> std::unique_ptr<Action>;
 };
 
