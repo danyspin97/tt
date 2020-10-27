@@ -45,6 +45,7 @@ tt_test_multiple_src = []
 
 subdir('action')
 subdir('dependency_graph')
+subdir('net')
 subdir('parser')
 subdir('script')
 subdir('supervision')
