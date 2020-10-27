@@ -31,16 +31,12 @@
 #include "msgpack.hpp"                         // IWYU pragma: keep
 #include "msgpack/v1/adaptor/adaptor_base.hpp" // for operator<<
 
-// This should be included before req0.h
-#include "nngpp/socket.h" // for socket
-
-#include "nngpp/protocol/req0.h" // for open
-
 #include "tt/action/notify_up_action.hpp"                  // for NotifyUpA...
 #include "tt/action/pack_action.hpp"                       // for PackAction
 #include "tt/data/long_lived_script.hpp"                   // for LongLived...
 #include "tt/data/script.hpp"                              // for Script
 #include "tt/log/script_logger.hpp"                        // for ScriptLogger
+#include "tt/net/client.hpp"                               // for Client
 #include "tt/supervision/long_lived_script_supervisor.hpp" // for LongLived...
 #include "tt/supervision/script_supervisor.hpp"            // for ScriptSup...
 #include "tt/supervision/supervision_signal_handler.hpp"   // for Supervisi...
@@ -102,11 +98,11 @@ auto tt::LongrunSupervisor::TryExecute() -> ScriptStatus {
 }
 
 void tt::LongrunSupervisor::NotifyStatus(ScriptStatus status) const {
-    nng::socket socket = nng::req::open();
-    socket.dial("tcp://localhost:8000");
+    net::Client client(net::Socket::Protocol::TCP, "localhost", 8000);
+    client.Connect();
 
     bool succeded = status == ScriptStatus::Success;
     NotifyUpAction action(longrun_.name(), succeded);
     auto s = PackAction(action);
-    socket.send(nng::buffer{s.data(), s.size()});
+    client.SendMessage(s);
 }
