@@ -29,6 +29,16 @@
 
 tt::ScriptLogger::ScriptLogger(Logger logger) : logger_(std::move(logger)) {}
 
+tt::ScriptLogger::~ScriptLogger() {
+    if (!stdout_line_.empty()) {
+        logger_->info("[stdout] {}", stdout_line_);
+    }
+    if (!stderr_line_.empty()) {
+        logger_->info("[stderr] {}", stderr_line_);
+    }
+    logger_->flush();
+}
+
 void tt::ScriptLogger::Log(Type type, const char *bytes, size_t size) {
     bool is_stdout = type == Type::STDOUT;
     std::string &last_line = is_stdout ? stdout_line_ : stderr_line_;

@@ -32,6 +32,7 @@ public:
     enum class Type { STDOUT = 1, STDERR = 2 };
 
     explicit ScriptLogger(Logger logger);
+    ~ScriptLogger();
 
     void Log(Type type, const char *bytes, size_t size);
 
