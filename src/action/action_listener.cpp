@@ -26,21 +26,17 @@
 #include <string>       // for operator+, string
 #include <system_error> // for system_error
 
-#include "nngpp/buffer.h"        // for buffer
-#include "nngpp/error.h"         // for exception
-#include "nngpp/protocol/rep0.h" // for open
-#include "nngpp/socket.h"        // for socket
-
 #include "tt/action/action.hpp"         // for Action
 #include "tt/action/action_factory.hpp" // for ActionFactory
 #include "tt/exception.hpp"             // for Exception
+#include "tt/net/server.hpp"            // for Server
 
-void tt::ActionListener::Listen() try {
-    nng::socket socket = nng::rep::open();
-    socket.listen("tcp://localhost:8000");
+void tt::ActionListener::Listen() {
+    net::Server server{net::Server::Protocol::TCP, "localhost", 8888};
+    server.Listen();
 
     for (;;) {
-        nng::buffer buffer = socket.recv();
+        auto buffer = server.ReceiveMessage();
         auto action_ptr = ActionFactory::GetActionFromBuffer(buffer);
         if (!action_ptr) {
             continue;
@@ -48,9 +44,4 @@ void tt::ActionListener::Listen() try {
 
         (void)std::async(std::launch::async, &Action::Apply, action_ptr.get());
     }
-} catch (const nng::exception &e) {
-    throw tt::Exception(
-        std::string{
-            "Couldn't listen on nng socket due to the following error: "} +
-        std::string{e.what()});
 }
