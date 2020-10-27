@@ -38,7 +38,7 @@
 #include "tt/exception.hpp"               // for Exception
 
 auto tt::ActionFactory::GetActionFromBuffer(const std::string &buffer)
-    -> std::unique_ptr<Action> {
+    -> std::unique_ptr<Action> try {
     msgpack::object_handle result;
     msgpack::unpack(result, buffer.data(), buffer.size());
     msgpack::object obj(result.get());
@@ -56,4 +56,7 @@ auto tt::ActionFactory::GetActionFromBuffer(const std::string &buffer)
         action_ptr = std::make_unique<NotifyUpAction>(obj.as<NotifyUpAction>());
     }
     return action_ptr;
+} catch (msgpack::type_error &e) {
+    throw tt::Exception(
+        "There was an error while parsing the buffer containing the action");
 }
