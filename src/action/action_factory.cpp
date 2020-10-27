@@ -54,8 +54,6 @@ auto tt::ActionFactory::GetActionFromBuffer(const std::string &buffer)
     std::unique_ptr<Action> action_ptr = nullptr;
     if (action_name == "notify_up") {
         action_ptr = std::make_unique<NotifyUpAction>(obj.as<NotifyUpAction>());
-    } else {
-        throw tt::Exception("Action not supported");
     }
     return action_ptr;
 }
