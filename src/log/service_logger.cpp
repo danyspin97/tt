@@ -28,8 +28,9 @@
 #include "spdlog/sinks/basic_file_sink.h" // for basic_logger_mt
 #include "spdlog/spdlog.h"                // for get
 
-#include "tt/log/script_logger.hpp" // for ScriptLogger
-#include "tt/path/dirs.hpp"         // for Dirs
+#include "tt/log/script_logger.hpp"    // for ScriptLogger
+#include "tt/path/directory_names.hpp" // for kServiceLogDirectoryName
+#include "tt/path/dirs.hpp"            // for Dirs
 
 tt::ServiceLogger::ServiceLogger(std::string service_name,
                                  const std::shared_ptr<Dirs> &dirs)
@@ -40,7 +41,7 @@ tt::ServiceLogger::ServiceLogger(std::string service_name,
     }
 
     auto service_log_path =
-        dirs->logdir() /
+        dirs->logdir() / kServiceLogDirectoryName /
         std::filesystem::path{service_name_ + std::string{".log"}};
     logger_ = spdlog::basic_logger_mt<spdlog::async_factory>(service_name_,
                                                              service_log_path);

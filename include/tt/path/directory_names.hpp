@@ -26,5 +26,6 @@ namespace tt {
 
 constexpr const char *kServiceDirectoryName = "service";
 constexpr const char *kSuperviseDirectoryName = "supervise";
+constexpr const char *kServiceLogDirectoryName = kServiceDirectoryName;
 
 } // namespace tt
