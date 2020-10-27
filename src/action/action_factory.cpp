@@ -43,7 +43,13 @@ auto tt::ActionFactory::GetActionFromBuffer(const std::string &buffer)
     msgpack::unpack(result, buffer.data(), buffer.size());
     msgpack::object obj(result.get());
 
-    std::string action_name = obj.via.map.ptr[0].val.as<std::string>();
+    // ComplexAction:
+    //     Action:
+    //         name_: "complex_action"
+    //     data:       ...
+    //     other_data: ...
+    std::string action_name =
+        obj.via.map.ptr[0].val.via.map.ptr[0].val.as<std::string>();
 
     std::unique_ptr<Action> action_ptr = nullptr;
     if (action_name == "notify_up") {
