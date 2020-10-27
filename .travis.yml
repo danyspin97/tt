@@ -25,14 +25,18 @@ script:
   - |
     if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then
         meson -Dtests=enabled -Db_coverage=true build
+        # Do not continue if the build fail
         build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory \
             ninja -C build || exit 1
         ninja -C build test
+        # Remember the exit code of the tests
+        tests_exit_code=$?
         ninja -C build coverage-text
         coveralls -e ext -e subprojects -e test -b build \
             --gcov /usr/bin/gcov-9 --gcov-options '\-lp'
         ninja -C build coverage-sonarcloud
         sonar-scanner
+        exit $tests_exit_code
     fi
 
 addons:
