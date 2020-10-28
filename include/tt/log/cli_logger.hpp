@@ -23,6 +23,8 @@
 #include <memory>
 #include <string>
 
+#include "tt/log/logger.hpp"
+
 namespace tt {
 
 class Dirs;
@@ -31,6 +33,11 @@ class CliLogger {
 public:
     CliLogger(const std::shared_ptr<Dirs> &dirs, const std::string &verbosity,
               bool silence_stderr);
+
+    void LogError(const std::string &message);
+
+private:
+    Logger logger_;
 };
 
 } // namespace tt

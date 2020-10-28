@@ -58,10 +58,12 @@ tt::CliLogger::CliLogger(const std::shared_ptr<Dirs> &dirs,
         sinks.push_back(cli_file_sink);
     }
 
-    auto cli_sinks =
-        std::make_shared<spdlog::logger>("cli", begin(sinks), end(sinks));
-    spdlog::set_default_logger(cli_sinks);
+    logger_ = std::make_shared<spdlog::logger>("cli", begin(sinks), end(sinks));
+    spdlog::set_default_logger(logger_);
 
     auto status_logger = spdlog::basic_logger_mt<spdlog::async_factory>(
         kServiceStatusLog, logdir / kServiceStatusLogFile);
+}
+void tt::CliLogger::LogError(const std::string &message) {
+    logger_->error("{}", message);
 }
