@@ -29,6 +29,7 @@
 #include "spdlog/spdlog.h" // for info
 
 #include "tt/cli/command/command.hpp"                 // for Command
+#include "tt/cli/command/command_dispatcher.hpp"      // for CommandDispatcher
 #include "tt/cli/command/enable_command.hpp"          // for EnableCommand
 #include "tt/cli/command/parse_command.hpp"           // for ParseCommand
 #include "tt/cli/command/serialize_command.hpp"       // for SerializeCommand
@@ -41,16 +42,16 @@ auto main(int argc, char *argv[]) -> int {
     args::ArgumentParser parser("tt init/rc manager.");
     auto common_options = std::make_shared<tt::cli::GlobalOptions>();
 
+    tt::cli::CommandDispatcher::SetGlobalOptions(common_options);
+
     args::Group manage{(args::Group &)parser, "Manage services"};
 
     // TODO: Decomment them when they have an action assigned each
     // args::Command(manage, "start", "Start/restart one or more services");
     // args::Command(manage, "stop", "Stop one or more services");
-    args::Command enable(manage, "enable", "Enable one or more services",
-                         [common_options](args::Subparser &subparser) {
-                             tt::cli::Command::Dispatch<tt::cli::EnableCommand>(
-                                 subparser, common_options);
-                         });
+    args::Command enable(
+        manage, "enable", "Enable one or more services",
+        tt::cli::CommandDispatcher::Dispatch<tt::cli::EnableCommand>());
     // args::Command(manage, "disable", "Disable one or more services");
     // args::Command(manage, "edit-config", "Edit the config of a service");
 
@@ -66,42 +67,31 @@ auto main(int argc, char *argv[]) -> int {
     args::Group system((args::Group &)parser, "System commands");
     args::Command svc(
         system, "svc", "Run service control",
-        [common_options](args::Subparser &subparser) {
-            tt::cli::Command::Dispatch<tt::cli::ServiceControlCommand>(
-                subparser, common_options);
-        });
+        tt::cli::CommandDispatcher::Dispatch<tt::cli::ServiceControlCommand>());
 
     args::Command supervise(
         system, "supervise", "Supervise a process [Do not run manually]",
-        [common_options](args::Subparser &subparser) {
-            tt::cli::Command::Dispatch<tt::cli::SuperviseCommand>(
-                subparser, common_options);
-        });
+        tt::cli::CommandDispatcher::Dispatch<tt::cli::SuperviseCommand>());
 
     args::Group testing((args::Group &)parser, "Test services files");
-    args::Command parse(testing, "parse",
-                        "Parse one or more services for testing purposes.",
-                        [common_options](args::Subparser &subparser) {
-                            tt::cli::Command::Dispatch<tt::cli::ParseCommand>(
-                                subparser, common_options);
-                        });
+    args::Command parse(
+        testing, "parse", "Parse one or more services for testing purposes.",
+        tt::cli::CommandDispatcher::Dispatch<tt::cli::ParseCommand>());
     args::Command serialize(
         testing, "serialize", "Serialize a longrun into a file",
-        [common_options](args::Subparser &subparser) {
-            tt::cli::Command::Dispatch<tt::cli::SerializeCommand>(
-                subparser, common_options);
-        });
+        tt::cli::CommandDispatcher::Dispatch<tt::cli::SerializeCommand>());
 
     args::GlobalOptions global_options(parser, common_options->arguments());
 
     try {
         parser.ParseCLI(argc, argv);
     } catch (const args::Help & /*e*/) {
-        std::cout << parser;
+        parser.Help(std::cout);
     } catch (const args::Error &e) {
-        std::cerr << e.what() << std::endl << parser;
+        std::cerr << e.what() << std::endl;
+        parser.Help(std::cout);
         return 1;
     }
 
-    return 0;
+    return tt::cli::CommandDispatcher::exit_code();
 }

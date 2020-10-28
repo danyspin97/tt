@@ -20,44 +20,41 @@
 
 #pragma once
 
+#include <functional>  // for function
 #include <memory>      // for shared_ptr
 #include <type_traits> // for is_base_of
-#include <utility>     // for move
 
 namespace args {
 class Subparser;
 }
 
-namespace tt {
-class CliLogger;
-class Dirs;
-namespace cli {
-class GlobalOptions;
-} // namespace cli
-} // namespace tt
-
 namespace tt::cli {
 
-class Command {
+class Command;
+class GlobalOptions;
+
+class CommandDispatcher {
 public:
-    Command(args::Subparser &parser,
-            std::shared_ptr<GlobalOptions> global_options);
-    virtual ~Command() = default;
+    static void
+    SetGlobalOptions(std::shared_ptr<GlobalOptions> global_options) {
+        global_options_ = std::move(global_options);
+    }
 
-    auto InitAndExecute() -> int;
+    template <typename T>
+    static auto Dispatch() -> std::function<void(args::Subparser &)> {
+        static_assert(std::is_base_of_v<Command, T>,
+                      "Dispatch only works with a subclass of Command");
+        return [](args::Subparser &subparser) {
+            T command = T(subparser, std::move(global_options_));
+            exit_code_ = command.InitAndExecute();
+        };
+    }
 
-protected:
-    virtual auto Execute() -> int = 0;
-
-    [[nodiscard]] auto logger() const -> std::shared_ptr<CliLogger>;
-    [[nodiscard]] auto dirs() const -> std::shared_ptr<Dirs>;
-
-    args::Subparser &parser_;
-    std::shared_ptr<GlobalOptions> global_options_;
+    [[nodiscard]] static auto exit_code() -> int { return exit_code_; }
 
 private:
-    std::shared_ptr<CliLogger> logger_;
-    std::shared_ptr<Dirs> dirs_;
+    static inline int exit_code_ = -1;
+    static inline std::shared_ptr<GlobalOptions> global_options_;
 };
 
 } // namespace tt::cli
