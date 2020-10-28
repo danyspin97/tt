@@ -68,7 +68,6 @@ void tt::cli::ParseCommand::ParseFiles() const {
 }
 
 void tt::cli::ParseCommand::ParseUserSystemServices() {
-    // TODO: Check for UID != 0 and add xdg.userservice
     for (auto &&service : service_list_) {
         bool found = false;
         for (const auto &name : GetPossibleNameForService(service)) {
