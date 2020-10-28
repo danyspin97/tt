@@ -18,10 +18,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/net/client.hpp"
-#include "tt/net/server.hpp"
+#include <cstdint> // for uint16_t
+#include <string>  // for basic_string, allocator, operator==
 
-#include "catch2/catch.hpp"
+#include "catch2/catch.hpp" // for SourceLineInfo, AssertionHandler, Section
+
+#include "tt/net/client.hpp" // for Client
+#include "tt/net/server.hpp" // for Server
+#include "tt/net/socket.hpp" // for Socket, Socket::Protocol, Socket::Proto...
 
 TEST_CASE("Client/Server", "[!mayfail]") {
     SECTION("Send and receive text message") {

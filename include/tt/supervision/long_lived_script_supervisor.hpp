@@ -35,7 +35,7 @@ public:
     explicit LongLivedScriptSupervisor(const std::string &service_name,
                                        const LongLivedScript &script,
                                        const Environment &environment,
-                                       const ScriptLogger& logger);
+                                       const ScriptLogger &logger);
 
     [[nodiscard]] auto HasStarted() const -> bool;
     auto ExecuteScript() -> ScriptStatus;

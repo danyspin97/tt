@@ -21,6 +21,7 @@
 #include "tt/cli/command/command.hpp"
 
 #include <unistd.h> // for geteuid
+#include <utility>  // for move
 
 #include "args.hxx" // for ValueFlag, Subparser
 

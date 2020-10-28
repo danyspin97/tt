@@ -22,7 +22,7 @@
 
 #include <string> // for string
 
-#include "msgpack.hpp"
+#include "msgpack.hpp" // IWYU pragma: keep
 
 #include "tt/action/action.hpp" // for Action
 

@@ -20,9 +20,11 @@
 
 #pragma once
 
-#include <string>
+#include <cstdint> // for uint16_t
+#include <string>  // for string
 
-#include "nngpp/socket.h"
+#include "nngpp/socket.h"      // for socket
+#include "nngpp/socket_view.h" // for socket_view
 
 namespace tt::net {
 

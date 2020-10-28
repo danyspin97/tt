@@ -20,14 +20,12 @@
 
 #pragma once
 
-#include <memory> // for shared_ptr
 #include <string> // for string
 
 #include "tt/log/logger.hpp" // for Logger
 
 namespace tt {
 
-class Dirs;
 class ScriptLogger;
 
 class ServiceLogger {

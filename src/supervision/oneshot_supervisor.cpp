@@ -18,7 +18,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <memory>   // for shared_ptr
 #include <optional> // for optional
 #include <utility>  // for move
 
@@ -31,10 +30,6 @@
 #include "tt/supervision/script_supervisor.hpp"      // for ScriptSupervisor
 #include "tt/supervision/service_status_manager.hpp" // for ServiceStatusMa...
 #include "tt/supervision/types.hpp"                  // for ScriptStatus
-
-namespace tt {
-class Dirs;
-} // namespace tt
 
 tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot, OneshotLogger logger)
     : oneshot_(std::move(oneshot)), logger_(std::move(logger)) {}

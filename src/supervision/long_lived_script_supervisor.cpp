@@ -29,15 +29,13 @@
 #include <unistd.h> // for dup, close, dup2, pipe
 #include <utility>  // for move
 
-#include "tt/log/script_logger.hpp" // for ScriptLogger
-
 namespace tt {
 class Environment;
 } // namespace tt
 
 tt::LongLivedScriptSupervisor::LongLivedScriptSupervisor(
     const std::string &service_name, const LongLivedScript &script,
-    const Environment &environment, const ScriptLogger& logger)
+    const Environment &environment, const ScriptLogger &logger)
     : ScriptSupervisor(service_name, script, environment, std::move(logger)),
       long_lived_script_(script) {}
 

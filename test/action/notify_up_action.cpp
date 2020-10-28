@@ -20,17 +20,10 @@
 
 #include "tt/action/notify_up_action.hpp"
 
-#include "catch2/catch.hpp"
+#include "catch2/catch.hpp" // for AssertionHandler, ope...
 
-#include <filesystem>
-#include <fstream>
-
-#include "spdlog/async.h"
-#include "spdlog/sinks/basic_file_sink.h"
-
-#include "tt/action/pack_action.hpp"
-#include "tt/action/unpack_action.hpp"
-#include "tt/supervision/service_status_manager.hpp"
+#include "tt/action/pack_action.hpp"   // for PackAction
+#include "tt/action/unpack_action.hpp" // for UnpackAction
 
 TEST_CASE("NotifyUpAction") {
     SECTION("Convert to msgpack and back") {

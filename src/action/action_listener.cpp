@@ -23,13 +23,13 @@
 #include <cxxabi.h>     // for __forced_unwind
 #include <future>       // for async, launch, launch::async
 #include <memory>       // for allocator, unique_ptr
-#include <string>       // for operator+, string
+#include <string>       // for string
 #include <system_error> // for system_error
 
 #include "tt/action/action.hpp"         // for Action
 #include "tt/action/action_factory.hpp" // for ActionFactory
-#include "tt/exception.hpp"             // for Exception
 #include "tt/net/server.hpp"            // for Server
+#include "tt/net/socket.hpp"            // for Socket::Protocol, Socket::Pr...
 
 void tt::ActionListener::Listen() {
     net::Server server{net::Server::Protocol::TCP, "localhost", 8888};

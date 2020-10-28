@@ -20,10 +20,11 @@
 
 #include "tt/action/pack_action.hpp"
 
-#include "catch2/catch.hpp"
+#include <type_traits> // for enable_if<>::type
 
-#include "tt/action/notify_up_action.hpp"
-#include "tt/action/pack_action.hpp"
+#include "catch2/catch.hpp" // for AssertionHandler, ope...
+
+#include "tt/action/notify_up_action.hpp" // for NotifyUpAction
 
 TEST_CASE("PackAction") {
     SECTION("Convert to msgpack") {

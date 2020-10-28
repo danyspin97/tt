@@ -39,7 +39,7 @@ public:
     explicit ScriptSupervisor(const std::string &service_name,
                               const Script &script,
                               const Environment &environment,
-                              const ScriptLogger& logger);
+                              const ScriptLogger &logger);
     virtual ~ScriptSupervisor() = default;
 
     [[nodiscard]] auto service_name() const -> const std::string &;

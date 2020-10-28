@@ -22,8 +22,8 @@
 
 #include <memory>
 
-#include "tt/data/oneshot.hpp"
-#include "tt/log/oneshot_logger.hpp"
+#include "tt/data/oneshot.hpp"       // for Oneshot
+#include "tt/log/oneshot_logger.hpp" // for OneshotLogger
 
 namespace spdlog {
 class logger;

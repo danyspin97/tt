@@ -38,7 +38,7 @@
 
 namespace tt::cli {
 class GlobalOptions;
-} // namespace tt
+} // namespace tt::cli
 
 tt::cli::ParseCommand::ParseCommand(
     args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)

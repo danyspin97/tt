@@ -20,22 +20,14 @@
 
 #include "tt/action/action_factory.hpp"
 
-#include <cstring> // for memcpy
-#include <string>  // for string, operator==
+#include <string> // for string, operator==
 
-#include "msgpack.hpp"                         // IWYU pragma: keep
-#include "msgpack/v1/adaptor/adaptor_base.hpp" // for operator>>
-#include "msgpack/v1/object.hpp"               // for object::as
-#include "msgpack/v1/object_fwd.hpp"           // for object::union_type
-#include "msgpack/v1/unpack_decl.hpp"          // for unpacked
-#include "msgpack/v2/object_fwd.hpp"           // for object
-#include "msgpack/v2/unpack.hpp"               // for unpacker
-#include "nngpp/buffer.h"                      // for buffer
+#include "msgpack.hpp" // IWYU pragma: keep
 
-#include "tt/action/action.hpp" // for Action
-#include "tt/action/adapter/notify_up_action_adapter.hpp"
-#include "tt/action/notify_up_action.hpp" // for NotifyUpAction
-#include "tt/exception.hpp"               // for Exception
+#include "tt/action/action.hpp"                           // for Action
+#include "tt/action/adapter/notify_up_action_adapter.hpp" // IWYU pragma: keep
+#include "tt/action/notify_up_action.hpp"                 // for NotifyUpAction
+#include "tt/exception.hpp"                               // for Exception
 
 auto tt::ActionFactory::GetActionFromBuffer(const std::string &buffer)
     -> std::unique_ptr<Action> try {

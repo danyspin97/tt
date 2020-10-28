@@ -23,13 +23,14 @@
 #include <cstdlib>      // for exit
 #include <cxxabi.h>     // for __forced_...
 #include <future>       // for future
+#include <memory>       // for allocator
 #include <optional>     // for optional
+#include <string>       // for string
 #include <system_error> // for system_error
 #include <unistd.h>     // for pause
 #include <utility>      // for move
 
-#include "msgpack.hpp"                         // IWYU pragma: keep
-#include "msgpack/v1/adaptor/adaptor_base.hpp" // for operator<<
+#include "msgpack.hpp" // IWYU pragma: keep
 
 #include "tt/action/notify_up_action.hpp"                  // for NotifyUpA...
 #include "tt/action/pack_action.hpp"                       // for PackAction
@@ -37,13 +38,10 @@
 #include "tt/data/script.hpp"                              // for Script
 #include "tt/log/script_logger.hpp"                        // for ScriptLogger
 #include "tt/net/client.hpp"                               // for Client
+#include "tt/net/socket.hpp"                               // for Socket
 #include "tt/supervision/long_lived_script_supervisor.hpp" // for LongLived...
 #include "tt/supervision/script_supervisor.hpp"            // for ScriptSup...
 #include "tt/supervision/supervision_signal_handler.hpp"   // for Supervisi...
-
-namespace tt {
-class Dirs;
-} // namespace tt
 
 tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
                                          LongrunLogger logger)

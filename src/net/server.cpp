@@ -20,7 +20,11 @@
 
 #include "tt/net/server.hpp"
 
-#include "nngpp/protocol/rep0.h" // for rep::open
+#include <utility> // for move
+
+#include "nngpp/buffer.h"        // for buffer
+#include "nngpp/protocol/rep0.h" // for open
+#include "nngpp/socket_view.h"   // for socket_view
 
 #include "tt/exception.hpp" // for Exception
 

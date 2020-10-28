@@ -46,7 +46,7 @@ class Subparser;
 } // namespace args
 namespace tt::cli {
 class GlobalOptions;
-} // namespace tt
+} // namespace tt::cli
 
 tt::cli::ServiceControlCommand::ServiceControlCommand(
     args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)

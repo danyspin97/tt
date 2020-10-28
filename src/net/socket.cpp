@@ -20,6 +20,8 @@
 
 #include "tt/net/socket.hpp"
 
+#include <utility> // for move
+
 #include "fmt/format.h" // for format
 
 tt::net::Socket::Socket(nng::socket &&socket, Protocol protocol,

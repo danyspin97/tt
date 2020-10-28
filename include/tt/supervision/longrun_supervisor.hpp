@@ -20,15 +20,12 @@
 
 #pragma once
 
-#include <memory> // for shared_ptr
-
 #include "tt/data/longrun.hpp"                             // for Longrun
 #include "tt/log/longrun_logger.hpp"                       // for LongrunLo...
 #include "tt/supervision/long_lived_script_supervisor.hpp" // for LongLived...
 #include "tt/supervision/types.hpp"                        // for ScriptStatus
 
 namespace tt {
-class Dirs;
 
 class LongrunSupervisor {
 public:

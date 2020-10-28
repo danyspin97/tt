@@ -23,7 +23,7 @@
 #include "catch2/catch.hpp" // for operator""_catch_sr, Source...
 
 #include "tt/dependency_graph/utils.hpp" // for AddTestDependenciesToGraph
-#include "tt/exception.hpp"              // for Exception (ptr only)
+#include "tt/exception.hpp"              // IWYU pragma: keep
 
 TEST_CASE("DependencyChecker") {
     tt::DependencyGraph graph;

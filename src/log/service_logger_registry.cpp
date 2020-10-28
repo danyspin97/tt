@@ -20,6 +20,9 @@
 
 #include "tt/log/service_logger_registry.hpp"
 
+#include <filesystem> // for operator/, path
+#include <utility>    // for move
+
 #include "spdlog/async.h"                 // for async_factory
 #include "spdlog/logger.h"                // for logger
 #include "spdlog/sinks/basic_file_sink.h" // for basic_logger_mt
@@ -27,7 +30,6 @@
 
 #include "tt/log/longrun_logger.hpp"   // for LongrunLogger
 #include "tt/log/oneshot_logger.hpp"   // for OneshotLogger
-#include "tt/log/script_logger.hpp"    // for ScriptLogger
 #include "tt/path/directory_names.hpp" // for kServiceLogDirectoryName
 #include "tt/path/dirs.hpp"            // for Dirs
 

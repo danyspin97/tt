@@ -23,9 +23,9 @@
 #include <cassert> // for assert
 #include <utility> // for move
 
-#include "tt/log/longrun_logger.hpp"          // for LongrunLogger
-#include "tt/log/oneshot_logger.hpp"          // for OneshotLogger
-#include "tt/log/service_logger_registry.hpp" // for ServiceLoggerRegistry
+#include "tt/data/oneshot.hpp"                            // for Oneshot
+#include "tt/log/oneshot_logger.hpp"                      // for OneshotLogger
+#include "tt/log/service_logger_registry.hpp"             // for ServiceLog...
 #include "tt/supervision/longrun_supervisor_launcher.hpp" // for LongrunSup...
 #include "tt/supervision/oneshot_supervisor.hpp"          // for OneshotSup...
 

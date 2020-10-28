@@ -20,7 +20,10 @@
 
 #pragma once
 
-#include "tt/net/socket.hpp"
+#include <cstdint> // for uint16_t
+#include <string>  // for string
+
+#include "tt/net/socket.hpp" // for Socket, Socket::Protocol
 
 namespace tt::net {
 

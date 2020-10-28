@@ -20,7 +20,12 @@
 
 #include "tt/net/client.hpp"
 
-#include "nngpp/protocol/req0.h" // for req::open
+#include <cstring> // for memcpy
+#include <utility> // for move
+
+#include "nngpp/buffer.h"        // for buffer, make_buffer
+#include "nngpp/protocol/req0.h" // for open
+#include "nngpp/socket_view.h"   // for socket_view
 
 #include "tt/exception.hpp" // for Exception
 

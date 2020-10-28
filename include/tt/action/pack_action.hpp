@@ -20,9 +20,10 @@
 
 #pragma once
 
-#include <sstream>
+#include <sstream> // for stringstream
+#include <string>  // for string
 
-#include "msgpack.hpp"
+#include "msgpack.hpp" // IWYU pragma: keep
 
 namespace tt {
 

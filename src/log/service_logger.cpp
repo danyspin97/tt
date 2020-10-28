@@ -20,17 +20,9 @@
 
 #include "tt/log/service_logger.hpp"
 
-#include <filesystem> // for path, operator/
-#include <utility>    // for move
+#include <utility> // for move
 
-#include "spdlog/async.h"                 // for async_factory
-#include "spdlog/logger.h"                // for logger
-#include "spdlog/sinks/basic_file_sink.h" // for basic_logger_mt
-#include "spdlog/spdlog.h"                // for get
-
-#include "tt/log/script_logger.hpp"    // for ScriptLogger
-#include "tt/path/directory_names.hpp" // for kServiceLogDirectoryName
-#include "tt/path/dirs.hpp"            // for Dirs
+#include "tt/log/script_logger.hpp" // for ScriptLogger
 
 tt::ServiceLogger::ServiceLogger(std::string service_name, Logger status_logger,
                                  Logger script_logger)

@@ -20,10 +20,9 @@
 
 #include "tt/action/action_factory.hpp"
 
-#include "catch2/catch.hpp"
+#include "catch2/catch.hpp" // for operator""_catch_sr
 
-#include "nngpp/buffer.h" // for buffer
-
+#include "tt/action/action.hpp"           // for Action
 #include "tt/action/notify_up_action.hpp" // for NotifyUpAction
 #include "tt/action/pack_action.hpp"      // for PackAction
 
