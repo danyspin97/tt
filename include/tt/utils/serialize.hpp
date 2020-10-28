@@ -34,7 +34,8 @@
 
 namespace tt::utils {
 
-template <typename T> void Serialize(T obj, const std::filesystem::path &path) {
+template <typename T>
+void Serialize(const T &obj, const std::filesystem::path &path) {
     std::fstream file{path, std::fstream::binary | std::fstream::trunc |
                                 std::fstream::out};
     if (!file.is_open()) {
