@@ -20,22 +20,17 @@
 
 #include "tt/cli/command/command.hpp"
 
-#include <unistd.h> // for geteuid
-#include <utility>  // for move
+#include <utility> // for move
 
 #include "args.hxx" // for ValueFlag, Subparser
 
 #include "tt/cli/define.hpp"         // for DEFAULT_VERBOSITY
 #include "tt/cli/global_options.hpp" // for GlobalOptions
 #include "tt/log/cli_logger.hpp"     // for CliLogger
-#include "tt/path/system_dirs.hpp"   // for SystemDirs
-#include "tt/path/user_dirs.hpp"     // for UserDirs
 
 tt::cli::Command::Command(args::Subparser &parser,
                           std::shared_ptr<GlobalOptions> global_options)
-    : parser_(parser), global_options_(std::move(global_options)),
-      dirs_(geteuid() > 0 ? std::make_shared<UserDirs>()
-                          : std::make_shared<SystemDirs>()) {}
+    : parser_(parser), global_options_(std::move(global_options)) {}
 
 auto tt::cli::Command::InitAndExecute() -> int {
     parser_.Parse();

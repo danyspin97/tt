@@ -20,7 +20,10 @@
 
 #pragma once
 
-#include <memory> // for shared_ptr
+#include <memory>   // for shared_ptr
+#include <unistd.h> // for geteuid
+
+#include "tt/path/user_dirs.hpp" // for UserDirs
 
 namespace args {
 class Subparser;
@@ -28,7 +31,6 @@ class Subparser;
 
 namespace tt {
 class CliLogger;
-class Dirs;
 
 namespace cli {
 class GlobalOptions;
@@ -56,7 +58,9 @@ protected:
 
 private:
     std::shared_ptr<CliLogger> logger_;
-    std::shared_ptr<Dirs> dirs_;
+    std::shared_ptr<Dirs> dirs_ = geteuid() > 0
+                                      ? std::make_shared<UserDirs>()
+                                      : std::make_shared<SystemDirs>();
 };
 
 } // namespace tt::cli
