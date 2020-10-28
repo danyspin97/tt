@@ -28,6 +28,7 @@
 #include "spdlog/sinks/basic_file_sink.h" // for basic_logger_mt
 #include "spdlog/spdlog.h"                // for get
 
+#include "tt/define.h"                 // for kServiceStatusLog, kSer...
 #include "tt/log/longrun_logger.hpp"   // for LongrunLogger
 #include "tt/log/oneshot_logger.hpp"   // for OneshotLogger
 #include "tt/path/directory_names.hpp" // for kServiceLogDirectoryName
@@ -35,9 +36,8 @@
 
 tt::ServiceLoggerRegistry::ServiceLoggerRegistry(std::shared_ptr<Dirs> dirs)
     : dirs_(std::move(dirs)) {
-    auto service_log_path = dirs_->logdir() / std::string{"service_status.log"};
-    logger_ = spdlog::basic_logger_mt<spdlog::async_factory>("service_status",
-                                                             service_log_path);
+    logger_ = spdlog::basic_logger_mt<spdlog::async_factory>(
+        kServiceStatusLog, dirs_->logdir() / kServiceStatusLogFile);
 }
 
 tt::ServiceLoggerRegistry::~ServiceLoggerRegistry() { logger_->flush(); }
