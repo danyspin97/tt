@@ -102,7 +102,7 @@ auto tt::cli::ParseCommand::GetPossibleNameForService(
     auto possible_names = std::vector<std::string>{service};
     std::filesystem::path service_path{service};
     if (auto ext = service_path.extension();
-        ext != "" && ext != (".system") && ext != ".user") {
+        ext == "" || (ext != "system" && ext != "user")) {
         possible_names.push_back(service + ".system");
         possible_names.push_back(service + ".user");
     }
