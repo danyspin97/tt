@@ -37,7 +37,7 @@ class Environment;
 
 tt::LongLivedScriptSupervisor::LongLivedScriptSupervisor(
     const std::string &service_name, const LongLivedScript &script,
-    const Environment &environment, ScriptLogger logger)
+    const Environment &environment, const ScriptLogger& logger)
     : ScriptSupervisor(service_name, script, environment, std::move(logger)),
       long_lived_script_(script) {}
 

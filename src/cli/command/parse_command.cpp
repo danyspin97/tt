@@ -36,10 +36,8 @@
 #include "tt/parser/service/service_parser.hpp" // for ServiceParser
 #include "tt/path/dirs.hpp"                     // for Dirs
 
-namespace tt {
-namespace cli {
+namespace tt::cli {
 class GlobalOptions;
-} // namespace cli
 } // namespace tt
 
 tt::cli::ParseCommand::ParseCommand(

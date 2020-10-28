@@ -39,7 +39,7 @@ class Environment;
 tt::ScriptSupervisor::ScriptSupervisor(const std::string &service_name,
                                        const Script &script,
                                        const Environment &environment,
-                                       ScriptLogger logger)
+                                       const ScriptLogger& logger)
     : service_name_(service_name), script_(script), environment_(environment),
       logger_(std::move(logger)) {}
 

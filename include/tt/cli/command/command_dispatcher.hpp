@@ -35,26 +35,24 @@ class GlobalOptions;
 
 class CommandDispatcher {
 public:
-    static void
-    SetGlobalOptions(std::shared_ptr<GlobalOptions> global_options) {
-        global_options_ = std::move(global_options);
-    }
+    explicit CommandDispatcher(std::shared_ptr<GlobalOptions> global_options)
+        : global_options_(std::move(global_options)) {}
 
     template <typename T>
-    static auto Dispatch() -> std::function<void(args::Subparser &)> {
+    auto Dispatch() -> std::function<void(args::Subparser &)> {
         static_assert(std::is_base_of_v<Command, T>,
                       "Dispatch only works with a subclass of Command");
-        return [](args::Subparser &subparser) {
+        return [this](args::Subparser &subparser) {
             T command = T(subparser, std::move(global_options_));
             exit_code_ = command.InitAndExecute();
         };
     }
 
-    [[nodiscard]] static auto exit_code() -> int { return exit_code_; }
+    [[nodiscard]] auto exit_code() const -> int { return exit_code_; }
 
 private:
-    static inline int exit_code_ = -1;
-    static inline std::shared_ptr<GlobalOptions> global_options_;
+    int exit_code_ = -1;
+    std::shared_ptr<GlobalOptions> global_options_;
 };
 
 } // namespace tt::cli

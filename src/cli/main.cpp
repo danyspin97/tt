@@ -42,16 +42,15 @@ auto main(int argc, char *argv[]) -> int {
     args::ArgumentParser parser("tt init/rc manager.");
     auto common_options = std::make_shared<tt::cli::GlobalOptions>();
 
-    tt::cli::CommandDispatcher::SetGlobalOptions(common_options);
+    tt::cli::CommandDispatcher dispatcher{common_options};
 
     args::Group manage{(args::Group &)parser, "Manage services"};
 
     // TODO: Decomment them when they have an action assigned each
     // args::Command(manage, "start", "Start/restart one or more services");
     // args::Command(manage, "stop", "Stop one or more services");
-    args::Command enable(
-        manage, "enable", "Enable one or more services",
-        tt::cli::CommandDispatcher::Dispatch<tt::cli::EnableCommand>());
+    args::Command enable(manage, "enable", "Enable one or more services",
+                         dispatcher.Dispatch<tt::cli::EnableCommand>());
     // args::Command(manage, "disable", "Disable one or more services");
     // args::Command(manage, "edit-config", "Edit the config of a service");
 
@@ -65,21 +64,20 @@ auto main(int argc, char *argv[]) -> int {
     //                   "Show the status and the configuration of a service");
 
     args::Group system((args::Group &)parser, "System commands");
-    args::Command svc(
-        system, "svc", "Run service control",
-        tt::cli::CommandDispatcher::Dispatch<tt::cli::ServiceControlCommand>());
+    args::Command svc(system, "svc", "Run service control",
+                      dispatcher.Dispatch<tt::cli::ServiceControlCommand>());
 
-    args::Command supervise(
-        system, "supervise", "Supervise a process [Do not run manually]",
-        tt::cli::CommandDispatcher::Dispatch<tt::cli::SuperviseCommand>());
+    args::Command supervise(system, "supervise",
+                            "Supervise a process [Do not run manually]",
+                            dispatcher.Dispatch<tt::cli::SuperviseCommand>());
 
     args::Group testing((args::Group &)parser, "Test services files");
-    args::Command parse(
-        testing, "parse", "Parse one or more services for testing purposes.",
-        tt::cli::CommandDispatcher::Dispatch<tt::cli::ParseCommand>());
-    args::Command serialize(
-        testing, "serialize", "Serialize a longrun into a file",
-        tt::cli::CommandDispatcher::Dispatch<tt::cli::SerializeCommand>());
+    args::Command parse(testing, "parse",
+                        "Parse one or more services for testing purposes.",
+                        dispatcher.Dispatch<tt::cli::ParseCommand>());
+    args::Command serialize(testing, "serialize",
+                            "Serialize a longrun into a file",
+                            dispatcher.Dispatch<tt::cli::SerializeCommand>());
 
     args::GlobalOptions global_options(parser, common_options->arguments());
 
@@ -93,5 +91,5 @@ auto main(int argc, char *argv[]) -> int {
         return 1;
     }
 
-    return tt::cli::CommandDispatcher::exit_code();
+    return dispatcher.exit_code();
 }

@@ -44,10 +44,8 @@
 namespace args {
 class Subparser;
 } // namespace args
-namespace tt {
-namespace cli {
+namespace tt::cli {
 class GlobalOptions;
-} // namespace cli
 } // namespace tt
 
 tt::cli::ServiceControlCommand::ServiceControlCommand(
