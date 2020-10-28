@@ -45,7 +45,7 @@ public:
             std::shared_ptr<GlobalOptions> global_options);
     virtual ~Command() = default;
 
-    auto InitAndExecute() -> int;
+    auto Run() -> int;
 
 protected:
     virtual auto Execute() -> int = 0;
@@ -53,6 +53,10 @@ protected:
     [[nodiscard]] auto logger() const -> std::shared_ptr<CliLogger>;
     [[nodiscard]] auto dirs() const -> std::shared_ptr<Dirs>;
 
+private:
+    void Init();
+
+protected:
     args::Subparser &parser_;
     std::shared_ptr<GlobalOptions> global_options_;
 
