@@ -40,17 +40,17 @@ tt::UserDirs::UserDirs() {
     statedir_ = xdg_dirs.DataHome() / "tt" / "state";
     logdir_ = xdg_dirs.DataHome() / "tt" / "log";
 
-    if (!std::filesystem::exists(livedir())) {
-        std::filesystem::create_directories(livedir());
+    if (!std::filesystem::exists(livedir_)) {
+        std::filesystem::create_directories(livedir_);
     }
-    if (!std::filesystem::exists(confdir())) {
-        std::filesystem::create_directories(confdir());
+    if (!std::filesystem::exists(confdir_)) {
+        std::filesystem::create_directories(confdir_);
     }
-    if (!std::filesystem::exists(statedir())) {
-        std::filesystem::create_directories(statedir());
+    if (!std::filesystem::exists(statedir_)) {
+        std::filesystem::create_directories(statedir_);
     }
-    if (!std::filesystem::exists(logdir())) {
-        std::filesystem::create_directories(logdir());
+    if (!std::filesystem::exists(logdir_)) {
+        std::filesystem::create_directories(logdir_);
     }
 }
 
