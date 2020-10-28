@@ -39,6 +39,7 @@
 tt::CliLogger::CliLogger(const std::shared_ptr<Dirs> &dirs,
                          const std::string &verbosity, bool silence_stderr) {
     auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    console->set_pattern("%v");
 
     console->set_level(spdlog::level::from_str(verbosity));
     if (silence_stderr) {
