@@ -26,13 +26,16 @@
 namespace tt {
 
 class Bundle;
+class Dirs;
 class Longrun;
 class Oneshot;
-class Dirs;
+class ServiceLoggerRegistry;
 
 class SuperviseService {
 public:
-    explicit SuperviseService(std::shared_ptr<Dirs> dirs);
+    explicit SuperviseService(
+        std::shared_ptr<Dirs> dirs,
+        std::shared_ptr<ServiceLoggerRegistry> logger_registry);
 
     void operator()(const Bundle &bundle) const;
     void operator()(const Longrun &longrun) const;
@@ -41,6 +44,7 @@ public:
 
 private:
     std::shared_ptr<Dirs> dirs_;
+    std::shared_ptr<ServiceLoggerRegistry> logger_registry_;
 };
 
 } // namespace tt

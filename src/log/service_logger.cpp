@@ -32,28 +32,19 @@
 #include "tt/path/directory_names.hpp" // for kServiceLogDirectoryName
 #include "tt/path/dirs.hpp"            // for Dirs
 
-tt::ServiceLogger::ServiceLogger(std::string service_name,
-                                 const std::shared_ptr<Dirs> &dirs)
-    : service_name_(std::move(service_name)) {
-    // Check if the logger has already been added
-    if ((logger_ = spdlog::get(service_name_))) {
-        return;
-    }
-
-    auto service_log_path =
-        dirs->logdir() / kServiceLogDirectoryName /
-        std::filesystem::path{service_name_ + std::string{".log"}};
-    logger_ = spdlog::basic_logger_mt<spdlog::async_factory>(service_name_,
-                                                             service_log_path);
-
-    logger_->set_pattern("{%d:%m:%Y %T} %v");
-}
+tt::ServiceLogger::ServiceLogger(std::string service_name, Logger status_logger,
+                                 Logger script_logger)
+    : service_name_(std::move(service_name)),
+      status_logger_(std::move(status_logger)),
+      script_logger_(std::move(script_logger)) {}
 
 auto tt::ServiceLogger::GetScriptLogger() const -> ScriptLogger {
-    return ScriptLogger(logger_);
+    return ScriptLogger(script_logger_);
 }
 
-auto tt::ServiceLogger::logger() const -> Logger { return logger_; }
+auto tt::ServiceLogger::status_logger() const -> Logger {
+    return status_logger_;
+}
 
 auto tt::ServiceLogger::service_name() const -> const std::string & {
     return service_name_;

@@ -46,8 +46,8 @@ class Dirs;
 } // namespace tt
 
 tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
-                                         std::shared_ptr<Dirs> dirs)
-    : longrun_(std::move(longrun)), logger_(longrun_.name(), std::move(dirs)),
+                                         LongrunLogger logger)
+    : longrun_(std::move(longrun)), logger_(std::move(logger)),
       spawn_(longrun_.name(), longrun_.run(), longrun_.environment(),
              logger_.GetScriptLogger()) {}
 

@@ -32,7 +32,8 @@ class ScriptLogger;
 
 class ServiceLogger {
 public:
-    ServiceLogger(std::string service_name, const std::shared_ptr<Dirs> &dirs);
+    ServiceLogger(std::string service_name, Logger status_logger,
+                  Logger script_logger);
     virtual ~ServiceLogger() = default;
 
     // Returns a new instance of ScriptLogger
@@ -44,12 +45,13 @@ public:
     virtual void Fail() const = 0;
 
 protected:
-    [[nodiscard]] auto logger() const -> Logger;
+    [[nodiscard]] auto status_logger() const -> Logger;
     [[nodiscard]] auto service_name() const -> const std::string &;
 
 private:
     std::string service_name_;
-    Logger logger_;
+    Logger status_logger_;
+    Logger script_logger_;
 };
 
 } // namespace tt

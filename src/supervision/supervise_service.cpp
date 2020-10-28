@@ -23,11 +23,16 @@
 #include <cassert> // for assert
 #include <utility> // for move
 
+#include "tt/log/longrun_logger.hpp"          // for LongrunLogger
+#include "tt/log/oneshot_logger.hpp"          // for OneshotLogger
+#include "tt/log/service_logger_registry.hpp" // for ServiceLoggerRegistry
 #include "tt/supervision/longrun_supervisor_launcher.hpp" // for LongrunSup...
 #include "tt/supervision/oneshot_supervisor.hpp"          // for OneshotSup...
 
-tt::SuperviseService::SuperviseService(std::shared_ptr<Dirs> dirs)
-    : dirs_(std::move(dirs)) {}
+tt::SuperviseService::SuperviseService(
+    std::shared_ptr<Dirs> dirs,
+    std::shared_ptr<ServiceLoggerRegistry> logger_registry)
+    : dirs_(std::move(dirs)), logger_registry_(std::move(logger_registry)) {}
 
 // Bundles are only used at compile time
 void tt::SuperviseService::operator()(const Bundle & /*bundle*/) const {
@@ -40,7 +45,8 @@ void tt::SuperviseService::operator()(const Longrun &longrun) const {
 }
 
 void tt::SuperviseService::operator()(const Oneshot &oneshot) const {
-    OneshotSupervisor spawn{oneshot, dirs_};
+    OneshotSupervisor spawn{oneshot,
+                            logger_registry_->GetOneshotLogger(oneshot.name())};
     spawn.Run();
 }
 

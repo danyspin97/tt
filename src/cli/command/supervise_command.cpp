@@ -34,6 +34,7 @@
 #include "bitsery/bitsery.h"
 
 #include "tt/cli/global_options.hpp"
+#include "tt/log/service_logger_registry.hpp" // for ServiceLoggerRegistry
 #include "tt/supervision/longrun_supervisor.hpp"
 #include "tt/utils/deserialize.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
@@ -46,7 +47,10 @@ tt::cli::SuperviseCommand::SuperviseCommand(
 auto tt::cli::SuperviseCommand::Execute() -> int {
     auto longrun = utils::Deserialize<Longrun>(args::get(filename_));
 
-    auto supervise = LongrunSupervisor{std::move(longrun), dirs()};
-    supervise.ExecuteScript();
+    ServiceLoggerRegistry logger_registry{dirs()};
+    auto name = longrun.name();
+    LongrunSupervisor supervisor{std::move(longrun),
+                                 logger_registry.GetLongrunLogger(name)};
+    supervisor.ExecuteScript();
     return 0;
 }

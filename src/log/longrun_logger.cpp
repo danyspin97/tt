@@ -27,13 +27,13 @@
 #include "tt/log/logger.hpp" // for Logger
 
 void tt::LongrunLogger::Start() const {
-    logger()->info("Starting longrun {}", service_name());
+    status_logger()->info("Starting longrun {}", service_name());
 }
 
 void tt::LongrunLogger::Success() const {
-    logger()->info("Longrun {} has started", service_name());
+    status_logger()->info("Longrun {} has started", service_name());
 }
 
 void tt::LongrunLogger::Fail() const {
-    logger()->error("Error on longrun {}", service_name());
+    status_logger()->error("Error on longrun {}", service_name());
 }

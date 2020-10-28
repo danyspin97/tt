@@ -37,6 +37,7 @@
 #include "tt/dependency_graph/get_graph_filename.hpp" // for GetGraphFilename
 #include "tt/dependency_graph/service_node.hpp"       // for ServiceNode
 #include "tt/exception.hpp"                           // for Exception
+#include "tt/log/service_logger_registry.hpp"         // for ServiceLoggerR...
 #include "tt/supervision/service_status_manager.hpp"  // for ServiceStatusM...
 #include "tt/supervision/supervise_service.hpp"       // for SuperviseService
 
@@ -70,13 +71,17 @@ auto tt::cli::ServiceControlCommand::StartServices() -> int {
     // Start action listener
     auto action_listener = std::thread(&ActionListener::Listen);
 
+    auto logger_registry = std::make_shared<ServiceLoggerRegistry>(dirs());
+
     // TODO: Calculate an optimal order of services to start
     auto nodes = graph.nodes();
     for (const auto &node : nodes) {
         // https://stackoverflow.com/questions/23454793/whats-the-c-11-way-to-fire-off-an-asynchronous-task-and-forget-about-it
         auto futptr = std::make_shared<std::future<void>>();
         *futptr = std::async(std::launch::async,
-                             [this, futptr, node]() { SpawnNode(node); });
+                             [this, futptr, node, logger_registry]() {
+                                 SpawnNode(node, logger_registry);
+                             });
     }
 
     // Runs indefinitely
@@ -85,7 +90,9 @@ auto tt::cli::ServiceControlCommand::StartServices() -> int {
     return 0;
 }
 
-void tt::cli::ServiceControlCommand::SpawnNode(const ServiceNode &node) {
+void tt::cli::ServiceControlCommand::SpawnNode(
+    const ServiceNode &node,
+    const std::shared_ptr<ServiceLoggerRegistry> &logger_registry) {
     DependencyReader dep_reader{};
     std::visit(dep_reader, node.service());
     auto deps = dep_reader.dependencies();
@@ -103,6 +110,6 @@ void tt::cli::ServiceControlCommand::SpawnNode(const ServiceNode &node) {
         manager.ServiceStartUpdate(node.name(), false);
         return;
     }
-    SuperviseService supervise{dirs()};
+    SuperviseService supervise{dirs(), logger_registry};
     std::visit(supervise, node.service());
 }

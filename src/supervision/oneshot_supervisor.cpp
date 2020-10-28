@@ -36,9 +36,8 @@ namespace tt {
 class Dirs;
 } // namespace tt
 
-tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot,
-                                         std::shared_ptr<Dirs> dirs)
-    : oneshot_(std::move(oneshot)), logger_(oneshot.name(), std::move(dirs)) {}
+tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot, OneshotLogger logger)
+    : oneshot_(std::move(oneshot)), logger_(std::move(logger)) {}
 
 void tt::OneshotSupervisor::Run() const {
     auto manager = ServiceStatusManager::GetInstance();

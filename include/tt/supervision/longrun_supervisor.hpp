@@ -32,7 +32,7 @@ class Dirs;
 
 class LongrunSupervisor {
 public:
-    LongrunSupervisor(Longrun &&longrun, std::shared_ptr<Dirs> dirs);
+    LongrunSupervisor(Longrun &&longrun, LongrunLogger logger);
     void ExecuteScript();
 
 private:

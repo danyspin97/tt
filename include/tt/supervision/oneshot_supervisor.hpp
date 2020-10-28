@@ -35,7 +35,7 @@ class Dirs;
 
 class OneshotSupervisor {
 public:
-    OneshotSupervisor(Oneshot oneshot, std::shared_ptr<Dirs> dirs);
+    OneshotSupervisor(Oneshot oneshot, OneshotLogger logger);
 
     void Run() const;
 

@@ -18,22 +18,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/log/oneshot_logger.hpp"
+#pragma once
 
-#include <memory> // for __shared_ptr_access
-
-#include "spdlog/logger.h" // for logger
+#include <memory> // for shared_ptr
 
 #include "tt/log/logger.hpp" // for Logger
 
-void tt::OneshotLogger::Start() const {
-    status_logger()->info("Starting oneshot {}", service_name());
-}
+namespace tt {
+class Dirs;
+class LongrunLogger;
+class OneshotLogger;
 
-void tt::OneshotLogger::Success() const {
-    status_logger()->info("Done oneshot {}", service_name());
-}
+class ServiceLoggerRegistry {
+public:
+    ServiceLoggerRegistry() = delete;
+    explicit ServiceLoggerRegistry(std::shared_ptr<Dirs> dirs);
+    ~ServiceLoggerRegistry();
 
-void tt::OneshotLogger::Fail() const {
-    status_logger()->error("Error on oneshot {}", service_name());
-}
+    auto GetLongrunLogger(const std::string &name) -> LongrunLogger;
+    auto GetOneshotLogger(const std::string &name) -> OneshotLogger;
+    auto GetScriptLoggerForService(const std::string &service_name) -> Logger;
+
+private:
+    std::shared_ptr<Dirs> dirs_;
+    Logger logger_;
+};
+
+} // namespace tt
