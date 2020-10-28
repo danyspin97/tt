@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <stddef.h> // for size_t
-#include <string>   // for string
+#include <cstddef> // for size_t
+#include <string>  // for string
 
 #include "tt/log/logger.hpp" // for Logger
 
