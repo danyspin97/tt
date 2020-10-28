@@ -30,10 +30,7 @@ public:
     static void SetupSignals();
 
     void HandleSignal(int signum);
-    static void staticHandleSignal(int signum);
-
-    void HandleSigChld(int signo, siginfo_t *info, void *context);
-    static void staticHandleSigChld(int signo, siginfo_t *info, void *context);
+    void HandleSigChld(int signo);
 
     static auto GetInstance() -> SupervisionSignalHandler &;
 
@@ -48,3 +45,8 @@ private:
 };
 
 } // namespace tt
+
+extern "C" {
+void handle_sig_chld(int signo, siginfo_t *info, void *context);
+void handle_signum(int signum);
+}

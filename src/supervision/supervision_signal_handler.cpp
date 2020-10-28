@@ -49,14 +49,14 @@ void tt::SupervisionSignalHandler::SetupSignals() {
     // Ignore SIGTERM while handling SIGCHLD
     sigaddset(&sigchld.sa_mask, SIGTERM);
     sigchld.sa_flags = 0;
-    sigchld.sa_sigaction = SupervisionSignalHandler::staticHandleSigChld;
+    sigchld.sa_sigaction = handle_sig_chld;
     sigaction(SIGCHLD, &sigchld, nullptr);
 
     // Handle all death signals
     for (auto signum : deathsigs) {
         struct sigaction sig {};
         sig.sa_flags = 0;
-        sig.sa_handler = SupervisionSignalHandler::staticHandleSignal;
+        sig.sa_handler = handle_signum;
         sigaction(signum, &sig, nullptr);
     }
 }
@@ -65,19 +65,7 @@ void tt::SupervisionSignalHandler::HandleSignal(int /*signum*/) {
     death_signal_received_ = true;
 }
 
-void tt::SupervisionSignalHandler::staticHandleSignal(int signum) {
-    GetInstance().HandleSignal(signum);
-}
-
-void tt::SupervisionSignalHandler::staticHandleSigChld(int signo,
-                                                       siginfo_t *info,
-                                                       void *context) {
-    GetInstance().HandleSigChld(signo, info, context);
-}
-
-void tt::SupervisionSignalHandler::HandleSigChld(int signo,
-                                                 siginfo_t * /*info*/,
-                                                 void * /*context*/) {
+void tt::SupervisionSignalHandler::HandleSigChld(int signo) {
     assert(signo == SIGCHLD);
     child_exited_ = true;
 }
@@ -99,4 +87,12 @@ auto tt::SupervisionSignalHandler::HasChildExited() -> bool {
 void tt::SupervisionSignalHandler::ResetStatus() {
     GetInstance().child_exited_ = false;
     GetInstance().death_signal_received_ = false;
+}
+
+void handle_sig_chld(int signo, siginfo_t * /*info*/, void * /*context*/) {
+    tt::SupervisionSignalHandler::GetInstance().HandleSigChld(signo);
+}
+
+void handle_signum(int signum) {
+    tt::SupervisionSignalHandler::GetInstance().HandleSignal(signum);
 }
