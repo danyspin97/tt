@@ -40,6 +40,10 @@ auto tt::cli::EnableCommand::Execute() -> int { return EnableServices(); }
 
 auto tt::cli::EnableCommand::EnableServices() -> int {
     const auto &services_list = args::get(service_list_);
+    if (services_list.empty()) {
+        throw tt::Exception("At least one service to enable must be provided");
+    }
+
     ServicesParser parser(dirs());
     parser.ParseServices(services_list);
     const std::vector<tt::Service> services = parser.services();
