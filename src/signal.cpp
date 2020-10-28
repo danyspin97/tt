@@ -20,6 +20,7 @@
 
 #include "tt/signal.hpp"
 
+#include <cassert> // for assert
 #include <map>     // for map, operator!=, _Rb_tree_const_iterator
 #include <utility> // for pair
 
@@ -37,9 +38,9 @@ auto tt::GetSignalName(tt::Signal signal) -> std::string {
         return "SIGKILL";
     case Signal::kSigTerm:
         return "SIGTERM";
+    default:
+        assert(false);
     }
-
-    throw Exception("Should never reach here");
 }
 
 auto tt::ParseSignalFromString(const std::string &signal) -> Signal {
