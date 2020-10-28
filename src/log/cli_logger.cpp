@@ -33,7 +33,6 @@
 #include "spdlog/sinks/stdout_color_sinks.h" // for stdout_color_sink_mt
 #include "spdlog/spdlog.h"                   // for set_default_logger
 
-#include "tt/define.h"      // for kServiceStatusLog, kSer...
 #include "tt/path/dirs.hpp" // for Dirs
 
 tt::CliLogger::CliLogger(const std::shared_ptr<Dirs> &dirs,
@@ -60,10 +59,8 @@ tt::CliLogger::CliLogger(const std::shared_ptr<Dirs> &dirs,
 
     logger_ = std::make_shared<spdlog::logger>("cli", begin(sinks), end(sinks));
     spdlog::set_default_logger(logger_);
-
-    auto status_logger = spdlog::basic_logger_mt<spdlog::async_factory>(
-        kServiceStatusLog, logdir / kServiceStatusLogFile);
 }
+
 void tt::CliLogger::LogError(const std::string &message) {
     logger_->error("{}", message);
 }
