@@ -60,12 +60,11 @@ void ServicesParser::ParseService(const std::string &service_name) {
     // Parse instance service
     if (size_t token_index = GetInstanceTokenIndex(service_name);
         token_index != string::npos) {
-        string new_service_name = service_name;
+        string split_name = service_name;
         string instance_name =
-            SplitServiceNameFromInstance(new_service_name, token_index);
-        auto path = GetPathForServiceName(new_service_name);
+            SplitServiceNameFromInstance(split_name, token_index);
+        auto path = GetPathForServiceName(split_name);
         auto service = InstanceServiceParser(path, instance_name).service();
-        auto service_name = new_service_name + instance_name;
         service_map_.emplace(service_name, service);
         return;
     }
