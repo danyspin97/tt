@@ -19,16 +19,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <functional> // for function
-#include <iostream>   // for operator<<, endl
-#include <memory>     // for allocator, mak...
-#include <string>     // for string
+#include <iostream> // for operator<<, cout
+#include <memory>   // for allocator, mak...
+#include <string>   // for string
 
-#include "args.hxx"        // for ArgumentParser
-#include "fmt/format.h"    // for format_to
-#include "spdlog/spdlog.h" // for info
+#include "args.hxx" // for ArgumentParser
 
-#include "tt/cli/command/command.hpp"                 // for Command
 #include "tt/cli/command/command_dispatcher.hpp"      // for CommandDispatcher
 #include "tt/cli/command/enable_command.hpp"          // for EnableCommand
 #include "tt/cli/command/parse_command.hpp"           // for ParseCommand
@@ -36,7 +32,6 @@
 #include "tt/cli/command/service_control_command.hpp" // for ServiceControl...
 #include "tt/cli/command/supervise_command.hpp"       // for SuperviseCommand
 #include "tt/cli/global_options.hpp"                  // for GlobalOptions
-#include "tt/exception.hpp"                           // for Exception
 
 auto main(int argc, char *argv[]) -> int {
     args::ArgumentParser parser("tt init/rc manager.");
