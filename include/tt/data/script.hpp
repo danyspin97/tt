@@ -89,7 +89,6 @@ protected:
 
     friend class Longrun;
     friend class Oneshot;
-    // Needed for LoggerScript()
     Script() = default;
 
 private:
