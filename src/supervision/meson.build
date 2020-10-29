@@ -12,5 +12,4 @@ tt_cli_src += files (
     'script_supervisor.cpp',
     'supervise_service.cpp',
     'supervision_signal_handler.cpp',
-    'utils.cpp',
 )
