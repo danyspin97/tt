@@ -20,26 +20,12 @@
 
 #pragma once
 
-#include <filesystem> // for path
-#include <string>     // for string
-#include <vector>     // for vector
-
-#include "tt/script/shell_script_builder.hpp" // for ShellScriptBuilder
+#include <filesystem> // for exists, path
 
 namespace tt {
-class Environment;
 
-class PathScriptBuilder : public ShellScriptBuilder {
-public:
-    using ShellScriptBuilder::ShellScriptBuilder;
-
-    [[nodiscard]] auto script(const std::string &execute,
-                              const Environment &environment)
-        -> std::vector<std::string> override;
-
-protected:
-    void ApplyModifiers() override;
-    [[nodiscard]] auto GetFileToExecute() -> std::filesystem::path override;
-};
+// Search PATH for a valid executable and return its path
+[[nodiscard]] auto GetExecutableFromPath(const std::string &executable)
+    -> std::filesystem::path;
 
 } // namespace tt

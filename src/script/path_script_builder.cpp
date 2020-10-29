@@ -27,8 +27,9 @@
 
 #include "fmt/format.h" // for format_to
 
-#include "tt/utils/split_path.hpp" // for SplitPath
-#include "tt/utils/trim.hpp"       // for trim_copy
+#include "tt/path/get_executable_from_path.hpp" // for GetExecutableFromPath
+#include "tt/utils/split_path.hpp"              // for SplitPath
+#include "tt/utils/trim.hpp"                    // for trim_copy
 
 namespace tt {
 class Environment;
@@ -41,11 +42,16 @@ void tt::PathScriptBuilder::ApplyModifiers() {}
                                                  const tt::Environment &
                                                  /*environment*/)
     -> std::vector<std::string> {
+    std::vector<std::string> argv;
+
     auto script = utils::trim_copy(execute);
     auto i = script.find(' ');
-    std::string path{script.substr(0, i)};
-    std::vector<std::string> argv;
-    argv.push_back(GetAbsolutePath(path));
+    std::filesystem::path executable{script.substr(0, i)};
+    if (executable.is_absolute()) {
+        argv.push_back(executable);
+    } else {
+        argv.push_back(GetExecutableFromPath(executable));
+    }
     if (i == std::string::npos) {
         return argv;
     }
@@ -86,36 +92,6 @@ void tt::PathScriptBuilder::ApplyModifiers() {}
     argv.emplace_back(std::string{res});
 
     return argv;
-}
-
-auto tt::PathScriptBuilder::GetAbsolutePath(const std::string &path)
-    -> std::filesystem::path {
-    std::filesystem::path filepath{path};
-
-    if (filepath.is_absolute()) {
-        return filepath;
-    }
-
-    // TODO: Use tt.env or Status::env()
-    const char *env_path = getenv("PATH");
-    std::string path_to_search;
-    if (env_path != nullptr) {
-        path_to_search = std::string{env_path};
-    } else {
-        path_to_search = "/bin";
-    }
-    auto paths = utils::SplitPath(path_to_search);
-    for (const auto &p : paths) {
-        std::filesystem::path new_path{p / filepath};
-        if (std::filesystem::exists(new_path)) {
-            // TODO: Check file is executable
-            return new_path;
-        }
-    }
-
-    // This will fail and the user will get notified
-    // TODO: Generate an exception
-    return filepath;
 }
 
 auto tt::PathScriptBuilder::GetFileToExecute() -> std::filesystem::path {
