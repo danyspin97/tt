@@ -60,7 +60,3 @@ tt::CliLogger::CliLogger(const std::shared_ptr<Dirs> &dirs,
     logger_ = std::make_shared<spdlog::logger>("cli", begin(sinks), end(sinks));
     spdlog::set_default_logger(logger_);
 }
-
-void tt::CliLogger::LogError(const std::string &message) {
-    logger_->error("{}", message);
-}

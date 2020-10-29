@@ -46,7 +46,7 @@ auto tt::cli::Command::Run() -> int try {
     Init();
     return Execute();
 } catch (const tt::Exception &e) {
-    logger_->LogError(e.msg());
+    logger_->LogError("{}", e.msg());
     return 255;
 }
 

@@ -23,6 +23,7 @@
 #include <memory>
 #include <string>
 
+#include "spdlog/spdlog.h"
 #include "tt/log/logger.hpp"
 
 namespace tt {
@@ -34,7 +35,30 @@ public:
     CliLogger(const std::shared_ptr<Dirs> &dirs, const std::string &verbosity,
               bool silence_stderr);
 
-    void LogError(const std::string &message);
+    template <typename FormatString, typename... Args>
+    void LogDebug(const FormatString &format, const Args &... args) {
+        logger_->debug(format, args...);
+    }
+
+    template <typename FormatString, typename... Args>
+    void LogInfo(const FormatString &format, const Args &... args) {
+        logger_->info(format, args...);
+    }
+
+    template <typename FormatString, typename... Args>
+    void LogWarn(const FormatString &format, const Args &... args) {
+        logger_->warn(format, args...);
+    }
+
+    template <typename FormatString, typename... Args>
+    void LogCritical(const FormatString &format, const Args &... args) {
+        logger_->critical(format, args...);
+    }
+
+    template <typename FormatString, typename... Args>
+    void LogError(const FormatString &format, const Args &... args) {
+        logger_->error(format, args...);
+    }
 
 private:
     Logger logger_;
