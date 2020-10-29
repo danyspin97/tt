@@ -107,7 +107,7 @@ auto tt::ScriptBuilder::script() -> Script {
     return script;
 }
 
-void tt::ScriptBuilder::SetOptionalAttributeForScript(Script &script) {
+void tt::ScriptBuilder::SetOptionalAttributeForScript(Script &script) const {
     if (!user_.empty()) {
         script.user(user_);
     }
@@ -134,22 +134,31 @@ void tt::ScriptBuilder::SetOptionalAttributeForScript(Script &script) {
 }
 
 auto ScriptBuilder::HasScript() const -> bool { return finished_; }
-auto tt::ScriptBuilder::execute() -> const std::string & { return execute_; }
+
+auto tt::ScriptBuilder::execute() const -> const std::string & {
+    return execute_;
+}
+
 void tt::ScriptBuilder::execute(std::string &&execute) {
     execute_ = std::move(execute);
 }
-auto tt::ScriptBuilder::execute_move() -> std::string && {
+
+auto tt::ScriptBuilder::execute() -> std::string && {
     return std::move(execute_);
 }
-auto tt::ScriptBuilder::type() -> const std::string & { return type_; }
+
+auto tt::ScriptBuilder::type() const -> const std::string & { return type_; }
+
 void tt::ScriptBuilder::type(const std::string &type) { type_ = type; }
-auto tt::ScriptBuilder::user() -> const std::string & { return user_; }
+
+auto tt::ScriptBuilder::user() const -> const std::string & { return user_; }
+
 void tt::ScriptBuilder::user(const std::string &user) { user_ = user; }
-auto tt::ScriptBuilder::user_move() -> std::string && {
-    return std::move(user_);
-}
-auto tt::ScriptBuilder::group() -> const std::string & { return group_; }
+
+auto tt::ScriptBuilder::user() -> std::string && { return std::move(user_); }
+
+auto tt::ScriptBuilder::group() const -> const std::string & { return group_; }
+
 void tt::ScriptBuilder::group(const std::string &group) { group_ = group; }
-auto tt::ScriptBuilder::group_move() -> std::string && {
-    return std::move(group_);
-}
+
+auto tt::ScriptBuilder::group() -> std::string && { return std::move(group_); }

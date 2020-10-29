@@ -42,7 +42,7 @@ void tt::LongLivedScriptBuilder::SetOptionalAttributeForLongLivedScript(
 
 auto tt::LongLivedScriptBuilder::long_lived_script() -> LongLivedScript {
     LongLivedScript long_lived_script =
-        LongLivedScript(GetParsedType(), std::move(execute_move()));
+        LongLivedScript(GetParsedType(), std::move(execute()));
     SetOptionalAttributeForScript(long_lived_script);
     SetOptionalAttributeForMainScript(long_lived_script);
     SetOptionalAttributeForLongLivedScript(long_lived_script);

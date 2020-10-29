@@ -42,8 +42,7 @@ void tt::MainScriptBuilder::SetOptionalAttributeForMainScript(
 }
 
 auto tt::MainScriptBuilder::main_script() -> MainScript {
-    MainScript main_script =
-        MainScript(GetParsedType(), std::move(execute_move()));
+    MainScript main_script = MainScript(GetParsedType(), std::move(execute()));
     SetOptionalAttributeForScript(main_script);
     SetOptionalAttributeForMainScript(main_script);
 
