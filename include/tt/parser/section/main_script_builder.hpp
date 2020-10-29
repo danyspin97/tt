@@ -34,7 +34,7 @@ public:
 
 protected:
     auto GetAttributeForKey(const std::string &key) -> std::string & override;
-    void SetOptionalAttributeForMainScript(MainScript &main_script);
+    void SetOptionalAttributeForMainScript(MainScript &main_script) const;
 
 private:
     std::string autostart_;

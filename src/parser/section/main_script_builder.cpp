@@ -35,7 +35,7 @@ auto tt::MainScriptBuilder::GetAttributeForKey(const std::string &key)
 }
 
 void tt::MainScriptBuilder::SetOptionalAttributeForMainScript(
-    MainScript &main_script) {
+    MainScript &main_script) const {
     if (!autostart_.empty()) {
         main_script.autostart(tt::utils::ParseBoolean(autostart_));
     }

@@ -31,7 +31,8 @@
 #include "tt/supervision/service_status_manager.hpp" // for ServiceStatusMa...
 #include "tt/supervision/types.hpp"                  // for ScriptStatus
 
-tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot, OneshotLogger logger)
+tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot,
+                                         OneshotLogger &&logger)
     : oneshot_(std::move(oneshot)), logger_(std::move(logger)) {}
 
 void tt::OneshotSupervisor::Run() const {

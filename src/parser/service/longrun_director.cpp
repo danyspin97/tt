@@ -43,8 +43,7 @@ using tt::LongrunDirector;
 using tt::SectionBuilder;
 
 LongrunDirector::LongrunDirector()
-    : main_section_builder_(main_section_), run_script_builder_("run"),
-      finish_script_builder_("finish"), env_section_builder_(environment_),
+    : main_section_builder_(main_section_), env_section_builder_(environment_),
       options_builder_(options_) {}
 
 auto LongrunDirector::InstanceService(string &&path) -> tt::Service {

@@ -35,7 +35,7 @@ class Dirs;
 
 class OneshotSupervisor {
 public:
-    OneshotSupervisor(Oneshot oneshot, OneshotLogger logger);
+    OneshotSupervisor(Oneshot oneshot, OneshotLogger &&logger);
 
     void Run() const;
 

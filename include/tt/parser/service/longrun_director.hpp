@@ -50,8 +50,8 @@ private:
     Environment environment_;
     LongrunOptions options_;
     MainSectionBuilder main_section_builder_;
-    LongLivedScriptBuilder run_script_builder_;
-    ScriptBuilder finish_script_builder_;
+    LongLivedScriptBuilder run_script_builder_{"run"};
+    ScriptBuilder finish_script_builder_{"finish"};
     EnvironmentBuilder env_section_builder_;
     LongrunOptionsBuilder options_builder_;
 };

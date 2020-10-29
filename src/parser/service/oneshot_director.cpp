@@ -41,8 +41,7 @@ using tt::OneshotDirector;
 using tt::SectionBuilder;
 
 OneshotDirector::OneshotDirector()
-    : main_section_builder_(main_section_), start_script_builder_("start"),
-      stop_script_builder_("stop"), env_section_builder_(environment_),
+    : main_section_builder_(main_section_), env_section_builder_(environment_),
       options_builder_(options_) {}
 
 auto OneshotDirector::InstanceService(string &&path) -> tt::Service {

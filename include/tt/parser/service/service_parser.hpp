@@ -39,7 +39,8 @@ protected:
         -> std::vector<std::string>;
 
 private:
-    auto GetTypeFromService(const std::vector<std::string> &service_lines)
+    [[nodiscard]] auto
+    GetTypeFromService(const std::vector<std::string> &service_lines) const
         -> std::string;
 
     [[nodiscard]] auto

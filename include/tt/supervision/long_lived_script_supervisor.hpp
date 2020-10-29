@@ -41,7 +41,7 @@ public:
     auto ExecuteScript() -> ScriptStatus;
 
 private:
-    [[nodiscard]] auto ListenOnNotifyFd() -> ScriptStatus;
+    [[nodiscard]] auto ListenOnNotifyFd() const -> ScriptStatus;
     void SetupNotifyFd();
 
     LongLivedScript long_lived_script_;

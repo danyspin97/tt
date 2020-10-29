@@ -36,7 +36,7 @@ class Environment;
 tt::LongLivedScriptSupervisor::LongLivedScriptSupervisor(
     const std::string &service_name, const LongLivedScript &script,
     const Environment &environment, const ScriptLogger &logger)
-    : ScriptSupervisor(service_name, script, environment, std::move(logger)),
+    : ScriptSupervisor(service_name, script, environment, logger),
       long_lived_script_(script) {}
 
 auto tt::LongLivedScriptSupervisor::ExecuteScript() -> ScriptStatus {
@@ -58,7 +58,7 @@ auto tt::LongLivedScriptSupervisor::ExecuteScript() -> ScriptStatus {
     return ScriptStatus::Failure;
 }
 
-auto tt::LongLivedScriptSupervisor::ListenOnNotifyFd() -> ScriptStatus {
+auto tt::LongLivedScriptSupervisor::ListenOnNotifyFd() const -> ScriptStatus {
     short revents = 0;
     struct pollfd fd = {notify_fd_, POLLIN, revents};
     int res = poll(&fd, 1, long_lived_script_.timeout());

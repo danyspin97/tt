@@ -67,8 +67,8 @@ auto tt::ServiceParser::ParseService() -> tt::Service {
     return director->ParseAndGetService(service_lines, std::move(path_));
 }
 
-auto ServiceParser::GetTypeFromService(const vector<string> &service_lines)
-    -> string {
+auto ServiceParser::GetTypeFromService(
+    const vector<string> &service_lines) const -> string {
     auto main_section_index = GetMainSectionIndex(service_lines);
     for (auto i = main_section_index; i < service_lines.size(); i++) {
         auto key_value_parser = KeyValueParser(service_lines.at(i));

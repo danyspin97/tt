@@ -50,9 +50,9 @@ protected:
     auto Execute() -> int override;
 
 private:
-    void
-    SpawnNode(const ServiceNode &node,
-              const std::shared_ptr<ServiceLoggerRegistry> &logger_registry);
+    void SpawnNode(
+        const ServiceNode &node,
+        const std::shared_ptr<ServiceLoggerRegistry> &logger_registry) const;
     [[nodiscard]] auto StartServices() -> int;
 };
 

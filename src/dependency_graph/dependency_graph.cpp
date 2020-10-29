@@ -101,7 +101,6 @@ void tt::DependencyGraph::CheckGraphIsAcyclic(
                     case Color::Gray:
                         throw Exception("Cycle found while calculating the "
                                         "dependencies of the services");
-                    case Color::Black:
                     default:
                         assert(false);
                     }

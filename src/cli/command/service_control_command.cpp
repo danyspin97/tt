@@ -90,7 +90,7 @@ auto tt::cli::ServiceControlCommand::StartServices() -> int {
 
 void tt::cli::ServiceControlCommand::SpawnNode(
     const ServiceNode &node,
-    const std::shared_ptr<ServiceLoggerRegistry> &logger_registry) {
+    const std::shared_ptr<ServiceLoggerRegistry> &logger_registry) const {
     DependencyReader dep_reader{};
     std::visit(dep_reader, node.service());
     auto deps = dep_reader.dependencies();
