@@ -26,8 +26,8 @@
 
 #include "tt/cli/define.hpp"         // for DEFAULT_VERBOSITY
 #include "tt/cli/global_options.hpp" // for GlobalOptions
-#include "tt/exception.hpp"
-#include "tt/log/cli_logger.hpp" // for CliLogger
+#include "tt/exception.hpp"          // for Exception
+#include "tt/log/cli_logger.hpp"     // for CliLogger
 
 tt::cli::Command::Command(args::Subparser &parser,
                           std::shared_ptr<GlobalOptions> global_options)
