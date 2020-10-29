@@ -46,7 +46,7 @@ protected:
 private:
     void ParseFiles() const;
     void ParseUserSystemServices();
-    auto ParseForFileInDefaultDirs(const ::std::string &name) -> bool;
+    auto ParseForFileInDefaultDirs(const ::std::string &name) const -> bool;
     static auto GetPossibleNameForService(const std::string &service)
         -> std::vector<std::string>;
 
