@@ -44,7 +44,7 @@ public:
                       "Dispatch only works with a subclass of Command");
         return [this](args::Subparser &subparser) {
             T command = T(subparser, std::move(global_options_));
-            exit_code_ = command.Run();
+            exit_code_ = command.Run(T::name);
         };
     }
 

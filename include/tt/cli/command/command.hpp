@@ -45,7 +45,7 @@ public:
             std::shared_ptr<GlobalOptions> global_options);
     virtual ~Command() = default;
 
-    auto Run() -> int;
+    auto Run(const std::string &name) -> int;
 
 protected:
     virtual auto Execute() -> int = 0;
@@ -54,7 +54,7 @@ protected:
     [[nodiscard]] auto dirs() const -> std::shared_ptr<Dirs>;
 
 private:
-    void Init();
+    void Init(const std::string &name);
 
 protected:
     args::Subparser &parser_;

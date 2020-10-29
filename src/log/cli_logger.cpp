@@ -35,7 +35,8 @@
 
 #include "tt/path/dirs.hpp" // for Dirs
 
-tt::CliLogger::CliLogger(const std::shared_ptr<Dirs> &dirs,
+tt::CliLogger::CliLogger(const std::string &command_name,
+                         const std::shared_ptr<Dirs> &dirs,
                          const std::string &verbosity, bool silence_stderr) {
     auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     console->set_pattern("%v");
@@ -54,6 +55,9 @@ tt::CliLogger::CliLogger(const std::shared_ptr<Dirs> &dirs,
         auto cli_file_sink =
             std::make_shared<spdlog::sinks::basic_file_sink_mt>(logdir /
                                                                 "cli.log");
+        // {DATE TIME.milliseconds} (command_name) [short log level (e.g. I)]
+        cli_file_sink->set_pattern("{%D %T.%e} (" + command_name +
+                                   ") [%L]\n%v");
         sinks.push_back(cli_file_sink);
     }
 

@@ -33,17 +33,17 @@ tt::cli::Command::Command(args::Subparser &parser,
                           std::shared_ptr<GlobalOptions> global_options)
     : parser_(parser), global_options_(std::move(global_options)) {}
 
-void tt::cli::Command::Init() {
+void tt::cli::Command::Init(const std::string &name) {
     parser_.Parse();
     auto verbosity = global_options_->verbosity().Matched()
                          ? global_options_->verbosity().Get()
                          : tt::cli::DEFAULT_VERBOSITY;
-    logger_ =
-        std::make_shared<CliLogger>(dirs_, verbosity, global_options_->quiet());
+    logger_ = std::make_shared<CliLogger>(name, dirs_, verbosity,
+                                          global_options_->quiet());
 }
 
-auto tt::cli::Command::Run() -> int try {
-    Init();
+auto tt::cli::Command::Run(const std::string &name) -> int try {
+    Init(name);
     return Execute();
 } catch (const tt::Exception &e) {
     logger_->LogError("{}", e.msg());

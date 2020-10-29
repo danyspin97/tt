@@ -32,7 +32,8 @@ class Dirs;
 
 class CliLogger {
 public:
-    CliLogger(const std::shared_ptr<Dirs> &dirs, const std::string &verbosity,
+    CliLogger(const std::string &command_name,
+              const std::shared_ptr<Dirs> &dirs, const std::string &verbosity,
               bool silence_stderr);
 
     template <typename FormatString, typename... Args>
