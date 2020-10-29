@@ -43,12 +43,13 @@ void tt::ScriptLogger::Log(Type type, const char *bytes, size_t size) {
     bool is_stdout = type == Type::STDOUT;
     std::string &last_line = is_stdout ? stdout_line_ : stderr_line_;
     std::string output{bytes, size};
-    size_t index = output.find('\n');
+    size_t index = 0;
     size_t last_index = 0;
 
     // If there is output remaining from the latest Read call
     // Append to it and log
-    if (index != std::string::npos && !last_line.empty()) {
+    if (index = output.find('\n');
+        index != std::string::npos && !last_line.empty()) {
         // Lock is not needed because this function is called synchronously
         // from a thread in Process
         size_t count = index - last_index;
@@ -60,15 +61,13 @@ void tt::ScriptLogger::Log(Type type, const char *bytes, size_t size) {
         logger_->info("[{}] {}", is_stdout ? "stdout" : "stderr", last_line);
         last_line.clear();
         last_index = index + 1;
-        index = output.find('\n', last_index);
     }
 
     // Parse all the remaining output
-    while (index != std::string::npos) {
-        logger_->info("[{}] {}", is_stdout ? "stdout" : "stderr",
-                      output.substr(last_index, index - last_index));
+    while ((index = output.find('\n', last_index)) != std::string::npos) {
+        std::string line = output.substr(last_index, index - last_index);
+        logger_->info("[{}] {}", is_stdout ? "stdout" : "stderr", line);
         last_index = index + 1;
-        index = output.find('\n', last_index);
     }
 
     if (last_index != index) {
