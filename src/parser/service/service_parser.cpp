@@ -23,6 +23,7 @@
 #include <filesystem> // for file_size
 #include <fstream>    // for basic_istream, ifs...
 #include <memory>     // for unique_ptr
+#include <sstream>    // for stringstream
 #include <string>     // for string, allocator
 #include <utility>    // for move
 
