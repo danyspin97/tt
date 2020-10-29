@@ -24,8 +24,8 @@
 #include <string>     // for string
 #include <vector>     // for vector
 
-namespace tt::utils {
+namespace tt {
 
 auto SplitPath(const std::string &paths) -> std::vector<std::filesystem::path>;
 
-} // namespace tt::utils
+} // namespace tt

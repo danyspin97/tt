@@ -28,7 +28,6 @@
 #include "fmt/format.h" // for format_to
 
 #include "tt/path/get_executable_from_path.hpp" // for GetExecutableFromPath
-#include "tt/utils/split_path.hpp"              // for SplitPath
 #include "tt/utils/trim.hpp"                    // for trim_copy
 
 namespace tt {

@@ -24,8 +24,8 @@
 
 #include "fmt/format.h" // for format
 
-#include "tt/exception.hpp"        // for Exception
-#include "tt/utils/split_path.hpp" // for SplitPath
+#include "tt/exception.hpp"       // for Exception
+#include "tt/path/split_path.hpp" // for SplitPath
 
 auto tt::GetExecutableFromPath(const std::string &executable)
     -> std::filesystem::path {
@@ -38,7 +38,7 @@ auto tt::GetExecutableFromPath(const std::string &executable)
     } else {
         path_to_search = "/bin:/sbin:/usr/bin:/usr/sbin";
     }
-    auto paths = utils::SplitPath(path_to_search);
+    auto paths = SplitPath(path_to_search);
     for (const auto &p : paths) {
         std::filesystem::path new_path{p / executable};
         if (std::filesystem::exists(new_path)) {

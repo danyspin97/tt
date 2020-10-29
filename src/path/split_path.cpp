@@ -18,13 +18,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/utils/split_path.hpp"
+#include "tt/path/split_path.hpp"
 
 #include <algorithm> // for find, max
 #include <cstddef>   // for size_t
 #include <iterator>  // for begin, end
 
-auto tt::utils::SplitPath(const std::string &path)
+auto tt::SplitPath(const std::string &path)
     -> std::vector<std::filesystem::path> {
     std::vector<std::filesystem::path> paths{};
     size_t start = 0;
