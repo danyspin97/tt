@@ -30,9 +30,10 @@ jobs:
           CXX: ${{ matrix.compiler }}
         run: |
           meson --unity on -Dtests=enabled -Db_lundef=false \
-          $(if [[ $CXX = g++-* ]]; then
-                echo -Db_sanitize=address,undefined;
-            fi) \
+          # g++ ASAN fails to run as of 29/10/2020
+          # $(if [[ $CXX = g++-* ]]; then
+          #       echo -Db_sanitize=address,undefined;
+          #   fi) \
           build && \
           ninja -C build
 
