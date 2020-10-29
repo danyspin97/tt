@@ -24,15 +24,14 @@
 #include <iosfwd>     // for streamsize
 #include <utility>    // for move
 
-#include "args.hxx"        // for Flag, PositionalList
-#include "fmt/format.h"    // for format_to
-#include "spdlog/spdlog.h" // for info, error
+#include "args.hxx" // for Flag, PositionalList
 
 // Include operator<<(ostream, Service) before ostream.h
 #include "tt/data/service.hpp" // for operator<<
 
 #include "fmt/ostream.h" // for formatbuf<>::int_type
 
+#include "tt/log/cli_logger.hpp"                // for CliLogger
 #include "tt/parser/service/service_parser.hpp" // for ServiceParser
 #include "tt/path/dirs.hpp"                     // for Dirs
 
@@ -58,12 +57,12 @@ auto tt::cli::ParseCommand::Execute() -> int {
 void tt::cli::ParseCommand::ParseFiles() const {
     for (auto &&service : service_list_) {
         if (!std::filesystem::exists(service)) {
-            spdlog::error("File {} does not exist", service);
+            logger()->LogError("File {} does not exist", service);
             continue;
         }
 
         auto parser = ServiceParser(service);
-        spdlog::info(parser.service());
+        logger()->LogInfo("{}", parser.service());
     }
 }
 
@@ -77,7 +76,7 @@ void tt::cli::ParseCommand::ParseUserSystemServices() {
         }
 
         if (!found) {
-            spdlog::info("Service '{}' could not be found", service);
+            logger()->LogWarn("Service '{}' could not be found", service);
         }
     }
 }
@@ -89,7 +88,7 @@ auto tt::cli::ParseCommand::ParseForFileInDefaultDirs(
         auto filename = servicedir / name;
         if (std::filesystem::exists(filename)) {
             auto parser = ServiceParser(filename);
-            spdlog::info(parser.service());
+            logger()->LogInfo("{}", parser.service());
             return true;
         }
     }
@@ -99,8 +98,8 @@ auto tt::cli::ParseCommand::ParseForFileInDefaultDirs(
 auto tt::cli::ParseCommand::GetPossibleNameForService(
     const std::string &service) -> std::vector<std::string> {
     auto possible_names = std::vector<std::string>{service};
-    std::filesystem::path service_path{service};
-    if (auto ext = service_path.extension();
+    std::filesystem::path service_file{service};
+    if (auto ext = service_file.extension();
         ext == "" || (ext != "system" && ext != "user")) {
         possible_names.push_back(service + ".system");
         possible_names.push_back(service + ".user");
