@@ -38,6 +38,10 @@ public:
                   std::shared_ptr<GlobalOptions> common_options);
     ~EnableCommand() override = default;
 
+    static constexpr inline const char *name = "enable";
+    static constexpr inline const char *description =
+        "Enable one or more services";
+
 protected:
     auto Execute() -> int override;
 

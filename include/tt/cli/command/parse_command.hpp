@@ -40,6 +40,10 @@ public:
                  std::shared_ptr<GlobalOptions> common_options);
     ~ParseCommand() override = default;
 
+    static constexpr inline const char *name = "parse";
+    static constexpr inline const char *description =
+        "Parse one or more services for testing purposes.";
+
 protected:
     auto Execute() -> int override;
 

@@ -36,6 +36,10 @@ public:
                      std::shared_ptr<GlobalOptions> common_options);
     ~SuperviseCommand() override = default;
 
+    static constexpr inline const char *name = "supervise";
+    static constexpr inline const char *description =
+        "Supervise a process [Do not run manually]";
+
 protected:
     auto Execute() -> int override;
 
