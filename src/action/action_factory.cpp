@@ -48,7 +48,7 @@ auto tt::ActionFactory::GetActionFromBuffer(const std::string &buffer)
         action_ptr = std::make_unique<NotifyUpAction>(obj.as<NotifyUpAction>());
     }
     return action_ptr;
-} catch (msgpack::type_error &e) {
+} catch (const msgpack::type_error & /*e*/) {
     throw tt::Exception(
         "There was an error while parsing the buffer containing the action");
 }
