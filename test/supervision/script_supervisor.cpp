@@ -22,50 +22,12 @@
 
 #include <chrono>     // for milliseconds
 #include <filesystem> // for exists, remove, file_size
-#include <istream>    // for basic_istream, ifstream
-#include <iterator>   // for istreambuf_iterator
 #include <thread>     // for sleep_for
-#include <utility>    // for move
 
 #include "catch2/catch.hpp"                  // for operator""_catch_sr
-#include "spdlog/async.h"                    // for async_factory
-#include "spdlog/logger.h"                   // for logger
-#include "spdlog/sinks/basic_file_sink.h"    // for basic_logger_mt
 #include "spdlog/sinks/stdout_color_sinks.h" // for stdout_color_mt
 
 #include "tt/data/environment.hpp" // for Environment
-
-namespace tt::test {
-
-void TestOutput(bool is_stdout) {
-    std::string type = is_stdout ? "stdout" : "stderr";
-    std::string line{"Write line to " + type};
-    std::string command = std::string{is_stdout ? "" : ">&2 "} + "echo " + line;
-    tt::Script script{tt::Script::Type::SH, std::move(command)};
-    std::string test_name = "test-write-" + type;
-    const auto logfile = std::string{test_name} + ".log";
-    if (std::filesystem::exists(logfile)) {
-        std::filesystem::remove(logfile);
-    }
-    auto logger =
-        spdlog::basic_logger_mt<spdlog::async_factory>(test_name, logfile);
-    logger->set_pattern("%v");
-    tt::Environment env;
-    tt::ScriptSupervisor spawn_script(test_name, script, env,
-                                      tt::ScriptLogger(logger));
-    tt::ScriptStatus status = spawn_script.ExecuteScript();
-    REQUIRE(status == tt::ScriptStatus::Success);
-    REQUIRE(std::filesystem::exists(logfile));
-
-    logger->flush();
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    std::ifstream ifs(logfile);
-    std::string content((std::istreambuf_iterator<char>(ifs)),
-                        (std::istreambuf_iterator<char>()));
-    CHECK(content == "[" + type + "] " + line + "\n");
-}
-
-} // namespace tt::test
 
 auto console = spdlog::stdout_color_mt("spawn_script_test");
 tt::ScriptLogger logger{console};
@@ -177,8 +139,4 @@ TEST_CASE("ScriptSupervisor") {
         tt::ScriptStatus status = spawn_script.ExecuteScript();
         CHECK(status == tt::ScriptStatus::Success);
     }
-
-    SECTION("Write to stdout") { tt::test::TestOutput(true); }
-
-    SECTION("Write to stderr") { tt::test::TestOutput(false); }
 }
