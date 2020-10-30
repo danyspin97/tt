@@ -46,8 +46,10 @@ TEST_CASE("BundleOptionsBuilder") {
     SECTION("Parse valid section") {
         TestBuilderWithFile(builder, "../test/data/bundle_options_section");
 
-        auto expected = vector<string>{"foo", "bar"};
-        REQUIRE(builder.options().contents() == expected);
+        auto expected_contents = vector<string>{"foo", "bar"};
+        auto expected_deps = vector<string>{"foobar"};
+        REQUIRE(builder.options().contents() == expected_contents);
+        REQUIRE(builder.options().dependencies() == expected_deps);
     }
 
     SECTION("Parse invalid section") {

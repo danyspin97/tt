@@ -47,8 +47,11 @@ void BundleOptionsBuilder::ParseLine(const string &line) {
 }
 
 void BundleOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
-    if (parser.key() == "contents") {
+    const auto &key = parser.key();
+    if (key == "contents") {
         options_.contents(parser.values());
+    } else if (key == "dependencies") {
+        options_.dependencies(parser.values());
     } else {
         AttributeNotFound(parser.key(), "options");
     }
