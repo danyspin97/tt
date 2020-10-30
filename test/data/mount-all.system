@@ -1,0 +1,8 @@
+[main]
+name = mount-all
+description = Contains all mount services
+type = bundle
+
+[options]
+contents = [ mount-cgroup mount-fstab ]
+dependencies = [ init-rwfs ]
