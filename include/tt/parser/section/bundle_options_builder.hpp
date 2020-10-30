@@ -32,6 +32,8 @@ class BundleOptions;
 class BundleOptionsBuilder : public OptionsBuilder {
 public:
     explicit BundleOptionsBuilder(BundleOptions &options);
+
+    void EndParsing() override;
     void ParseLine(const std::string &line) override;
 
 protected:

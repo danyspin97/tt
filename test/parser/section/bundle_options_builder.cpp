@@ -41,19 +41,20 @@ using tt::SectionBuilderException;
 
 TEST_CASE("BundleOptionsBuilder") {
     auto options = BundleOptions();
-    auto builder = BundleOptionsBuilder(options);
+    BundleOptionsBuilder builder;
 
     SECTION("Parse valid section") {
         TestBuilderWithFile(builder, "../test/data/bundle_options_section");
 
         auto expected = vector<string>{"foo", "bar"};
-        REQUIRE(options.contents() == expected);
+        REQUIRE(builder.options().contents() == expected);
     }
 
     SECTION("Parse invalid section") {
         const auto testFiles = {
-            "empty_multiline_value", "invalid", "invalid_multiline_value",
-            "unclosed_multiline_value", "unknown_multiline_value"};
+            "empty_multiline_value",   "invalid",
+            "invalid_multiline_value", "unclosed_multiline_value",
+            "unknown_multiline_value", "empty-file"};
         for (const auto &test : testFiles) {
             CHECK_THROWS_AS(
                 TestBuilderWithFile(builder, string{"../test/data/"} + test),

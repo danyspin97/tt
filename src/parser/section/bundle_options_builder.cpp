@@ -61,3 +61,11 @@ void BundleOptionsBuilder::TrySetAttributeForKey(const string & /*key*/,
                                                  const string & /*value*/) {
     throw SectionBuilderException("No key is allowed in section [options]");
 }
+
+void BundleOptionsBuilder::EndParsing() {
+    OptionsBuilder::EndParsing();
+    if (options_.contents().empty()) {
+        throw SectionBuilderException(
+            "Bundle cannot have empty contents in section [options]");
+    }
+}
