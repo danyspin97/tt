@@ -38,9 +38,6 @@ using tt::KeyValueParser;
 using tt::KeyValueParserLineInvalidException;
 using tt::SectionBuilderException;
 
-EnvironmentBuilder::EnvironmentBuilder(Environment &environment)
-    : environment_(environment) {}
-
 void EnvironmentBuilder::ParseLine(const string &line) {
     try {
         TryParseLine(line);
@@ -85,4 +82,8 @@ void EnvironmentBuilder::CheckKeyIsValid(const string &key) {
             throw EnvironmentKeyNotValidException(msg);
         }
     }
+}
+
+auto EnvironmentBuilder::environment() -> Environment && {
+    return std::move(environment_);
 }

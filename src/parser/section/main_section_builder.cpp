@@ -74,3 +74,7 @@ auto MainSectionBuilder::GetAttributeForKey(const std::string &key)
 
     AttributeNotFound(key, "main");
 }
+
+auto MainSectionBuilder::main_section() -> MainSection & {
+    return main_section_;
+}

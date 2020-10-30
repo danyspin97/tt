@@ -23,22 +23,24 @@
 
 #include <string> // for string
 
+#include "tt/data/longrun_options.hpp"           // for LongrunOptions
 #include "tt/parser/section/options_builder.hpp" // for OptionsBuilder
 
 namespace tt {
 class ArrayParser;
-class LongrunOptions;
 
 class LongrunOptionsBuilder : public OptionsBuilder {
 public:
-    explicit LongrunOptionsBuilder(LongrunOptions &options);
+    LongrunOptionsBuilder() = default;
+
+    [[nodiscard]] auto options() -> LongrunOptions &&;
 
     void SaveValuesOfParser(const ArrayParser &parser) override;
     void TrySetAttributeForKey(const std::string &key,
                                const std::string &value) override;
 
 private:
-    LongrunOptions &options_;
+    LongrunOptions options_;
 };
 
 } // namespace tt

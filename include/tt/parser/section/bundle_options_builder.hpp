@@ -23,6 +23,7 @@
 
 #include <string> // for string
 
+#include "tt/data/bundle_options.hpp"            // for BundleOptions
 #include "tt/parser/section/options_builder.hpp" // for OptionsBuilder
 
 namespace tt {
@@ -31,19 +32,20 @@ class BundleOptions;
 
 class BundleOptionsBuilder : public OptionsBuilder {
 public:
-    explicit BundleOptionsBuilder(BundleOptions &options);
+    BundleOptionsBuilder() = default;
+
+    [[nodiscard]] auto options() -> BundleOptions &&;
 
     void EndParsing() override;
     void ParseLine(const std::string &line) override;
 
 protected:
     void SaveValuesOfParser(const ArrayParser &parser) override;
-
     void TrySetAttributeForKey(const std::string &key,
                                const std::string &value) override;
 
 private:
-    BundleOptions &options_;
+    BundleOptions options_;
 };
 
 } // namespace tt

@@ -23,15 +23,17 @@
 
 #include <string> // for string
 
+#include "tt/data/oneshot_options.hpp"           // for OneshotOptions
 #include "tt/parser/section/options_builder.hpp" // for OptionsBuilder
 
 namespace tt {
 class ArrayParser;
-class OneshotOptions;
 
 class OneshotOptionsBuilder : public OptionsBuilder {
 public:
-    explicit OneshotOptionsBuilder(OneshotOptions &oneshotOptions);
+    OneshotOptionsBuilder() = default;
+
+    [[nodiscard]] auto options() -> OneshotOptions &&;
 
 protected:
     void TrySetAttributeForKey(const std::string &key,
@@ -39,7 +41,7 @@ protected:
     void SaveValuesOfParser(const ArrayParser &parser) override;
 
 private:
-    OneshotOptions &options_;
+    OneshotOptions options_;
 };
 
 } // namespace tt

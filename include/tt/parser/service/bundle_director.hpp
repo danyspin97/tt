@@ -34,8 +34,7 @@ class SectionBuilder;
 
 class BundleDirector : public ServiceDirector {
 public:
-    BundleDirector();
-    ~BundleDirector() override = default;
+    BundleDirector() = default;
 
     auto InstanceService(std::string &&path) -> Service override;
     auto GetBuilderForSection(const std::string &section)
@@ -44,8 +43,6 @@ public:
 private:
     MainSectionBuilder main_section_builder_;
     BundleOptionsBuilder options_builder_;
-    MainSection main_section_;
-    BundleOptions options_;
 };
 
 } // namespace tt

@@ -32,15 +32,14 @@ using tt::MainSection;
 using tt::MainSectionBuilder;
 
 TEST_CASE("MainSectionBuilder") {
-    MainSection m;
-    auto builder = MainSectionBuilder(m);
+    MainSectionBuilder builder;
 
     SECTION("parse valid section") {
         TestBuilderWithFile(builder, "../test/data/main_section");
 
-        CHECK(m.name == "nginx");
-        CHECK(m.description == "Run nginx server");
-        CHECK(m.type == "longrun");
+        CHECK(builder.main_section().name == "nginx");
+        CHECK(builder.main_section().description == "Run nginx server");
+        CHECK(builder.main_section().type == "longrun");
     }
 
     SECTION("parse invalid section") {

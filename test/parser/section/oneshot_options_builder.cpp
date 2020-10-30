@@ -40,15 +40,14 @@ using tt::SectionBuilderException;
 using tt::TestBuilderWithFile;
 
 TEST_CASE("OneshotOptionsBuilder") {
-    auto options = OneshotOptions();
-    auto builder = OneshotOptionsBuilder(options);
+    OneshotOptionsBuilder builder;
 
     SECTION("Parse valid section") {
         TestBuilderWithFile(builder, "../test/data/oneshot_options_section");
 
         auto expected_deps = vector<string>{"foo", "bar"};
-        CHECK(options.optional() == true);
-        CHECK(options.dependencies() == expected_deps);
+        CHECK(builder.options().optional() == true);
+        CHECK(builder.options().dependencies() == expected_deps);
     }
 
     SECTION("Parse invalid sections") {

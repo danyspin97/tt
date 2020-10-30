@@ -35,8 +35,7 @@ using tt::Environment;
 using tt::EnvironmentBuilder;
 
 TEST_CASE("EnvironmentBuilder") {
-    Environment e;
-    auto builder = EnvironmentBuilder(e);
+    EnvironmentBuilder builder;
 
     SECTION("Parse valid section") {
         TestBuilderWithFile(builder, "../test/data/environment_section");
@@ -44,7 +43,7 @@ TEST_CASE("EnvironmentBuilder") {
         expected["CMDARGS"] = "-d --nofork";
         expected["LOGLEVEL"] = "0";
         for (auto &pair : expected) {
-            CHECK(e.Get(pair.first) == pair.second);
+            CHECK(builder.environment().Get(pair.first) == pair.second);
         }
     }
 

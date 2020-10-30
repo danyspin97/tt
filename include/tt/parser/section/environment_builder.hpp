@@ -23,6 +23,7 @@
 
 #include <string> // for string
 
+#include "tt/data/environment.hpp"               // for Environment
 #include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
 namespace tt {
@@ -30,17 +31,18 @@ class Environment;
 
 class EnvironmentBuilder : public SectionBuilder {
 public:
-    explicit EnvironmentBuilder(Environment &environment);
+    EnvironmentBuilder() = default;
+
+    [[nodiscard]] auto environment() -> Environment &&;
 
     void ParseLine(const std::string &line) override;
-
     void EndParsing() override {}
 
 private:
     void TryParseLine(const std::string &line);
     static void CheckKeyIsValid(const std::string &key);
 
-    Environment &environment_;
+    Environment environment_;
 };
 
 } // namespace tt

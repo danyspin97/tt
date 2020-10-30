@@ -31,9 +31,6 @@ using tt::AttributeNotFound;
 using tt::LongrunOptions;
 using tt::LongrunOptionsBuilder;
 
-LongrunOptionsBuilder::LongrunOptionsBuilder(LongrunOptions &options)
-    : options_(options) {}
-
 void LongrunOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
     const auto key = parser.key();
     if (key == "depends") {
@@ -51,4 +48,8 @@ void LongrunOptionsBuilder::TrySetAttributeForKey(const string &key,
     } else {
         AttributeNotFound(key, "options");
     }
+}
+
+auto LongrunOptionsBuilder::options() -> LongrunOptions && {
+    return std::move(options_);
 }

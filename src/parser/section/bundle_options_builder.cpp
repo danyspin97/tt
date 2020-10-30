@@ -34,9 +34,6 @@ using tt::BundleOptionsBuilder;
 using tt::IsEmptyLine;
 using tt::SectionBuilderException;
 
-BundleOptionsBuilder::BundleOptionsBuilder(BundleOptions &options)
-    : options_(options) {}
-
 void BundleOptionsBuilder::ParseLine(const string &line) {
     if (IsEmptyLine(line)) {
         return;
@@ -68,4 +65,8 @@ void BundleOptionsBuilder::EndParsing() {
         throw SectionBuilderException(
             "Bundle cannot have empty contents in section [options]");
     }
+}
+
+auto BundleOptionsBuilder::options() -> BundleOptions && {
+    return std::move(options_);
 }

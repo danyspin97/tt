@@ -38,17 +38,13 @@ class SectionBuilder;
 
 class LongrunDirector : public ServiceDirector {
 public:
-    LongrunDirector();
-    ~LongrunDirector() override = default;
+    LongrunDirector() = default;
 
     auto InstanceService(std::string &&path) -> Service override;
     auto GetBuilderForSection(const std::string &section)
         -> SectionBuilder * override;
 
 private:
-    MainSection main_section_;
-    Environment environment_;
-    LongrunOptions options_;
     MainSectionBuilder main_section_builder_;
     LongLivedScriptBuilder run_script_builder_{"run"};
     ScriptBuilder finish_script_builder_{"finish"};

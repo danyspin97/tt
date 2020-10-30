@@ -41,16 +41,15 @@ using tt::SectionBuilderException;
 using tt::TestBuilderWithFile;
 
 TEST_CASE("LongrunOptionsBuilder") {
-    auto options = LongrunOptions();
-    auto builder = LongrunOptionsBuilder(options);
+    LongrunOptionsBuilder builder;
 
     SECTION("Parse valid section") {
         TestBuilderWithFile(builder, "../test/data/longrun_options_section");
 
         auto expected_deps = vector<string>{"foo", "bar"};
 
-        CHECK(options.dependencies() == expected_deps);
-        CHECK(options.optional() == true);
+        CHECK(builder.options().dependencies() == expected_deps);
+        CHECK(builder.options().optional() == true);
     }
 
     SECTION("Parse invalid sections") {

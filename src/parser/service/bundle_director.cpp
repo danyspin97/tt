@@ -39,13 +39,11 @@ using tt::BundleDirector;
 using tt::Exception;
 using tt::SectionBuilder;
 
-BundleDirector::BundleDirector()
-    : main_section_builder_(main_section_), options_builder_(options_) {}
-
 auto BundleDirector::InstanceService(string &&path) -> tt::Service {
-    return Bundle(std::move(main_section_.name),
-                  std::move(main_section_.description), std::move(path),
-                  std::move(options_));
+    auto &main_section = main_section_builder_.main_section();
+    return Bundle(std::move(main_section.name),
+                  std::move(main_section.description), std::move(path),
+                  std::move(options_builder_.options()));
 }
 
 auto BundleDirector::GetBuilderForSection(const std::string &section)

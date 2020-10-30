@@ -23,6 +23,7 @@
 
 #include <string> // for string
 
+#include "tt/parser/section/main_section.hpp"    // for MainSection
 #include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
 namespace tt {
@@ -30,8 +31,9 @@ struct MainSection;
 
 class MainSectionBuilder : public SectionBuilder {
 public:
-    explicit MainSectionBuilder(MainSection &main_section)
-        : main_section_(main_section) {}
+    MainSectionBuilder() = default;
+
+    [[nodiscard]] auto main_section() -> MainSection &;
 
     void ParseLine(const std::string &line) override;
     void EndParsing() override {}
@@ -39,7 +41,7 @@ public:
 private:
     void TryParseLine(const std::string &line);
     auto GetAttributeForKey(const std::string &key) -> std::string &;
-    MainSection &main_section_;
+    MainSection main_section_;
 
     std::string key_;
     std::string value_;

@@ -32,9 +32,6 @@ using tt::AttributeNotFound;
 using tt::OneshotOptions;
 using tt::OneshotOptionsBuilder;
 
-OneshotOptionsBuilder::OneshotOptionsBuilder(OneshotOptions &options)
-    : options_(options) {}
-
 void OneshotOptionsBuilder::TrySetAttributeForKey(const string &key,
                                                   const string &value) {
     if (key == "optional") {
@@ -53,4 +50,8 @@ void OneshotOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
     }
 
     AttributeNotFound(key, "options");
+}
+
+auto OneshotOptionsBuilder::options() -> OneshotOptions && {
+    return std::move(options_);
 }

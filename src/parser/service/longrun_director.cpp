@@ -42,20 +42,18 @@ using tt::Longrun;
 using tt::LongrunDirector;
 using tt::SectionBuilder;
 
-LongrunDirector::LongrunDirector()
-    : main_section_builder_(main_section_), env_section_builder_(environment_),
-      options_builder_(options_) {}
-
 auto LongrunDirector::InstanceService(string &&path) -> tt::Service {
+    auto &main_section = main_section_builder_.main_section();
     if (!run_script_builder_.HasScript()) {
-        throw Exception("Service '" + main_section_.name +
+        throw Exception("Service '" + main_section.name +
                         "' does not have a [run] section");
     }
 
-    auto service = Longrun(
-        std::move(main_section_.name), std::move(main_section_.description),
-        std::move(path), std::move(options_), std::move(environment_),
-        run_script_builder_.long_lived_script());
+    auto service = Longrun(std::move(main_section.name),
+                           std::move(main_section.description), std::move(path),
+                           std::move(options_builder_.options()),
+                           std::move(env_section_builder_.environment()),
+                           run_script_builder_.long_lived_script());
 
     if (finish_script_builder_.HasScript()) {
         service.finish(finish_script_builder_.script());

@@ -38,17 +38,13 @@ class SectionBuilder;
 
 class OneshotDirector : public ServiceDirector {
 public:
-    OneshotDirector();
-    ~OneshotDirector() override = default;
+    OneshotDirector() = default;
 
     auto InstanceService(std::string &&path) -> Service override;
     auto GetBuilderForSection(const std::string &section)
         -> SectionBuilder * override;
 
 private:
-    MainSection main_section_;
-    Environment environment_;
-    OneshotOptions options_;
     MainSectionBuilder main_section_builder_;
     MainScriptBuilder start_script_builder_{"start"};
     ScriptBuilder stop_script_builder_{"stop"};
