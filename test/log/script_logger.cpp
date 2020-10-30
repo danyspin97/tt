@@ -51,7 +51,7 @@ void TestOutput(std::string test_name, std::string echo_args,
                           echo_args + " " + output;
     // We can only redirect when using bash
     auto script_type =
-        is_stdout ? tt::Script::Type::Path : tt::Script::Type::Bash;
+        is_stdout ? tt::Script::Type::Path : tt::Script::Type::SH;
     tt::Script script{script_type, std::move(command)};
     const auto logfile = std::string{test_name} + ".log";
     if (std::filesystem::exists(logfile)) {
