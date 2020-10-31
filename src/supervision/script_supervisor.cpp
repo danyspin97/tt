@@ -99,25 +99,12 @@ void tt::ScriptSupervisor::Kill() {
 void tt::ScriptSupervisor::Signal(int signum) { process_->signal(signum); }
 
 auto tt::ScriptSupervisor::HasExited() -> bool {
-    if (exit_status_ != -1) {
-        return true;
-    }
-
     int exit_status = 0;
-    if (process_->try_get_exit_status(exit_status)) {
-        exit_status_ = exit_status;
-        return true;
-    }
-
-    return false;
+    return process_->try_get_exit_status(exit_status);
 }
 
 auto tt::ScriptSupervisor::GetExitStatus() -> int {
-    if (exit_status_ != -1) {
-        return exit_status_;
-    }
-
-    return exit_status_ = process_->get_exit_status();
+    return process_->get_exit_status();
 }
 
 auto tt::ScriptSupervisor::service_name() const -> const std::string & {

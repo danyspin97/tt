@@ -70,7 +70,6 @@ private:
     const Environment &environment_;
 
     std::unique_ptr<TinyProcessLib::Process> process_;
-    int exit_status_ = -1;
     ScriptLogger logger_;
 };
 
