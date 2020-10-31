@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/supervision/supervision_signal_handler.hpp"
+#include "tt/supervision/signal_handler.hpp"
 
 #include <array>   // for array
 #include <cassert> // for assert

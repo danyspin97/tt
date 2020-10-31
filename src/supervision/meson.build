@@ -11,5 +11,5 @@ tt_cli_src += files (
     'oneshot_supervisor.cpp',
     'script_supervisor.cpp',
     'supervise_service.cpp',
-    'supervision_signal_handler.cpp',
+    'signal_handler.cpp',
 )
