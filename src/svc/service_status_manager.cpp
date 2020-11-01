@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/supervision/service_status_manager.hpp"
+#include "tt/svc/service_status_manager.hpp"
 
 #include <cassert> // for assert
 #include <utility> // for pair
@@ -26,7 +26,7 @@
 #include "fmt/format.h" // for format
 
 #include "tt/exception.hpp"                  // for Exception
-#include "tt/supervision/service_status.hpp" // for ServiceStatus
+#include "tt/svc/service_status.hpp" // for ServiceStatus
 
 auto tt::ServiceStatusManager::GetInstance() -> ServiceStatusManager & {
     static ServiceStatusManager instance;

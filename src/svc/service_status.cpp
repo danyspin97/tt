@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/supervision/service_status.hpp"
+#include "tt/svc/service_status.hpp"
 
 auto tt::ServiceStatus::Wait() -> bool {
     std::unique_lock<std::mutex> lock(mutex_);

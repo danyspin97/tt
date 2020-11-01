@@ -15,6 +15,7 @@ subdir('parser')
 subdir('path')
 subdir('script')
 subdir('supervision')
+subdir('svc')
 subdir('utils')
 
 tt_soversion = 0
