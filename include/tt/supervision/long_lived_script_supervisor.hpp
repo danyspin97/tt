@@ -37,7 +37,6 @@ public:
                                        const Environment &environment,
                                        const ScriptLogger &logger);
 
-    [[nodiscard]] auto HasStarted() const -> bool;
     auto ExecuteScript() -> ScriptStatus;
 
 private:
@@ -45,7 +44,6 @@ private:
     void SetupNotifyFd();
 
     LongLivedScript long_lived_script_;
-    bool waiting_on_startup_ = false;
     int notify_fd_ = 0;
 };
 

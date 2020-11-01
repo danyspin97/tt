@@ -47,10 +47,8 @@ auto tt::LongLivedScriptSupervisor::ExecuteScript() -> ScriptStatus {
     if (long_lived_script_.notify()) {
         return ListenOnNotifyFd();
     }
-    waiting_on_startup_ = true;
     std::this_thread::sleep_for(
         std::chrono::milliseconds(long_lived_script_.timeout()));
-    waiting_on_startup_ = false;
     return ScriptStatus::Success;
 }
 
@@ -72,8 +70,4 @@ void tt::LongLivedScriptSupervisor::SetupNotifyFd() {
     notify_fd_ = dup(fd[0]);
     close(dup(fd[0]));
     dup2(fd[1], static_cast<int>(long_lived_script_.notify().value()));
-}
-
-auto tt::LongLivedScriptSupervisor::HasStarted() const -> bool {
-    return waiting_on_startup_;
 }
