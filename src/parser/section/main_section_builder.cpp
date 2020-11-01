@@ -43,8 +43,8 @@ void MainSectionBuilder::ParseLine(const string &line) {
         const auto msg =
             "\"" + key_ + "\" was already set while parsing [main] section";
         throw SectionBuilderException(msg);
-    } catch (const std::exception &e) {
-        throw std::exception(e);
+    } catch (const AttributeNotFoundException &e) {
+        throw SectionBuilderException(e.msg());
     }
 }
 
