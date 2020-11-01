@@ -26,12 +26,12 @@
 
 void tt::MaskSignals(sigset_t *set) {
     // TODO: Handle errors
-    sigprocmask(SIG_BLOCK, set, nullptr);
+    pthread_sigmask(SIG_BLOCK, set, nullptr);
 }
 
 void tt::UnmaskSignals(sigset_t *set) {
     // TODO: Handle errors
-    sigprocmask(SIG_UNBLOCK, set, nullptr);
+    pthread_sigmask(SIG_UNBLOCK, set, nullptr);
 }
 
 auto tt::WaitOnSignalSet(sigset_t *signals) -> siginfo_t {
