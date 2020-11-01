@@ -51,11 +51,7 @@ auto tt::LongLivedScriptSupervisor::ExecuteScript() -> ScriptStatus {
     std::this_thread::sleep_for(
         std::chrono::milliseconds(long_lived_script_.timeout()));
     waiting_on_startup_ = false;
-    bool success_ = true;
-    if (success_) {
-        return ScriptStatus::Success;
-    }
-    return ScriptStatus::Failure;
+    return ScriptStatus::Success;
 }
 
 auto tt::LongLivedScriptSupervisor::ListenOnNotifyFd() const -> ScriptStatus {
