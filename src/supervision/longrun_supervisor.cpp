@@ -44,14 +44,35 @@
 #include "tt/supervision/signal_handler.hpp"               // for Supervisi...
 
 tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
-                                         LongrunLogger logger)
-    : longrun_(std::move(longrun)), logger_(std::move(logger)),
-      spawn_(longrun_.name(), longrun_.run(), longrun_.environment(),
-             logger_.GetScriptLogger()) {}
+                                         LongrunLogger &&logger)
+    : longrun_(std::move(longrun)), logger_(std::move(logger)) {}
 
-void tt::LongrunSupervisor::ExecuteScript() {
-    SupervisionSignalHandler::SetupSignals();
+auto tt::LongrunSupervisor::Run() -> bool {
+    sigset_t set;
+    AddSignalToSet(SIGCHLD, &set);
+    MaskSignals(&set);
 
+    // Every time the daemon goes down, try to restart it
+    auto status = ScriptStatus::Failure;
+    while (should_run_again_.load()) {
+        status = ExecuteScript();
+        NotifyStatus(status);
+        // We tried running the longrun but it didn't start properly
+        if (status == ScriptStatus::Failure) {
+            break;
+        }
+        // The longrun started, but it might fail in the future
+        // Wait for sigchld signals
+        WaitOnSignalSet(&set);
+        // Here the run script failed (either we called Kill() from main
+        // or the daemon exited)
+        ExecuteFinishScript();
+    }
+
+    return status == ScriptStatus::Success;
+}
+
+auto tt::LongrunSupervisor::ExecuteScript() -> ScriptStatus {
     auto time_to_try = longrun_.run().max_death();
     decltype(time_to_try) time_tried = 0;
     auto status = ScriptStatus::Failure;
@@ -59,48 +80,45 @@ void tt::LongrunSupervisor::ExecuteScript() {
         status = TryExecute();
         time_tried++;
     } while (time_tried < time_to_try && status != ScriptStatus::Success);
-
-    NotifyStatus(ScriptStatus::Failure);
-    exit(1);
+    return status;
 }
 
 auto tt::LongrunSupervisor::TryExecute() -> ScriptStatus {
-    SupervisionSignalHandler::ResetStatus();
+    run_supervisor_ = std::make_unique<LongLivedScriptSupervisor>(
+        longrun_.name(), longrun_.run(), longrun_.environment(),
+        logger_.GetScriptLogger());
 
-    // Runs in another thread
-    auto futptr = std::make_shared<std::future<void>>();
-    *futptr = std::async(std::launch::async, [futptr, this]() {
-        if (spawn_.ExecuteScript() == ScriptStatus::Success) {
-            NotifyStatus(ScriptStatus::Success);
-        }
-    });
+    // Avoid starting a script when we were told to stop (by calling Kill())
+    if (should_run_again_.load() &&
+        run_supervisor_->ExecuteScript() == ScriptStatus::Success) {
+        return ScriptStatus::Success;
+    }
+    run_supervisor_ = nullptr;
 
-    while (true) {
-        pause();
+    ExecuteFinishScript();
+    return ScriptStatus::Failure;
+}
 
-        if (SupervisionSignalHandler::HasReceivedDeathSignal()) {
-            spawn_.Kill();
-            NotifyStatus(ScriptStatus::Failure);
-            exit(255);
-        }
-
-        if (SupervisionSignalHandler::HasChildExited()) {
-            if (longrun_.finish()) {
-                ScriptSupervisor(longrun_.name(), longrun_.finish().value(),
-                                 longrun_.environment(),
-                                 logger_.GetScriptLogger());
-            }
-            return ScriptStatus::Failure;
-        }
+void tt::LongrunSupervisor::ExecuteFinishScript() const {
+    if (longrun_.finish()) {
+        ScriptSupervisor(longrun_.name(), longrun_.finish().value(),
+                         longrun_.environment(), logger_.GetScriptLogger());
     }
 }
 
 void tt::LongrunSupervisor::NotifyStatus(ScriptStatus status) const {
-    net::Client client(net::Socket::Protocol::TCP, "localhost", 8000);
+    net::Client client(net::Socket::Protocol::TCP, "localhost", 8888);
     client.Connect();
 
     bool succeded = status == ScriptStatus::Success;
     NotifyUpAction action(longrun_.name(), succeded);
     auto s = PackAction(action);
     client.SendMessage(s);
+}
+
+void tt::LongrunSupervisor::Kill() {
+    should_run_again_.store(false);
+    if (run_supervisor_) {
+        run_supervisor_->Kill();
+    }
 }

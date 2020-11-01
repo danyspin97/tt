@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <atomic> // for atomic
+
 #include "tt/data/longrun.hpp"                             // for Longrun
 #include "tt/log/longrun_logger.hpp"                       // for LongrunLo...
 #include "tt/supervision/long_lived_script_supervisor.hpp" // for LongLived...
@@ -29,16 +31,22 @@ namespace tt {
 
 class LongrunSupervisor {
 public:
-    LongrunSupervisor(Longrun &&longrun, LongrunLogger logger);
-    void ExecuteScript();
+    LongrunSupervisor(Longrun &&longrun, LongrunLogger &&logger);
+    void Kill();
+    // Returns if the longrun ran as success
+    auto Run() -> bool;
 
 private:
     void NotifyStatus(ScriptStatus status) const;
-    auto TryExecute() -> ScriptStatus;
+    [[nodiscard]] auto ExecuteScript() -> ScriptStatus;
+    void ExecuteFinishScript() const;
+    [[nodiscard]] auto TryExecute() -> ScriptStatus;
+    void WaitOnStopSignals();
 
     Longrun longrun_;
     LongrunLogger logger_;
-    LongLivedScriptSupervisor spawn_;
+    std::unique_ptr<LongLivedScriptSupervisor> run_supervisor_ = nullptr;
+    std::atomic<bool> should_run_again_ = true;
 };
 
 } // namespace tt
