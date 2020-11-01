@@ -53,7 +53,6 @@ private:
     void SpawnNode(
         const ServiceNode &node,
         const std::shared_ptr<ServiceLoggerRegistry> &logger_registry) const;
-    [[nodiscard]] auto StartServices() -> int;
 };
 
 } // namespace tt::cli

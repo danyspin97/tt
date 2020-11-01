@@ -39,7 +39,8 @@
 #include "tt/exception.hpp"                           // for Exception
 #include "tt/log/service_logger_registry.hpp"         // for ServiceLoggerR...
 #include "tt/supervision/service_status_manager.hpp"  // for ServiceStatusM...
-#include "tt/supervision/supervise_service.hpp"       // for SuperviseService
+#include "tt/supervision/signal_handler.hpp"    // for AddSignalsToSet, ...
+#include "tt/supervision/supervise_service.hpp" // for SuperviseService
 
 namespace args {
 class Subparser;
@@ -53,10 +54,10 @@ tt::cli::ServiceControlCommand::ServiceControlCommand(
     : Command(parser, std::move(common_options)) {}
 
 auto tt::cli::ServiceControlCommand::Execute() -> int {
-    return StartServices();
-}
+    sigset_t set;
+    AddSignalsToSet(kStopSignals, &set);
+    MaskSignals(&set);
 
-auto tt::cli::ServiceControlCommand::StartServices() -> int {
     auto graph_filename = GetGraphFilename(dirs());
     if (!std::filesystem::exists(graph_filename) ||
         !std::filesystem::is_regular_file(graph_filename)) {
@@ -66,10 +67,10 @@ auto tt::cli::ServiceControlCommand::StartServices() -> int {
     auto services = graph.GetActiveServices();
     ServiceStatusManager::GetInstance().Initialize(services);
 
-    // Start action listener
-    auto action_listener = std::thread(&ActionListener::Listen);
-
     auto logger_registry = std::make_shared<ServiceLoggerRegistry>(dirs());
+
+    // Start action listener
+    std::thread(&ActionListener::Listen).detach();
 
     // TODO: Calculate an optimal order of services to start
     auto nodes = graph.nodes();
@@ -82,8 +83,7 @@ auto tt::cli::ServiceControlCommand::StartServices() -> int {
                              });
     }
 
-    // Runs indefinitely
-    action_listener.join();
+    WaitOnSignalSet(&set);
 
     return 0;
 }
