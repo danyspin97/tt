@@ -36,10 +36,9 @@ class Environment;
 
 class ScriptSupervisor {
 public:
-    explicit ScriptSupervisor(const std::string &service_name,
-                              const Script &script,
-                              const Environment &environment,
-                              const ScriptLogger &logger);
+    ScriptSupervisor(const std::string &service_name, const Script &script,
+                     const Environment &environment,
+                     const ScriptLogger &logger);
     virtual ~ScriptSupervisor() = default;
 
     [[nodiscard]] auto service_name() const -> const std::string &;
@@ -71,6 +70,7 @@ private:
 
     std::unique_ptr<TinyProcessLib::Process> process_;
     ScriptLogger logger_;
+    std::mutex process_mutex_;
 };
 
 } // namespace tt

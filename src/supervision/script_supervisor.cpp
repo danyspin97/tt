@@ -75,6 +75,7 @@ auto tt::ScriptSupervisor::ExecuteUntilTimeout(Timeout timeout)
 void tt::ScriptSupervisor::LaunchProcess() {
     auto builder = ScriptBuilderFactory::GetScriptBuilder(script_.type());
     auto command = builder->script(script_.execute(), environment_);
+    std::lock_guard<std::mutex> lock(process_mutex_);
     process_ = std::make_unique<TinyProcessLib::Process>(
         command, "",
         [this](const char *bytes, size_t size) {
@@ -86,6 +87,7 @@ void tt::ScriptSupervisor::LaunchProcess() {
 }
 
 void tt::ScriptSupervisor::Kill() {
+    std::lock_guard<std::mutex> lock(process_mutex_);
     Timeout timeout{std::chrono::milliseconds(script_.timeout_kill())};
     Signal(static_cast<int>(script_.down_signal()));
     while (!HasExited() && !timeout.TimedOut()) {
