@@ -26,6 +26,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <future> // for async
 #include <utility>
 
 #include "args.hxx"
@@ -36,6 +37,7 @@
 #include "tt/cli/global_options.hpp"
 #include "tt/log/service_logger_registry.hpp" // for ServiceLoggerRegistry
 #include "tt/supervision/longrun_supervisor.hpp"
+#include "tt/supervision/signal_handler.hpp" // for AddSignalToSet, ...
 #include "tt/utils/deserialize.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 
@@ -45,12 +47,20 @@ tt::cli::SuperviseCommand::SuperviseCommand(
       filename_(parser, "filename", "Filename to read the longrun from") {}
 
 auto tt::cli::SuperviseCommand::Execute() -> int {
+    sigset_t set;
+    tt::AddSignalsToSet(stop_signals, &set);
+    tt::MaskSignals(&set);
+
     auto longrun = utils::Deserialize<Longrun>(args::get(filename_));
 
     ServiceLoggerRegistry logger_registry{dirs()};
     auto name = longrun.name();
     LongrunSupervisor supervisor{std::move(longrun),
                                  logger_registry.GetLongrunLogger(name)};
-    supervisor.ExecuteScript();
-    return 0;
+    auto longrun_run_successfully = std::async(
+        std::launch::async, [&supervisor]() { return supervisor.Run(); });
+    tt::RemoveSignalFromSet(SIGCHLD, &set);
+    tt::WaitOnSignalSet(&set);
+    supervisor.Kill();
+    return longrun_run_successfully.get() ? 0 : 255;
 }
