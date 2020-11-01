@@ -48,7 +48,7 @@ tt::cli::SuperviseCommand::SuperviseCommand(
 
 auto tt::cli::SuperviseCommand::Execute() -> int {
     sigset_t set;
-    tt::AddSignalsToSet(stop_signals, &set);
+    tt::AddSignalsToSet(kStopSignals, &set);
     tt::AddSignalToSet(SIGCHLD, &set);
     tt::MaskSignals(&set);
 

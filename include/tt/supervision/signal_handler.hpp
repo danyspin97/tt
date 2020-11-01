@@ -25,10 +25,9 @@
 
 namespace tt {
 
-constexpr int STOP_SIGNALS_SIZE = 10;
+constexpr int kStopSignalsSize = 2;
 // signals asking us terminate
-constexpr std::array<int, tt::STOP_SIGNALS_SIZE> stop_signals = {
-    SIGINT, SIGQUIT, SIGTERM};
+constexpr std::array<int, kStopSignalsSize> kStopSignals = {SIGINT, SIGTERM};
 
 void MaskSignals(sigset_t *set);
 void UnmaskSignals(sigset_t *set);
@@ -44,8 +43,8 @@ void RemoveSignalFromSet(int signal, sigset_t *set);
 
 auto WaitOnSignalSet(sigset_t *signals) -> siginfo_t;
 
-constexpr auto GetStopSignals() -> std::array<int, STOP_SIGNALS_SIZE> {
-    return stop_signals;
+constexpr auto GetStopSignals() -> std::array<int, kStopSignalsSize> {
+    return kStopSignals;
 }
 
 } // namespace tt
