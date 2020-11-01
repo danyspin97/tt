@@ -49,7 +49,7 @@ auto tt::LongLivedScriptSupervisor::ExecuteScript() -> ScriptStatus {
     }
     std::this_thread::sleep_for(
         std::chrono::milliseconds(long_lived_script_.timeout()));
-    return ScriptStatus::Success;
+    return HasExited() ? ScriptStatus::Failure : ScriptStatus::Success;
 }
 
 auto tt::LongLivedScriptSupervisor::ListenOnNotifyFd() const -> ScriptStatus {
