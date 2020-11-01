@@ -52,7 +52,7 @@ tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
 auto tt::LongrunSupervisor::Run() -> bool {
     sigset_t set;
     AddSignalToSet(SIGCHLD, &set);
-    MaskSignals(&set);
+    // SIGCHLD is already masked in Command::SuperviseCommand
 
     // Every time the daemon goes down, try to restart it
     auto status = ScriptStatus::Failure;
