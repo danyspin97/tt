@@ -80,16 +80,14 @@ auto tt::LongrunSupervisor::ExecuteScript() -> ScriptStatus {
     auto status = ScriptStatus::Failure;
     do {
         status = TryExecute();
-        time_tried++;
-    } while (should_run_again_.load() && time_tried < time_to_try &&
+        // Avoid starting a script when we were told to stop (by calling Kill())
+    } while (should_run_again_.load() && ++time_tried < time_to_try &&
              status != ScriptStatus::Success);
     return status;
 }
 
 auto tt::LongrunSupervisor::TryExecute() -> ScriptStatus {
-    // Avoid starting a script when we were told to stop (by calling Kill())
-    if (should_run_again_.load() &&
-        run_supervisor_.ExecuteScript() == ScriptStatus::Success) {
+    if (run_supervisor_.ExecuteScript() == ScriptStatus::Success) {
         return ScriptStatus::Success;
     }
 
