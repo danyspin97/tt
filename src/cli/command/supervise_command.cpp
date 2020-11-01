@@ -35,6 +35,7 @@
 #include "bitsery/bitsery.h"
 
 #include "tt/cli/global_options.hpp"
+#include "tt/log/cli_logger.hpp"
 #include "tt/log/service_logger_registry.hpp" // for ServiceLoggerRegistry
 #include "tt/supervision/longrun_supervisor.hpp"
 #include "tt/supervision/signal_handler.hpp" // for AddSignalToSet, ...
@@ -58,14 +59,23 @@ auto tt::cli::SuperviseCommand::Execute() -> int {
     auto name = longrun.name();
     LongrunSupervisor supervisor{std::move(longrun),
                                  logger_registry.GetLongrunLogger(name)};
-    // Run the longrun in another thread
-    auto longrun_run_successfully = std::async(
-        std::launch::async, [&supervisor]() { return supervisor.Run(); });
 
-    // We don't want to wait on SIGCHLD
-    tt::RemoveSignalFromSet(SIGCHLD, &set);
-    // Wait until we receive a stop signal
-    tt::WaitOnSignalSet(&set);
-    supervisor.Kill();
-    return longrun_run_successfully.get() ? 0 : 255;
+    std::thread([this, &supervisor, &set]() {
+        // We don't want to wait on SIGCHLD
+        tt::RemoveSignalFromSet(SIGCHLD, &set);
+        // For some reasons we are receiving a spurius signal
+        while (true) {
+            // Wait until we receive a stop signal
+            auto s = tt::WaitOnSignalSet(&set);
+            for (auto sig : kStopSignals) {
+                if (s.si_signo == sig) {
+                    supervisor.Kill();
+                    break;
+                }
+            }
+            logger()->LogError("Received signal {}", s.si_signo);
+        }
+    }).detach();
+
+    return supervisor.Run() ? 0 : 255;
 }
