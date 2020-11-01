@@ -45,7 +45,7 @@ private:
 
     Longrun longrun_;
     LongrunLogger logger_;
-    std::unique_ptr<LongLivedScriptSupervisor> run_supervisor_ = nullptr;
+    LongLivedScriptSupervisor run_supervisor_;
     std::atomic<bool> should_run_again_ = true;
 };
 

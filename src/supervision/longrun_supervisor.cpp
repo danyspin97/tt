@@ -45,7 +45,9 @@
 
 tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
                                          LongrunLogger &&logger)
-    : longrun_(std::move(longrun)), logger_(std::move(logger)) {}
+    : longrun_(std::move(longrun)), logger_(std::move(logger)),
+      run_supervisor_(longrun_.name(), longrun_.run(), longrun_.environment(),
+                      logger_.GetScriptLogger()) {}
 
 auto tt::LongrunSupervisor::Run() -> bool {
     sigset_t set;
@@ -79,21 +81,17 @@ auto tt::LongrunSupervisor::ExecuteScript() -> ScriptStatus {
     do {
         status = TryExecute();
         time_tried++;
-    } while (time_tried < time_to_try && status != ScriptStatus::Success);
+    } while (should_run_again_.load() && time_tried < time_to_try &&
+             status != ScriptStatus::Success);
     return status;
 }
 
 auto tt::LongrunSupervisor::TryExecute() -> ScriptStatus {
-    run_supervisor_ = std::make_unique<LongLivedScriptSupervisor>(
-        longrun_.name(), longrun_.run(), longrun_.environment(),
-        logger_.GetScriptLogger());
-
     // Avoid starting a script when we were told to stop (by calling Kill())
     if (should_run_again_.load() &&
-        run_supervisor_->ExecuteScript() == ScriptStatus::Success) {
+        run_supervisor_.ExecuteScript() == ScriptStatus::Success) {
         return ScriptStatus::Success;
     }
-    run_supervisor_ = nullptr;
 
     ExecuteFinishScript();
     return ScriptStatus::Failure;
@@ -118,7 +116,5 @@ void tt::LongrunSupervisor::NotifyStatus(ScriptStatus status) const {
 
 void tt::LongrunSupervisor::Kill() {
     should_run_again_.store(false);
-    if (run_supervisor_) {
-        run_supervisor_->Kill();
-    }
+    run_supervisor_.Kill();
 }
