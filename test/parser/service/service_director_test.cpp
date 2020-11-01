@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/parser/service/service_director_test.hpp"
+#include "tt/test/parser/service/service_director_test.hpp"
 
 #include "catch2/catch.hpp"
 
