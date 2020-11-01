@@ -20,33 +20,32 @@
 
 #pragma once
 
-#include <csignal> // IWYU pragma: keep for siginfo_t
+#include <array>   // for array
+#include <csignal> // IWYU pragma: keep for siginfo_t, sigset_t
 
 namespace tt {
 
-class SupervisionSignalHandler {
-public:
-    SupervisionSignalHandler();
-    static void SetupSignals();
+constexpr int STOP_SIGNALS_SIZE = 10;
+// signals asking us terminate
+constexpr std::array<int, tt::STOP_SIGNALS_SIZE> stop_signals = {
+    SIGINT, SIGQUIT, SIGTERM};
 
-    void HandleSignal(int signum);
-    void HandleSigChld(int signo);
+void MaskSignals(sigset_t *set);
+void UnmaskSignals(sigset_t *set);
 
-    static auto GetInstance() -> SupervisionSignalHandler &;
+void AddSignalToSet(int signal, sigset_t *set);
+template <size_t N>
+void AddSignalsToSet(std::array<int, N> signals, sigset_t *set) {
+    for (auto signal : signals) {
+        sigaddset(set, signal);
+    }
+}
+void RemoveSignalFromSet(int signal, sigset_t *set);
 
-    static auto HasReceivedDeathSignal() -> bool;
-    static auto HasChildExited() -> bool;
+auto WaitOnSignalSet(sigset_t *signals) -> siginfo_t;
 
-    static void ResetStatus();
-
-private:
-    bool death_signal_received_ = false;
-    bool child_exited_ = false;
-};
+constexpr auto GetStopSignals() -> std::array<int, STOP_SIGNALS_SIZE> {
+    return stop_signals;
+}
 
 } // namespace tt
-
-extern "C" {
-void handle_sig_chld(int signo, siginfo_t *info, void *context);
-void handle_signum(int signum);
-}

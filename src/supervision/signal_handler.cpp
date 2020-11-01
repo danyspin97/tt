@@ -22,77 +22,26 @@
 
 #include <array>   // for array
 #include <cassert> // for assert
-#include <csignal> // for sigaction, sigaddset, SIGCHLD, SIGTERM, SIGABRT
+#include <csignal> // for sigaction, sigaddset, sigdelset
 
-#if __linux__
-constexpr std::array<int, 23> deathsigs = {
-    /* signals making us terminate */
-    SIGHUP, SIGINT, SIGKILL, SIGPIPE, SIGALRM, SIGTERM, SIGUSR1, SIGUSR2,
-    SIGPOLL, SIGPROF, SIGVTALRM, SIGIO, SIGPWR,
-    /* signals making us coredump */
-    SIGQUIT, SIGILL, SIGABRT, SIGFPE, SIGSEGV, SIGBUS, SIGSYS, SIGTRAP, SIGXCPU,
-    SIGXFSZ};
-#else
-constexpr std::array<int, 21> deathsigs = {
-    /* signals making us terminate */
-    SIGHUP, SIGINT, SIGKILL, SIGPIPE, SIGALRM, SIGTERM, SIGUSR1, SIGUSR2,
-    SIGPROF, SIGVTALRM, SIGIO,
-    /* signals making us coredump */
-    SIGQUIT, SIGILL, SIGABRT, SIGFPE, SIGSEGV, SIGBUS, SIGSYS, SIGTRAP, SIGXCPU,
-    SIGXFSZ};
-#endif
-
-tt::SupervisionSignalHandler::SupervisionSignalHandler() { SetupSignals(); }
-
-void tt::SupervisionSignalHandler::SetupSignals() {
-    struct sigaction sigchld {};
-    // Ignore SIGTERM while handling SIGCHLD
-    sigaddset(&sigchld.sa_mask, SIGTERM);
-    sigchld.sa_flags = 0;
-    sigchld.sa_sigaction = handle_sig_chld;
-    sigaction(SIGCHLD, &sigchld, nullptr);
-
-    // Handle all death signals
-    for (auto signum : deathsigs) {
-        struct sigaction sig {};
-        sig.sa_flags = 0;
-        sig.sa_handler = handle_signum;
-        sigaction(signum, &sig, nullptr);
-    }
+void tt::MaskSignals(sigset_t *set) {
+    // TODO: Handle errors
+    sigprocmask(SIG_BLOCK, set, nullptr);
 }
 
-void tt::SupervisionSignalHandler::HandleSignal(int /*signum*/) {
-    death_signal_received_ = true;
+void tt::UnmaskSignals(sigset_t *set) {
+    // TODO: Handle errors
+    sigprocmask(SIG_UNBLOCK, set, nullptr);
 }
 
-void tt::SupervisionSignalHandler::HandleSigChld(int signo) {
-    assert(signo == SIGCHLD);
-    child_exited_ = true;
+auto tt::WaitOnSignalSet(sigset_t *signals) -> siginfo_t {
+    siginfo_t signal_received;
+    sigwaitinfo(signals, &signal_received);
+    return signal_received;
 }
 
-auto tt::SupervisionSignalHandler::GetInstance() -> SupervisionSignalHandler & {
-    static SupervisionSignalHandler instance;
+void tt::AddSignalToSet(int signal, sigset_t *set) { sigaddset(set, signal); }
 
-    return instance;
-}
-
-auto tt::SupervisionSignalHandler::HasReceivedDeathSignal() -> bool {
-    return GetInstance().death_signal_received_;
-}
-
-auto tt::SupervisionSignalHandler::HasChildExited() -> bool {
-    return GetInstance().child_exited_;
-}
-
-void tt::SupervisionSignalHandler::ResetStatus() {
-    GetInstance().child_exited_ = false;
-    GetInstance().death_signal_received_ = false;
-}
-
-void handle_sig_chld(int signo, siginfo_t * /*info*/, void * /*context*/) {
-    tt::SupervisionSignalHandler::GetInstance().HandleSigChld(signo);
-}
-
-void handle_signum(int signum) {
-    tt::SupervisionSignalHandler::GetInstance().HandleSignal(signum);
+void tt::RemoveSignalFromSet(int signal, sigset_t *set) {
+    sigdelset(set, signal);
 }
