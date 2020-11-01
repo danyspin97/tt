@@ -1,3 +1,5 @@
+test_includes = include_directories('include')
+
 catch_cxxflags = [
     '-DCATCH_CONFIG_MAIN',
     '-DCATCH_CONFIG_FAST_COMPILE',
@@ -81,6 +83,7 @@ foreach src : tt_test_multiple_src
         filename,
         src,
         dependencies: tt_test_deps,
+        include_directories: test_includes,
         cpp_args: catch_cxxflags,
     )
 
