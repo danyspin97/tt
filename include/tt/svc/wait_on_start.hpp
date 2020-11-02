@@ -18,20 +18,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/svc/service_status.hpp"
+#pragma once
 
-auto tt::ServiceStatus::Wait() -> bool {
-    std::unique_lock<std::mutex> lock(mutex_);
-    if (ended_) {
-        return success_;
-    }
-    condition_.wait(lock, [this]() { return ended_; });
-    return success_;
-}
+#include <condition_variable> // for condition_variable
+#include <mutex>              // for mutex
 
-void tt::ServiceStatus::Update(bool succeeded) {
-    std::unique_lock<std::mutex> lock(mutex_);
-    ended_ = true;
-    success_ = succeeded;
-    condition_.notify_all();
-}
+namespace tt {
+
+class WaitOnStart {
+public:
+    void Wait();
+    void Signal();
+
+private:
+    std::mutex mutex_;
+    std::condition_variable condition_;
+    bool ended_ = false;
+};
+
+} // namespace tt

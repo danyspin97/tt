@@ -18,28 +18,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "tt/svc/wait_on_start.hpp"
 
-#include <condition_variable> // for condition_variable
-#include <mutex>              // for mutex
+void tt::WaitOnStart::Wait() {
+    std::unique_lock<std::mutex> lock(mutex_);
+    (condition_).wait(lock, [this]() { return ended_; });
+}
 
-namespace tt {
-
-class ServiceStatus {
-public:
-    ServiceStatus() = default;
-    // std::mutex and std::condition_variable does not have this constructor
-    ServiceStatus(const tt::ServiceStatus &) = delete;
-
-    [[nodiscard]] auto Wait() -> bool;
-    void Update(bool succeeded);
-
-private:
-    // TODO c++20: use atomic_flag::wait
-    std::mutex mutex_;
-    std::condition_variable condition_;
-    bool success_ = false;
-    bool ended_ = false;
-};
-
-} // namespace tt
+void tt::WaitOnStart::Signal() {
+    std::unique_lock<std::mutex> lock(mutex_);
+    ended_ = true;
+    condition_.notify_all();
+}
