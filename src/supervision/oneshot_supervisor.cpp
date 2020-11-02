@@ -21,34 +21,30 @@
 #include <optional> // for optional
 #include <utility>  // for move
 
-#include "tt/data/main_script.hpp"                   // for MainScript
-#include "tt/data/oneshot.hpp"                       // for Oneshot
-#include "tt/data/script.hpp"                        // for Script
-#include "tt/log/oneshot_logger.hpp"                 // for OneshotLogger
-#include "tt/log/script_logger.hpp"                  // for ScriptLogger
-#include "tt/supervision/oneshot_supervisor.hpp"     // for OneshotSupervisor
-#include "tt/supervision/script_supervisor.hpp"      // for ScriptSupervisor
-#include "tt/svc/service_status_manager.hpp" // for ServiceStatusMa...
-#include "tt/supervision/types.hpp"                  // for ScriptStatus
+#include "tt/data/main_script.hpp"               // for MainScript
+#include "tt/data/oneshot.hpp"                   // for Oneshot
+#include "tt/data/script.hpp"                    // for Script
+#include "tt/log/oneshot_logger.hpp"             // for OneshotLogger
+#include "tt/log/script_logger.hpp"              // for ScriptLogger
+#include "tt/supervision/oneshot_supervisor.hpp" // for OneshotSupervisor
+#include "tt/supervision/script_supervisor.hpp"  // for ScriptSupervisor
+#include "tt/supervision/types.hpp"              // for ScriptStatus
+#include "tt/svc/service_status_manager.hpp"     // for ServiceStatusMa...
 
 tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot,
                                          OneshotLogger &&logger)
     : oneshot_(std::move(oneshot)), logger_(std::move(logger)) {}
 
-void tt::OneshotSupervisor::Run() const {
-    auto manager = ServiceStatusManager::GetInstance();
+auto tt::OneshotSupervisor::Run() const -> bool {
     const auto &name = oneshot_.name();
     logger_.Start();
     ScriptSupervisor spawn_start{name, oneshot_.start(), oneshot_.environment(),
                                  logger_.GetScriptLogger()};
     if (spawn_start.ExecuteScript() == ScriptStatus::Success) {
-        // Notify the service started up successfully
-        manager.ServiceStartUpdate(name, true);
         logger_.Success();
-        return;
+        return true;
     }
 
-    manager.ServiceStartUpdate(name, false);
     logger_.Fail();
     if (oneshot_.stop()) {
         ScriptSupervisor spawn_stop{name, oneshot_.stop().value(),
@@ -57,4 +53,5 @@ void tt::OneshotSupervisor::Run() const {
         // We don't care if the stop script failed
         spawn_stop.ExecuteScript();
     }
+    return false;
 }

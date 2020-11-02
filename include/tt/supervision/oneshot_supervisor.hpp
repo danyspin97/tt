@@ -37,7 +37,7 @@ class OneshotSupervisor {
 public:
     OneshotSupervisor(Oneshot oneshot, OneshotLogger &&logger);
 
-    void Run() const;
+    [[nodiscard]] auto Run() const -> bool;
 
 private:
     static void InitLogger();
