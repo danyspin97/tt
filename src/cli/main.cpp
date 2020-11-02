@@ -35,24 +35,21 @@
 
 auto common_options = std::make_shared<tt::cli::GlobalOptions>();
 tt::cli::CommandDispatcher dispatcher{common_options};
+std::vector<std::unique_ptr<args::Command>> commands;
 
-template <typename T>
-constexpr void
-AddCommandToGroup(args::Group &group,
-                  std::vector<std::unique_ptr<args::Command>> &commands) {
+template <typename T> constexpr void AddCommandToGroup(args::Group &group) {
     commands.push_back(std::make_unique<args::Command>(
         group, T::name, T::description, dispatcher.Dispatch<T>()));
 }
 
 args::ArgumentParser parser("tt init/rc manager.");
-std::vector<std::unique_ptr<args::Command>> commands;
 args::Group manage{(args::Group &)parser, "Manage services"};
 args::Group system_group((args::Group &)parser, "System commands");
 args::Group testing((args::Group &)parser, "Test services files");
 args::GlobalOptions global_options(parser, common_options->arguments());
 
 constexpr void InitCommands() {
-    AddCommandToGroup<tt::cli::EnableCommand>(manage, commands);
+    AddCommandToGroup<tt::cli::EnableCommand>(manage);
     // TODO: Decomment them when they have an action assigned each
     // args::Command(manage, "start", "Start/restart one or more services");
     // args::Command(manage, "stop", "Stop one or more services");
@@ -68,11 +65,11 @@ constexpr void InitCommands() {
     // args::Command show(query, "show",
     //                   "Show the status and the configuration of a service");
 
-    AddCommandToGroup<tt::cli::ServiceControlCommand>(system_group, commands);
-    AddCommandToGroup<tt::cli::SuperviseCommand>(system_group, commands);
+    AddCommandToGroup<tt::cli::ServiceControlCommand>(system_group);
+    AddCommandToGroup<tt::cli::SuperviseCommand>(system_group);
 
-    AddCommandToGroup<tt::cli::ParseCommand>(testing, commands);
-    AddCommandToGroup<tt::cli::SerializeCommand>(testing, commands);
+    AddCommandToGroup<tt::cli::ParseCommand>(testing);
+    AddCommandToGroup<tt::cli::SerializeCommand>(testing);
 }
 
 auto main(int argc, char *argv[]) -> int {
