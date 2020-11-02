@@ -26,10 +26,16 @@
 #include "args.hxx" // for ArgumentParser
 
 #include "tt/cli/command/command_dispatcher.hpp"      // for CommandDispatcher
+#include "tt/cli/command/disable_command.hpp"         // for DisableCommand
+#include "tt/cli/command/edit_config_command.hpp"     // for EditConfigCommand
 #include "tt/cli/command/enable_command.hpp"          // for EnableCommand
 #include "tt/cli/command/parse_command.hpp"           // for ParseCommand
 #include "tt/cli/command/serialize_command.hpp"       // for SerializeCommand
 #include "tt/cli/command/service_control_command.hpp" // for ServiceControl...
+#include "tt/cli/command/show_command.hpp"            // for ShowCommand
+#include "tt/cli/command/start_command.hpp"           // for StartCommand
+#include "tt/cli/command/status_command.hpp"          // for StatusCommand
+#include "tt/cli/command/stop_command.hpp"            // for StopCommand
 #include "tt/cli/command/supervise_command.hpp"       // for SuperviseCommand
 #include "tt/cli/global_options.hpp"                  // for GlobalOptions
 
@@ -45,25 +51,19 @@ template <typename T> constexpr void AddCommandToGroup(args::Group &group) {
 args::ArgumentParser parser("tt init/rc manager.");
 args::Group manage{(args::Group &)parser, "Manage services"};
 args::Group system_group((args::Group &)parser, "System commands");
+args::Group query(parser, "Query the status of the system");
 args::Group testing((args::Group &)parser, "Test services files");
 args::GlobalOptions global_options(parser, common_options->arguments());
 
 constexpr void InitCommands() {
     AddCommandToGroup<tt::cli::EnableCommand>(manage);
-    // TODO: Decomment them when they have an action assigned each
-    // args::Command(manage, "start", "Start/restart one or more services");
-    // args::Command(manage, "stop", "Stop one or more services");
-    // args::Command(manage, "disable", "Disable one or more services");
-    // args::Command(manage, "edit-config", "Edit the config of a service");
+    AddCommandToGroup<tt::cli::DisableCommand>(manage);
+    AddCommandToGroup<tt::cli::StartCommand>(manage);
+    AddCommandToGroup<tt::cli::StopCommand>(manage);
+    AddCommandToGroup<tt::cli::EditConfigCommand>(manage);
 
-    // args::Group query(parser, "Query the status of the system");
-    // args::Command show(query, "show",
-    //                   "Show the status and the configuration of a service");
-    // args::Command status(query, "status", "Show the status of the system");
-
-    // args::Group query(parser, "Query the status of the system");
-    // args::Command show(query, "show",
-    //                   "Show the status and the configuration of a service");
+    AddCommandToGroup<tt::cli::StatusCommand>(manage);
+    AddCommandToGroup<tt::cli::ShowCommand>(manage);
 
     AddCommandToGroup<tt::cli::ServiceControlCommand>(system_group);
     AddCommandToGroup<tt::cli::SuperviseCommand>(system_group);
