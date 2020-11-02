@@ -26,32 +26,27 @@
 #include <string>       // for string
 #include <vector>       // for vector
 
+#include "tt/svc/service_status.hpp" // for ServiceStatus
+#include "tt/svc/wait_on_start.hpp"  // for WaitOnStart
+
 namespace tt {
 
-class ServiceStatus;
+class ServiceStatusImpl;
 
 class ServiceStatusManager {
 public:
-    static auto GetInstance() -> ServiceStatusManager &;
+    explicit ServiceStatusManager(const std::vector<std::string> &services);
 
-    void Initialize(std::vector<std::string> &services);
-    void ServiceStartUpdate(const std::string &service, bool succeeded) const;
-    void ServiceDownUpdate(const std::string &service, bool succeeded) const;
-    [[nodiscard]] auto WaitOnServiceStart(const std::string &service) const
-        -> bool;
-    [[nodiscard]] auto WaitOnServiceDown(const std::string &service) const
-        -> bool;
+    void ChangeStatusOfService(const std::string &service,
+                               ServiceStatus new_status);
+    [[nodiscard]] auto WaitOnServiceStart(const std::string &service) -> bool;
+    void WaitOnServiceDown(const std::string &service);
 
 private:
-    using ServiceStatusPtr = std::shared_ptr<ServiceStatus>;
-
-    static auto
-    GetStatus(const std::map<std::string, ServiceStatusPtr> &services_status,
-              const std::string &service) -> ServiceStatusPtr;
-
     static inline std::shared_mutex mutex_;
-    std::map<std::string, ServiceStatusPtr> up_status_;
-    std::map<std::string, ServiceStatusPtr> down_status_;
+    std::map<std::string,
+             std::pair<ServiceStatus, std::unique_ptr<WaitOnStart>>>
+        services_;
 };
 
 } // namespace tt
