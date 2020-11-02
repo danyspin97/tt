@@ -33,7 +33,4 @@ auto tt::NotifyUpAction::service() const -> std::string { return service_; }
 
 auto tt::NotifyUpAction::succeded() const -> bool { return succeeded_; }
 
-void tt::NotifyUpAction::Apply() {
-    auto service_status_manager = tt::ServiceStatusManager::GetInstance();
-    service_status_manager.ServiceStartUpdate(service_, succeded());
-}
+void tt::NotifyUpAction::Apply() {}
