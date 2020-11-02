@@ -4,6 +4,5 @@ tt_cli_src += files (
     'longrun_supervisor_launcher.cpp',
     'oneshot_supervisor.cpp',
     'script_supervisor.cpp',
-    'supervise_service.cpp',
     'signal_handler.cpp',
 )

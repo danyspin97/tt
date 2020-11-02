@@ -20,31 +20,29 @@
 
 #pragma once
 
-#include <memory>
-#include <variant>
+#include <string> // for string
+
+#include "tt/data/service.hpp"                      // for Service
+#include "tt/dependency_graph/dependency_graph.hpp" // for DependencyGraph
+#include "tt/log/service_logger_registry.hpp"       // for ServiceLoggerRegistry
+#include "tt/svc/service_status_manager.hpp"        // for ServiceStatusManager
 
 namespace tt {
 
-class Bundle;
-class Dirs;
-class Longrun;
-class Oneshot;
-class ServiceLoggerRegistry;
-
-class SuperviseService {
+class ServiceManager {
 public:
-    explicit SuperviseService(
-        std::shared_ptr<Dirs> dirs,
-        std::shared_ptr<ServiceLoggerRegistry> logger_registry);
+    ServiceManager(DependencyGraph &&graph, std::shared_ptr<Dirs> dirs);
 
-    void operator()(const Bundle &bundle) const;
-    void operator()(const Longrun &longrun) const;
-    void operator()(const Oneshot &oneshot) const;
-    void operator()(std::monostate /*unused*/) const;
+    void StartAllServices();
 
 private:
+    void StartService(const std::string &service_name, const Service &service);
+
+    DependencyGraph graph_;
+    ServiceStatusManager status_manager_;
     std::shared_ptr<Dirs> dirs_;
-    std::shared_ptr<ServiceLoggerRegistry> logger_registry_;
+    // ServiceLoggerRegistry needs dirs to construct
+    ServiceLoggerRegistry logger_registry_;
 };
 
 } // namespace tt

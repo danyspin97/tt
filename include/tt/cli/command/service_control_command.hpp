@@ -28,8 +28,9 @@ namespace args {
 class Subparser;
 } // namespace args
 namespace tt {
-class ServiceNode;
 class ServiceLoggerRegistry;
+class ServiceNode;
+class ServiceStatusManager;
 namespace cli {
 class GlobalOptions;
 } // namespace cli
@@ -47,11 +48,6 @@ public:
 
 protected:
     auto Execute() -> int override;
-
-private:
-    void SpawnNode(
-        const ServiceNode &node,
-        const std::shared_ptr<ServiceLoggerRegistry> &logger_registry) const;
 };
 
 } // namespace tt::cli

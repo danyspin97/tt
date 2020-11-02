@@ -20,27 +20,15 @@
 
 #include "tt/cli/command/service_control_command.hpp"
 
-#include <cxxabi.h>     // for __forced_unwind
-#include <filesystem>   // for exists, is_reg...
-#include <future>       // for future, async
-#include <string>       // for string
-#include <system_error> // for system_error
-#include <thread>       // for thread
-#include <utility>      // for move
-#include <variant>      // for visit
-#include <vector>       // for vector
+#include <filesystem> // for exists, is_reg...
+#include <thread>     // for thread
 
 #include "tt/action/action_listener.hpp"              // for ActionListener
-#include "tt/data/longrun.hpp"                        // for Deserialize
 #include "tt/dependency_graph/dependency_graph.hpp"   // for DependencyGraph
-#include "tt/dependency_graph/dependency_reader.hpp"  // for DependencyReader
 #include "tt/dependency_graph/get_graph_filename.hpp" // for GetGraphFilename
-#include "tt/dependency_graph/service_node.hpp"       // for ServiceNode
 #include "tt/exception.hpp"                           // for Exception
-#include "tt/log/service_logger_registry.hpp"         // for ServiceLoggerR...
-#include "tt/svc/service_status_manager.hpp"  // for ServiceStatusM...
-#include "tt/supervision/signal_handler.hpp"    // for AddSignalsToSet, ...
-#include "tt/supervision/supervise_service.hpp" // for SuperviseService
+#include "tt/supervision/signal_handler.hpp" // for AddSignalsToSet, ...
+#include "tt/svc/service_manager.hpp"        // for ServiceManager
 
 namespace args {
 class Subparser;
@@ -65,49 +53,14 @@ auto tt::cli::ServiceControlCommand::Execute() -> int {
     }
     auto graph = utils::Deserialize<DependencyGraph>(graph_filename);
     auto services = graph.GetActiveServices();
-    ServiceStatusManager::GetInstance().Initialize(services);
-
-    auto logger_registry = std::make_shared<ServiceLoggerRegistry>(dirs());
+    ServiceManager service_manager(std::move(graph), dirs());
 
     // Start action listener
     std::thread(&ActionListener::Listen).detach();
 
-    // TODO: Calculate an optimal order of services to start
-    auto nodes = graph.nodes();
-    for (const auto &node : nodes) {
-        // https://stackoverflow.com/questions/23454793/whats-the-c-11-way-to-fire-off-an-asynchronous-task-and-forget-about-it
-        auto futptr = std::make_shared<std::future<void>>();
-        *futptr = std::async(std::launch::async,
-                             [this, futptr, node, logger_registry]() {
-                                 SpawnNode(node, logger_registry);
-                             });
-    }
+    service_manager.StartAllServices();
 
     WaitOnSignalSet(&set);
 
     return 0;
-}
-
-void tt::cli::ServiceControlCommand::SpawnNode(
-    const ServiceNode &node,
-    const std::shared_ptr<ServiceLoggerRegistry> &logger_registry) const {
-    DependencyReader dep_reader{};
-    std::visit(dep_reader, node.service());
-    auto deps = dep_reader.dependencies();
-
-    const auto &manager = ServiceStatusManager::GetInstance();
-    auto deps_satisfied = true;
-    for (const auto &dep : deps) {
-        if (!manager.WaitOnServiceStart(dep)) {
-            deps_satisfied = false;
-            break;
-        }
-    }
-
-    if (!deps_satisfied) {
-        manager.ServiceStartUpdate(node.name(), false);
-        return;
-    }
-    SuperviseService supervise{dirs(), logger_registry};
-    std::visit(supervise, node.service());
 }
