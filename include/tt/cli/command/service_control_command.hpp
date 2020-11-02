@@ -41,7 +41,6 @@ class ServiceControlCommand : public Command {
 public:
     ServiceControlCommand(args::Subparser &parser,
                           std::shared_ptr<GlobalOptions> common_options);
-    ~ServiceControlCommand() override = default;
 
     static constexpr inline const char *name = "svc";
     static constexpr inline const char *description = "Run service control";

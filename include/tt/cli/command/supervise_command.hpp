@@ -19,11 +19,6 @@
  */
 
 #pragma once
-
-#include <memory>
-#include <string>
-#include <vector>
-
 #include "args.hxx"
 
 #include "tt/cli/command/command.hpp"
@@ -34,7 +29,6 @@ class SuperviseCommand : public Command {
 public:
     SuperviseCommand(args::Subparser &parser,
                      std::shared_ptr<GlobalOptions> common_options);
-    ~SuperviseCommand() override = default;
 
     static constexpr inline const char *name = "supervise";
     static constexpr inline const char *description =

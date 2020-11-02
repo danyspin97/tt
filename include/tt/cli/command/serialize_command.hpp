@@ -35,9 +35,6 @@ class SerializeCommand : public Command {
 public:
     SerializeCommand(args::Subparser &parser,
                      std::shared_ptr<GlobalOptions> common_options);
-    ~SerializeCommand() override = default;
-    static auto Dispatch(args::Subparser &parser,
-                         std::shared_ptr<GlobalOptions> common_options) -> int;
 
     static constexpr inline const char *name = "serialize";
     static constexpr inline const char *description =

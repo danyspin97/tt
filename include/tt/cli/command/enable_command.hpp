@@ -20,15 +20,9 @@
 
 #pragma once
 
-#include <filesystem>
-#include <memory>
-#include <string>
-#include <vector>
-
 #include "args.hxx"
 
 #include "tt/cli/command/command.hpp"
-#include "tt/parser/service/services_parser.hpp"
 
 namespace tt::cli {
 
@@ -36,7 +30,6 @@ class EnableCommand : public Command {
 public:
     EnableCommand(args::Subparser &parser,
                   std::shared_ptr<GlobalOptions> common_options);
-    ~EnableCommand() override = default;
 
     static constexpr inline const char *name = "enable";
     static constexpr inline const char *description =
