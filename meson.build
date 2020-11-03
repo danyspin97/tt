@@ -37,6 +37,7 @@ endif
 add_global_arguments(spdlog_cxxargs, language: 'cpp')
 
 catch2_dep = dependency('catch2', required: get_option('tests'), fallback: ['catch2', 'catch2_dep'])
+json = dependency('nlohmann_json', fallback: ['nlohmann_json', 'nlohmann_json_dep'])
 nng_dep = dependency('nng', method : 'cmake', modules : ['nng::nng'], fallback: ['nng', 'nng_dep'])
 
 tiny_process_inc = include_directories('ext/tiny-process-library')

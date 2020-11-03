@@ -55,6 +55,7 @@ tt depends on the following libraries:
 - [boost](https://www.boost.org/) (build time only)
 - [catch2](https://github.com/catchorg/Catch2)* (only required for the tests)
 - [fmt](https://github.com/fmtlib/fmt)*
+- [json](https://github.com/nlohmann/json)*
 - [nng](https://github.com/nanomsg/nng)*
 - [spdlog](https://github.com/gabime/spdlog)*
 
