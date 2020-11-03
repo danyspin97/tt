@@ -51,7 +51,7 @@ template <typename T> constexpr void AddCommandToGroup(args::Group &group) {
 args::ArgumentParser parser("tt init/rc manager.");
 args::Group manage{(args::Group &)parser, "Manage services"};
 args::Group system_group((args::Group &)parser, "System commands");
-args::Group query(parser, "Query the status of the system");
+args::Group query((args::Group &)parser, "Query the status of the system");
 args::Group testing((args::Group &)parser, "Test services files");
 args::GlobalOptions global_options(parser, common_options->arguments());
 
