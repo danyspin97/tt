@@ -39,6 +39,7 @@ public:
 
     void ChangeStatusOfService(const std::string &service,
                                ServiceStatus new_status);
+    [[nodiscard]] auto GetUpServices() const -> std::vector<std::string>;
     [[nodiscard]] auto WaitOnServiceStart(const std::string &service) -> bool;
     void WaitOnServiceDown(const std::string &service);
 

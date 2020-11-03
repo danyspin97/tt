@@ -66,3 +66,16 @@ auto tt::ServiceStatusManager::WaitOnServiceStart(const std::string &service)
 void tt::ServiceStatusManager::WaitOnServiceDown(const std::string &service) {
     services_.at(service).second->Wait();
 }
+
+auto tt::ServiceStatusManager::GetUpServices() const
+    -> std::vector<std::string> {
+    std::shared_lock lock(mutex_);
+    std::vector<std::string> up_services;
+    for (const auto &entry : services_) {
+        if (entry.second.first == ServiceStatus::Up) {
+            up_services.push_back(entry.first);
+        }
+    }
+
+    return up_services;
+}
