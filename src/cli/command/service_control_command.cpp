@@ -29,6 +29,7 @@
 #include "tt/exception.hpp"                           // for Exception
 #include "tt/supervision/signal_handler.hpp" // for AddSignalsToSet, ...
 #include "tt/svc/service_manager.hpp"        // for ServiceManager
+#include "tt/utils/launch_async.hpp"         // for LaunchAsync
 
 namespace args {
 class Subparser;
@@ -58,7 +59,8 @@ auto tt::cli::ServiceControlCommand::Execute() -> int {
     // Start action listener
     std::thread(&ActionListener::Listen).detach();
 
-    service_manager.StartAllServices();
+    tt::LaunchAsync(
+        [&service_manager]() { service_manager.StartAllServices(); });
 
     WaitOnSignalSet(&set);
 
