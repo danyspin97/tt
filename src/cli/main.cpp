@@ -23,7 +23,8 @@
 #include <memory>   // for allocator, mak...
 #include <string>   // for string
 
-#include "args.hxx" // for ArgumentParser
+#include "args.hxx"       // for ArgumentParser
+#include "spdlog/async.h" // for init_thread_pool
 
 #include "tt/cli/command/command_dispatcher.hpp"      // for CommandDispatcher
 #include "tt/cli/command/disable_command.hpp"         // for DisableCommand
@@ -73,6 +74,8 @@ constexpr void InitCommands() {
 }
 
 auto main(int argc, char *argv[]) -> int {
+    spdlog::init_thread_pool(512, 1);
+
     InitCommands();
     try {
         parser.ParseCLI(argc, argv);
