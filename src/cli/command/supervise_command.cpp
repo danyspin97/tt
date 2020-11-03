@@ -48,10 +48,10 @@ tt::cli::SuperviseCommand::SuperviseCommand(
       filename_(parser, "filename", "Filename to read the longrun from") {}
 
 auto tt::cli::SuperviseCommand::Execute() -> int {
-    sigset_t set;
-    tt::AddSignalsToSet(kStopSignals, &set);
-    tt::AddSignalToSet(SIGCHLD, &set);
-    tt::MaskSignals(&set);
+    auto signal_set = GetEmptySignalSet();
+    AddSignalsToSet(kStopSignals, &signal_set);
+    AddSignalToSet(SIGCHLD, &signal_set);
+    MaskSignals(&signal_set);
 
     auto longrun = utils::Deserialize<Longrun>(args::get(filename_));
 
@@ -60,22 +60,11 @@ auto tt::cli::SuperviseCommand::Execute() -> int {
     LongrunSupervisor supervisor{std::move(longrun),
                                  logger_registry.GetLongrunLogger(name)};
 
-    std::thread([this, &supervisor, &set]() {
+    std::thread([&supervisor, &signal_set]() {
         // We don't want to wait on SIGCHLD
-        tt::RemoveSignalFromSet(SIGCHLD, &set);
-        // For some reasons we are receiving a spurius signal
-        while (true) {
-            // Wait until we receive a stop signal
-            auto s = tt::WaitOnSignalSet(&set);
-            for (auto sig : kStopSignals) {
-                if (s.si_signo == sig) {
-                    supervisor.Kill();
-                    break;
-                }
-            }
-            logger()->LogError("Received signal {}", s.si_signo);
-        }
+        RemoveSignalFromSet(SIGCHLD, &signal_set);
+        WaitOnSignalSet(&signal_set);
+        supervisor.Kill();
     }).detach();
-
     return supervisor.Run() ? 0 : 255;
 }

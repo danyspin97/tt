@@ -43,9 +43,9 @@ tt::cli::ServiceControlCommand::ServiceControlCommand(
     : Command(parser, std::move(common_options)) {}
 
 auto tt::cli::ServiceControlCommand::Execute() -> int {
-    sigset_t set;
-    AddSignalsToSet(kStopSignals, &set);
-    MaskSignals(&set);
+    auto signal_set = GetEmptySignalSet();
+    AddSignalsToSet(kStopSignals, &signal_set);
+    MaskSignals(&signal_set);
 
     auto graph_filename = GetGraphFilename(dirs());
     if (!std::filesystem::exists(graph_filename) ||
@@ -62,7 +62,8 @@ auto tt::cli::ServiceControlCommand::Execute() -> int {
     tt::LaunchAsync(
         [&service_manager]() { service_manager.StartAllServices(); });
 
-    WaitOnSignalSet(&set);
+    // Wait until we receive a stop signal
+    WaitOnSignalSet(&signal_set);
 
     service_manager.StopAllServices();
 

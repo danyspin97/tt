@@ -34,6 +34,12 @@ void tt::UnmaskSignals(sigset_t *set) {
     pthread_sigmask(SIG_UNBLOCK, set, nullptr);
 }
 
+auto tt::GetEmptySignalSet() -> sigset_t {
+    sigset_t set;
+    sigemptyset(&set);
+    return set;
+}
+
 auto tt::WaitOnSignalSet(sigset_t *signals) -> siginfo_t {
     siginfo_t signal_received;
     sigwaitinfo(signals, &signal_received);

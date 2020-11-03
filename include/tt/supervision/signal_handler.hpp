@@ -32,6 +32,8 @@ constexpr std::array<int, kStopSignalsSize> kStopSignals = {SIGINT, SIGTERM};
 void MaskSignals(sigset_t *set);
 void UnmaskSignals(sigset_t *set);
 
+auto GetEmptySignalSet() -> sigset_t;
+
 void AddSignalToSet(int signal, sigset_t *set);
 template <size_t N>
 void AddSignalsToSet(std::array<int, N> signals, sigset_t *set) {
