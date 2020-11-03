@@ -40,16 +40,29 @@ auto tt::ServiceNode::name() const -> const std::string & {
 
 auto tt::ServiceNode::service() const -> tt::Service { return service_; }
 
-void tt::ServiceNode::AddDependant() { dependants_++; }
+auto tt::ServiceNode::dependants() const -> const std::vector<std::string> & {
+    return dependants_;
+}
 
-auto tt::ServiceNode::HasDependants() const -> bool { return dependants_ != 0; }
+void tt::ServiceNode::AddDependant(const std::string &dependant_name) {
+    dependants_.push_back(dependant_name);
+}
 
-void tt::ServiceNode::RemoveDependant() { dependants_--; }
+auto tt::ServiceNode::HasDependants() const -> bool {
+    return !dependants_.empty();
+}
+
+void tt::ServiceNode::RemoveDependant(const std::string &dependant_name) {
+    dependants_.erase(
+        std::remove(dependants_.begin(), dependants_.end(), dependant_name));
+}
 
 void tt::ServiceNode::Dump(std::ostream &oss) const {
     oss << "Service: " << service_;
     oss << "\nService name: " << service_name_;
-    oss << "\nDependants: " << dependants_;
+    oss << "\nDependants: ";
+    std::copy(dependants_.begin(), dependants_.end(),
+              std::ostream_iterator<std::string>(oss, ", "));
 }
 
 auto operator<<(std::ostream &oss, const tt::ServiceNode &node)

@@ -45,10 +45,11 @@ public:
     auto operator==(const ServiceNode &node) const -> bool;
     [[nodiscard]] auto service() const -> Service;
     [[nodiscard]] auto name() const -> const std::string &;
+    [[nodiscard]] auto dependants() const -> const std::vector<std::string> &;
 
-    void AddDependant();
+    void AddDependant(const std::string &dependant_name);
     [[nodiscard]] auto HasDependants() const -> bool;
-    void RemoveDependant();
+    void RemoveDependant(const std::string &dependant_name);
 
     void Dump(std::ostream &oss) const;
 
@@ -80,11 +81,16 @@ private:
                                        serializer.object(oneshot);
                                    });
                 }});
-        serializer.value4b(dependants_);
+        serializer.container(
+            dependants_, dependants_.max_size(),
+            [](S &serializer, std::string &value) {
+                serializer.template text<sizeof(std::string::value_type),
+                                         std::string>(value, value.max_size());
+            });
     }
     Service service_;
     std::string service_name_;
-    uint32_t dependants_{0};
+    std::vector<std::string> dependants_;
 };
 
 } // namespace tt

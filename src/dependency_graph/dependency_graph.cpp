@@ -64,8 +64,9 @@ void tt::DependencyGraph::PopulateDependant(
     const std::vector<std::string> &services) {
     for (const auto &service_name : services) {
         const auto &node = GetNodeFromName(service_name);
-        ForEachDependencyOfNode(
-            node, [](auto &dep_node) { dep_node.AddDependant(); });
+        ForEachDependencyOfNode(node, [service_name](auto &dep_node) {
+            dep_node.AddDependant(service_name);
+        });
     }
 }
 
@@ -158,8 +159,9 @@ void tt::DependencyGraph::UpdateDependants() {
 }
 
 void tt::DependencyGraph::UpdateDependantOfNode(const ServiceNode &node) {
-    ForEachDependencyOfNode(node, [this](ServiceNode &dep_node) {
-        dep_node.RemoveDependant();
+    const auto &service_name = node.name();
+    ForEachDependencyOfNode(node, [this, service_name](ServiceNode &dep_node) {
+        dep_node.RemoveDependant(service_name);
         if (!IsNodeRequired(dep_node)) {
             UpdateDependantOfNode(dep_node);
         }
@@ -215,6 +217,11 @@ auto tt::DependencyGraph::GetActiveServices() const
                    std::back_inserter(services),
                    [](auto &pair) { return pair.first; });
     return services;
+}
+
+auto tt::DependencyGraph::GetDependantsOfService(
+    const std::string &service_name) -> const std::vector<std::string> & {
+    return GetNodeFromName(service_name).dependants();
 }
 
 auto tt::DependencyGraph::enabled_services() const
