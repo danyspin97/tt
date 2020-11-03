@@ -131,8 +131,8 @@ Credits also to:
 - [**@skarnet**](https://github.com/skarnet) for his work on
   [_s6_](https://skarnet.org/software/s6/) and his awesome explanations about
   UNIX inner workings and design
-- [**@obarun**(https://obarun.org) for his work on 66 and most of the ideas that
-  made the foundation of tt
+- [**@obarun**](https://obarun.org) for his work on 66 and most of the ideas
+  that made the foundation of tt
 
 ### Third-party libraries included
 
@@ -140,7 +140,7 @@ Credits also to:
 - [**bitsery**](https://github.com/fraillt/bitsery), binary serialization
   library
 - [**nngpp**](https://github.com/cwzx/nngpp), wrapper around
-  [_nanomsg-next-gen](https://github.com/nanomsg/nng) library
+  [_nanomsg-next-gen_](https://github.com/nanomsg/nng) library
 - [**tiny-process-library**](https://gitlab.com/eidheim/tiny-process-library/),
   to start and stop processess and read from stdin
   and stdout
