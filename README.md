@@ -128,12 +128,24 @@ Thanks to [@pac85](https://github.com/pac85) for its contributions and to all th
 
 Credits also to:
 
-- [@Taywee](https://github.com/Taywee) for its
-  [args](https://github.com/Taywee/args) library
-- [@fraillt](https://github.com/fraillt) for its
-  [bitsery](https://github.com/fraillt/bitsery) library
-- [@skarnet](https://github.com/skarnet) for his work on s6
-- [@obarun](https://obarun.org) for his work on 66
+- [**@skarnet**](https://github.com/skarnet) for his work on
+  [_s6_](https://skarnet.org/software/s6/) and his awesome explanations about
+  UNIX inner workings and design
+- [**@obarun**(https://obarun.org) for his work on 66 and most of the ideas that
+  made the foundation of tt
+
+### Third-party libraries included
+
+- [**args**](https://github.com/Taywee/args), command-line argument parser
+- [**bitsery**](https://github.com/fraillt/bitsery), binary serialization
+  library
+- [**nngpp**](https://github.com/cwzx/nngpp), wrapper around
+  [_nanomsg-next-gen](https://github.com/nanomsg/nng) library
+- [**tiny-process-library**](https://gitlab.com/eidheim/tiny-process-library/),
+  to start and stop processess and read from stdin
+  and stdout
+- [**xdgpp**](https://sr.ht/~danyspin97/xdgpp/), implementation of the
+  [_XDG Base Directory Specification_](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html)
 
 ## License
 
