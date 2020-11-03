@@ -14,6 +14,7 @@
 [![Sonar Violations (short format)](https://img.shields.io/sonar/violations/DanySpin97_tt?logo=sonarcloud&server=https%3A%2F%2Fsonarcloud.io&sonarVersion=7.9&style=flat-square)](https://sonarcloud.io/dashboard?id=DanySpin97_tt)
 [![Sonar Tech Debt](https://img.shields.io/sonar/tech_debt/DanySpin97_tt?logo=sonarcloud&server=https%3A%2F%2Fsonarcloud.io&style=flat-square)](https://sonarcloud.io/dashboard?id=DanySpin97_tt)
 [![CII Best Practices](https://img.shields.io/cii/summary/3935?style=flat-square)](https://bestpractices.coreinfrastructure.org/projects/3935)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDanySpin97%2Ftt.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FDanySpin97%2Ftt?ref=badge_shield)
 
 tt is an init and service manager inspired by
 [66](https://web.obarun.org/software/66),
@@ -139,3 +140,6 @@ Credits also to:
 tt is licensed under the [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) License - see [LICENSE](https://github.com/DanySpin97/tt/blob/master/LICENSE) file for more
 details.
 
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDanySpin97%2Ftt.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDanySpin97%2Ftt?ref=badge_large)
