@@ -14,13 +14,27 @@ pkg = import('pkgconfig')
 
 fmt_dep = dependency('fmt', fallback: ['fmt', 'fmt_dep'])
 spdlog_dep = dependency('spdlog', version : '>=1.4.2', fallback: ['spdlog', 'spdlog_dep'])
+
+spdlog_cxxargs = [
+    # Do not log thread id
+    '-DSPDLOG_NO_THREAD_ID',
+    # Log levels are set only at startup, no need for atomic levels
+    '-DSPDLOG_NO_ATOMIC_LEVELS',
+    # Do not let child inherit log file descriptors
+    '-DSPDLOG_PREVENT_CHILD_FD',
+    # Default logger is created inside CliLogger
+    '-DSPDLOG_DISABLE_DEFAULT_LOGGER',
+]
+
 # Check that both fmt and spdlog are either installed on the system
 # This way spdlog can use the external fmt instead of the embedded one
 is_system_fmt = fmt_dep.type_name() == 'pkgconfig'
 is_system_spdlog = spdlog_dep.type_name() == 'pkgconfig'
 if is_system_fmt and is_system_fmt
-    add_global_arguments('-DSPDLOG_FMT_EXTERNAL', language: 'cpp')
+    spdlog_cxxargs += '-DSPDLOG_FMT_EXTERNAL'
 endif
+
+add_global_arguments(spdlog_cxxargs, language: 'cpp')
 
 catch2_dep = dependency('catch2', required: get_option('tests'), fallback: ['catch2', 'catch2_dep'])
 nng_dep = dependency('nng', method : 'cmake', modules : ['nng::nng'], fallback: ['nng', 'nng_dep'])
