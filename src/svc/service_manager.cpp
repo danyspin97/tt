@@ -93,7 +93,7 @@ void tt::ServiceManager::StartService(const std::string &service_name,
         auto new_status = success ? ServiceStatus::Up : ServiceStatus::Down;
         status_manager_.ChangeStatusOfService(service_name, new_status);
     } else if constexpr (!std::is_same_v<std::decay_t<decltype(service)>,
-                                         Oneshot>) {
+                                         Longrun>) {
         const auto &longrun = std::get<Longrun>(service);
         LongrunSupervisorLauncher launcher{longrun, dirs_};
         launcher.Launch();
