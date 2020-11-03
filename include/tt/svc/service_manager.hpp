@@ -34,9 +34,11 @@ public:
     ServiceManager(DependencyGraph &&graph, std::shared_ptr<Dirs> dirs);
 
     void StartAllServices();
+    void StopAllServices();
 
 private:
     void StartService(const std::string &service_name, const Service &service);
+    void StopService(const std::string &service_name, const Service &service);
 
     DependencyGraph graph_;
     ServiceStatusManager status_manager_;

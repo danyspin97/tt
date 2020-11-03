@@ -47,6 +47,22 @@ void tt::ServiceManager::StartAllServices() {
     }
 }
 
+void tt::ServiceManager::StopAllServices() {
+    std::vector<std::future<void>> stop_scripts_running;
+    auto up_services = status_manager_.GetUpServices();
+    stop_scripts_running.reserve(up_services.size());
+    for (const auto &service_name : up_services) {
+        const auto &service = graph_.GetServiceByName(service_name);
+        stop_scripts_running.emplace_back(
+            std::async(std::launch::async, &tt::ServiceManager::StopService,
+                       this, service_name, service));
+    }
+
+    for (const auto &future : stop_scripts_running) {
+        future.wait();
+    }
+}
+
 void tt::ServiceManager::StartService(const std::string &service_name,
                                       const Service &service) {
     status_manager_.ChangeStatusOfService(service_name,
@@ -81,5 +97,22 @@ void tt::ServiceManager::StartService(const std::string &service_name,
         const auto &longrun = std::get<Longrun>(service);
         LongrunSupervisorLauncher launcher{longrun, dirs_};
         launcher.Launch();
+    }
+}
+
+void tt::ServiceManager::StopService(const std::string &service_name,
+                                     const Service &service) {
+    const auto &dependants = graph_.GetDependantsOfService(service_name);
+    for (const auto &dependant : dependants) {
+        status_manager_.WaitOnServiceDown(dependant);
+    }
+
+    if constexpr (!std::is_same_v<std::decay_t<decltype(service)>, Oneshot>) {
+        const auto &oneshot = std::get<Oneshot>(service);
+        OneshotSupervisor supervisor{
+            oneshot, logger_registry_.GetOneshotLogger(service_name)};
+        supervisor.Stop();
+    } else if constexpr (!std::is_same_v<std::decay_t<decltype(service)>,
+                                         Longrun>) {
     }
 }

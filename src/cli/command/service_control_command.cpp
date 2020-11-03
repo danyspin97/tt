@@ -62,5 +62,7 @@ auto tt::cli::ServiceControlCommand::Execute() -> int {
 
     WaitOnSignalSet(&set);
 
+    service_manager.StopAllServices();
+
     return 0;
 }
