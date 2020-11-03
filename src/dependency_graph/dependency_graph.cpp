@@ -219,6 +219,12 @@ auto tt::DependencyGraph::GetActiveServices() const
     return services;
 }
 
+auto tt::DependencyGraph::GetServiceByName(const std::string &name)
+    -> const Service & {
+    const auto &node = GetNodeFromName(name);
+    return node.service();
+}
+
 auto tt::DependencyGraph::GetDependantsOfService(
     const std::string &service_name) -> const std::vector<std::string> & {
     return GetNodeFromName(service_name).dependants();

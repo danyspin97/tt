@@ -48,6 +48,8 @@ public:
     void AddServices(const std::vector<std::string> &services_to_enable,
                      const std::vector<tt::Service> &services);
     [[nodiscard]] auto GetActiveServices() const -> std::vector<std::string>;
+    [[nodiscard]] auto GetServiceByName(const std::string &name)
+        -> const Service &;
     [[nodiscard]] auto GetDependantsOfService(const std::string &service_name)
         -> const std::vector<std::string> &;
     [[nodiscard]] auto HasService(const std::string &service) const -> bool;
