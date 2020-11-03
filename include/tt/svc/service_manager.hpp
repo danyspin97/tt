@@ -25,7 +25,8 @@
 #include "tt/data/service.hpp"                      // for Service
 #include "tt/dependency_graph/dependency_graph.hpp" // for DependencyGraph
 #include "tt/log/service_logger_registry.hpp"       // for ServiceLoggerRegistry
-#include "tt/svc/service_status_manager.hpp"        // for ServiceStatusManager
+#include "tt/supervision/longrun_supervisor_launcher.hpp" // for LongrunSup...
+#include "tt/svc/service_status_manager.hpp" // for ServiceStatusManager
 
 namespace tt {
 
@@ -45,6 +46,7 @@ private:
     std::shared_ptr<Dirs> dirs_;
     // ServiceLoggerRegistry needs dirs to construct
     ServiceLoggerRegistry logger_registry_;
+    LongrunSupervisorLauncher longrun_launcher_;
 };
 
 } // namespace tt

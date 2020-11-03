@@ -44,15 +44,22 @@
 #include "tt/utils/serialize.hpp"
 
 tt::LongrunSupervisorLauncher::LongrunSupervisorLauncher(
-    const Longrun &longrun, const std::shared_ptr<Dirs> &dirs)
-    : longrun_(longrun), filename_(dirs->supervisedir() / longrun_.name()) {
-    utils::Serialize(longrun, filename_);
-}
+    const std::shared_ptr<Dirs> &dirs)
+    : dirs_(dirs) {}
 
-void tt::LongrunSupervisorLauncher::Launch() {
-    std::string execute{"tt supervise " + filename_.string()};
+void tt::LongrunSupervisorLauncher::Launch(const Longrun &longrun) {
+    auto filename = dirs_->supervisedir() / longrun.name();
+    utils::Serialize(longrun, filename);
+    std::string execute{"tt supervise " + filename.string()};
     PathScriptBuilder builder;
     tt::Environment env;
     auto command = builder.script(execute, env);
-    TinyProcessLib::Process supervise{command};
+    longrun_supervisors_.emplace(longrun.name(), command);
+}
+
+void tt::LongrunSupervisorLauncher::Close(const std::string &service_name) {
+    auto &process = longrun_supervisors_.at(service_name);
+    process.signal(SIGINT);
+    // Wait for it to close
+    process.get_exit_status();
 }

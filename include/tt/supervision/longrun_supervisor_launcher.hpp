@@ -20,11 +20,12 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include <map>    // for map
+#include <string> // for string
 
-#include "tt/data/service.hpp"
-#include "tt/supervision/types.hpp"
+#include <tiny-process-library/process.hpp> // for Process
+
+#include "tt/data/service.hpp" // for Service
 
 namespace tt {
 
@@ -32,14 +33,14 @@ class Dirs;
 
 class LongrunSupervisorLauncher {
 public:
-    LongrunSupervisorLauncher(const Longrun &longrun,
-                              const std::shared_ptr<Dirs> &dirs);
-    void Launch();
+    explicit LongrunSupervisorLauncher(const std::shared_ptr<Dirs> &dirs);
+
+    void Launch(const Longrun &longrun);
+    void Close(const std::string &service_name);
 
 private:
-    Longrun longrun_;
-    std::vector<const char *> environment_;
-    std::filesystem::path filename_;
+    std::shared_ptr<Dirs> dirs_;
+    std::map<std::string, TinyProcessLib::Process> longrun_supervisors_;
 };
 
 } // namespace tt

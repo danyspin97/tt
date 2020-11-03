@@ -30,7 +30,8 @@
 tt::ServiceManager::ServiceManager(DependencyGraph &&graph,
                                    std::shared_ptr<Dirs> dirs)
     : graph_(std::move(graph)), status_manager_(graph_.GetActiveServices()),
-      dirs_(std::move(dirs)), logger_registry_(dirs_) {}
+      dirs_(std::move(dirs)), logger_registry_(dirs_),
+      longrun_launcher_(dirs_) {}
 
 void tt::ServiceManager::StartAllServices() {
     std::vector<std::future<void>> start_scripts_running;
@@ -95,8 +96,7 @@ void tt::ServiceManager::StartService(const std::string &service_name,
     } else if constexpr (!std::is_same_v<std::decay_t<decltype(service)>,
                                          Longrun>) {
         const auto &longrun = std::get<Longrun>(service);
-        LongrunSupervisorLauncher launcher{longrun, dirs_};
-        launcher.Launch();
+        longrun_launcher_.Launch(longrun);
     }
 }
 
@@ -114,5 +114,6 @@ void tt::ServiceManager::StopService(const std::string &service_name,
         supervisor.Stop();
     } else if constexpr (!std::is_same_v<std::decay_t<decltype(service)>,
                                          Longrun>) {
+        longrun_launcher_.Close(service_name);
     }
 }
