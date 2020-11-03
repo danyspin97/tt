@@ -87,9 +87,9 @@ void tt::ServiceManager::StartService(const std::string &service_name,
     }
     if constexpr (!std::is_same_v<std::decay_t<decltype(service)>, Oneshot>) {
         const auto &oneshot = std::get<Oneshot>(service);
-        OneshotSupervisor spawn{
+        OneshotSupervisor supervisor{
             oneshot, logger_registry_.GetOneshotLogger(service_name)};
-        bool success = spawn.Start();
+        bool success = supervisor.Start();
         auto new_status = success ? ServiceStatus::Up : ServiceStatus::Down;
         status_manager_.ChangeStatusOfService(service_name, new_status);
     } else if constexpr (!std::is_same_v<std::decay_t<decltype(service)>,
