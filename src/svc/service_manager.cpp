@@ -86,18 +86,24 @@ void tt::ServiceManager::StartService(const std::string &service_name,
                                               ServiceStatus::Down);
         return;
     }
-    if constexpr (!std::is_same_v<std::decay_t<decltype(service)>, Oneshot>) {
-        const auto &oneshot = std::get<Oneshot>(service);
-        OneshotSupervisor supervisor{
-            oneshot, logger_registry_.GetOneshotLogger(service_name)};
-        bool success = supervisor.Start();
-        auto new_status = success ? ServiceStatus::Up : ServiceStatus::Down;
-        status_manager_.ChangeStatusOfService(service_name, new_status);
-    } else if constexpr (!std::is_same_v<std::decay_t<decltype(service)>,
-                                         Longrun>) {
-        const auto &longrun = std::get<Longrun>(service);
-        longrun_launcher_.Launch(longrun);
-    }
+    std::visit(
+        [this, &service_name](const auto &service) {
+            if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
+                                         Oneshot>) {
+                const auto &oneshot = static_cast<Oneshot>(service);
+                OneshotSupervisor supervisor{
+                    oneshot, logger_registry_.GetOneshotLogger(service_name)};
+                bool success = supervisor.Start();
+                auto new_status =
+                    success ? ServiceStatus::Up : ServiceStatus::Down;
+                status_manager_.ChangeStatusOfService(service_name, new_status);
+            } else if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
+                                                Longrun>) {
+                const auto &longrun = static_cast<Longrun>(service);
+                longrun_launcher_.Launch(longrun);
+            }
+        },
+        service);
 }
 
 void tt::ServiceManager::StopService(const std::string &service_name,
@@ -107,13 +113,18 @@ void tt::ServiceManager::StopService(const std::string &service_name,
         status_manager_.WaitOnServiceDown(dependant);
     }
 
-    if constexpr (!std::is_same_v<std::decay_t<decltype(service)>, Oneshot>) {
-        const auto &oneshot = std::get<Oneshot>(service);
-        OneshotSupervisor supervisor{
-            oneshot, logger_registry_.GetOneshotLogger(service_name)};
-        supervisor.Stop();
-    } else if constexpr (!std::is_same_v<std::decay_t<decltype(service)>,
-                                         Longrun>) {
-        longrun_launcher_.Close(service_name);
-    }
+    std::visit(
+        [this, &service_name](const auto &service) {
+            if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
+                                         Oneshot>) {
+                const auto &oneshot = static_cast<Oneshot>(service);
+                OneshotSupervisor supervisor{
+                    oneshot, logger_registry_.GetOneshotLogger(service_name)};
+                supervisor.Stop();
+            } else if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
+                                                Longrun>) {
+                longrun_launcher_.Close(service_name);
+            }
+        },
+        service);
 }
