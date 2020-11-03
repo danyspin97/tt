@@ -46,5 +46,13 @@ TEST_CASE("Serialize and Deserialize") {
         tt::utils::Deserialize<tt::DependencyGraph>(graph_test_file);
 
     CHECK(graph.enabled_services() == deserialized_graph.enabled_services());
-    CHECK(graph.nodes() == deserialized_graph.nodes());
+    REQUIRE(graph.services().size() == deserialized_graph.services().size());
+    for (size_t i = 0; i < graph.services().size(); i++) {
+        // Quickly check if the names of the services are the same
+        // Since we are using a std::vector of std::variant of
+        // std::reference_wrapper of Oneshot, this code has become dirty
+        CHECK(std::get<tt::Oneshot>(graph.services().at(i).get()).name() ==
+              std::get<tt::Oneshot>(deserialized_graph.services().at(i).get())
+                  .name());
+    }
 }

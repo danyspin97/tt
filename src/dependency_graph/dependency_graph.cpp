@@ -229,7 +229,11 @@ auto tt::DependencyGraph::enabled_services() const
     return enabled_services_;
 }
 
-auto tt::DependencyGraph::nodes() const
-    -> const std::vector<tt::ServiceNode> & {
-    return nodes_;
+auto tt::DependencyGraph::services() const
+    -> std::vector<std::reference_wrapper<const tt::Service>> {
+    std::vector<std::reference_wrapper<const tt::Service>> services;
+    for (const auto &node : nodes_) {
+        services.emplace_back(std::cref(node.service()));
+    }
+    return services;
 }

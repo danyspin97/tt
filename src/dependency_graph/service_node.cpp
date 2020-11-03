@@ -38,7 +38,9 @@ auto tt::ServiceNode::name() const -> const std::string & {
     return service_name_;
 }
 
-auto tt::ServiceNode::service() const -> tt::Service { return service_; }
+auto tt::ServiceNode::service() const -> const tt::Service & {
+    return service_;
+}
 
 auto tt::ServiceNode::dependants() const -> const std::vector<std::string> & {
     return dependants_;

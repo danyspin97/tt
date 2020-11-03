@@ -42,7 +42,8 @@ class DependencyGraph {
 public:
     [[nodiscard]] auto enabled_services() const
         -> const std::set<std::string> &;
-    [[nodiscard]] auto nodes() const -> const std::vector<ServiceNode> &;
+    [[nodiscard]] auto services() const
+        -> std::vector<std::reference_wrapper<const Service>>;
 
     void AddServices(const std::vector<std::string> &services_to_enable,
                      const std::vector<tt::Service> &services);

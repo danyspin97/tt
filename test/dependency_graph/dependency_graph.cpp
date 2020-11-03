@@ -37,7 +37,7 @@ TEST_CASE("DependencyChecker") {
 
         REQUIRE_NOTHROW(graph.RemoveServices({"mount-fstab"}));
 
-        CHECK(graph.nodes().empty());
+        CHECK(graph.services().empty());
         CHECK(graph.enabled_services().empty());
     }
 

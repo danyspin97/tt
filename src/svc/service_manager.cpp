@@ -21,6 +21,7 @@
 #include "tt/svc/service_manager.hpp"
 
 #include "tt/dependency_graph/dependency_reader.hpp" // for DependencyReader
+#include "tt/dependency_graph/utils.hpp"             // for GetName
 #include "tt/supervision/longrun_supervisor_launcher.hpp" // for LongrunSu...
 #include "tt/supervision/oneshot_supervisor.hpp" // for OneshotSupervisor
 #include "tt/utils/launch_async.hpp"             // for LaunchAsync
@@ -32,9 +33,10 @@ tt::ServiceManager::ServiceManager(DependencyGraph &&graph,
 
 void tt::ServiceManager::StartAllServices() {
     // TODO: Calculate an optimal order of services to start
-    for (const auto &node : graph_.nodes()) {
+    for (const auto &service : graph_.services()) {
+        const auto &service_name = std::visit(tt::GetName, service.get());
         LaunchAsync(
-            [this, node]() { StartService(node.name(), node.service()); });
+            [this, node]() { StartService(service_name, service); });
     }
 }
 
