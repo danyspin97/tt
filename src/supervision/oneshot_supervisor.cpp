@@ -35,7 +35,7 @@ tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot,
                                          OneshotLogger &&logger)
     : oneshot_(std::move(oneshot)), logger_(std::move(logger)) {}
 
-auto tt::OneshotSupervisor::Run() const -> bool {
+auto tt::OneshotSupervisor::Start() const -> bool {
     const auto &name = oneshot_.name();
     logger_.Start();
     ScriptSupervisor spawn_start{name, oneshot_.start(), oneshot_.environment(),
@@ -54,4 +54,15 @@ auto tt::OneshotSupervisor::Run() const -> bool {
         spawn_stop.ExecuteScript();
     }
     return false;
+}
+
+void tt::OneshotSupervisor::Stop() const {
+    if (!oneshot_.stop()) {
+        return;
+    }
+    const auto &name = oneshot_.name();
+    ScriptSupervisor supervisor{name, oneshot_.stop().value(),
+                                oneshot_.environment(),
+                                logger_.GetScriptLogger()};
+    supervisor.ExecuteScript();
 }
