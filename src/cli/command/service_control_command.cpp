@@ -57,7 +57,7 @@ auto tt::cli::ServiceControlCommand::Execute() -> int {
     ServiceManager service_manager(std::move(graph), dirs());
 
     // Start action listener
-    std::thread(&ActionListener::Listen).detach();
+    std::thread(&ActionListener::Listen, dirs()).detach();
 
     tt::LaunchAsync(
         [&service_manager]() { service_manager.StartAllServices(); });

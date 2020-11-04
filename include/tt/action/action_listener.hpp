@@ -20,11 +20,15 @@
 
 #pragma once
 
+#include <memory>
+
 namespace tt {
+
+class Dirs;
 
 class ActionListener {
 public:
-    [[noreturn]] static void Listen();
+    [[noreturn]] static void Listen(std::shared_ptr<Dirs> dirs);
 };
 
 } // namespace tt

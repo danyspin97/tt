@@ -39,15 +39,18 @@
 #include "tt/log/script_logger.hpp"                        // for ScriptLogger
 #include "tt/net/client.hpp"                               // for Client
 #include "tt/net/socket.hpp"                               // for Socket
+#include "tt/path/dirs.hpp"                                // for Dirs
 #include "tt/supervision/long_lived_script_supervisor.hpp" // for LongLived...
 #include "tt/supervision/script_supervisor.hpp"            // for ScriptSup...
 #include "tt/supervision/signal_handler.hpp"               // for Supervisi...
 
 tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
-                                         LongrunLogger &&logger)
+                                         LongrunLogger &&logger,
+                                         std::shared_ptr<Dirs> dirs)
     : longrun_(std::move(longrun)), logger_(std::move(logger)),
       run_supervisor_(longrun_.name(), longrun_.run(), longrun_.environment(),
-                      logger_.GetScriptLogger()) {}
+                      logger_.GetScriptLogger()),
+      socket_path_(dirs->livedir() / "tt-ipc.socket") {}
 
 auto tt::LongrunSupervisor::Run() -> bool {
     sigset_t set;
@@ -103,8 +106,7 @@ void tt::LongrunSupervisor::ExecuteFinishScript() const {
 }
 
 void tt::LongrunSupervisor::NotifyStatus(ScriptStatus status) const {
-    net::Client client(net::Socket::Protocol::TCP, "localhost", 8888);
-    client.Connect();
+    net::Client client(socket_path_);
 
     bool succeded = status == ScriptStatus::Success;
     NotifyUpAction action(longrun_.name(), succeded);

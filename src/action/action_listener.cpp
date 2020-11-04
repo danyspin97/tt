@@ -30,10 +30,10 @@
 #include "tt/action/action_factory.hpp" // for ActionFactory
 #include "tt/net/server.hpp"            // for Server
 #include "tt/net/socket.hpp"            // for Socket::Protocol, Socket::Pr...
+#include "tt/path/dirs.hpp"             // for Dirs
 
-void tt::ActionListener::Listen() {
-    net::Server server{net::Server::Protocol::TCP, "localhost", 8888};
-    server.Listen();
+void tt::ActionListener::Listen(std::shared_ptr<Dirs> dirs) {
+    net::Server server{dirs->livedir() / "tt-ipc.socket"};
 
     for (;;) {
         auto buffer = server.ReceiveMessage();

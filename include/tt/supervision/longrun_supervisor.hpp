@@ -29,9 +29,12 @@
 
 namespace tt {
 
+class Dirs;
+
 class LongrunSupervisor {
 public:
-    LongrunSupervisor(Longrun &&longrun, LongrunLogger &&logger);
+    LongrunSupervisor(Longrun &&longrun, LongrunLogger &&logger,
+                      std::shared_ptr<Dirs> dirs);
     void Kill();
     // Returns if the longrun ran as success
     auto Run() -> bool;
@@ -47,6 +50,7 @@ private:
     LongrunLogger logger_;
     LongLivedScriptSupervisor run_supervisor_;
     std::atomic<bool> should_run_again_ = true;
+    std::filesystem::path socket_path_;
 };
 
 } // namespace tt

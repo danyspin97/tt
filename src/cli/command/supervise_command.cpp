@@ -57,8 +57,8 @@ auto tt::cli::SuperviseCommand::Execute() -> int {
 
     ServiceLoggerRegistry logger_registry{dirs()};
     auto name = longrun.name();
-    LongrunSupervisor supervisor{std::move(longrun),
-                                 logger_registry.GetLongrunLogger(name)};
+    LongrunSupervisor supervisor{
+        std::move(longrun), logger_registry.GetLongrunLogger(name), dirs()};
 
     std::thread([&supervisor, &signal_set]() {
         // We don't want to wait on SIGCHLD
