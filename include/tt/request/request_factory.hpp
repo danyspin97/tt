@@ -18,19 +18,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/action/notify_up_action.hpp"
+#pragma once
 
-#include <utility> // for move
+#include <memory> // for unique_ptr
+#include <string> // for string
 
-#include "tt/svc/service_status_manager.hpp" // for ServiceStatusMa...
+namespace tt {
 
-tt::NotifyUpAction::NotifyUpAction(std::string service, bool succeded)
-    : service_(std::move(service)), succeeded_(succeded) {
-    name("notify_up");
-}
+class Request;
 
-auto tt::NotifyUpAction::service() const -> std::string { return service_; }
+class RequestFactory {
+public:
+    static auto GetRequestFromBuffer(const std::string &buffer)
+        -> std::unique_ptr<Request>;
+};
 
-auto tt::NotifyUpAction::succeded() const -> bool { return succeeded_; }
-
-void tt::NotifyUpAction::Apply() {}
+} // namespace tt

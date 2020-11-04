@@ -20,20 +20,28 @@
 
 #pragma once
 
-#include <sstream> // for stringstream
-#include <string>  // for string
+#include <string>
 
-#include "msgpack.hpp" // IWYU pragma: keep
+#include "msgpack.hpp"
 
 namespace tt {
 
-class Action;
+class Request {
+public:
+    virtual ~Request() = default;
+    virtual void Apply() = 0;
 
-template <typename T> auto PackAction(const T &action) -> std::string {
-    static_assert(std::is_base_of_v<Action, T>, "T must derive from Action");
-    std::stringstream stream;
-    msgpack::pack(stream, action);
-    return stream.str();
-}
+    [[nodiscard]] auto name() const noexcept -> const std::string & {
+        return name_;
+    }
+
+    MSGPACK_DEFINE_MAP(name_)
+
+protected:
+    void name(std::string name) noexcept { name_ = std::move(name); }
+
+private:
+    std::string name_;
+};
 
 } // namespace tt

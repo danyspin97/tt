@@ -45,6 +45,8 @@ void tt::cli::Command::Init(const std::string &name) {
 auto tt::cli::Command::Run(const std::string &name) -> int try {
     Init(name);
     return Execute();
+    // all std::execption should be caught and thrown as tt::Exception with
+    // a meaningful message
 } catch (const tt::Exception &e) {
     logger_->LogError("{}", e.msg());
     return 255;

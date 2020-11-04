@@ -20,21 +20,20 @@
 
 #pragma once
 
-#include <string>
+#include <sstream> // for stringstream
+#include <string>  // for string
 
-#include "msgpack.hpp"
-
-#include "tt/action/adapter/notify_up_action_adapter.hpp"
+#include "msgpack.hpp" // IWYU pragma: keep
 
 namespace tt {
 
-template <typename T> auto UnpackAction(const std::string &buffer) -> T {
-    static_assert(std::is_base_of_v<Action, T>, "T must derive from Action");
-    msgpack::object_handle result;
-    msgpack::unpack(result, buffer.c_str(), buffer.size());
-    msgpack::object obj(result.get());
+class Request;
 
-    return obj.as<T>();
+template <typename T> auto PackRequest(const T &action) -> std::string {
+    static_assert(std::is_base_of_v<Request, T>, "T must derive from Request");
+    std::stringstream stream;
+    msgpack::pack(stream, action);
+    return stream.str();
 }
 
 } // namespace tt

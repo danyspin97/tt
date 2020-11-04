@@ -32,14 +32,14 @@
 
 #include "msgpack.hpp" // IWYU pragma: keep
 
-#include "tt/action/notify_up_action.hpp"                  // for NotifyUpA...
-#include "tt/action/pack_action.hpp"                       // for PackAction
 #include "tt/data/long_lived_script.hpp"                   // for LongLived...
 #include "tt/data/script.hpp"                              // for Script
 #include "tt/log/script_logger.hpp"                        // for ScriptLogger
 #include "tt/net/client.hpp"                               // for Client
 #include "tt/net/socket.hpp"                               // for Socket
 #include "tt/path/dirs.hpp"                                // for Dirs
+#include "tt/request/notify_up_request.hpp"                // for NotifyUpA...
+#include "tt/request/pack_request.hpp"                     // for PackRequest
 #include "tt/supervision/long_lived_script_supervisor.hpp" // for LongLived...
 #include "tt/supervision/script_supervisor.hpp"            // for ScriptSup...
 #include "tt/supervision/signal_handler.hpp"               // for Supervisi...
@@ -109,8 +109,8 @@ void tt::LongrunSupervisor::NotifyStatus(ScriptStatus status) const {
     net::Client client(socket_path_);
 
     bool succeded = status == ScriptStatus::Success;
-    NotifyUpAction action(longrun_.name(), succeded);
-    auto s = PackAction(action);
+    NotifyUpRequest action(longrun_.name(), succeded);
+    auto s = PackRequest(action);
     client.SendMessage(s);
 }
 

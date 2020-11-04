@@ -18,7 +18,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/action/action_listener.hpp"
+#include "tt/request/request_listener.hpp"
 
 #include <cxxabi.h>     // for __forced_unwind
 #include <future>       // for async, launch, launch::async
@@ -26,22 +26,23 @@
 #include <string>       // for string
 #include <system_error> // for system_error
 
-#include "tt/action/action.hpp"         // for Action
-#include "tt/action/action_factory.hpp" // for ActionFactory
-#include "tt/net/server.hpp"            // for Server
-#include "tt/net/socket.hpp"            // for Socket::Protocol, Socket::Pr...
-#include "tt/path/dirs.hpp"             // for Dirs
+#include "tt/net/server.hpp"              // for Server
+#include "tt/net/socket.hpp"              // for Socket::Protocol, Socket::Pr...
+#include "tt/path/dirs.hpp"               // for Dirs
+#include "tt/request/request.hpp"         // for Request
+#include "tt/request/request_factory.hpp" // for RequestFactory
 
-void tt::ActionListener::Listen(std::shared_ptr<Dirs> dirs) {
+void tt::RequestListener::Listen(std::shared_ptr<Dirs> dirs) {
     net::Server server{dirs->livedir() / "tt-ipc.socket"};
 
     for (;;) {
         auto buffer = server.ReceiveMessage();
-        auto action_ptr = ActionFactory::GetActionFromBuffer(buffer);
+        auto action_ptr = RequestFactory::GetRequestFromBuffer(buffer);
         if (!action_ptr) {
             continue;
         }
 
-        (void)std::async(std::launch::async, &Action::Apply, action_ptr.get());
+        (void)std::async(std::launch::async, &tt::Request::Apply,
+                         action_ptr.get());
     }
 }

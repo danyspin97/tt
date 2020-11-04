@@ -18,21 +18,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/action/notify_up_action.hpp"
+#include "tt/request/notify_up_request.hpp"
 
-#include "catch2/catch.hpp" // for AssertionHandler, ope...
+#include <utility> // for move
 
-#include "tt/action/pack_action.hpp"   // for PackAction
-#include "tt/action/unpack_action.hpp" // for UnpackAction
+#include "tt/svc/service_status_manager.hpp" // for ServiceStatusMa...
 
-TEST_CASE("NotifyUpAction") {
-    SECTION("Convert to msgpack and back") {
-        tt::NotifyUpAction action("dummy", true);
-        auto buffer = tt::PackAction(action);
-
-        auto deserialized_action = tt::UnpackAction<tt::NotifyUpAction>(buffer);
-        CHECK(deserialized_action.name() == "notify_up");
-        CHECK(deserialized_action.service() == action.service());
-        CHECK(deserialized_action.succeded());
-    }
+tt::NotifyUpRequest::NotifyUpRequest(std::string service, bool succeded)
+    : service_(std::move(service)), succeeded_(succeded) {
+    name("notify_up");
 }
+
+auto tt::NotifyUpRequest::service() const -> std::string { return service_; }
+
+auto tt::NotifyUpRequest::succeded() const -> bool { return succeeded_; }
+
+void tt::NotifyUpRequest::Apply() {}

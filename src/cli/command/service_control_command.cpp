@@ -23,7 +23,7 @@
 #include <filesystem> // for exists, is_reg...
 #include <thread>     // for thread
 
-#include "tt/action/action_listener.hpp"              // for ActionListener
+#include "tt/request/request_listener.hpp"              // for RequestListener
 #include "tt/dependency_graph/dependency_graph.hpp"   // for DependencyGraph
 #include "tt/dependency_graph/get_graph_filename.hpp" // for GetGraphFilename
 #include "tt/exception.hpp"                           // for Exception
@@ -57,7 +57,7 @@ auto tt::cli::ServiceControlCommand::Execute() -> int {
     ServiceManager service_manager(std::move(graph), dirs());
 
     // Start action listener
-    std::thread(&ActionListener::Listen, dirs()).detach();
+    std::thread(&RequestListener::Listen, dirs()).detach();
 
     tt::LaunchAsync(
         [&service_manager]() { service_manager.StartAllServices(); });

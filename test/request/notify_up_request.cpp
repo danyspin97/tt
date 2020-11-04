@@ -18,31 +18,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "tt/request/notify_up_request.hpp"
 
-#include <string> // for string
+#include "catch2/catch.hpp" // for AssertionHandler, ope...
 
-#include "msgpack.hpp" // IWYU pragma: keep
+#include "tt/request/pack_request.hpp"   // for PackRequest
+#include "tt/request/unpack_request.hpp" // for UnpackRequest
 
-#include "tt/action/action.hpp" // for Action
+TEST_CASE("NotifyUpRequest") {
+    SECTION("Convert to msgpack and back") {
+        tt::NotifyUpRequest action("dummy", true);
+        auto buffer = tt::PackRequest(action);
 
-namespace tt {
-
-class NotifyUpAction : public Action {
-public:
-    explicit NotifyUpAction(std::string service, bool succeded);
-    NotifyUpAction() = delete;
-
-    [[nodiscard]] auto service() const -> std::string;
-    [[nodiscard]] auto succeded() const -> bool;
-
-    void Apply() override;
-
-    MSGPACK_DEFINE_MAP(MSGPACK_BASE_MAP(Action), service_, succeeded_)
-
-private:
-    std::string service_;
-    bool succeeded_;
-};
-
-} // namespace tt
+        auto deserialized_action = tt::UnpackRequest<tt::NotifyUpRequest>(buffer);
+        CHECK(deserialized_action.name() == "notify_up");
+        CHECK(deserialized_action.service() == action.service());
+        CHECK(deserialized_action.succeded());
+    }
+}

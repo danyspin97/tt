@@ -18,34 +18,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/action/action_factory.hpp"
+#include "tt/request/request_factory.hpp"
 
 #include <string> // for string, operator==
 
 #include "msgpack.hpp" // IWYU pragma: keep
 
-#include "tt/action/action.hpp"                           // for Action
-#include "tt/action/adapter/notify_up_action_adapter.hpp" // IWYU pragma: keep
-#include "tt/action/notify_up_action.hpp"                 // for NotifyUpAction
-#include "tt/exception.hpp"                               // for Exception
+#include "tt/exception.hpp"                                 // for Exception
+#include "tt/request/adapter/notify_up_request_adapter.hpp" // IWYU pragma: keep
+#include "tt/request/notify_up_request.hpp" // for NotifyUpRequest
+#include "tt/request/request.hpp"           // for Request
 
-auto tt::ActionFactory::GetActionFromBuffer(const std::string &buffer)
-    -> std::unique_ptr<Action> try {
+auto tt::RequestFactory::GetRequestFromBuffer(const std::string &buffer)
+    -> std::unique_ptr<Request> try {
     msgpack::object_handle result;
     msgpack::unpack(result, buffer.data(), buffer.size());
     msgpack::object obj(result.get());
 
-    // ComplexAction:
-    //     Action:
+    // ComplexRequest:
+    //     Request:
     //         name_: "complex_action"
     //     data:       ...
     //     other_data: ...
     std::string action_name =
         obj.via.map.ptr[0].val.via.map.ptr[0].val.as<std::string>();
 
-    std::unique_ptr<Action> action_ptr = nullptr;
+    std::unique_ptr<Request> action_ptr = nullptr;
     if (action_name == "notify_up") {
-        action_ptr = std::make_unique<NotifyUpAction>(obj.as<NotifyUpAction>());
+        action_ptr = std::make_unique<NotifyUpRequest>(obj.as<NotifyUpRequest>());
     }
     return action_ptr;
 } catch (const msgpack::type_error & /*e*/) {

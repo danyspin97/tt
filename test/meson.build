@@ -45,11 +45,11 @@ tt_test_src = files(
 # ]
 tt_test_multiple_src = []
 
-subdir('action')
 subdir('dependency_graph')
 subdir('log')
 subdir('net')
 subdir('parser')
+subdir('request')
 subdir('script')
 subdir('supervision')
 subdir('utils')

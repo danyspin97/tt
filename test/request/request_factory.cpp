@@ -18,17 +18,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "tt/request/request_factory.hpp"
 
-#include <memory>
+#include "catch2/catch.hpp" // for operator""_catch_sr
 
-namespace tt {
+#include "tt/request/notify_up_request.hpp" // for NotifyUpRequest
+#include "tt/request/pack_request.hpp"      // for PackRequest
+#include "tt/request/request.hpp"           // for Request
 
-class Dirs;
+TEST_CASE("RequestFactory") {
+    SECTION("NotifyUpRequest") {
+        tt::NotifyUpRequest action("dummy", true);
+        auto buffer = tt::PackRequest(action);
 
-class ActionListener {
-public:
-    [[noreturn]] static void Listen(std::shared_ptr<Dirs> dirs);
-};
+        auto deserialized_action =
+            tt::RequestFactory::GetRequestFromBuffer(buffer);
 
-} // namespace tt
+        REQUIRE(deserialized_action);
+        CHECK(deserialized_action->name() == "notify_up");
+        CHECK_NOTHROW(
+            dynamic_cast<tt::NotifyUpRequest *>(deserialized_action.get()));
+    }
+}

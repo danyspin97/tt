@@ -20,28 +20,15 @@
 
 #pragma once
 
-#include <string>
-
-#include "msgpack.hpp"
+#include <memory>
 
 namespace tt {
 
-class Action {
+class Dirs;
+
+class RequestListener {
 public:
-    virtual ~Action() = default;
-    virtual void Apply() = 0;
-
-    [[nodiscard]] auto name() const noexcept -> const std::string & {
-        return name_;
-    }
-
-    MSGPACK_DEFINE_MAP(name_)
-
-protected:
-    void name(std::string name) noexcept { name_ = std::move(name); }
-
-private:
-    std::string name_;
+    [[noreturn]] static void Listen(std::shared_ptr<Dirs> dirs);
 };
 
 } // namespace tt

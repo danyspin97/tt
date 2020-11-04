@@ -18,25 +18,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/action/action_factory.hpp"
+#pragma once
 
-#include "catch2/catch.hpp" // for operator""_catch_sr
+#include <string> // for string
 
-#include "tt/action/action.hpp"           // for Action
-#include "tt/action/notify_up_action.hpp" // for NotifyUpAction
-#include "tt/action/pack_action.hpp"      // for PackAction
+#include "msgpack.hpp" // IWYU pragma: keep
 
-TEST_CASE("ActionFactory") {
-    SECTION("NotifyUpAction") {
-        tt::NotifyUpAction action("dummy", true);
-        auto buffer = tt::PackAction(action);
+#include "tt/request/request.hpp" // for Request
 
-        auto deserialized_action =
-            tt::ActionFactory::GetActionFromBuffer(buffer);
+namespace tt {
 
-        REQUIRE(deserialized_action);
-        CHECK(deserialized_action->name() == "notify_up");
-        CHECK_NOTHROW(
-            dynamic_cast<tt::NotifyUpAction *>(deserialized_action.get()));
-    }
-}
+class NotifyUpRequest : public Request {
+public:
+    explicit NotifyUpRequest(std::string service, bool succeded);
+    NotifyUpRequest() = delete;
+
+    [[nodiscard]] auto service() const -> std::string;
+    [[nodiscard]] auto succeded() const -> bool;
+
+    void Apply() override;
+
+    MSGPACK_DEFINE_MAP(MSGPACK_BASE_MAP(Request), service_, succeeded_)
+
+private:
+    std::string service_;
+    bool succeeded_;
+};
+
+} // namespace tt

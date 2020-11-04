@@ -18,24 +18,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/action/pack_action.hpp"
+#include "tt/request/pack_request.hpp"
 
 #include <type_traits> // for enable_if<>::type
 
 #include "catch2/catch.hpp" // for AssertionHandler, ope...
 
-#include "tt/action/notify_up_action.hpp" // for NotifyUpAction
+#include "tt/request/notify_up_request.hpp" // for NotifyUpRequest
 
-TEST_CASE("PackAction") {
+TEST_CASE("PackRequest") {
     SECTION("Convert to msgpack") {
-        tt::NotifyUpAction action("dummy", true);
-        auto buffer = tt::PackAction(action);
+        tt::NotifyUpRequest action("dummy", true);
+        auto buffer = tt::PackRequest(action);
 
         msgpack::object_handle result;
         msgpack::unpack(result, buffer.c_str(), buffer.size());
         msgpack::object obj(result.get());
 
-        CHECK(obj.via.map.ptr[0].key.as<std::string>() == "Action");
+        CHECK(obj.via.map.ptr[0].key.as<std::string>() == "Request");
         CHECK(obj.via.map.ptr[0].val.via.map.ptr[0].key.as<std::string>() ==
               "name_");
         CHECK(obj.via.map.ptr[0].val.via.map.ptr[0].val.as<std::string>() ==

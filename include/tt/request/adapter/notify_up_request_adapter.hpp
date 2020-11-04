@@ -24,15 +24,15 @@
 
 #include "msgpack.hpp"
 
-#include "tt/action/notify_up_action.hpp"
+#include "tt/request/notify_up_request.hpp"
 
 namespace msgpack {
 MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
     namespace adaptor {
 
     // Place class template specialization here
-    template <> struct as<tt::NotifyUpAction> {
-        auto operator()(msgpack::object const &o) const -> tt::NotifyUpAction {
+    template <> struct as<tt::NotifyUpRequest> {
+        auto operator()(msgpack::object const &o) const -> tt::NotifyUpRequest {
             if (o.type != msgpack::type::MAP) {
                 throw msgpack::type_error();
             }
@@ -46,7 +46,7 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
 
             auto service = o.via.map.ptr[1].val.as<std::string>();
             auto succeded = o.via.map.ptr[2].val.as<bool>();
-            return tt::NotifyUpAction{std::move(service), succeded};
+            return tt::NotifyUpRequest{std::move(service), succeded};
         }
     };
 

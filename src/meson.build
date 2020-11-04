@@ -6,13 +6,13 @@ tt_src = files(
 tt_cli_src = []
 
 # Add sources
-subdir('action')
 subdir('data')
 subdir('dependency_graph')
 subdir('log')
 subdir('net')
 subdir('parser')
 subdir('path')
+subdir('request')
 subdir('script')
 subdir('supervision')
 subdir('svc')

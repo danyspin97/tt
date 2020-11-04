@@ -20,17 +20,21 @@
 
 #pragma once
 
-#include <memory> // for unique_ptr
-#include <string> // for string
+#include <string>
+
+#include "msgpack.hpp"
+
+#include "tt/request/adapter/notify_up_request_adapter.hpp"
 
 namespace tt {
 
-class Action;
+template <typename T> auto UnpackRequest(const std::string &buffer) -> T {
+    static_assert(std::is_base_of_v<Request, T>, "T must derive from Request");
+    msgpack::object_handle result;
+    msgpack::unpack(result, buffer.c_str(), buffer.size());
+    msgpack::object obj(result.get());
 
-class ActionFactory {
-public:
-    static auto GetActionFromBuffer(const std::string &buffer)
-        -> std::unique_ptr<Action>;
-};
+    return obj.as<T>();
+}
 
 } // namespace tt
