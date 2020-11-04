@@ -27,7 +27,7 @@
 #include "tt/net/server.hpp" // for Server
 #include "tt/net/socket.hpp" // for Socket, Socket::Protocol, Socket::Proto...
 
-TEST_CASE("Client/Server") {
+TEST_CASE("Client/Server", "[!mayfail]") {
     SECTION("Send and receive text message") {
         constexpr const char *address = "localhost";
         constexpr const uint16_t port = 8999;
