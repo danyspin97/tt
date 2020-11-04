@@ -20,22 +20,15 @@
 
 #pragma once
 
-#include <cstdint> // for uint16_t
-#include <string>  // for string
-
 #include "tt/net/socket.hpp" // for Socket, Socket::Protocol
 
 namespace tt::net {
 
 class Server : public Socket {
 public:
-    Server(Protocol protocol, std::string address, uint16_t port);
+    explicit Server(std::filesystem::path socket_path);
 
-    void Listen();
     auto ReceiveMessage() -> std::string;
-
-private:
-    bool is_listening = false;
 };
 
 } // namespace tt::net

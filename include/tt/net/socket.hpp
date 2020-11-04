@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include <cstdint> // for uint16_t
-#include <string>  // for string
+#include <filesystem> // for path
 
 #include "nngpp/socket.h"      // for socket
 #include "nngpp/socket_view.h" // for socket_view
@@ -30,13 +29,7 @@ namespace tt::net {
 
 class Socket {
 public:
-    enum class Protocol {
-        UDP,
-        TCP,
-    };
-
-    Socket(nng::socket &&socket, Protocol protocol, std::string address,
-           uint16_t port);
+    Socket(nng::socket &&socket, std::filesystem::path address);
 
 protected:
     [[nodiscard]] auto socket() const -> nng::socket_view;
@@ -45,9 +38,7 @@ protected:
 
 private:
     nng::socket socket_;
-    Protocol protocol_;
-    std::string address_;
-    uint16_t port_;
+    std::filesystem::path socket_path_;
 };
 
 } // namespace tt::net

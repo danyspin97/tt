@@ -28,23 +28,12 @@
 
 #include "tt/exception.hpp" // for Exception
 
-tt::net::Server::Server(Protocol protocol, std::string address, uint16_t port)
-    : Socket(nng::rep::open(), protocol, std::move(address), port) {}
-
-void tt::net::Server::Listen() {
-    if (is_listening) {
-        return;
-    }
-
+tt::net::Server::Server(std::filesystem::path socket_path)
+    : Socket(nng::rep::open(), std::move(socket_path)) {
     socket().listen(GetNetAddress().c_str());
-    is_listening = true;
 }
 
 auto tt::net::Server::ReceiveMessage() -> std::string {
-    if (!is_listening) {
-        throw tt::Exception("Must listen on socket first");
-    }
-
     auto buffer = socket().recv();
     return std::string{static_cast<const char *>(buffer.data()), buffer.size()};
 }

@@ -24,14 +24,11 @@
 
 #include "fmt/format.h" // for format
 
-tt::net::Socket::Socket(nng::socket &&socket, Protocol protocol,
-                        std::string address, uint16_t port)
-    : socket_(std::move(socket)), protocol_(protocol),
-      address_(std::move(address)), port_(port) {}
+tt::net::Socket::Socket(nng::socket &&socket,
+                        std::filesystem::path socket_path_)
+    : socket_(std::move(socket)), socket_path_(std::move(socket_path_)) {}
 
 auto tt::net::Socket::GetNetAddress() const -> std::string {
-    const char *protocol_str = protocol_ == Protocol::UDP ? "udp" : "tcp";
-    return fmt::format("{}://{}:{}", protocol_str, address_,
-                       std::to_string(port_));
+    return fmt::format("ipc://{}", socket_path_.string());
 }
 auto tt::net::Socket::socket() const -> nng::socket_view { return socket_; }

@@ -29,23 +29,12 @@
 
 #include "tt/exception.hpp" // for Exception
 
-tt::net::Client::Client(Protocol protocol, std::string address, uint16_t port)
-    : Socket(nng::req::open(), protocol, std::move(address), port) {}
-
-void tt::net::Client::Connect() {
-    if (is_connected) {
-        return;
-    }
-
+tt::net::Client::Client(std::filesystem::path socket_path)
+    : Socket(nng::req::open(), std::move(socket_path)) {
     socket().dial(GetNetAddress().c_str());
-    is_connected = true;
 }
 
 void tt::net::Client::SendMessage(const std::string &message) {
-    if (!is_connected) {
-        throw tt::Exception("Must connect first");
-    }
-
     nng::buffer msg = nng::make_buffer(message.size());
     memcpy(msg.data(), message.data(), message.size());
     socket().send(msg);
