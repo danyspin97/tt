@@ -20,28 +20,11 @@
 
 #pragma once
 
-#include <string>
-
-#include "msgpack.hpp"
-
-namespace tt {
+namespace tt::request {
 
 class Request {
 public:
     virtual ~Request() = default;
-    virtual void Apply() = 0;
-
-    [[nodiscard]] auto name() const noexcept -> const std::string & {
-        return name_;
-    }
-
-    MSGPACK_DEFINE_MAP(name_)
-
-protected:
-    void name(std::string name) noexcept { name_ = std::move(name); }
-
-private:
-    std::string name_;
 };
 
-} // namespace tt
+} // namespace tt::request
