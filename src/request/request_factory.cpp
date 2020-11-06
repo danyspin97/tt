@@ -22,33 +22,30 @@
 
 #include <string> // for string, operator==
 
-#include "msgpack.hpp" // IWYU pragma: keep
+#include <nlohmann/json.hpp> // for json, detail::exception
 
-#include "tt/exception.hpp"                                 // for Exception
-#include "tt/request/adapter/notify_up_request_adapter.hpp" // IWYU pragma: keep
-#include "tt/request/notify_up_request.hpp" // for NotifyUpRequest
-#include "tt/request/request.hpp"           // for Request
+#include "tt/exception.hpp"                             // for Exception
+#include "tt/request/adapter/notify_service_statup.hpp" // IWYU pragma: keep
+#include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
 
-auto tt::RequestFactory::GetRequestFromBuffer(const std::string &buffer)
-    -> std::unique_ptr<Request> try {
-    msgpack::object_handle result;
-    msgpack::unpack(result, buffer.data(), buffer.size());
-    msgpack::object obj(result.get());
+using json = nlohmann::json;
+
+auto tt::request::RequestFactory::GetRequestFromBuffer(
+    const std::string &buffer)
+    -> std::pair<const char *, std::unique_ptr<Request>> try {
+    json j = json::parse(buffer);
 
     // ComplexRequest:
-    //     Request:
-    //         name_: "complex_action"
-    //     data:       ...
-    //     other_data: ...
-    std::string action_name =
-        obj.via.map.ptr[0].val.via.map.ptr[0].val.as<std::string>();
+    //     request_name: "complex_action"
+    //     request: { request_object }
+    std::string request_name = j.at("request_name");
 
-    std::unique_ptr<Request> action_ptr = nullptr;
-    if (action_name == "notify_up") {
-        action_ptr = std::make_unique<NotifyUpRequest>(obj.as<NotifyUpRequest>());
+    if (request_name == NotifyServiceStatus::name) {
+        return std::make_pair(
+            std::ref(NotifyServiceStatus::name),
+            std::make_unique<NotifyServiceStatus>(j.at("request")));
     }
-    return action_ptr;
-} catch (const msgpack::type_error & /*e*/) {
-    throw tt::Exception(
-        "There was an error while parsing the buffer containing the action");
+    throw tt::Exception(request_name + " is not a supported request");
+} catch (const nlohmann::detail::exception & /*e*/) {
+    throw tt::Exception("There was an error while parsing the request");
 }

@@ -23,14 +23,14 @@
 #include <memory> // for unique_ptr
 #include <string> // for string
 
-namespace tt {
+namespace tt::request {
 
 class Request;
 
 class RequestFactory {
 public:
     static auto GetRequestFromBuffer(const std::string &buffer)
-        -> std::unique_ptr<Request>;
+        -> std::pair<const char *, std::unique_ptr<Request>>;
 };
 
-} // namespace tt
+} // namespace tt::request

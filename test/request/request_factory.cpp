@@ -22,21 +22,27 @@
 
 #include "catch2/catch.hpp" // for operator""_catch_sr
 
-#include "tt/request/notify_up_request.hpp" // for NotifyUpRequest
-#include "tt/request/pack_request.hpp"      // for PackRequest
-#include "tt/request/request.hpp"           // for Request
+#include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
+#include "tt/request/pack_request.hpp"          // for PackAction
+#include "tt/request/request.hpp"               // for Action
 
-TEST_CASE("RequestFactory") {
-    SECTION("NotifyUpRequest") {
-        tt::NotifyUpRequest action("dummy", true);
-        auto buffer = tt::PackRequest(action);
+TEST_CASE("ActionFactory") {
+    SECTION("NotifyServiceStatus") {
+        tt::request::NotifyServiceStatus request("dummy",
+                                                 tt::ServiceStatus::Up);
+        auto buffer = tt::request::PackRequest(request);
 
-        auto deserialized_action =
-            tt::RequestFactory::GetRequestFromBuffer(buffer);
-
-        REQUIRE(deserialized_action);
-        CHECK(deserialized_action->name() == "notify_up");
+        std::pair<const char *, std::unique_ptr<tt::request::Request>>
+            deserialized_request;
         CHECK_NOTHROW(
-            dynamic_cast<tt::NotifyUpRequest *>(deserialized_action.get()));
+            deserialized_request =
+                tt::request::RequestFactory::GetRequestFromBuffer(buffer));
+
+        CHECK_NOTHROW(std::is_same_v<
+                      std::decay_t<decltype(deserialized_request.second.get())>,
+                      tt::request::NotifyServiceStatus>);
+        CHECK(deserialized_request.first);
+        CHECK(deserialized_request.first ==
+              tt::request::NotifyServiceStatus::name);
     }
 }
