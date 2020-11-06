@@ -40,43 +40,46 @@
 #include "tt/cli/command/supervise_command.hpp"       // for SuperviseCommand
 #include "tt/cli/global_options.hpp"                  // for GlobalOptions
 
-auto common_options = std::make_shared<tt::cli::GlobalOptions>();
-tt::cli::CommandDispatcher dispatcher{common_options};
-std::vector<std::unique_ptr<args::Command>> commands;
-
-template <typename T> constexpr void AddCommandToGroup(args::Group &group) {
+template <typename T>
+void AddCommandToGroup(args::Group &group,
+                       std::vector<std::unique_ptr<args::Command>> &commands,
+                       tt::cli::CommandDispatcher &dispatcher) {
     commands.push_back(std::make_unique<args::Command>(
         group, T::name, T::description, dispatcher.Dispatch<T>()));
-}
-
-args::ArgumentParser parser("tt init/rc manager.");
-args::Group manage{(args::Group &)parser, "Manage services"};
-args::Group system_group((args::Group &)parser, "System commands");
-args::Group query((args::Group &)parser, "Query the status of the system");
-args::Group testing((args::Group &)parser, "Test services files");
-args::GlobalOptions global_options(parser, common_options->arguments());
-
-constexpr void InitCommands() {
-    AddCommandToGroup<tt::cli::EnableCommand>(manage);
-    AddCommandToGroup<tt::cli::DisableCommand>(manage);
-    AddCommandToGroup<tt::cli::StartCommand>(manage);
-    AddCommandToGroup<tt::cli::StopCommand>(manage);
-    AddCommandToGroup<tt::cli::EditConfigCommand>(manage);
-
-    AddCommandToGroup<tt::cli::StatusCommand>(manage);
-    AddCommandToGroup<tt::cli::ShowCommand>(manage);
-
-    AddCommandToGroup<tt::cli::ServiceControlCommand>(system_group);
-    AddCommandToGroup<tt::cli::SuperviseCommand>(system_group);
-
-    AddCommandToGroup<tt::cli::ParseCommand>(testing);
-    AddCommandToGroup<tt::cli::SerializeCommand>(testing);
 }
 
 auto main(int argc, char *argv[]) -> int {
     spdlog::init_thread_pool(512, 1);
 
-    InitCommands();
+    std::vector<std::unique_ptr<args::Command>> commands;
+    args::ArgumentParser parser("tt init/rc manager.");
+    auto common_options = std::make_shared<tt::cli::GlobalOptions>();
+    tt::cli::CommandDispatcher dispatcher{common_options};
+    args::GlobalOptions global_options((args::Group &)parser,
+                                       common_options->arguments());
+
+    args::Group manage{(args::Group &)parser, "Manage services"};
+    args::Group system_group((args::Group &)parser, "System commands");
+    args::Group query((args::Group &)parser, "Query the status of the system");
+    args::Group testing((args::Group &)parser, "Test services files");
+
+    AddCommandToGroup<tt::cli::EnableCommand>(manage, commands, dispatcher);
+    AddCommandToGroup<tt::cli::DisableCommand>(manage, commands, dispatcher);
+    AddCommandToGroup<tt::cli::StartCommand>(manage, commands, dispatcher);
+    AddCommandToGroup<tt::cli::StopCommand>(manage, commands, dispatcher);
+    AddCommandToGroup<tt::cli::EditConfigCommand>(manage, commands, dispatcher);
+
+    AddCommandToGroup<tt::cli::StatusCommand>(manage, commands, dispatcher);
+    AddCommandToGroup<tt::cli::ShowCommand>(manage, commands, dispatcher);
+
+    AddCommandToGroup<tt::cli::ServiceControlCommand>(system_group, commands,
+                                                      dispatcher);
+    AddCommandToGroup<tt::cli::SuperviseCommand>(system_group, commands,
+                                                 dispatcher);
+
+    AddCommandToGroup<tt::cli::ParseCommand>(testing, commands, dispatcher);
+    AddCommandToGroup<tt::cli::SerializeCommand>(testing, commands, dispatcher);
+
     try {
         parser.ParseCLI(argc, argv);
     } catch (const args::Help & /*e*/) {
