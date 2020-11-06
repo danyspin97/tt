@@ -49,9 +49,9 @@ tt::CliLogger::CliLogger(const std::string &command_name,
     std::vector<spdlog::sink_ptr> sinks;
     sinks.push_back(console);
 
-    std::filesystem::path logdir = dirs->logdir();
-
     if (isatty(STDOUT_FILENO) == 0) {
+        std::filesystem::path logdir = dirs->logdir();
+
         auto cli_file_sink =
             std::make_shared<spdlog::sinks::basic_file_sink_mt>(logdir /
                                                                 "cli.log");
