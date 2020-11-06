@@ -69,8 +69,6 @@ void tt::ServiceManager::StopAllServices() {
 
 void tt::ServiceManager::StartService(const std::string &service_name,
                                       const Service &service) {
-    status_manager_.ChangeStatusOfService(service_name,
-                                          ServiceStatus::Starting);
 
     DependencyReader dep_reader{};
     std::visit(std::ref(dep_reader), service);
@@ -89,6 +87,9 @@ void tt::ServiceManager::StartService(const std::string &service_name,
                                               ServiceStatus::Down);
         return;
     }
+
+    status_manager_.ChangeStatusOfService(service_name,
+                                          ServiceStatus::Starting);
     std::visit(
         [this, &service_name](const auto &service) {
             if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
@@ -116,6 +117,8 @@ void tt::ServiceManager::StopService(const std::string &service_name,
         status_manager_.WaitOnServiceDown(dependant);
     }
 
+    status_manager_.ChangeStatusOfService(service_name,
+                                          ServiceStatus::Stopping);
     std::visit(
         [this, &service_name](const auto &service) {
             if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
@@ -130,4 +133,5 @@ void tt::ServiceManager::StopService(const std::string &service_name,
             }
         },
         service);
+    status_manager_.ChangeStatusOfService(service_name, ServiceStatus::Down);
 }
