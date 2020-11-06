@@ -58,9 +58,14 @@ tt::CliLogger::CliLogger(const std::string &command_name,
         // {DATE TIME.milliseconds} (command_name) [short log level (e.g. I)]
         cli_file_sink->set_pattern("{%D %T.%e} (" + command_name +
                                    ") [%L]\n%v");
+        // Do not log debug and trace messages to not fill the file
+        cli_file_sink->set_level(spdlog::level::info);
         sinks.push_back(cli_file_sink);
     }
 
     logger_ = std::make_shared<spdlog::logger>("cli", begin(sinks), end(sinks));
+    // Set logger_ to the mininum logging level
+    // let console and cli_file_sink choose their own
+    logger_->set_level(spdlog::level::trace);
     spdlog::set_default_logger(logger_);
 }
