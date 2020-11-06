@@ -37,6 +37,10 @@ public:
     void StartAllServices();
     void StopAllServices();
 
+    [[nodiscard]] auto status_manager() -> ServiceStatusManager & {
+        return status_manager_;
+    }
+
 private:
     void StartService(const std::string &service_name, const Service &service);
     void StopService(const std::string &service_name, const Service &service);
