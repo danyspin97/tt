@@ -18,31 +18,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "tt/request/notify_service_status.hpp"
 
-#include <string> // for string
+#include <utility> // for move
 
-#include "msgpack.hpp" // IWYU pragma: keep
+#include "tt/svc/service_status_manager.hpp" // for ServiceStatusMa...
 
-#include "tt/request/request.hpp" // for Request
+tt::request::NotifyServiceStatus::NotifyServiceStatus(std::string service,
+                                                      ServiceStatus status)
+    : service_(std::move(service)), status_(status) {}
 
-namespace tt {
+auto tt::request::NotifyServiceStatus::service() const -> std::string {
+    return service_;
+}
 
-class NotifyUpRequest : public Request {
-public:
-    explicit NotifyUpRequest(std::string service, bool succeded);
-    NotifyUpRequest() = delete;
-
-    [[nodiscard]] auto service() const -> std::string;
-    [[nodiscard]] auto succeded() const -> bool;
-
-    void Apply() override;
-
-    MSGPACK_DEFINE_MAP(MSGPACK_BASE_MAP(Request), service_, succeeded_)
-
-private:
-    std::string service_;
-    bool succeeded_;
-};
-
-} // namespace tt
+auto tt::request::NotifyServiceStatus::status() const -> ServiceStatus {
+    return status_;
+}

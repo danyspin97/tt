@@ -1,6 +1,6 @@
 tt_src += files(
     'request_factory.cpp',
-    'notify_up_request.cpp',
+    'notify_service_status.cpp',
 )
 
 tt_cli_src += files(

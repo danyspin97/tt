@@ -18,21 +18,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tt/request/notify_up_request.hpp"
+#include "tt/request/notify_service_status.hpp"
 
 #include "catch2/catch.hpp" // for AssertionHandler, ope...
 
-#include "tt/request/pack_request.hpp"   // for PackRequest
-#include "tt/request/unpack_request.hpp" // for UnpackRequest
+#include <nlohmann/json.hpp> // for json
+
+#include "tt/request/adapter/notify_service_statup.hpp" // IWYU pragma: keep
 
 TEST_CASE("NotifyUpRequest") {
-    SECTION("Convert to msgpack and back") {
-        tt::NotifyUpRequest action("dummy", true);
-        auto buffer = tt::PackRequest(action);
+    SECTION("Convert to json and back") {
+        tt::request::NotifyServiceStatus request("dummy",
+                                                 tt::ServiceStatus::Up);
+        nlohmann::json j = request;
 
-        auto deserialized_action = tt::UnpackRequest<tt::NotifyUpRequest>(buffer);
-        CHECK(deserialized_action.name() == "notify_up");
-        CHECK(deserialized_action.service() == action.service());
-        CHECK(deserialized_action.succeded());
+        std::unique_ptr<tt::request::NotifyServiceStatus> deserialized_request;
+        REQUIRE_NOTHROW(deserialized_request =
+                            std::make_unique<tt::request::NotifyServiceStatus>(
+                                j.get<tt::request::NotifyServiceStatus>()));
+        CHECK(deserialized_request->service() == request.service());
+        CHECK(deserialized_request->status() == tt::ServiceStatus::Up);
     }
 }
