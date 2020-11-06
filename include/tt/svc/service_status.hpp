@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <string>
+
 namespace tt {
 
 enum class ServiceStatus {
@@ -29,5 +31,9 @@ enum class ServiceStatus {
     Stopping = 3,
     Down = 4
 };
+
+auto GetServiceStatusName(ServiceStatus status) -> std::string;
+
+auto ParseServiceStatusFromString(const std::string &status) -> ServiceStatus;
 
 } // namespace tt
