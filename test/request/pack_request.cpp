@@ -20,29 +20,21 @@
 
 #include "tt/request/pack_request.hpp"
 
-#include <type_traits> // for enable_if<>::type
-
 #include "catch2/catch.hpp" // for AssertionHandler, ope...
 
-#include "tt/request/notify_up_request.hpp" // for NotifyUpRequest
+#include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
 
-TEST_CASE("PackRequest") {
-    SECTION("Convert to msgpack") {
-        tt::NotifyUpRequest action("dummy", true);
-        auto buffer = tt::PackRequest(action);
+TEST_CASE("PackAction") {
+    SECTION("Convert to json") {
+        tt::request::NotifyServiceStatus request("dummy",
+                                                 tt::ServiceStatus::Up);
+        auto buffer = tt::request::PackRequest(request);
 
-        msgpack::object_handle result;
-        msgpack::unpack(result, buffer.c_str(), buffer.size());
-        msgpack::object obj(result.get());
+        nlohmann::json j = nlohmann::json::parse(buffer);
 
-        CHECK(obj.via.map.ptr[0].key.as<std::string>() == "Request");
-        CHECK(obj.via.map.ptr[0].val.via.map.ptr[0].key.as<std::string>() ==
-              "name_");
-        CHECK(obj.via.map.ptr[0].val.via.map.ptr[0].val.as<std::string>() ==
-              "notify_up");
-        CHECK(obj.via.map.ptr[1].key.as<std::string>() == "service_");
-        CHECK(obj.via.map.ptr[1].val.as<std::string>() == "dummy");
-        CHECK(obj.via.map.ptr[2].key.as<std::string>() == "succeeded_");
-        CHECK(obj.via.map.ptr[2].val.as<bool>() == true);
+        CHECK(j.at("request_name") == tt::request::NotifyServiceStatus::name);
+        CHECK(j.at("request").at("service") == "dummy");
+        CHECK(j.at("request").at("status") ==
+              tt::GetServiceStatusName(tt::ServiceStatus::Up));
     }
 }

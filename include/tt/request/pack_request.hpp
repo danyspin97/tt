@@ -23,17 +23,20 @@
 #include <sstream> // for stringstream
 #include <string>  // for string
 
-#include "msgpack.hpp" // IWYU pragma: keep
+#include <nlohmann/json.hpp>
 
-namespace tt {
+#include "tt/request/adapter/notify_service_statup.hpp" // IWYU pragma: keep
+
+namespace tt::request {
 
 class Request;
 
-template <typename T> auto PackRequest(const T &action) -> std::string {
+template <typename T> auto PackRequest(const T &request) -> std::string {
     static_assert(std::is_base_of_v<Request, T>, "T must derive from Request");
-    std::stringstream stream;
-    msgpack::pack(stream, action);
-    return stream.str();
+    nlohmann::json j;
+    j["request_name"] = T::name;
+    j["request"] = request;
+    return j.dump();
 }
 
-} // namespace tt
+} // namespace tt::request
