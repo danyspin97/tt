@@ -31,11 +31,13 @@
 
 namespace tt {
 
+class ServiceLoggerRegistry;
 class ServiceStatusImpl;
 
 class ServiceStatusManager {
 public:
-    explicit ServiceStatusManager(const std::vector<std::string> &services);
+    ServiceStatusManager(const std::vector<std::string> &services,
+                         ServiceLoggerRegistry &logger_registry);
 
     void ChangeStatusOfService(const std::string &service,
                                ServiceStatus new_status);
@@ -48,6 +50,8 @@ private:
     std::map<std::string,
              std::pair<ServiceStatus, std::unique_ptr<WaitOnStart>>>
         services_;
+
+    ServiceLoggerRegistry &logger_registry_;
 };
 
 } // namespace tt

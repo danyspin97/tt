@@ -33,6 +33,7 @@
 #include "tt/log/oneshot_logger.hpp"   // for OneshotLogger
 #include "tt/path/directory_names.hpp" // for kServiceLogDirectoryName
 #include "tt/path/dirs.hpp"            // for Dirs
+#include "tt/svc/service_status.hpp" // for ServiceStatus, GetServiceStatusName
 
 tt::ServiceLoggerRegistry::ServiceLoggerRegistry(std::shared_ptr<Dirs> dirs)
     : dirs_(std::move(dirs)) {
@@ -73,3 +74,10 @@ auto tt::ServiceLoggerRegistry::GetScriptLoggerForService(
 
     return logger;
 }
+
+void tt::ServiceLoggerRegistry::LogServiceStatus(
+    const std::string &service_name, tt::ServiceStatus status) const {
+    logger_->info("{} is {}", service_name, GetServiceStatusName(status));
+}
+
+void tt::ServiceLoggerRegistry::Flush() const { logger_->flush(); }

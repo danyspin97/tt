@@ -46,10 +46,11 @@ private:
     void StopService(const std::string &service_name, const Service &service);
 
     DependencyGraph graph_;
-    ServiceStatusManager status_manager_;
     std::shared_ptr<Dirs> dirs_;
     // ServiceLoggerRegistry needs dirs to construct
     ServiceLoggerRegistry logger_registry_;
+    // ServiceStatusManager needs both graph_ and logger_registry_
+    ServiceStatusManager status_manager_;
     LongrunSupervisorLauncher longrun_launcher_;
 };
 

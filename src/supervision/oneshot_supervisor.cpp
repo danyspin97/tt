@@ -37,15 +37,12 @@ tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot,
 
 auto tt::OneshotSupervisor::Start() const -> bool {
     const auto &name = oneshot_.name();
-    logger_.Start();
     ScriptSupervisor spawn_start{name, oneshot_.start(), oneshot_.environment(),
                                  logger_.GetScriptLogger()};
     if (spawn_start.ExecuteScript() == ScriptStatus::Success) {
-        logger_.Success();
         return true;
     }
 
-    logger_.Fail();
     if (oneshot_.stop()) {
         ScriptSupervisor spawn_stop{name, oneshot_.stop().value(),
                                     oneshot_.environment(),

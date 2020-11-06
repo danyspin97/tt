@@ -26,15 +26,22 @@
 #include "tt/log/logger.hpp" // for Logger
 
 namespace tt {
+
 class Dirs;
 class LongrunLogger;
 class OneshotLogger;
+
+enum class ServiceStatus;
 
 class ServiceLoggerRegistry {
 public:
     ServiceLoggerRegistry() = delete;
     explicit ServiceLoggerRegistry(std::shared_ptr<Dirs> dirs);
     ~ServiceLoggerRegistry();
+
+    void LogServiceStatus(const std::string &service_name,
+                          ServiceStatus status) const;
+    void Flush() const;
 
     auto GetLongrunLogger(const std::string &name) -> LongrunLogger;
     auto GetOneshotLogger(const std::string &name) -> OneshotLogger;

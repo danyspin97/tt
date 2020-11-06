@@ -29,8 +29,8 @@
 
 tt::ServiceManager::ServiceManager(DependencyGraph &&graph,
                                    std::shared_ptr<Dirs> dirs)
-    : graph_(std::move(graph)), status_manager_(graph_.GetActiveServices()),
-      dirs_(std::move(dirs)), logger_registry_(dirs_),
+    : graph_(std::move(graph)), dirs_(std::move(dirs)), logger_registry_(dirs_),
+      status_manager_(graph_.GetActiveServices(), logger_registry_),
       longrun_launcher_(dirs_) {}
 
 void tt::ServiceManager::StartAllServices() {
@@ -46,6 +46,8 @@ void tt::ServiceManager::StartAllServices() {
     for (const auto &future : start_scripts_running) {
         future.wait();
     }
+
+    logger_registry_.Flush();
 }
 
 void tt::ServiceManager::StopAllServices() {
@@ -62,6 +64,7 @@ void tt::ServiceManager::StopAllServices() {
     for (const auto &future : stop_scripts_running) {
         future.wait();
     }
+    logger_registry_.Flush();
 }
 
 void tt::ServiceManager::StartService(const std::string &service_name,

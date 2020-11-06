@@ -25,10 +25,13 @@
 
 #include "fmt/format.h" // for format
 
-#include "tt/exception.hpp" // for Exception
+#include "tt/exception.hpp"                   // for Exception
+#include "tt/log/service_logger_registry.hpp" // for ServiceLoggerRegistry
 
 tt::ServiceStatusManager::ServiceStatusManager(
-    const std::vector<std::string> &services) {
+    const std::vector<std::string> &services,
+    ServiceLoggerRegistry &logger_registry)
+    : logger_registry_(logger_registry) {
     for (auto service : services) {
         services_.emplace(service,
                           std::make_pair(ServiceStatus::Reset,
@@ -51,6 +54,7 @@ void tt::ServiceStatusManager::ChangeStatusOfService(const std::string &service,
         // No need to do anything here
         ;
     }
+    logger_registry_.LogServiceStatus(service, new_status);
 }
 
 auto tt::ServiceStatusManager::WaitOnServiceStart(const std::string &service)
