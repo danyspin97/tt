@@ -37,9 +37,8 @@
 
 #include "tt/cli/global_options.hpp"
 
-tt::cli::SerializeCommand::SerializeCommand(
-    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
-    : Command(parser, std::move(common_options)),
+tt::cli::SerializeCommand::SerializeCommand(args::Subparser &parser)
+    : Command(parser),
       service_(parser, "service", "path of the service to serialize"),
       filename_(parser, "filename", "filename to serialize the service into") {}
 

@@ -33,8 +33,7 @@ namespace tt::cli {
 
 class SerializeCommand : public Command {
 public:
-    SerializeCommand(args::Subparser &parser,
-                     std::shared_ptr<GlobalOptions> common_options);
+    explicit SerializeCommand(args::Subparser &parser);
 
     static constexpr inline const char *name = "serialize";
     static constexpr inline const char *description =

@@ -28,8 +28,7 @@ namespace tt::cli {
 
 class StartCommand : public Command {
 public:
-    StartCommand(args::Subparser &parser,
-                 std::shared_ptr<GlobalOptions> common_options);
+    explicit StartCommand(args::Subparser &parser);
 
     static constexpr inline const char *name = "start";
     static constexpr inline const char *description =

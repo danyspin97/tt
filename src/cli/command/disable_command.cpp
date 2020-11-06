@@ -24,9 +24,7 @@
 
 #include "tt/cli/global_options.hpp"
 
-tt::cli::DisableCommand::DisableCommand(
-    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
-    : Command(parser, std::move(common_options)),
-      services_(parser, "service", "services to disable") {}
+tt::cli::DisableCommand::DisableCommand(args::Subparser &parser)
+    : Command(parser), services_(parser, "service", "services to disable") {}
 
 auto tt::cli::DisableCommand::Execute() -> int { return 0; }

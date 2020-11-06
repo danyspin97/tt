@@ -28,8 +28,7 @@ namespace tt::cli {
 
 class DisableCommand : public Command {
 public:
-    DisableCommand(args::Subparser &parser,
-                   std::shared_ptr<GlobalOptions> common_options);
+    explicit DisableCommand(args::Subparser &parser);
 
     static constexpr inline const char *name = "disable";
     static constexpr inline const char *description =

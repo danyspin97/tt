@@ -31,10 +31,8 @@
 #include "tt/utils/deserialize.hpp"
 #include "tt/utils/serialize.hpp"
 
-tt::cli::EnableCommand::EnableCommand(
-    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
-    : Command(parser, std::move(common_options)),
-      service_list_(parser, "services", "services to parse") {}
+tt::cli::EnableCommand::EnableCommand(args::Subparser &parser)
+    : Command(parser), service_list_(parser, "services", "services to parse") {}
 
 auto tt::cli::EnableCommand::Execute() -> int { return EnableServices(); }
 

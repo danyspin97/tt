@@ -41,8 +41,7 @@ namespace tt::cli {
 
 class Command {
 public:
-    Command(args::Subparser &parser,
-            std::shared_ptr<GlobalOptions> global_options);
+    explicit Command(args::Subparser &parser);
     virtual ~Command() = default;
 
     auto Run(const std::string &name) -> int;
@@ -58,7 +57,6 @@ private:
 
 protected:
     args::Subparser &parser_;
-    std::shared_ptr<GlobalOptions> global_options_;
 
 private:
     std::shared_ptr<CliLogger> logger_;

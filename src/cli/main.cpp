@@ -53,10 +53,7 @@ auto main(int argc, char *argv[]) -> int {
 
     std::vector<std::unique_ptr<args::Command>> commands;
     args::ArgumentParser parser("tt init/rc manager.");
-    auto common_options = std::make_shared<tt::cli::GlobalOptions>();
-    tt::cli::CommandDispatcher dispatcher{common_options};
-    args::GlobalOptions global_options((args::Group &)parser,
-                                       common_options->arguments());
+    tt::cli::CommandDispatcher dispatcher;
 
     args::Group manage{(args::Group &)parser, "Manage services"};
     args::Group system_group((args::Group &)parser, "System commands");
@@ -89,6 +86,5 @@ auto main(int argc, char *argv[]) -> int {
         parser.Help(std::cout);
         return 1;
     }
-
     return dispatcher.exit_code();
 }

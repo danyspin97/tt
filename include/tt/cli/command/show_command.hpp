@@ -28,8 +28,7 @@ namespace tt::cli {
 
 class ShowCommand : public Command {
 public:
-    ShowCommand(args::Subparser &parser,
-                std::shared_ptr<GlobalOptions> common_options);
+    explicit ShowCommand(args::Subparser &parser);
 
     static constexpr inline const char *name = "show";
     static constexpr inline const char *description = "Show info of a service";

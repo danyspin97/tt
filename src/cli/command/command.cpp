@@ -29,17 +29,16 @@
 #include "tt/exception.hpp"          // for Exception
 #include "tt/log/cli_logger.hpp"     // for CliLogger
 
-tt::cli::Command::Command(args::Subparser &parser,
-                          std::shared_ptr<GlobalOptions> global_options)
-    : parser_(parser), global_options_(std::move(global_options)) {}
+tt::cli::Command::Command(args::Subparser &parser) : parser_(parser) {}
 
 void tt::cli::Command::Init(const std::string &name) {
+    GlobalOptions options;
+    parser_.Add(options.arguments());
     parser_.Parse();
-    auto verbosity = global_options_->verbosity().Matched()
-                         ? global_options_->verbosity().Get()
-                         : tt::cli::DEFAULT_VERBOSITY;
-    logger_ = std::make_shared<CliLogger>(name, dirs_, verbosity,
-                                          global_options_->quiet());
+    auto verbosity = options.verbosity().Matched() ? options.verbosity().Get()
+                                                   : tt::cli::DEFAULT_VERBOSITY;
+    logger_ =
+        std::make_shared<CliLogger>(name, dirs_, verbosity, options.quiet());
 }
 
 auto tt::cli::Command::Run(const std::string &name) -> int try {

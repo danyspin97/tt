@@ -22,9 +22,7 @@
 
 #include "tt/cli/global_options.hpp"
 
-tt::cli::ShowCommand::ShowCommand(args::Subparser &parser,
-                                  std::shared_ptr<GlobalOptions> common_options)
-    : Command(parser, std::move(common_options)),
-      service_(parser, "service", "service to show info of") {}
+tt::cli::ShowCommand::ShowCommand(args::Subparser &parser)
+    : Command(parser), service_(parser, "service", "service to show info of") {}
 
 auto tt::cli::ShowCommand::Execute() -> int { return 0; }

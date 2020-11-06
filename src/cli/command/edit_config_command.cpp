@@ -22,9 +22,8 @@
 
 #include "tt/cli/global_options.hpp"
 
-tt::cli::EditConfigCommand::EditConfigCommand(
-    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
-    : Command(parser, std::move(common_options)),
+tt::cli::EditConfigCommand::EditConfigCommand(args::Subparser &parser)
+    : Command(parser),
       service_(parser, "service", "service to edit the configuration to") {}
 
 auto tt::cli::EditConfigCommand::Execute() -> int { return 0; }

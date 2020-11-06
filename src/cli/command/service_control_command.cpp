@@ -38,9 +38,8 @@ namespace tt::cli {
 class GlobalOptions;
 } // namespace tt::cli
 
-tt::cli::ServiceControlCommand::ServiceControlCommand(
-    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
-    : Command(parser, std::move(common_options)) {}
+tt::cli::ServiceControlCommand::ServiceControlCommand(args::Subparser &parser)
+    : Command(parser) {}
 
 auto tt::cli::ServiceControlCommand::Execute() -> int {
     auto signal_set = GetEmptySignalSet();

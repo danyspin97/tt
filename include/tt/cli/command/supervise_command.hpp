@@ -27,8 +27,7 @@ namespace tt::cli {
 
 class SuperviseCommand : public Command {
 public:
-    SuperviseCommand(args::Subparser &parser,
-                     std::shared_ptr<GlobalOptions> common_options);
+    explicit SuperviseCommand(args::Subparser &parser);
 
     static constexpr inline const char *name = "supervise";
     static constexpr inline const char *description =

@@ -28,8 +28,7 @@ namespace tt::cli {
 
 class EnableCommand : public Command {
 public:
-    EnableCommand(args::Subparser &parser,
-                  std::shared_ptr<GlobalOptions> common_options);
+    explicit EnableCommand(args::Subparser &parser);
 
     static constexpr inline const char *name = "enable";
     static constexpr inline const char *description =

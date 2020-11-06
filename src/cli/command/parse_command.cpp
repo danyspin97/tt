@@ -39,10 +39,8 @@ namespace tt::cli {
 class GlobalOptions;
 } // namespace tt::cli
 
-tt::cli::ParseCommand::ParseCommand(
-    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
-    : Command(parser, std::move(common_options)),
-      service_list_(parser, "services", "services to parse"),
+tt::cli::ParseCommand::ParseCommand(args::Subparser &parser)
+    : Command(parser), service_list_(parser, "services", "services to parse"),
       is_file_(parser, "file", "", {'f', "file"}) {}
 
 auto tt::cli::ParseCommand::Execute() -> int {

@@ -22,9 +22,7 @@
 
 #include "tt/cli/global_options.hpp"
 
-tt::cli::StopCommand::StopCommand(args::Subparser &parser,
-                                  std::shared_ptr<GlobalOptions> common_options)
-    : Command(parser, std::move(common_options)),
-      services_(parser, "service", "services to stop") {}
+tt::cli::StopCommand::StopCommand(args::Subparser &parser)
+    : Command(parser), services_(parser, "service", "services to stop") {}
 
 auto tt::cli::StopCommand::Execute() -> int { return 0; }

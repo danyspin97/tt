@@ -22,8 +22,7 @@
 
 #include "tt/cli/global_options.hpp"
 
-tt::cli::StatusCommand::StatusCommand(
-    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
-    : Command(parser, std::move(common_options)) {}
+tt::cli::StatusCommand::StatusCommand(args::Subparser &parser)
+    : Command(parser) {}
 
 auto tt::cli::StatusCommand::Execute() -> int { return 0; }

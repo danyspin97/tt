@@ -28,8 +28,7 @@ namespace tt::cli {
 
 class StatusCommand : public Command {
 public:
-    StatusCommand(args::Subparser &parser,
-                  std::shared_ptr<GlobalOptions> common_options);
+    explicit StatusCommand(args::Subparser &parser);
 
     static constexpr inline const char *name = "status";
     static constexpr inline const char *description =

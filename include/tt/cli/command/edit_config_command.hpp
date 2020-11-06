@@ -28,8 +28,7 @@ namespace tt::cli {
 
 class EditConfigCommand : public Command {
 public:
-    EditConfigCommand(args::Subparser &parser,
-                      std::shared_ptr<GlobalOptions> common_options);
+    explicit EditConfigCommand(args::Subparser &parser);
 
     static constexpr inline const char *name = "edit-config";
     static constexpr inline const char *description =

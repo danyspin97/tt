@@ -42,9 +42,8 @@
 #include "tt/utils/deserialize.hpp"
 #include "tt/utils/read_buffer_from_file.hpp"
 
-tt::cli::SuperviseCommand::SuperviseCommand(
-    args::Subparser &parser, std::shared_ptr<GlobalOptions> common_options)
-    : Command(parser, std::move(common_options)),
+tt::cli::SuperviseCommand::SuperviseCommand(args::Subparser &parser)
+    : Command(parser),
       filename_(parser, "filename", "Filename to read the longrun from") {}
 
 auto tt::cli::SuperviseCommand::Execute() -> int {
