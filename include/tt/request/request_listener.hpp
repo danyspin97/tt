@@ -20,15 +20,31 @@
 
 #pragma once
 
-#include <memory>
+#include <filesystem> // for path
+#include <memory>     // for shared_ptr
 
 namespace tt {
-
 class Dirs;
+class ServiceManager;
+
+namespace request {
+
+class Request;
 
 class RequestListener {
 public:
-    [[noreturn]] static void Listen(std::shared_ptr<Dirs> dirs);
+    RequestListener(ServiceManager &service_manager,
+                    std::shared_ptr<Dirs> dirs);
+
+    [[noreturn]] void Listen();
+
+    void
+    ApplyRequest(std::pair<const char *, std::unique_ptr<Request>> request);
+
+private:
+    ServiceManager &service_manager_;
+    const std::filesystem::path socket_path_;
 };
 
+} // namespace request
 } // namespace tt

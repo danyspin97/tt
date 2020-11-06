@@ -26,23 +26,38 @@
 #include <string>       // for string
 #include <system_error> // for system_error
 
-#include "tt/net/server.hpp"              // for Server
-#include "tt/net/socket.hpp"              // for Socket::Protocol, Socket::Pr...
-#include "tt/path/dirs.hpp"               // for Dirs
-#include "tt/request/request.hpp"         // for Request
-#include "tt/request/request_factory.hpp" // for RequestFactory
+#include "tt/net/server.hpp" // for Server
+#include "tt/net/socket.hpp" // for Socket::Protocol, Socket::Pr...
+#include "tt/path/dirs.hpp"  // for Dirs
+#include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
+#include "tt/request/request.hpp"               // for Action
+#include "tt/request/request_factory.hpp"       // for ActionFactory
+#include "tt/svc/service_manager.hpp"           // for ServiceManager
 
-void tt::RequestListener::Listen(std::shared_ptr<Dirs> dirs) {
-    net::Server server{dirs->livedir() / "tt-ipc.socket"};
+tt::request::RequestListener::RequestListener(ServiceManager &service_manager,
+                                              std::shared_ptr<Dirs> dirs)
+    : service_manager_(service_manager),
+      socket_path_(dirs->livedir() / "tt-ipc.socket") {}
+
+void tt::request::RequestListener::Listen() {
+    net::Server server{socket_path_};
 
     for (;;) {
         auto buffer = server.ReceiveMessage();
-        auto action_ptr = RequestFactory::GetRequestFromBuffer(buffer);
-        if (!action_ptr) {
-            continue;
-        }
+        auto request = RequestFactory::GetRequestFromBuffer(buffer);
 
-        (void)std::async(std::launch::async, &tt::Request::Apply,
-                         action_ptr.get());
+        (void)std::async(std::launch::async, &RequestListener::ApplyRequest,
+                         this, std::move(request));
+    }
+}
+
+void tt::request::RequestListener::ApplyRequest(
+    std::pair<const char *, std::unique_ptr<Request>> request) {
+    if (request.first == NotifyServiceStatus::name) {
+        auto notify =
+            dynamic_cast<NotifyServiceStatus *>(request.second.release());
+
+        service_manager_.status_manager().ChangeStatusOfService(
+            notify->service(), notify->status());
     }
 }
