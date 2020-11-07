@@ -107,6 +107,10 @@ private:
                 serializer.template text<sizeof(std::string::value_type),
                                          std::string>(group, group.max_size());
             });
+        serializer.value4b(timeout_);
+        serializer.value4b(timeout_kill_);
+        serializer.value1b(down_signal_);
+        serializer.value1b(max_death_);
     }
 
     std::string execute_;
