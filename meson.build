@@ -60,6 +60,7 @@ deps = [
     # with the 'tests' option
     catch2_dep,
     fmt_dep,
+    json,
     nng_dep,
     spdlog_dep,
     tiny_process_dep,
