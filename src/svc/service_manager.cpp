@@ -88,8 +88,6 @@ void tt::ServiceManager::StartService(const std::string &service_name,
         return;
     }
 
-    status_manager_.ChangeStatusOfService(service_name,
-                                          ServiceStatus::Starting);
     std::visit(
         [this, &service_name](const auto &service) {
             if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
@@ -97,6 +95,8 @@ void tt::ServiceManager::StartService(const std::string &service_name,
                 const auto &oneshot = static_cast<Oneshot>(service);
                 OneshotSupervisor supervisor{
                     oneshot, logger_registry_.GetOneshotLogger(service_name)};
+                status_manager_.ChangeStatusOfService(service_name,
+                                                      ServiceStatus::Starting);
                 bool success = supervisor.Start();
                 auto new_status =
                     success ? ServiceStatus::Up : ServiceStatus::Down;
@@ -117,8 +117,6 @@ void tt::ServiceManager::StopService(const std::string &service_name,
         status_manager_.WaitOnServiceDown(dependant);
     }
 
-    status_manager_.ChangeStatusOfService(service_name,
-                                          ServiceStatus::Stopping);
     std::visit(
         [this, &service_name](const auto &service) {
             if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
@@ -126,12 +124,15 @@ void tt::ServiceManager::StopService(const std::string &service_name,
                 const auto &oneshot = static_cast<Oneshot>(service);
                 OneshotSupervisor supervisor{
                     oneshot, logger_registry_.GetOneshotLogger(service_name)};
+                status_manager_.ChangeStatusOfService(
+                    service_name, ServiceStatus::Stopping);
                 supervisor.Stop();
+                status_manager_.ChangeStatusOfService(service_name,
+                                                      ServiceStatus::Down);
             } else if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
                                                 Longrun>) {
                 longrun_launcher_.Close(service_name);
             }
         },
         service);
-    status_manager_.ChangeStatusOfService(service_name, ServiceStatus::Down);
 }
