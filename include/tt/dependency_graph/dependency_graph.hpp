@@ -85,7 +85,7 @@ private:
             });
         serializer.ext(
             name_to_index_, bitsery::ext::StdMap{name_to_index_.max_size()},
-            [](S &serializer, std::string &name, size_t index) {
+            [](S &serializer, std::string &name, size_t &index) {
                 serializer.template text<sizeof(std::string::value_type),
                                          std::string>(name, name.max_size());
                 serializer.template value<sizeof(size_t)>(index);
