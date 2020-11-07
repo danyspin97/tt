@@ -32,6 +32,8 @@ namespace tt {
 
 class Dirs;
 
+enum class ServiceStatus;
+
 class LongrunSupervisor {
 public:
     LongrunSupervisor(Longrun &&longrun, LongrunLogger &&logger,
@@ -41,7 +43,7 @@ public:
     auto Run() -> bool;
 
 private:
-    void NotifyStatus(ScriptStatus status) const;
+    void NotifyStatus(ServiceStatus status);
     [[nodiscard]] auto ExecuteScript() -> ScriptStatus;
     void ExecuteFinishScript() const;
     [[nodiscard]] auto TryExecute() -> ScriptStatus;

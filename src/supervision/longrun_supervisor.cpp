@@ -57,21 +57,31 @@ auto tt::LongrunSupervisor::Run() -> bool {
 
     // Every time the daemon goes down, try to restart it
     auto status = ScriptStatus::Failure;
-    while (should_run_again_.load()) {
+    while (true) {
+        NotifyStatus(ServiceStatus::Starting);
         status = ExecuteScript();
-        NotifyStatus(status);
         // We tried running the longrun but it didn't start properly
         if (status == ScriptStatus::Failure) {
             break;
         }
+        NotifyStatus(ServiceStatus::Up);
         // The longrun started, but it might fail in the future
         // Wait for sigchld signals
         WaitOnSignalSet(&set);
         // Here the run script failed (either we called Kill() from main
         // or the daemon exited)
         ExecuteFinishScript();
+        if (!should_run_again_.load()) {
+            break;
+        }
+        // Notify that the service is down, even if we are going to run it again
+        // some services may need to be restarted as well
+        NotifyStatus(ServiceStatus::Down);
     }
+    NotifyStatus(ServiceStatus::Down);
 
+    // Return true if the script run fine and we stopped because
+    // Kill() was called
     return status == ScriptStatus::Success;
 }
 
@@ -103,17 +113,14 @@ void tt::LongrunSupervisor::ExecuteFinishScript() const {
     }
 }
 
-void tt::LongrunSupervisor::NotifyStatus(ScriptStatus script_status) const {
-
-    ServiceStatus service_status = script_status == ScriptStatus::Success
-                                       ? ServiceStatus::Up
-                                       : ServiceStatus::Down;
-    request::NotifyServiceStatus request(longrun_.name(), service_status);
+void tt::LongrunSupervisor::NotifyStatus(ServiceStatus status) {
+    request::NotifyServiceStatus request(longrun_.name(), status);
     auto s = request::PackRequest(request);
     ipc_client_.SendMessage(s);
 }
 
 void tt::LongrunSupervisor::Kill() {
     should_run_again_.store(false);
+    NotifyStatus(ServiceStatus::Stopping);
     run_supervisor_.Kill();
 }
