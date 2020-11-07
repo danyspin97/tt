@@ -64,7 +64,6 @@ void tt::ServiceManager::StopAllServices() {
     for (const auto &future : stop_scripts_running) {
         future.wait();
     }
-    logger_registry_.Flush();
 }
 
 void tt::ServiceManager::StartService(const std::string &service_name,
