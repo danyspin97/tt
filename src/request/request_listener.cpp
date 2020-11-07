@@ -55,6 +55,7 @@ void tt::request::RequestListener::ApplyRequest(
     std::pair<std::string, std::unique_ptr<Request>> request) {
 
     if (request.first == NotifyServiceStatus::request_name) {
+        auto *notify =
             dynamic_cast<NotifyServiceStatus *>(request.second.release());
 
         service_manager_.status_manager().ChangeStatusOfService(
