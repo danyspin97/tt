@@ -25,7 +25,7 @@
 
 namespace tt {
 
-enum class Signal {
+enum class Signal : std::uint8_t {
     kSigHup = 1,
     kSigInt = 2,
     kSigQuit = 3,
