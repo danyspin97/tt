@@ -122,11 +122,14 @@ void tt::ServiceManager::StopService(const std::string &service_name,
             if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
                                          Oneshot>) {
                 const auto &oneshot = static_cast<Oneshot>(service);
-                OneshotSupervisor supervisor{
-                    oneshot, logger_registry_.GetOneshotLogger(service_name)};
-                status_manager_.ChangeStatusOfService(
-                    service_name, ServiceStatus::Stopping);
-                supervisor.Stop();
+                if (oneshot.stop()) {
+                    OneshotSupervisor supervisor{
+                        oneshot,
+                        logger_registry_.GetOneshotLogger(service_name)};
+                    status_manager_.ChangeStatusOfService(
+                        service_name, ServiceStatus::Stopping);
+                    supervisor.Stop();
+                }
                 status_manager_.ChangeStatusOfService(service_name,
                                                       ServiceStatus::Down);
             } else if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
