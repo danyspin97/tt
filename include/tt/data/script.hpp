@@ -60,15 +60,13 @@ public:
     virtual ~Script() = default;
     virtual auto Dump(std::ostream &oss) const -> std::ostream &;
 
-    [[nodiscard]] auto timeout() const noexcept -> uint_fast32_t {
-        return timeout_;
-    }
-    void timeout(uint_fast32_t timeout) noexcept { timeout_ = timeout; }
+    [[nodiscard]] auto timeout() const noexcept -> uint32_t { return timeout_; }
+    void timeout(uint32_t timeout) noexcept { timeout_ = timeout; }
 
-    [[nodiscard]] auto timeout_kill() const noexcept -> uint_fast32_t {
+    [[nodiscard]] auto timeout_kill() const noexcept -> uint32_t {
         return timeout_kill_;
     }
-    void timeout_kill(uint_fast32_t timeout_kill) noexcept {
+    void timeout_kill(uint32_t timeout_kill) noexcept {
         timeout_kill_ = timeout_kill;
     }
 
@@ -79,10 +77,10 @@ public:
         down_signal_ = down_signal;
     }
 
-    [[nodiscard]] auto max_death() const noexcept -> uint_fast16_t {
+    [[nodiscard]] auto max_death() const noexcept -> uint8_t {
         return max_death_;
     }
-    void max_death(uint_fast16_t max_death) { max_death_ = max_death; };
+    void max_death(uint8_t max_death) { max_death_ = max_death; };
 
 protected:
     void execute(std::string &&execute) { execute_ = std::move(execute); }
@@ -115,10 +113,10 @@ private:
     Type type_;
     std::optional<std::string> user_;
     std::optional<std::string> group_;
-    uint_fast32_t timeout_ = 3000;
-    uint_fast32_t timeout_kill_ = 3000;
+    uint32_t timeout_ = 3000;
+    uint32_t timeout_kill_ = 3000;
     Signal down_signal_ = Signal::kSigTerm;
-    uint_fast16_t max_death_ = 3;
+    uint8_t max_death_ = 3;
 };
 
 } // namespace tt
