@@ -51,7 +51,7 @@ tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
       ipc_client_(dirs->livedir() / "tt-ipc.socket") {}
 
 auto tt::LongrunSupervisor::Run() -> bool {
-    sigset_t set;
+    auto set = GetEmptySignalSet();
     AddSignalToSet(SIGCHLD, &set);
     // SIGCHLD is already masked in Command::SuperviseCommand
 
