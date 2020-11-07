@@ -56,6 +56,8 @@ namespace bitsery {
                 resizeImpl(container, size, std::is_default_constructible<TValue>{});
             }
         private:
+            using diff_t = typename T::difference_type;
+
             static void resizeImpl(T& container, size_t size, std::true_type) {
                 container.resize(size);
             }
@@ -65,7 +67,7 @@ namespace bitsery {
                     container.push_back(::bitsery::Access::create<TValue>());
                 }
                 if (oldSize > newSize) {
-                    container.erase(std::next(std::begin(container), newSize), std::end(container));
+                    container.erase(std::next(std::begin(container), static_cast<diff_t>(newSize)), std::end(container));
                 }
             }
 
@@ -85,7 +87,7 @@ namespace bitsery {
             static void increaseBufferSize(T& container) {
                 //since we're writing to buffer use different resize strategy than default implementation
                 //when small size grow faster, to avoid thouse 2/4/8/16... byte allocations
-                auto newSize = static_cast<size_t>(container.size() * 1.5 + 128);
+                auto newSize = static_cast<size_t>(static_cast<double>(container.size()) * 1.5) + 128;
                 //make data cache friendly
                 newSize -= newSize % 64;//64 is cache line size
                 container.resize((std::max)(newSize, container.capacity()));

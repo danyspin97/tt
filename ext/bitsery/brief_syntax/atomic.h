@@ -1,6 +1,6 @@
 //MIT License
 //
-//Copyright (c) 2017 Mindaugas Vinkelis
+//Copyright (c) 2020 Nick Renieris
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -20,24 +20,16 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+#ifndef BITSERY_BRIEF_SYNTAX_TYPE_STD_ATOMIC_H
+#define BITSERY_BRIEF_SYNTAX_TYPE_STD_ATOMIC_H
 
-#ifndef BITSERY_BITSERY_H
-#define BITSERY_BITSERY_H
+#include "../ext/std_atomic.h"
 
-#define BITSERY_MAJOR_VERSION 5
-#define BITSERY_MINOR_VERSION 1
-#define BITSERY_PATCH_VERSION 0
+namespace bitsery {
+    template<typename S, typename T>
+    void serialize(S &s, std::atomic<T> &obj) {
+        s.template ext<sizeof(T)>(obj, ext::StdAtomic{});
+    }
+}
 
-#define BITSERY_QUOTE_MACRO(name) #name
-#define BITSERY_BUILD_VERSION_STR(major,minor, patch) \
-BITSERY_QUOTE_MACRO(major) "." \
-BITSERY_QUOTE_MACRO(minor) "." \
-BITSERY_QUOTE_MACRO(patch)
-
-#define BITSERY_VERSION \
-BITSERY_BUILD_VERSION_STR(BITSERY_MAJOR_VERSION, BITSERY_MINOR_VERSION, BITSERY_PATCH_VERSION)
-
-#include "serializer.h"
-#include "deserializer.h"
-
-#endif //BITSERY_BITSERY_H
+#endif //BITSERY_BRIEF_SYNTAX_TYPE_STD_ATOMIC_H

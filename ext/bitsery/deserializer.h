@@ -130,7 +130,8 @@ namespace bitsery {
             template<typename T>
             void readBitsInternal(T &v, size_t size) {
                 auto bitsLeft = size;
-                T res{};
+                using TFast = typename FastType<T>::type;
+                TFast res{};
                 while (bitsLeft > 0) {
                     auto bits = (std::min)(bitsLeft, details::BitsSize<UnsignedValue>::value);
                     if (m_scratchBits < bits) {
@@ -141,12 +142,12 @@ namespace bitsery {
                     }
                     auto shiftedRes =
                         static_cast<T>(m_scratch & ((static_cast<ScratchType>(1) << bits) - 1)) << (size - bitsLeft);
-                    res |= shiftedRes;
+                    res = static_cast<TFast>(res | static_cast<TFast>(shiftedRes));
                     m_scratch >>= bits;
                     m_scratchBits -= bits;
                     bitsLeft -= bits;
                 }
-                v = res;
+                v = static_cast<T>(res);
             }
 
             void handleAlignErrors(ScratchType value, std::true_type) {
@@ -443,8 +444,10 @@ namespace bitsery {
         void procContainer(It first, It last, std::true_type) {
             using TValue = typename std::decay<decltype(*first)>::type;
             using TIntegral = typename details::IntegralFromFundamental<TValue>::TValue;
-            if (first != last)
-                this->_adapter.template readBuffer<VSIZE>(reinterpret_cast<TIntegral*>(&(*first)), std::distance(first, last));
+            if (first != last){
+                const auto distance = std::distance(first, last);
+                this->_adapter.template readBuffer<VSIZE>(reinterpret_cast<TIntegral*>(&(*first)), static_cast<size_t>(distance));
+            }
         }
 
         //process by calling functions
@@ -465,7 +468,8 @@ namespace bitsery {
         void procText(T& str, size_t length) {
             auto begin = std::begin(str);
             //end of string, not end of container
-            auto end = std::next(begin, length);
+            using diff_t = typename std::iterator_traits<decltype(begin)>::difference_type;
+            auto end = std::next(begin, static_cast<diff_t>(length));
             procContainer<VSIZE>(begin, end, std::integral_constant<bool, traits::ContainerTraits<T>::isContiguous>{});
             //null terminated character at the end
             if (traits::TextTraits<T>::addNUL)

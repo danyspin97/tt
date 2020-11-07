@@ -1,6 +1,6 @@
 //MIT License
 //
-//Copyright (c) 2017 Mindaugas Vinkelis
+//Copyright (c) 2020 Nick Renieris
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,46 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+#ifndef BITSERY_EXT_STD_ATOMIC_H
+#define BITSERY_EXT_STD_ATOMIC_H
 
-#ifndef BITSERY_BRIEF_SYNTAX_TYPE_STD_LIST_H
-#define BITSERY_BRIEF_SYNTAX_TYPE_STD_LIST_H
-
-#include "../traits/list.h"
-#include "../details/brief_syntax_common.h"
+#include "../traits/core/traits.h"
+#include <atomic>
 
 namespace bitsery {
-    template<typename S, typename T, typename Allocator>
-    void serialize(S &s, std::list<T, Allocator> &obj) {
-        brief_syntax::processContainer(s, obj);
+    namespace ext {
+
+        class StdAtomic {
+        public:
+
+            template<typename Ser, typename T, typename Fnc>
+            void serialize(Ser& ser, const std::atomic<T>& obj, Fnc&& fnc) const {
+                auto res = obj.load();
+                fnc(ser, res);
+            }
+
+            template<typename Des, typename T, typename Fnc>
+            void deserialize(Des& des, std::atomic<T>& obj, Fnc&& fnc) const {
+                T res{};
+                fnc(des, res);
+                obj.store(res);
+            }
+        };
+
     }
+
+    namespace traits {
+        template<typename T>
+        struct ExtensionTraits<ext::StdAtomic, std::atomic<T>> {
+            using TValue = T;
+            static constexpr bool SupportValueOverload = true;
+            static constexpr bool SupportObjectOverload = false;
+            static constexpr bool SupportLambdaOverload = false;
+        };
+
+    }
+
 }
 
-#endif //BITSERY_BRIEF_SYNTAX_TYPE_STD_LIST_H
+
+#endif //BITSERY_EXT_STD_ATOMIC_H

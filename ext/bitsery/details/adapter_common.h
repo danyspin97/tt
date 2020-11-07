@@ -81,9 +81,8 @@ namespace bitsery {
         void handleReadMaxSize(Reader&, size_t&, size_t, std::false_type) {
         }
 
-
-        template <typename Writter>
-        void writeSize(Writter& w, const size_t size) {
+        template <typename Writer>
+        void writeSize(Writer& w, const size_t size) {
             if (size < 0x80u) {
                 w.template writeBytes<1>(static_cast<uint8_t>(size));
             } else {
@@ -125,7 +124,7 @@ namespace bitsery {
             }
 
             static uint16_t exec(uint16_t value) {
-                return (value & 0x00ff) << 8 | (value & 0xff00) >> 8;
+                return static_cast<uint16_t>((value & 0x00ff) << 8 | (value & 0xff00) >> 8);
             }
 
             static uint8_t exec(uint8_t value) {
@@ -139,17 +138,24 @@ namespace bitsery {
             using UT = typename std::conditional<TSize == 1, uint8_t,
                     typename std::conditional<TSize == 2, uint16_t,
                             typename std::conditional<TSize == 4, uint32_t, uint64_t>::type>::type>::type;
-            return SwapImpl::exec(static_cast<UT>(value));
+            return static_cast<TValue>(SwapImpl::exec(static_cast<UT>(value)));
         }
 
         /**
          * endianness utils
          */
-        //add test data in separate struct, because some compilers only support constexpr functions with return-only body
+        // add test data in separate struct, because some compilers only support constexpr functions with return-only body
+        // suppress msvc warnings.
+#ifdef _MSC_VER
+        #pragma warning( disable : 4310 )
+#endif
         struct EndiannessTestData {
             static constexpr uint32_t _sample4Bytes = 0x01020304;
             static constexpr uint8_t _sample1stByte = (const uint8_t &) _sample4Bytes;
         };
+#ifdef _MSC_VER
+        #pragma warning( default : 4310 )
+#endif
 
         constexpr EndiannessType getSystemEndianness() {
             static_assert(EndiannessTestData::_sample1stByte == 0x04 || EndiannessTestData::_sample1stByte == 0x01,
@@ -176,8 +182,54 @@ namespace bitsery {
 
         template<>
         struct ScratchType<uint8_t> {
-            using type = uint16_t;
+            using type = uint_fast16_t;
         };
+
+        template<typename T>
+        struct FastType {
+            using type = T;
+        };
+
+        template<>
+        struct FastType<uint8_t> {
+            using type = uint_fast8_t;
+        };
+
+        template<>
+        struct FastType<uint16_t> {
+            using type = uint_fast16_t;
+        };
+
+        template<>
+        struct FastType<uint32_t> {
+            using type = uint_fast32_t;
+        };
+
+        template<>
+        struct FastType<uint64_t> {
+            using type = uint_fast64_t;
+        };
+
+        template<>
+        struct FastType<int8_t> {
+            using type = int_fast8_t;
+        };
+
+        template<>
+        struct FastType<int16_t> {
+            using type = int_fast16_t;
+        };
+
+        template<>
+        struct FastType<int32_t> {
+            using type = int_fast32_t;
+        };
+
+        template<>
+        struct FastType<int64_t> {
+            using type = int_fast64_t;
+        };
+
 
         /**
          * output/input adapter base that handles endianness
@@ -290,7 +342,8 @@ namespace bitsery {
 
             template<typename T>
             void swapDataBits(T *v, size_t count, std::true_type) {
-                std::for_each(v, std::next(v, count), [](T &x) { x = details::swap(x); });
+                using diff_t = typename std::iterator_traits<T*>::difference_type;
+                std::for_each(v, std::next(v, static_cast<diff_t>(count)), [](T &x) { x = details::swap(x); });
             }
 
             template<typename T>

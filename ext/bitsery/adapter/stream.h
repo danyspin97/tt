@@ -93,7 +93,7 @@ namespace bitsery {
         }
 
         void readChecked(TValue* data, size_t size, std::true_type) {
-            if (size - static_cast<size_t>(_ios->rdbuf()->sgetn(data, size)) != _zeroIfNoErrors) {
+            if (size - static_cast<size_t>(_ios->rdbuf()->sgetn(data, static_cast<std::streamsize>(size))) != _zeroIfNoErrors) {
                 *data = {};
                 if (_zeroIfNoErrors == 0) {
                     error(_ios->rdstate() == std::ios_base::badbit
@@ -104,7 +104,7 @@ namespace bitsery {
         }
 
         void readChecked(TValue* data, size_t size, std::false_type) {
-            _ios->rdbuf()->sgetn(data , size);
+            _ios->rdbuf()->sgetn(data , static_cast<std::streamsize>(size));
         }
 
         std::basic_ios<TChar, CharTraits>* _ios;
@@ -119,8 +119,8 @@ namespace bitsery {
         using TConfig = Config;
         using TValue = TChar;
 
-        BasicOutputStreamAdapter(std::basic_ios<TChar, CharTraits>& ostream)
-                :_ios{std::addressof(ostream)} {}
+        BasicOutputStreamAdapter(std::basic_ostream<TChar, CharTraits>& ostream)
+                :_ostream{std::addressof(ostream)} {}
 
         void currentWritePos(size_t ) {
             static_assert(std::is_void<TChar>::value, "setting write position is not supported with StreamAdapter");
@@ -132,8 +132,7 @@ namespace bitsery {
         }
 
         void flush() {
-            if (auto ostream = dynamic_cast<std::basic_ostream<TChar, CharTraits>*>(_ios))
-                ostream->flush();
+            _ostream->flush();
         }
 
         size_t writtenBytesCount() const {
@@ -146,14 +145,14 @@ namespace bitsery {
 
         template <size_t SIZE>
         void writeInternalValue(const TValue* data) {
-            _ios->rdbuf()->sputn( data , SIZE );
+            _ostream->rdbuf()->sputn( data , SIZE );
         }
 
         void writeInternalBuffer(const TValue* data, size_t size) {
-            _ios->rdbuf()->sputn( data , size );
+            _ostream->rdbuf()->sputn( data , size );
         }
 
-        std::basic_ios<TChar, CharTraits>* _ios;
+        std::basic_ostream<TChar, CharTraits>* _ostream;
     };
 
     template <typename TChar, typename Config, typename CharTraits, typename TBuffer = std::array<TChar, 256>>
@@ -169,14 +168,14 @@ namespace bitsery {
         using TValue = TChar;
 
         //bufferSize is used when buffer is dynamically allocated
-        BasicBufferedOutputStreamAdapter(std::basic_ios<TChar, CharTraits>& ostream, size_t bufferSize = 256)
-                :_ios(std::addressof(ostream)),
+        BasicBufferedOutputStreamAdapter(std::basic_ostream<TChar, CharTraits>& ostream, size_t bufferSize = 256)
+                :_ostream(std::addressof(ostream)),
                  _buf{},
                  _beginIt{std::begin(_buf)},
                  _currOffset{0}
         {
             init(bufferSize, TResizable{});
-            // buffer size must be atleast 16, because writeIntervalValue expect that atleast one value fits to buffer.
+            // buffer size must be atleast 16, because writeIntervalValue expect that at least one value fits to buffer.
             assert(_bufferSize >= 16);
         }
 
@@ -185,7 +184,7 @@ namespace bitsery {
         BasicBufferedOutputStreamAdapter& operator = (const BasicBufferedOutputStreamAdapter&) = delete;
 
         BasicBufferedOutputStreamAdapter(BasicBufferedOutputStreamAdapter&& rhs)
-                : _ios{rhs._ios},
+                : _ostream{rhs._ostream},
                   _buf{std::move(rhs._buf)},
                   _beginIt{std::begin(_buf)},
                   _currOffset{rhs._currOffset},
@@ -194,7 +193,7 @@ namespace bitsery {
         };
 
         BasicBufferedOutputStreamAdapter& operator = (BasicBufferedOutputStreamAdapter&& rhs) {
-            _ios = rhs._ios;
+            _ostream = rhs._ostream;
             _buf = std::move(rhs._buf);
             _beginIt = std::begin(_buf);
             _currOffset = rhs._currOffset;
@@ -213,8 +212,7 @@ namespace bitsery {
 
         void flush() {
             writeBufferToStream();
-            if (auto ostream = dynamic_cast<std::basic_ostream<TChar, CharTraits>*>(_ios))
-                ostream->flush();
+            _ostream->flush();
         }
 
         size_t writtenBytesCount() const {
@@ -225,6 +223,7 @@ namespace bitsery {
 
     private:
         using TResizable = std::integral_constant<bool, traits::ContainerTraits<TBuffer>::isResizable>;
+        using diff_t = typename std::iterator_traits<BufferIt>::difference_type;
 
         template <size_t SIZE>
         void writeInternalValue(const TValue* data) {
@@ -233,24 +232,24 @@ namespace bitsery {
                 writeBufferToStream();
                 newOffset = SIZE;
             }
-            std::copy_n(data, SIZE, _beginIt + _currOffset);
+            std::copy_n(data, SIZE, _beginIt + static_cast<diff_t>(_currOffset));
             _currOffset = newOffset;
         }
 
         void writeInternalBuffer(const TValue* data, size_t size) {
             const auto newOffset = _currOffset + size;
             if (newOffset <= _bufferSize) {
-                std::copy_n(data, size, _beginIt + _currOffset);
+                std::copy_n(data, size, _beginIt + static_cast<diff_t>(_currOffset));
                 _currOffset = newOffset;
             } else {
                 writeBufferToStream();
                 // write buffer directly to stream
-                _ios->rdbuf()->sputn(data, size);
+                _ostream->rdbuf()->sputn(data, size);
             }
         }
 
         void writeBufferToStream() {
-            _ios->rdbuf()->sputn(std::addressof(*_beginIt), _currOffset);
+            _ostream->rdbuf()->sputn(std::addressof(*_beginIt), static_cast<std::streamsize>(_currOffset));
             _currOffset = 0;
         }
 
@@ -265,7 +264,7 @@ namespace bitsery {
             _bufferSize = traits::ContainerTraits<Buffer>::size(_buf);
         }
 
-        std::basic_ios<TChar, CharTraits>* _ios;
+        std::basic_ostream<TChar, CharTraits>* _ostream;
         TBuffer _buf;
         BufferIt _beginIt;
         size_t _currOffset;
@@ -273,22 +272,24 @@ namespace bitsery {
     };
 
     template <typename TChar, typename Config, typename CharTraits>
-    class BasicIOStreamAdapter:public BasicInputStreamAdapter<TChar, Config, CharTraits>, public BasicOutputStreamAdapter<TChar, Config, CharTraits> {
+    class BasicIOStreamAdapter
+        : public BasicInputStreamAdapter<TChar, Config, CharTraits>
+        , public BasicOutputStreamAdapter<TChar, Config, CharTraits>
+    {
     public:
         using TValue = TChar;
 
         //both bases contain reference to same iostream, so no need to do anything
-        BasicIOStreamAdapter(std::basic_ios<TChar, CharTraits>& iostream)
-                :BasicInputStreamAdapter<TChar, Config, CharTraits>{iostream},
-                 BasicOutputStreamAdapter<TChar, Config, CharTraits>{iostream} {
-
-        }
+        BasicIOStreamAdapter(std::basic_iostream<TChar, CharTraits>& iostream)
+            :BasicInputStreamAdapter<TChar, Config, CharTraits>{iostream}
+            ,BasicOutputStreamAdapter<TChar, Config, CharTraits>{iostream}
+        {}
     };
 
     //helper types for most common implementations for std streams
     using OutputStreamAdapter = BasicOutputStreamAdapter<char, DefaultConfig, std::char_traits<char>>;
-    using InputStreamAdapter = BasicInputStreamAdapter<char, DefaultConfig, std::char_traits<char>>;
-    using IOStreamAdapter = BasicIOStreamAdapter<char, DefaultConfig, std::char_traits<char>>;
+    using InputStreamAdapter  = BasicInputStreamAdapter<char, DefaultConfig, std::char_traits<char>>;
+    using IOStreamAdapter     = BasicIOStreamAdapter<char, DefaultConfig, std::char_traits<char>>;
 
     using OutputBufferedStreamAdapter = BasicBufferedOutputStreamAdapter<char, DefaultConfig, std::char_traits<char>>;
 }
