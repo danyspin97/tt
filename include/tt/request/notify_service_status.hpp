@@ -35,7 +35,7 @@ public:
     [[nodiscard]] auto service() const -> std::string;
     [[nodiscard]] auto status() const -> ServiceStatus;
 
-    static constexpr inline const char *name = "notify_service_status";
+    static inline const std::string request_name = "notify_service_status";
 
 private:
     std::string service_;

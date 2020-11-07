@@ -53,8 +53,8 @@ void tt::request::RequestListener::Listen() {
 
 void tt::request::RequestListener::ApplyRequest(
     std::pair<const char *, std::unique_ptr<Request>> request) {
-    if (request.first == NotifyServiceStatus::name) {
         auto notify =
+    if (request.first == NotifyServiceStatus::request_name) {
             dynamic_cast<NotifyServiceStatus *>(request.second.release());
 
         service_manager_.status_manager().ChangeStatusOfService(

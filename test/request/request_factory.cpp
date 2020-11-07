@@ -43,6 +43,6 @@ TEST_CASE("ActionFactory") {
                       tt::request::NotifyServiceStatus>);
         CHECK(deserialized_request.first);
         CHECK(deserialized_request.first ==
-              tt::request::NotifyServiceStatus::name);
+              tt::request::NotifyServiceStatus::request_name);
     }
 }

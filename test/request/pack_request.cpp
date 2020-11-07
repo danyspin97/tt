@@ -32,7 +32,8 @@ TEST_CASE("PackAction") {
 
         nlohmann::json j = nlohmann::json::parse(buffer);
 
-        CHECK(j.at("request_name") == tt::request::NotifyServiceStatus::name);
+        CHECK(j.at("request_name") ==
+              tt::request::NotifyServiceStatus::request_name);
         CHECK(j.at("request").at("service") == "dummy");
         CHECK(j.at("request").at("status") ==
               tt::GetServiceStatusName(tt::ServiceStatus::Up));

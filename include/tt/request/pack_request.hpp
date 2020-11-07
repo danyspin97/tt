@@ -34,7 +34,7 @@ class Request;
 template <typename T> auto PackRequest(const T &request) -> std::string {
     static_assert(std::is_base_of_v<Request, T>, "T must derive from Request");
     nlohmann::json j;
-    j["request_name"] = T::name;
+    j["request_name"] = T::request_name;
     j["request"] = request;
     return j.dump();
 }

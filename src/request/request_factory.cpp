@@ -40,9 +40,9 @@ auto tt::request::RequestFactory::GetRequestFromBuffer(
     //     request: { request_object }
     std::string request_name = j.at("request_name");
 
-    if (request_name == NotifyServiceStatus::name) {
+    if (request_name == NotifyServiceStatus::request_name) {
         return std::make_pair(
-            std::ref(NotifyServiceStatus::name),
+            NotifyServiceStatus::request_name,
             std::make_unique<NotifyServiceStatus>(j.at("request")));
     }
     throw tt::Exception(request_name + " is not a supported request");
