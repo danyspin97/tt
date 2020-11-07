@@ -51,6 +51,8 @@ auto tt::cli::SuperviseCommand::Execute() -> int {
     AddSignalsToSet(kStopSignals, &signal_set);
     AddSignalToSet(SIGCHLD, &signal_set);
     MaskSignals(&signal_set);
+    // We don't want to wait on SIGCHLD
+    RemoveSignalFromSet(SIGCHLD, &signal_set);
 
     auto longrun = utils::Deserialize<Longrun>(args::get(filename_));
 
@@ -59,11 +61,12 @@ auto tt::cli::SuperviseCommand::Execute() -> int {
     LongrunSupervisor supervisor{
         std::move(longrun), logger_registry.GetLongrunLogger(name), dirs()};
 
-    std::thread([&supervisor, &signal_set]() {
-        // We don't want to wait on SIGCHLD
-        RemoveSignalFromSet(SIGCHLD, &signal_set);
-        WaitOnSignalSet(&signal_set);
-        supervisor.Kill();
-    }).detach();
-    return supervisor.Run() ? 0 : 255;
+    auto run_supervisor = [&supervisor]() { return supervisor.Run(); };
+    std::packaged_task<bool()> task(run_supervisor);
+    auto future = task.get_future();
+    std::thread task_td(std::move(task));
+    WaitOnSignalSet(&signal_set);
+    supervisor.Kill();
+    task_td.join();
+    return future.get() ? 0 : 255;
 }
