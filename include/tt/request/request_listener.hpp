@@ -38,8 +38,7 @@ public:
 
     [[noreturn]] void Listen();
 
-    void
-    ApplyRequest(std::pair<const char *, std::unique_ptr<Request>> request);
+    void ApplyRequest(std::pair<std::string, std::unique_ptr<Request>> request);
 
 private:
     ServiceManager &service_manager_;

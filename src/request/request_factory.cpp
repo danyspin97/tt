@@ -32,7 +32,7 @@ using json = nlohmann::json;
 
 auto tt::request::RequestFactory::GetRequestFromBuffer(
     const std::string &buffer)
-    -> std::pair<const char *, std::unique_ptr<Request>> try {
+    -> std::pair<std::string, std::unique_ptr<Request>> try {
     json j = json::parse(buffer);
 
     // ComplexRequest:

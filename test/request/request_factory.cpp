@@ -32,16 +32,12 @@ TEST_CASE("ActionFactory") {
                                                  tt::ServiceStatus::Up);
         auto buffer = tt::request::PackRequest(request);
 
-        std::pair<const char *, std::unique_ptr<tt::request::Request>>
-            deserialized_request;
-        CHECK_NOTHROW(
-            deserialized_request =
-                tt::request::RequestFactory::GetRequestFromBuffer(buffer));
+        auto deserialized_request =
+            tt::request::RequestFactory::GetRequestFromBuffer(buffer);
 
         CHECK_NOTHROW(std::is_same_v<
                       std::decay_t<decltype(deserialized_request.second.get())>,
                       tt::request::NotifyServiceStatus>);
-        CHECK(deserialized_request.first);
         CHECK(deserialized_request.first ==
               tt::request::NotifyServiceStatus::request_name);
     }
