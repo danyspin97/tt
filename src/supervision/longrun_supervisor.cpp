@@ -48,7 +48,7 @@ tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
     : longrun_(std::move(longrun)), logger_(std::move(logger)),
       run_supervisor_(longrun_.name(), longrun_.run(), longrun_.environment(),
                       logger_.GetScriptLogger()),
-      socket_path_(dirs->livedir() / "tt-ipc.socket") {}
+      ipc_client_(dirs->livedir() / "tt-ipc.socket") {}
 
 auto tt::LongrunSupervisor::Run() -> bool {
     sigset_t set;
@@ -104,14 +104,13 @@ void tt::LongrunSupervisor::ExecuteFinishScript() const {
 }
 
 void tt::LongrunSupervisor::NotifyStatus(ScriptStatus script_status) const {
-    net::Client client(socket_path_);
 
     ServiceStatus service_status = script_status == ScriptStatus::Success
                                        ? ServiceStatus::Up
                                        : ServiceStatus::Down;
     request::NotifyServiceStatus request(longrun_.name(), service_status);
     auto s = request::PackRequest(request);
-    client.SendMessage(s);
+    ipc_client_.SendMessage(s);
 }
 
 void tt::LongrunSupervisor::Kill() {

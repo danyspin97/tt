@@ -24,6 +24,7 @@
 
 #include "tt/data/longrun.hpp"                             // for Longrun
 #include "tt/log/longrun_logger.hpp"                       // for LongrunLo...
+#include "tt/net/client.hpp"                               // for Client
 #include "tt/supervision/long_lived_script_supervisor.hpp" // for LongLived...
 #include "tt/supervision/types.hpp"                        // for ScriptStatus
 
@@ -50,7 +51,7 @@ private:
     LongrunLogger logger_;
     LongLivedScriptSupervisor run_supervisor_;
     std::atomic<bool> should_run_again_ = true;
-    std::filesystem::path socket_path_;
+    net::Client ipc_client_;
 };
 
 } // namespace tt
