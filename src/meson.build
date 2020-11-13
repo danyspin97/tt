@@ -3,7 +3,9 @@ tt_src = files(
     'signal.cpp',
 )
 
-tt_cli_src = []
+tt_cli_src = files(
+    'file_lock.cpp',
+)
 
 # Add sources
 subdir('data')
