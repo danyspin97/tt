@@ -23,10 +23,10 @@
 #include <filesystem> // for operator/, path
 #include <utility>    // for move
 
-#include "spdlog/async.h"                 // for async_factory
-#include "spdlog/logger.h"                // for logger
-#include "spdlog/sinks/basic_file_sink.h" // for basic_logger_mt
-#include "spdlog/spdlog.h"                // for get
+#include "spdlog/async.h"                    // for async_factory
+#include "spdlog/logger.h"                   // for logger
+#include "spdlog/sinks/rotating_file_sink.h" // for rotating_file_sink_mt
+#include "spdlog/spdlog.h"                   // for get
 
 #include "tt/define.h"                 // for kServiceStatusLog, kSer...
 #include "tt/log/longrun_logger.hpp"   // for LongrunLogger
@@ -37,8 +37,10 @@
 
 tt::ServiceLoggerRegistry::ServiceLoggerRegistry(std::shared_ptr<Dirs> dirs)
     : dirs_(std::move(dirs)) {
-    logger_ = spdlog::basic_logger_mt<spdlog::async_factory>(
-        kServiceStatusLog, dirs_->logdir() / kServiceStatusLogFile);
+    logger_ = spdlog::rotating_logger_mt<spdlog::async_factory>(
+        // 1Mb, 3 files
+        kServiceStatusLog, dirs_->logdir() / kServiceStatusLogFile, 1024 * 1024,
+        3);
 }
 
 tt::ServiceLoggerRegistry::~ServiceLoggerRegistry() { logger_->flush(); }
@@ -67,8 +69,9 @@ auto tt::ServiceLoggerRegistry::GetScriptLoggerForService(
     auto service_log_path =
         dirs_->logdir() / kServiceLogDirectoryName /
         std::filesystem::path{service_name + std::string{".log"}};
-    logger = spdlog::basic_logger_mt<spdlog::async_factory>(service_name,
-                                                            service_log_path);
+    logger = spdlog::rotating_logger_mt<spdlog::async_factory>(
+        // 5Mb, 3 files
+        service_name, service_log_path, 1024 * 1024 * 5, 3);
 
     logger->set_pattern("{%d:%m:%Y %T} %v");
 
