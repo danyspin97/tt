@@ -15,7 +15,7 @@ if get_option('b_coverage')
     libtt_cli = library('tt_cli',
         tt_cli_src,
         include_directories: [ext_inc, tt_inc],
-        dependencies: [ tt_dep, deps ],
+        dependencies: tt_test_deps,
         install: false,
         version: meson.project_version(),
         soversion: tt_soversion,
