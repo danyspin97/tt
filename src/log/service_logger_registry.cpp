@@ -35,12 +35,15 @@
 #include "tt/path/dirs.hpp"            // for Dirs
 #include "tt/svc/service_status.hpp" // for ServiceStatus, GetServiceStatusName
 
+constexpr const char *tt_log_pattern = "[%d/%m/%Y %T.%e] %v";
+
 tt::ServiceLoggerRegistry::ServiceLoggerRegistry(std::shared_ptr<Dirs> dirs)
     : dirs_(std::move(dirs)) {
     logger_ = spdlog::rotating_logger_mt<spdlog::async_factory>(
         // 1Mb, 3 files
         kServiceStatusLog, dirs_->logdir() / kServiceStatusLogFile, 1024 * 1024,
         3);
+    logger_->set_pattern(tt_log_pattern);
 }
 
 tt::ServiceLoggerRegistry::~ServiceLoggerRegistry() { logger_->flush(); }
@@ -73,7 +76,7 @@ auto tt::ServiceLoggerRegistry::GetScriptLoggerForService(
         // 5Mb, 3 files
         service_name, service_log_path, 1024 * 1024 * 5, 3);
 
-    logger->set_pattern("{%d:%m:%Y %T} %v");
+    logger->set_pattern(tt_log_pattern);
 
     return logger;
 }
