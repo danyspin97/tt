@@ -31,7 +31,8 @@
 #include "tt/utils/serialize.hpp"
 
 tt::cli::EnableCommand::EnableCommand(args::Subparser &parser)
-    : Command(parser), service_list_(parser, "services", "services to parse") {}
+    : Command(parser), service_list_(parser, "services", "services to enable") {
+}
 
 auto tt::cli::EnableCommand::Execute() -> int { return EnableServices(); }
 
