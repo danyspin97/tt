@@ -26,6 +26,7 @@
 
 #include "tt/dependency_graph/dependency_graph.hpp"
 #include "tt/dependency_graph/get_graph_filename.hpp"
+#include "tt/file_lock.hpp" // for FileLock
 #include "tt/parser/service/services_parser.hpp"
 #include "tt/path/dirs.hpp"
 #include "tt/utils/deserialize.hpp"
@@ -37,6 +38,12 @@ tt::cli::EnableCommand::EnableCommand(args::Subparser &parser)
 auto tt::cli::EnableCommand::Execute() -> int { return EnableServices(); }
 
 auto tt::cli::EnableCommand::EnableServices() -> int {
+    FileLock lock(dirs()->supervisedir() / ".graph_lock");
+    if (!lock.TryLock()) {
+        throw Exception(
+            "Another instance of tt-enable or tt-disable is running");
+    }
+
     const auto &services_list = args::get(service_list_);
     if (services_list.empty()) {
         throw tt::Exception("At least one service to enable must be provided");

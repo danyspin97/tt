@@ -26,6 +26,7 @@
 #include "tt/dependency_graph/dependency_graph.hpp"   // for DependencyGraph
 #include "tt/dependency_graph/get_graph_filename.hpp" // for GetGraphFilename
 #include "tt/exception.hpp"                           // for Exception
+#include "tt/file_lock.hpp"                           // for FileLock
 #include "tt/request/request_listener.hpp"            // for ActionListener
 #include "tt/supervision/signal_handler.hpp" // for AddSignalsToSet, ...
 #include "tt/svc/service_manager.hpp"        // for ServiceManager
@@ -42,6 +43,11 @@ tt::cli::ServiceControlCommand::ServiceControlCommand(args::Subparser &parser)
     : Command(parser) {}
 
 auto tt::cli::ServiceControlCommand::Execute() -> int {
+    FileLock lock(dirs()->livedir() / ".svc_lock");
+    if (!lock.TryLock()) {
+        throw Exception("Another instance of tt-svc is running");
+    }
+
     auto signal_set = GetEmptySignalSet();
     AddSignalsToSet(kStopSignals, &signal_set);
     MaskSignals(&signal_set);

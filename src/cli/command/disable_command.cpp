@@ -23,8 +23,17 @@
 #include "args.hxx"
 
 #include "tt/cli/global_options.hpp"
+#include "tt/exception.hpp" // for Exception
+#include "tt/file_lock.hpp" // for FileLock
 
 tt::cli::DisableCommand::DisableCommand(args::Subparser &parser)
     : Command(parser), services_(parser, "service", "services to disable") {}
 
-auto tt::cli::DisableCommand::Execute() -> int { return 0; }
+auto tt::cli::DisableCommand::Execute() -> int {
+    FileLock lock(dirs()->supervisedir() / ".graph_lock");
+    if (!lock.TryLock()) {
+        throw Exception(
+            "Another instance of tt-enable or tt-disable is running");
+    }
+    return 0;
+}
