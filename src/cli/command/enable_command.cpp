@@ -22,8 +22,6 @@
 
 #include <unistd.h>
 
-#include "spdlog/spdlog.h"
-
 #include "tt/dependency_graph/dependency_graph.hpp"
 #include "tt/dependency_graph/get_graph_filename.hpp"
 #include "tt/file_lock.hpp" // for FileLock
