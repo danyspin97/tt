@@ -44,7 +44,7 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
 
     const auto &services_list = args::get(service_list_);
     if (services_list.empty()) {
-        throw tt::Exception("At least one service to enable must be provided");
+        throw tt::Exception("At least one service must be provided");
     }
 
     ServicesParser parser(dirs());
