@@ -42,7 +42,8 @@ private:
     auto GetGraphPath() -> std::filesystem::path;
 
     args::PositionalList<std::string> service_list_;
-    // TODO: Add more arguments
+    args::Flag update_services_;
+    args::Flag no_update_dependencies_;
 };
 
 } // namespace tt::cli
