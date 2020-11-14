@@ -42,6 +42,11 @@ public:
         SH,
     };
 
+    Script(Type type, std::string &&execute);
+    Script(Type type, std::string &&execute, std::string &&user,
+           std::string &&group);
+    virtual ~Script() = default;
+
     [[nodiscard]] auto type() const noexcept -> Type { return type_; }
     [[nodiscard]] auto execute() const noexcept -> std::string {
         return execute_;
@@ -54,11 +59,6 @@ public:
         return group_;
     }
     void group(const std::string &group) noexcept { group_ = group; }
-    Script(Type type, std::string &&execute);
-    Script(Type type, std::string &&execute, std::string &&user,
-           std::string &&group);
-    virtual ~Script() = default;
-    virtual auto Dump(std::ostream &oss) const -> std::ostream &;
 
     [[nodiscard]] auto timeout() const noexcept -> uint32_t { return timeout_; }
     void timeout(uint32_t timeout) noexcept { timeout_ = timeout; }
@@ -81,6 +81,8 @@ public:
         return max_death_;
     }
     void max_death(uint8_t max_death) { max_death_ = max_death; };
+
+    virtual auto Dump(std::ostream &oss) const -> std::ostream &;
 
 protected:
     void execute(std::string &&execute) { execute_ = std::move(execute); }
