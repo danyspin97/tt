@@ -29,6 +29,11 @@ namespace tt {
 
 class OneshotOptions : public ServiceOptions {
 public:
+    auto operator==(const OneshotOptions &rhs) const -> bool;
+    auto operator!=(const OneshotOptions &rhs) const {
+        return !operator==(rhs);
+    }
+
     [[nodiscard]] auto optional() const noexcept -> bool { return optional_; }
     void optional(bool optional) { optional_ = optional; }
 

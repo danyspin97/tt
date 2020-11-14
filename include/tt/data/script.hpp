@@ -47,6 +47,9 @@ public:
            std::string &&group);
     virtual ~Script() = default;
 
+    auto operator==(const Script &rhs) const -> bool;
+    auto operator!=(const Script &rhs) const { return !operator==(rhs); }
+
     [[nodiscard]] auto type() const noexcept -> Type { return type_; }
     [[nodiscard]] auto execute() const noexcept -> std::string {
         return execute_;

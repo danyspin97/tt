@@ -29,6 +29,11 @@ namespace tt {
 
 class LongrunOptions : public ServiceOptions {
 public:
+    auto operator==(const LongrunOptions &rhs) const -> bool;
+    auto operator!=(const LongrunOptions &rhs) const {
+        return !operator==(rhs);
+    }
+
     [[nodiscard]] auto optional() const noexcept -> bool { return optional_; }
     void optional(bool optional) noexcept { optional_ = optional; }
 

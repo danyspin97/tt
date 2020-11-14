@@ -31,6 +31,9 @@ namespace tt {
 
 class ServiceImpl {
 public:
+    auto operator==(const ServiceImpl &rhs) const -> bool;
+    auto operator!=(const ServiceImpl &rhs) const { return !operator==(rhs); }
+
     [[nodiscard]] auto name() const noexcept -> std::string { return name_; }
 
     [[nodiscard]] auto description() const noexcept -> std::string {

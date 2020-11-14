@@ -36,6 +36,9 @@ class MainScript : public Script {
 public:
     using Script::Script;
 
+    auto operator==(const MainScript &rhs) const -> bool;
+    auto operator!=(const MainScript &rhs) const { return !operator==(rhs); }
+
     [[nodiscard]] auto autostart() const noexcept -> bool { return autostart_; }
     void autostart(bool autostart) { autostart_ = autostart; }
 

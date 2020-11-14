@@ -32,6 +32,10 @@ using std::string;
 
 using tt::ServiceOptions;
 
+auto ServiceOptions::operator==(const ServiceOptions &rhs) const -> bool {
+    return depends_ == rhs.depends_;
+}
+
 auto ServiceOptions::Dump(ostream &oss) const -> ostream & {
     if (!depends_.empty()) {
         oss << "depends = " << tt::kArrayOpenToken << " ";

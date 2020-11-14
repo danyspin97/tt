@@ -24,6 +24,10 @@ using std::ostream;
 
 using tt::LongrunOptions;
 
+auto tt::LongrunOptions::operator==(const LongrunOptions &rhs) const -> bool {
+    return ServiceOptions::operator==(rhs) && optional_ == rhs.optional_;
+}
+
 auto LongrunOptions::Dump(ostream &oss) const -> ostream & {
     oss << "\noptional = " << optional();
     ServiceOptions::Dump(oss);

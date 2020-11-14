@@ -40,6 +40,9 @@ public:
     Bundle(std::string &&name, std::string &&description, std::string &&path,
            BundleOptions &&options);
 
+    auto operator==(const Bundle &rhs) const -> bool;
+    auto operator!=(const Bundle &rhs) const { return !operator==(rhs); }
+
     [[nodiscard]] auto options() const noexcept -> BundleOptions {
         return options_;
     }

@@ -32,6 +32,9 @@ namespace tt {
 
 class BundleOptions : public ServiceOptions {
 public:
+    auto operator==(const BundleOptions &rhs) const -> bool;
+    auto operator!=(const BundleOptions &rhs) const { return !operator==(rhs); }
+
     [[nodiscard]] auto contents() const -> std::vector<std::string> {
         return contents_;
     }

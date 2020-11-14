@@ -22,6 +22,12 @@
 
 #include <algorithm> // for for_each, max
 
+auto tt::Environment::operator==(const Environment &rhs) const -> bool {
+    // If the pairs are sorted, we will compare just the content
+    // TODO: Make pairs ordered
+    return pairs_ == rhs.pairs_;
+}
+
 auto tt::Environment::Get(const std::string &key) const -> std::string {
     for (const auto &pair : pairs_) {
         if (std::get<0>(pair) == key) {

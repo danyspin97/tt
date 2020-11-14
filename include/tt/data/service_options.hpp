@@ -34,6 +34,11 @@ namespace tt {
 
 class ServiceOptions {
 public:
+    auto operator==(const ServiceOptions &rhs) const -> bool;
+    auto operator!=(const ServiceOptions &rhs) const {
+        return !operator==(rhs);
+    }
+
     [[nodiscard]] auto dependencies() const -> std::vector<std::string> {
         return depends_;
     }

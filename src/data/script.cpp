@@ -39,6 +39,13 @@ Script::Script(Type type, std::string &&execute, std::string &&user,
     : execute_(std::move(execute)), type_(type), user_(std::move(user)),
       group_(std::move(group)) {}
 
+auto Script::operator==(const Script &rhs) const -> bool {
+    return execute_ == rhs.execute_ && user_ == rhs.user_ &&
+           group_ == rhs.group_ && timeout_ == rhs.timeout_ &&
+           timeout_kill_ == rhs.timeout_kill_ &&
+           down_signal_ == rhs.down_signal_ && max_death_ == rhs.max_death_;
+}
+
 auto Script::Dump(ostream &oss) const -> ostream & {
     // TODO: Convert from Type to string
     // o << "type = " << type() << "\n";

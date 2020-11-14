@@ -36,6 +36,12 @@ Longrun::Longrun(std::string &&name, std::string &&description,
       options_(std::move(options)), environment_(std::move(environment)),
       run_(std::move(run)) {}
 
+auto Longrun::operator==(const Longrun &rhs) const -> bool {
+    return ServiceImpl::operator==(rhs) && run_ == rhs.run_ &&
+           finish_ == rhs.finish_ && options_ == rhs.options_ &&
+           environment_ == rhs.environment_;
+}
+
 auto Longrun::Dump(ostream &oss) const -> ostream & {
     oss << "[main]\n";
     ServiceImpl::Dump(oss);

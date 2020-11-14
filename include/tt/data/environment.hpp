@@ -36,6 +36,9 @@ namespace tt {
 
 class Environment {
 public:
+    auto operator==(const Environment &rhs) const -> bool;
+    auto operator!=(const Environment &rhs) const { return !operator==(rhs); }
+
     [[nodiscard]] auto Get(const std::string &key) const -> std::string;
     [[nodiscard]] auto GetKeys() const -> std::vector<std::string>;
     void Set(const std::string &key, const std::string &value);

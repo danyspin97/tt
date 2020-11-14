@@ -33,6 +33,10 @@ Bundle::Bundle(std::string &&name, std::string &&description,
     : ServiceImpl(std::move(name), std::move(description), std::move(path)),
       options_(std::move(options)) {}
 
+auto Bundle::operator==(const Bundle &rhs) const -> bool {
+    return ServiceImpl::operator==(rhs) && options_ == rhs.options_;
+}
+
 auto Bundle::Dump(ostream &oss) const -> ostream & {
     oss << "[main]\n"
         << "\ntype = bundle";

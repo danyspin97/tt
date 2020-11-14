@@ -36,6 +36,12 @@ Oneshot::Oneshot(std::string &&name, std::string &&description,
       options_(std::move(options)), environment_(std::move(environment)),
       start_(std::move(start)) {}
 
+auto Oneshot::operator==(const Oneshot &rhs) const -> bool {
+    return ServiceImpl::operator==(rhs) && options_ == rhs.options_ &&
+           environment_ == rhs.environment_ && start_ == rhs.start_ &&
+           stop_ == rhs.stop_;
+}
+
 auto Oneshot::Dump(ostream &oss) const -> ostream & {
     oss << "[main]\n";
     ServiceImpl::Dump(oss);

@@ -22,6 +22,10 @@
 
 #include <ostream> // for operator<<, ostream, basic_ostream
 
+auto tt::OneshotOptions::operator==(const OneshotOptions &rhs) const -> bool {
+    return optional_ == rhs.optional_;
+}
+
 auto tt::OneshotOptions::Dump(std::ostream &oss) const -> std::ostream & {
     ServiceOptions::Dump(oss) << "\n";
     return oss << "\noptional = " << optional();

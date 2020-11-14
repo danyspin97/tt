@@ -47,6 +47,9 @@ public:
             OneshotOptions &&options, Environment &&environment,
             MainScript &&start);
 
+    auto operator==(const Oneshot &rhs) const -> bool;
+    auto operator!=(const Oneshot &rhs) const { return !operator==(rhs); }
+
     [[nodiscard]] auto environment() const noexcept -> Environment {
         return environment_;
     }

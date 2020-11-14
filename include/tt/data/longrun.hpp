@@ -52,6 +52,9 @@ public:
             LongrunOptions &&options, Environment &&environment,
             LongLivedScript &&run);
 
+    auto operator==(const Longrun &rhs) const -> bool;
+    auto operator!=(const Longrun &rhs) const { return !operator==(rhs); }
+
     [[nodiscard]] auto environment() const noexcept -> Environment {
         return environment_;
     }

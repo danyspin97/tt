@@ -35,6 +35,10 @@ tt::ServiceImpl::ServiceImpl(std::string &&name, std::string &&description,
     ValidatePath();
 }
 
+auto tt::ServiceImpl::operator==(const ServiceImpl &rhs) const -> bool {
+    return name_ == rhs.name_ && description_ == rhs.description_;
+}
+
 void tt::ServiceImpl::ValidatePath() const {
     std::filesystem::path file(path());
     if (file.stem() != name()) {

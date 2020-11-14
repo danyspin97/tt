@@ -22,6 +22,10 @@
 
 #include <ostream> // for ostream, operator<<, basic_ostream
 
+auto tt::MainScript::operator==(const MainScript &rhs) const -> bool {
+    return Script::operator==(rhs) && autostart_ == rhs.autostart_;
+}
+
 auto tt::MainScript::Dump(std::ostream &oss) const -> std::ostream & {
     Script::Dump(oss);
     oss << "\nautostart = " << autostart_;

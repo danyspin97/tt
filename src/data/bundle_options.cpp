@@ -31,6 +31,10 @@ using std::string;
 
 using tt::BundleOptions;
 
+auto BundleOptions::operator==(const BundleOptions &rhs) const -> bool {
+    return contents_ == rhs.contents_;
+}
+
 auto BundleOptions::Dump(ostream &oss) const -> ostream & {
     oss << "contents = ( ";
     copy(contents_.begin(), contents_.end(),

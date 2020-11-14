@@ -39,6 +39,11 @@ class LongLivedScript : public MainScript {
 public:
     using MainScript::MainScript;
 
+    auto operator==(const LongLivedScript &rhs) const -> bool;
+    auto operator!=(const LongLivedScript &rhs) const {
+        return !operator==(rhs);
+    }
+
     [[nodiscard]] auto notify() const noexcept -> std::optional<uint_fast32_t> {
         return notify_;
     }
