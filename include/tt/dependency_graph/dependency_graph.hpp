@@ -46,7 +46,7 @@ public:
         -> std::vector<std::reference_wrapper<const Service>>;
 
     void AddServices(const std::vector<std::string> &services_to_enable,
-                     const std::vector<tt::Service> &services);
+                     std::vector<tt::Service> &services);
     [[nodiscard]] auto GetActiveServices() const -> std::vector<std::string>;
     [[nodiscard]] auto GetServiceByName(const std::string &name)
         -> const Service &;
@@ -58,7 +58,7 @@ public:
     void RemoveServices(const std::vector<std::string> &services);
 
 private:
-    auto AddNodes(const std::vector<Service> &services) -> size_t;
+    auto AddNewNodes(std::vector<Service> &&services) -> size_t;
     void AddEnabledServices(const std::vector<std::string> &services_to_enable);
     void CheckDepenciesAreFullfilled(size_t starting_index);
     void CheckGraphIsAcyclic(const std::vector<std::string> &enabled_services);
@@ -71,6 +71,7 @@ private:
     void RemoveEnabledServices(const std::vector<std::string> &services);
     void RemoveService(const ServiceNode &node);
     void RemoveUnusedServices();
+    auto ReplaceExistingNodes(std::vector<tt::Service> &services) -> bool;
     void UpdateDependantOfNode(const ServiceNode &node);
     void UpdateDependants();
 
