@@ -138,6 +138,8 @@ Credits also to:
 - [**args**](https://github.com/Taywee/args), command-line argument parser
 - [**bitsery**](https://github.com/fraillt/bitsery), binary serialization
   library
+- [**expected**](https://github.com/TartanLlama/expected), c++17 implementation
+  of [_std::expected_](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0323r3.pdf)
 - [**nngpp**](https://github.com/cwzx/nngpp), wrapper around
   [_nanomsg-next-gen_](https://github.com/nanomsg/nng) library
 - [**tiny-process-library**](https://gitlab.com/eidheim/tiny-process-library/),
