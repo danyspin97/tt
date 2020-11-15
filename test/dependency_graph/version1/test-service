@@ -1,0 +1,11 @@
+[main]
+name = test-service
+description = test
+type = oneshot
+
+[start]
+build = auto
+execute =(
+   echo "test"
+)
+

@@ -62,4 +62,33 @@ TEST_CASE("DependencyChecker") {
             tt::AddTestDependenciesToGraph(graph, {"foobar"}, filenames),
             tt::Exception);
     }
+
+    SECTION("Re add existing service") {
+        const std::string service_name = "test-service";
+        std::vector<std::string> filenames = {
+            "../test/dependency_graph/version1/" + service_name};
+        REQUIRE_NOTHROW(
+            tt::AddTestDependenciesToGraph(graph, {service_name}, filenames));
+
+        REQUIRE_NOTHROW(tt::AddTestDependenciesToGraph(graph, {}, filenames));
+
+        CHECK(graph.services().size() == 1);
+    }
+
+    SECTION("Replace service") {
+        const std::string service_name = "test-service";
+        std::vector<std::string> filenames = {
+            "../test/dependency_graph/version1/" + service_name};
+        REQUIRE_NOTHROW(
+            tt::AddTestDependenciesToGraph(graph, {service_name}, filenames));
+
+        filenames = {"../test/dependency_graph/version2/" + service_name};
+        REQUIRE_NOTHROW(
+            tt::AddTestDependenciesToGraph(graph, {service_name}, filenames));
+
+        // version2 has a stop script, while version1 does not
+        CHECK(graph.services().size() == 1);
+        CHECK(
+            std::get<tt::Oneshot>(graph.GetServiceByName(service_name)).stop());
+    }
 }
