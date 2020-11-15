@@ -1,0 +1,18 @@
+[main]
+name = test-service
+description = test2
+type = oneshot
+
+[start]
+build = auto
+execute =(
+   echo "test"
+)
+
+[stop]
+build = auto
+execute = test
+
+[options]
+depends =[ dummy ]
+

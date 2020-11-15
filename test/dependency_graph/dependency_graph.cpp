@@ -91,4 +91,20 @@ TEST_CASE("DependencyChecker") {
         CHECK(
             std::get<tt::Oneshot>(graph.GetServiceByName(service_name)).stop());
     }
+
+    SECTION("Replace a service that has a dep on a newly added one") {
+        const std::string service_name = "test-service";
+        std::vector<std::string> filenames = {
+            "../test/dependency_graph/version2/" + service_name};
+        REQUIRE_NOTHROW(
+            tt::AddTestDependenciesToGraph(graph, {service_name}, filenames));
+
+        // version3 has an additional depedency on dummy
+        filenames = {"../test/dependency_graph/version3/" + service_name,
+                     "../test/dependency_graph/dummy"};
+        REQUIRE_NOTHROW(
+            tt::AddTestDependenciesToGraph(graph, {service_name}, filenames));
+
+        CHECK(graph.services().size() == 2);
+    }
 }

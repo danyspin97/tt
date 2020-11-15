@@ -1,0 +1,8 @@
+[main]
+name = dummy
+description = dummy
+type = oneshot
+
+[start]
+build = auto
+execute = dummy

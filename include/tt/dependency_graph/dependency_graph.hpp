@@ -58,7 +58,8 @@ public:
     void RemoveServices(const std::vector<std::string> &services);
 
 private:
-    auto AddNewNodes(std::vector<Service> &&services) -> size_t;
+    auto AddNodes(std::vector<Service>::iterator begin,
+                  std::vector<Service>::iterator end) -> size_t;
     void AddEnabledServices(const std::vector<std::string> &services_to_enable);
     void CheckDepenciesAreFullfilled(size_t starting_index);
     void CheckGraphIsAcyclic(const std::vector<std::string> &enabled_services);
@@ -69,9 +70,16 @@ private:
     [[nodiscard]] auto IsNodeRequired(const ServiceNode &node) const -> bool;
     void PopulateDependant(const std::vector<std::string> &services);
     void RemoveEnabledServices(const std::vector<std::string> &services);
+    // Replace existing nods with new ones, if needed
+    auto ReplaceExistingNodes(std::vector<Service>::iterator begin,
+                              std::vector<Service>::iterator end) -> bool;
     void RemoveService(const ServiceNode &node);
     void RemoveUnusedServices();
-    auto ReplaceExistingNodes(std::vector<tt::Service> &services) -> bool;
+    // Split the vector in two parts: the first contains new services,
+    // the second one contains existing services. Return an iterator to the
+    // first service of the second part
+    auto SplitExistingServices(std::vector<Service> &services)
+        -> std::vector<Service>::iterator;
     void UpdateDependantOfNode(const ServiceNode &node);
     void UpdateDependants();
 
@@ -97,6 +105,6 @@ private:
     std::set<std::string> enabled_services_;
     std::map<std::string, size_t> name_to_index_;
     std::vector<ServiceNode> nodes_;
-}; // namespace tt
+};
 
 } // namespace tt

@@ -35,20 +35,31 @@
 void tt::DependencyGraph::AddServices(
     const std::vector<std::string> &services_to_enable,
     std::vector<tt::Service> &services) {
-    auto nodes_replaced = ReplaceExistingNodes(services);
-    auto index = AddNewNodes(std::move(services));
+    auto existing_services = SplitExistingServices(services);
+    auto index = AddNodes(services.begin(), existing_services);
+    auto nodes_replaced =
+        ReplaceExistingNodes(existing_services, services.end());
     AddEnabledServices(services_to_enable);
     CheckDepenciesAreFullfilled(nodes_replaced ? 0 : index);
     CheckGraphIsAcyclic(services_to_enable);
     PopulateDependant(services_to_enable);
 }
 
-auto tt::DependencyGraph::AddNewNodes(std::vector<tt::Service> &&services)
+auto tt::DependencyGraph::SplitExistingServices(std::vector<Service> &services)
+    -> std::vector<Service>::iterator {
+    return std::remove_if(services.begin(), services.end(),
+                          [this](const auto &service) {
+                              return HasService(std::visit(GetName, service));
+                          });
+}
+
+auto tt::DependencyGraph::AddNodes(std::vector<Service>::iterator begin,
+                                   std::vector<Service>::iterator end)
     -> size_t {
     size_t ret_index = nodes_.size();
     size_t current_index = ret_index;
-    nodes_.reserve(services.size() + ret_index);
-    for (auto &&service : services) {
+    nodes_.reserve(nodes_.size() + std::distance(begin, end));
+    std::for_each(begin, end, [this, &current_index](auto &service) {
         assert(!std::holds_alternative<std::monostate>(service));
         const auto name = std::visit(tt::GetName, service);
         // Assert that this is indeed a new service
@@ -57,43 +68,35 @@ auto tt::DependencyGraph::AddNewNodes(std::vector<tt::Service> &&services)
         nodes_.emplace_back(std::move(service));
         name_to_index_.emplace(name, current_index);
         current_index++;
-    }
+    });
     return ret_index;
 }
 
 auto tt::DependencyGraph::ReplaceExistingNodes(
-    std::vector<tt::Service> &services) -> bool {
+    std::vector<Service>::iterator begin, std::vector<Service>::iterator end)
+    -> bool {
     bool replaced = false;
-    services.erase(
-        std::remove_if(services.begin(), services.end(),
-                       [this, &replaced](auto &service) {
-                           const auto &service_name =
-                               std::visit(GetName, service);
-                           // This service hasn't been added, skip it
-                           if (!HasService(service_name)) {
-                               return false;
-                           }
-                           auto node_index = name_to_index_.at(service_name);
-                           auto old_node = nodes_.at(node_index);
-                           // The new node contains the same service as the
-                           // old one, remove it from the services list
-                           if (old_node.service() == service) {
-                               return true;
-                           }
+    std::for_each(begin, end, [this, &replaced](auto &service) {
+        const auto &service_name = std::visit(GetName, service);
+        assert(HasService(service_name));
+        auto node_index = name_to_index_.at(service_name);
+        auto old_node = nodes_.at(node_index);
+        // The new node contains the same service as the
+        // old one, remove it from the services list
+        if (old_node.service() == service) {
+            return;
+        }
 
-                           ForEachDependencyOfNode(
-                               old_node,
-                               [this, service_name](ServiceNode &dep_node) {
-                                   dep_node.RemoveDependant(service_name);
-                               });
+        ForEachDependencyOfNode(old_node,
+                                [this, service_name](ServiceNode &dep_node) {
+                                    dep_node.RemoveDependant(service_name);
+                                });
 
-                           ServiceNode new_node(service);
-                           nodes_.at(node_index) = std::move(new_node);
-                           PopulateDependant({service_name});
-                           replaced = true;
-                           return true;
-                       }),
-        services.end());
+        ServiceNode new_node(service);
+        nodes_.at(node_index) = std::move(new_node);
+        PopulateDependant({service_name});
+        replaced = true;
+    });
     return replaced;
 }
 
