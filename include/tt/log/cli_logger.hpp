@@ -35,6 +35,7 @@ public:
     CliLogger(const std::string &command_name,
               const std::shared_ptr<Dirs> &dirs, const std::string &verbosity,
               bool silence_stderr);
+    CliLogger() = delete;
 
     template <typename FormatString, typename... Args>
     void LogDebug(const FormatString &format, const Args &... args) const {
