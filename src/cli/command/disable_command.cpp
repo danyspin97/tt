@@ -30,7 +30,7 @@ tt::cli::DisableCommand::DisableCommand(args::Subparser &parser)
     : Command(parser), services_(parser, "service", "services to disable") {}
 
 auto tt::cli::DisableCommand::Execute() -> int {
-    FileLock lock(dirs()->supervisedir() / ".graph_lock");
+    FileLock lock(dirs()->livedir() / ".graph_lock");
     if (!lock.TryLock()) {
         throw Exception(
             "Another instance of tt-enable or tt-disable is running");

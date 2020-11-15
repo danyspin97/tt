@@ -45,7 +45,7 @@ auto tt::cli::EnableCommand::Execute() -> int {
         throw tt::Exception("At least one service must be provided");
     }
 
-    FileLock lock(dirs()->supervisedir() / ".graph_lock");
+    FileLock lock(dirs()->livedir() / ".graph_lock");
     if (!lock.TryLock()) {
         throw Exception(
             "Another instance of tt-enable or tt-disable is running");
