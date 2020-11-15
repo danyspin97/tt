@@ -33,7 +33,7 @@ class Dirs;
 
 class LongrunSupervisorLauncher {
 public:
-    explicit LongrunSupervisorLauncher(const std::shared_ptr<Dirs> &dirs);
+    explicit LongrunSupervisorLauncher(std::shared_ptr<Dirs> dirs);
 
     void Launch(const Longrun &longrun);
     void Close(const std::string &service_name);

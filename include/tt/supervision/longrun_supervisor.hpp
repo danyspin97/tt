@@ -37,7 +37,7 @@ enum class ServiceStatus;
 class LongrunSupervisor {
 public:
     LongrunSupervisor(Longrun &&longrun, LongrunLogger &&logger,
-                      std::shared_ptr<Dirs> dirs);
+                      const std::shared_ptr<Dirs>& dirs);
     void Kill();
     // Returns if the longrun ran as success
     auto Run() -> bool;

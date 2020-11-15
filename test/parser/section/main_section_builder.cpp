@@ -28,7 +28,6 @@
 #include "tt/parser/section/utils.hpp"        // for TestBuilderWithFile
 
 using std::string;
-using tt::MainSection;
 using tt::MainSectionBuilder;
 
 TEST_CASE("MainSectionBuilder") {

@@ -35,7 +35,7 @@
 #include "tt/svc/service_manager.hpp"           // for ServiceManager
 
 tt::request::RequestListener::RequestListener(ServiceManager &service_manager,
-                                              std::shared_ptr<Dirs> dirs)
+                                              const std::shared_ptr<Dirs>& dirs)
     : service_manager_(service_manager),
       socket_path_(dirs->livedir() / "tt-ipc.socket") {}
 

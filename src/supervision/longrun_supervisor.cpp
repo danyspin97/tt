@@ -44,7 +44,7 @@
 
 tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
                                          LongrunLogger &&logger,
-                                         std::shared_ptr<Dirs> dirs)
+                                         const std::shared_ptr<Dirs>& dirs)
     : longrun_(std::move(longrun)), logger_(std::move(logger)),
       run_supervisor_(longrun_.name(), longrun_.run(), longrun_.environment(),
                       logger_.GetScriptLogger()),

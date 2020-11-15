@@ -26,7 +26,7 @@
 
 namespace nlohmann {
 template <> struct adl_serializer<tt::request::NotifyServiceStatus> {
-    static tt::request::NotifyServiceStatus from_json(const json &j) {
+    static auto from_json(const json &j) -> tt::request::NotifyServiceStatus {
         auto status = tt::ParseServiceStatusFromString(j.at("status"));
         return {j.at("service"), status};
     }

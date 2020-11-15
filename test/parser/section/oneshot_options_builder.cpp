@@ -34,7 +34,6 @@ class SectionBuilderException;
 using std::string;
 using std::vector;
 
-using tt::OneshotOptions;
 using tt::OneshotOptionsBuilder;
 using tt::SectionBuilderException;
 using tt::TestBuilderWithFile;

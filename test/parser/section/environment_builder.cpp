@@ -31,7 +31,6 @@
 using std::map;
 using std::string;
 
-using tt::Environment;
 using tt::EnvironmentBuilder;
 
 TEST_CASE("EnvironmentBuilder") {
