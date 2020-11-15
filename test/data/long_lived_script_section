@@ -3,4 +3,5 @@ execute =(
     dbus-daemon
 )
 notify = 3
+timeout = 2000
 

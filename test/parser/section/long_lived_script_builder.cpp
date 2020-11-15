@@ -36,6 +36,7 @@ TEST_CASE("LongLivedScriptBuilder") {
 
         CHECK(s.notify());
         CHECK(s.notify().value() == 3);
+        CHECK(s.timeout() == 2000);
     }
 
     SECTION("Parse invalid line") {
