@@ -24,9 +24,8 @@
 
 #include "fmt/format.h" // for format
 
-tt::net::Socket::Socket(nng::socket &&socket,
-                        std::filesystem::path socket_path_)
-    : socket_(std::move(socket)), socket_path_(std::move(socket_path_)) {}
+tt::net::Socket::Socket(nng::socket &&socket, std::filesystem::path address)
+    : socket_(std::move(socket)), socket_path_(std::move(address)) {}
 
 auto tt::net::Socket::GetNetAddress() const -> std::string {
     return fmt::format("ipc://{}", socket_path_.string());
