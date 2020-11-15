@@ -63,7 +63,7 @@ TEST_CASE("DependencyChecker") {
             tt::Exception);
     }
 
-    SECTION("Re add existing service") {
+    SECTION("Re-add an existing service") {
         const std::string service_name = "test-service";
         std::vector<std::string> filenames = {
             "../test/dependency_graph/version1/" + service_name};
@@ -75,7 +75,7 @@ TEST_CASE("DependencyChecker") {
         CHECK(graph.services().size() == 1);
     }
 
-    SECTION("Replace service") {
+    SECTION("Replace a service") {
         const std::string service_name = "test-service";
         std::vector<std::string> filenames = {
             "../test/dependency_graph/version1/" + service_name};
