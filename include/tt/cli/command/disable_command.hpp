@@ -38,6 +38,8 @@ protected:
     auto Execute() -> int override;
 
 private:
+    auto DisableServices() -> int;
+
     args::PositionalList<std::string> services_;
 };
 

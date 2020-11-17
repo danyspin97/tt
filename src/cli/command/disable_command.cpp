@@ -22,18 +22,44 @@
 
 #include "args.hxx"
 
-#include "tt/cli/global_options.hpp"
-#include "tt/exception.hpp" // for Exception
-#include "tt/file_lock.hpp" // for FileLock
+#include "tt/cli/global_options.hpp"                  // for GlobalOptions
+#include "tt/dependency_graph/dependency_graph.hpp"   // for DependencyGraph
+#include "tt/dependency_graph/get_graph_filename.hpp" // for GetGraphFilename
+#include "tt/exception.hpp"                           // for Exception
+#include "tt/file_lock.hpp"                           // for FileLock
+#include "tt/path/dirs.hpp"                           // for Dirs
+#include "tt/utils/deserialize.hpp"                   // for Deserialize
+#include "tt/utils/serialize.hpp"                     // for Serialize
 
 tt::cli::DisableCommand::DisableCommand(args::Subparser &parser)
     : Command(parser), services_(parser, "service", "services to disable") {}
 
 auto tt::cli::DisableCommand::Execute() -> int {
+    if (services_.cbegin() == services_.cend()) {
+        throw tt::Exception("At least one service must be provided");
+    }
+
     FileLock lock(dirs()->livedir() / ".graph_lock");
     if (!lock.TryLock()) {
         throw Exception(
             "Another instance of tt-enable or tt-disable is running");
     }
+
+    return DisableServices();
+}
+
+auto tt::cli::DisableCommand::DisableServices() -> int {
+    auto &services = args::get(services_);
+
+    DependencyGraph graph;
+    auto graph_filename = GetGraphFilename(dirs());
+    if (!std::filesystem::exists(graph_filename)) {
+        throw Exception("No service has been enabled yet");
+    }
+    graph = utils::Deserialize<DependencyGraph>(graph_filename);
+
+    graph.RemoveServices(services);
+
+    utils::Serialize(graph, graph_filename);
     return 0;
 }
