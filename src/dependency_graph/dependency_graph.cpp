@@ -88,7 +88,7 @@ auto tt::DependencyGraph::ReplaceExistingNodes(
         }
 
         ForEachDependencyOfNode(old_node,
-                                [this, service_name](ServiceNode &dep_node) {
+                                [service_name](ServiceNode &dep_node) {
                                     dep_node.RemoveDependant(service_name);
                                 });
 
