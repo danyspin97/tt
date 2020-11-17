@@ -20,7 +20,7 @@
 
 #include "tt/dependency_graph/dependency_reader.hpp"
 
-#include <assert.h> // for assert
+#include <cassert> // for assert
 
 #include "tt/data/bundle.hpp"          // for Bundle
 #include "tt/data/bundle_options.hpp"  // for BundleOptions

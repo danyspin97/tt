@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <assert.h>    // for assert
+#include <cassert>    // for assert
 #include <string>      // for string
 #include <type_traits> // for decay_t
 #include <variant>     // for visit, monostate

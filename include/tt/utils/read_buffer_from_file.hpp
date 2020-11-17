@@ -21,7 +21,7 @@
 #pragma once
 
 #include <filesystem> // for path
-#include <stdint.h>   // for uint8_t
+#include <cstdint>   // for uint8_t
 #include <vector>     // for vector
 
 namespace tt::utils {

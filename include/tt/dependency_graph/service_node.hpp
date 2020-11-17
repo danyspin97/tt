@@ -21,7 +21,7 @@
 #pragma once
 
 #include <iosfwd>   // for ostream
-#include <stdint.h> // for uint32_t
+#include <cstdint> // for uint32_t
 #include <string>   // for string
 #include <variant>  // for monostate
 

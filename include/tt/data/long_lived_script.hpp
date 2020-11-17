@@ -22,7 +22,7 @@
 
 #include <iosfwd>   // for ostream
 #include <optional> // for optional
-#include <stdint.h> // for uint_fast32_t
+#include <cstdint> // for uint_fast32_t
 
 #include "bitsery/ext/inheritance.h"  // for BaseClass
 #include "bitsery/ext/std_optional.h" // for StdOptional

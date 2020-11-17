@@ -22,7 +22,7 @@
 
 #include <filesystem>    // for path
 #include <memory>        // for shared_ptr
-#include <stddef.h>      // for size_t
+#include <cstddef>      // for size_t
 #include <string>        // for string, hash
 #include <unordered_map> // for unordered_map
 #include <vector>        // for vector
