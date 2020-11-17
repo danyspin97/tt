@@ -1,5 +1,5 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,misc-*,modernize-*,performance-*,readability-*,portability-*,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,bugprone-*,hicpp-*,-hicpp-no-array-decay'
+Checks:          'clang-diagnostic-*,clang-analyzer-*,misc-*,modernize-*,performance-*,readability-*,portability-*,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,bugprone-*,hicpp-*,-hicpp-no-array-decay,-hicpp-deprecated-headers'
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
