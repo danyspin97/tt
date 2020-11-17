@@ -41,6 +41,18 @@ TEST_CASE("DependencyChecker") {
         CHECK(graph.enabled_services().empty());
     }
 
+    SECTION("Add a service after removing one") {
+        std::vector<std::string> filenames = {"../test/data/init-fsck",
+                                              "../test/data/mount-rwfs"};
+        REQUIRE_NOTHROW(tt::AddTestDependenciesToGraph(
+            graph, {"init-fsck", "mount-rwfs"}, filenames));
+
+        REQUIRE_NOTHROW(graph.RemoveServices({"init-fsck"}));
+
+        REQUIRE_NOTHROW(tt::AddTestDependenciesToGraph(
+            graph, {"udev"}, {"../test/data/udev.system"}));
+    }
+
     SECTION("mount-fstab with unresolved deps") {
         std::vector<std::string> filenames = {"../test/data/mount-fstab"};
         REQUIRE_THROWS_AS(

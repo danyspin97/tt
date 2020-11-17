@@ -1,7 +1,7 @@
 [main]
 name = udev
 description = Run udev daemon
-type = oneshot
+type = longrun
 
 [run]
 build = auto
