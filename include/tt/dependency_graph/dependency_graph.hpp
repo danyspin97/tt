@@ -74,13 +74,12 @@ private:
     auto ReplaceExistingNodes(std::vector<Service>::iterator begin,
                               std::vector<Service>::iterator end) -> bool;
     void RemoveService(const ServiceNode &node);
-    void RemoveUnusedServices();
+    void RemoveNode(const ServiceNode &node);
     // Split the vector in two parts: the first contains new services,
     // the second one contains existing services. Return an iterator to the
     // first service of the second part
     auto SplitExistingServices(std::vector<Service> &services)
         -> std::vector<Service>::iterator;
-    void UpdateDependantOfNode(const ServiceNode &node);
     void UpdateDependants();
 
     friend class bitsery::Access;

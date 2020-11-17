@@ -171,9 +171,40 @@ void tt::DependencyGraph::RemoveServices(
         }
     }
 
-    RemoveEnabledServices(services);
-    UpdateDependants();
-    RemoveUnusedServices();
+    for (const auto &service : services) {
+        size_t elem_deleted = enabled_services_.erase(service);
+        assert(elem_deleted != 0);
+
+        auto &node = GetNodeFromName(service);
+        if (!IsNodeRequired(node)) {
+            RemoveNode(node);
+        }
+    }
+}
+
+void tt::DependencyGraph::RemoveNode(const ServiceNode &node) {
+    ForEachDependencyOfNode(node, [this, &node](ServiceNode &dep_node) {
+        dep_node.RemoveDependant(node.name());
+        if (!IsNodeRequired(dep_node)) {
+            RemoveNode(dep_node);
+        }
+    });
+
+    const auto &node_to_remove_name = node.name();
+    auto index = name_to_index_[node_to_remove_name];
+    if (index == nodes_.size() - 1) {
+        nodes_.pop_back();
+        name_to_index_.erase(node_to_remove_name);
+        return;
+    }
+
+    const auto &end_node_name = nodes_.back().name();
+    std::swap(nodes_[index], nodes_.back());
+    std::swap(name_to_index_[node_to_remove_name],
+              name_to_index_[end_node_name]);
+    nodes_.pop_back();
+    // end_node_name is now a reference to node.name(), due to the first swap
+    name_to_index_.erase(end_node_name);
 }
 
 void tt::DependencyGraph::AddEnabledServices(
@@ -182,38 +213,12 @@ void tt::DependencyGraph::AddEnabledServices(
                              services_to_enable.end());
 }
 
-void tt::DependencyGraph::RemoveEnabledServices(
-    const std::vector<std::string> &services) {
-    for (auto &&service : services) {
-        size_t elem_deleted = enabled_services_.erase(service);
-        assert(elem_deleted != 0);
-    }
-}
-
 void tt::DependencyGraph::UpdateDependants() {
     for (const auto &node : nodes_) {
         if (!IsNodeRequired(node)) {
-            UpdateDependantOfNode(node);
+            RemoveNode(node);
         }
     }
-}
-
-void tt::DependencyGraph::UpdateDependantOfNode(const ServiceNode &node) {
-    const auto &service_name = node.name();
-    ForEachDependencyOfNode(node, [this, service_name](ServiceNode &dep_node) {
-        dep_node.RemoveDependant(service_name);
-        if (!IsNodeRequired(dep_node)) {
-            UpdateDependantOfNode(dep_node);
-        }
-    });
-}
-
-void tt::DependencyGraph::RemoveUnusedServices() {
-    nodes_.erase(std::remove_if(nodes_.begin(), nodes_.end(),
-                                [this](const auto &node) {
-                                    return !IsNodeRequired(node);
-                                }),
-                 nodes_.end());
 }
 
 template <typename Func>
