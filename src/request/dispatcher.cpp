@@ -18,29 +18,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "tt/request/dispatcher.hpp"
 
-#include <string> // for string
+#include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
 
-#include "tt/request/request.hpp"    // for Request
-#include "tt/request/visited.hpp"    // for Visited
-#include "tt/svc/service_status.hpp" // for ServiceStatus
+tt::request::Dispatcher::Dispatcher(ServiceManager &service_manager)
+    : service_manager_(service_manager) {}
 
-namespace tt::request {
-
-class NotifyServiceStatus : public Visited<NotifyServiceStatus> {
-public:
-    NotifyServiceStatus(std::string service, ServiceStatus status);
-    NotifyServiceStatus() = delete;
-
-    [[nodiscard]] auto service() const -> std::string;
-    [[nodiscard]] auto status() const -> ServiceStatus;
-
-    static inline const std::string request_name = "notify_service_status";
-
-private:
-    std::string service_;
-    ServiceStatus status_;
-};
-
-} // namespace tt::request
+void tt::request::Dispatcher::operator()(
+    std::shared_ptr<NotifyServiceStatus> notify) {
+    service_manager_.status_manager().ChangeStatusOfService(notify->service(),
+                                                            notify->status());
+}

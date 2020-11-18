@@ -30,7 +30,7 @@ class Request;
 class RequestFactory {
 public:
     static auto GetRequestFromBuffer(const std::string &buffer)
-        -> std::pair<std::string, std::unique_ptr<Request>>;
+        -> std::shared_ptr<Request>;
 };
 
 } // namespace tt::request

@@ -23,9 +23,10 @@
 #include <filesystem> // for path
 #include <memory>     // for shared_ptr
 
+#include "tt/request/dispatcher.hpp" // for Dispatcher
+
 namespace tt {
 class Dirs;
-class ServiceManager;
 
 namespace request {
 
@@ -34,14 +35,12 @@ class Request;
 class RequestListener {
 public:
     RequestListener(ServiceManager &service_manager,
-                    const std::shared_ptr<Dirs>& dirs);
+                    const std::shared_ptr<Dirs> &dirs);
 
     [[noreturn]] void Listen();
 
-    void ApplyRequest(std::pair<std::string, std::unique_ptr<Request>> request);
-
 private:
-    ServiceManager &service_manager_;
+    Dispatcher dispatcher_;
     const std::filesystem::path socket_path_;
 };
 

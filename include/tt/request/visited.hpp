@@ -20,27 +20,17 @@
 
 #pragma once
 
-#include <string> // for string
+#include <memory> // for shared_ptr, enable_shared_from_this
 
-#include "tt/request/request.hpp"    // for Request
-#include "tt/request/visited.hpp"    // for Visited
-#include "tt/svc/service_status.hpp" // for ServiceStatus
+#include "tt/request/request.hpp" // for Request
+#include "tt/request/visitor.hpp" // for Visitor
 
 namespace tt::request {
 
-class NotifyServiceStatus : public Visited<NotifyServiceStatus> {
+template <typename T>
+class Visited : public Request, public std::enable_shared_from_this<T> {
 public:
-    NotifyServiceStatus(std::string service, ServiceStatus status);
-    NotifyServiceStatus() = delete;
-
-    [[nodiscard]] auto service() const -> std::string;
-    [[nodiscard]] auto status() const -> ServiceStatus;
-
-    static inline const std::string request_name = "notify_service_status";
-
-private:
-    std::string service_;
-    ServiceStatus status_;
+    void accept(Visitor &visitor) { visitor(this->shared_from_this()); }
 };
 
 } // namespace tt::request

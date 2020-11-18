@@ -33,10 +33,11 @@
 #include "tt/request/request.hpp"               // for Action
 #include "tt/request/request_factory.hpp"       // for ActionFactory
 #include "tt/svc/service_manager.hpp"           // for ServiceManager
+#include "tt/utils/launch_async.hpp"            // for LaunchAsync
 
 tt::request::RequestListener::RequestListener(ServiceManager &service_manager,
-                                              const std::shared_ptr<Dirs>& dirs)
-    : service_manager_(service_manager),
+                                              const std::shared_ptr<Dirs> &dirs)
+    : dispatcher_(service_manager),
       socket_path_(dirs->livedir() / "tt-ipc.socket") {}
 
 void tt::request::RequestListener::Listen() {
@@ -46,19 +47,6 @@ void tt::request::RequestListener::Listen() {
         auto buffer = server.ReceiveMessage();
         auto request = RequestFactory::GetRequestFromBuffer(buffer);
 
-        (void)std::async(std::launch::async, &RequestListener::ApplyRequest,
-                         this, std::move(request));
-    }
-}
-
-void tt::request::RequestListener::ApplyRequest(
-    std::pair<std::string, std::unique_ptr<Request>> request) {
-
-    if (request.first == NotifyServiceStatus::request_name) {
-        auto *notify =
-            dynamic_cast<NotifyServiceStatus *>(request.second.release());
-
-        service_manager_.status_manager().ChangeStatusOfService(
-            notify->service(), notify->status());
+        tt::LaunchAsync([this, &request]() { request->accept(dispatcher_); });
     }
 }

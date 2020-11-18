@@ -21,10 +21,12 @@
 #pragma once
 
 namespace tt::request {
+class Visitor;
 
 class Request {
 public:
     virtual ~Request() = default;
+    virtual void accept(Visitor &visitor) = 0;
 };
 
 } // namespace tt::request

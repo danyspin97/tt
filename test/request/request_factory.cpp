@@ -35,10 +35,8 @@ TEST_CASE("ActionFactory") {
         auto deserialized_request =
             tt::request::RequestFactory::GetRequestFromBuffer(buffer);
 
-        CHECK_NOTHROW(std::is_same_v<
-                      std::decay_t<decltype(deserialized_request.second.get())>,
-                      tt::request::NotifyServiceStatus>);
-        CHECK(deserialized_request.first ==
-              tt::request::NotifyServiceStatus::request_name);
+        CHECK_NOTHROW(
+            std::is_same_v<std::decay_t<decltype(deserialized_request.get())>,
+                           tt::request::NotifyServiceStatus>);
     }
 }

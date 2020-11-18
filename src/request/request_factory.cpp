@@ -31,8 +31,7 @@
 using json = nlohmann::json;
 
 auto tt::request::RequestFactory::GetRequestFromBuffer(
-    const std::string &buffer)
-    -> std::pair<std::string, std::unique_ptr<Request>> try {
+    const std::string &buffer) -> std::shared_ptr<Request> try {
     json j = json::parse(buffer);
 
     // ComplexRequest:
@@ -41,9 +40,7 @@ auto tt::request::RequestFactory::GetRequestFromBuffer(
     std::string request_name = j.at("request_name");
 
     if (request_name == NotifyServiceStatus::request_name) {
-        return std::make_pair(
-            NotifyServiceStatus::request_name,
-            std::make_unique<NotifyServiceStatus>(j.at("request")));
+        return std::make_shared<NotifyServiceStatus>(j.at("request"));
     }
     throw tt::Exception(request_name + " is not a supported request");
 } catch (const nlohmann::detail::exception & /*e*/) {

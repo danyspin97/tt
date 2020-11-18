@@ -20,27 +20,15 @@
 
 #pragma once
 
-#include <string> // for string
+#include <cassert> // for assert
+#include <memory>  // for shared_ptr
 
-#include "tt/request/request.hpp"    // for Request
-#include "tt/request/visited.hpp"    // for Visited
-#include "tt/svc/service_status.hpp" // for ServiceStatus
+namespace tt::utils {
 
-namespace tt::request {
-
-class NotifyServiceStatus : public Visited<NotifyServiceStatus> {
-public:
-    NotifyServiceStatus(std::string service, ServiceStatus status);
-    NotifyServiceStatus() = delete;
-
-    [[nodiscard]] auto service() const -> std::string;
-    [[nodiscard]] auto status() const -> ServiceStatus;
-
-    static inline const std::string request_name = "notify_service_status";
-
-private:
-    std::string service_;
-    ServiceStatus status_;
+class Visitor {
+    template <typename T> void operator()(std::shared_ptr<T> /*visited*/) {
+        assert(false);
+    };
 };
 
-} // namespace tt::request
+} // namespace tt::utils
