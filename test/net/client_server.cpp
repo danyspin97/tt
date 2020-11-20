@@ -23,6 +23,8 @@
 
 #include "catch2/catch.hpp" // for SourceLineInfo, AssertionHandler, Section
 
+#include "tl/expected.hpp" // for expected
+
 #include "tt/net/client.hpp" // for Client
 #include "tt/net/server.hpp" // for Server
 #include "tt/net/socket.hpp" // for Socket, Socket::Protocol, Socket::Proto...
@@ -42,8 +44,8 @@ TEST_CASE("Client/Server", "[!mayfail]") {
         std::string sent_message{"This is a simple message"};
         REQUIRE_NOTHROW(client.SendMessage(sent_message));
 
-        std::string received_message;
-        REQUIRE_NOTHROW(received_message = server.ReceiveMessage());
+        auto received_message = server.ReceiveMessage();
+        REQUIRE(received_message);
         CHECK(sent_message == received_message);
     }
 }

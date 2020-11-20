@@ -26,9 +26,12 @@
 #include <string>       // for string
 #include <system_error> // for system_error
 
-#include "tt/net/server.hpp" // for Server
-#include "tt/net/socket.hpp" // for Socket::Protocol, Socket::Pr...
-#include "tt/path/dirs.hpp"  // for Dirs
+#include "spdlog/spdlog.h" // for SPDLOG_WARN, SPDLOG_ERROR
+
+#include "tl/expected.hpp" // for expected
+
+#include "tt/net/server.hpp"                    // for Server
+#include "tt/path/dirs.hpp"                     // for Dirs
 #include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
 #include "tt/request/request.hpp"               // for Action
 #include "tt/request/request_factory.hpp"       // for ActionFactory
@@ -50,7 +53,12 @@ void tt::request::RequestListener::Listen() {
 
     for (;;) {
         auto buffer = server.ReceiveMessage();
-        auto request = RequestFactory::GetRequestFromBuffer(buffer);
+        if (!buffer) {
+            SPDLOG_ERROR(buffer.error());
+            continue;
+        }
+
+        auto request = RequestFactory::GetRequestFromBuffer(buffer.value());
 
         tt::LaunchAsync([this, &request]() { request->accept(dispatcher_); });
     }

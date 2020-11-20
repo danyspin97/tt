@@ -32,7 +32,6 @@ public:
     auto Connect() -> bool;
     [[nodiscard]] auto IsConnected() const noexcept -> bool;
 
-    void SendMessage(const std::string &message);
 private:
     bool is_connected_ = false;
 };

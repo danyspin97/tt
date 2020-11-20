@@ -30,6 +30,8 @@
 #include <unistd.h>     // for pause
 #include <utility>      // for move
 
+#include "tl/expected.hpp" // for expected
+
 #include "tt/data/long_lived_script.hpp"                   // for LongLived...
 #include "tt/data/script.hpp"                              // for Script
 #include "tt/log/script_logger.hpp"                        // for ScriptLogger
@@ -124,7 +126,9 @@ void tt::LongrunSupervisor::NotifyStatus(ServiceStatus status) {
     }
     request::NotifyServiceStatus request(longrun_.name(), status);
     auto s = request::PackRequest(request);
-    ipc_client_.SendMessage(s);
+    if (!ipc_client_.SendMessage(s)) {
+        // TODO: add logging
+    }
 }
 
 void tt::LongrunSupervisor::Kill() {

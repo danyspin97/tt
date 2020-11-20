@@ -22,7 +22,8 @@
 
 #include <utility> // for move
 
-#include "fmt/format.h" // for format
+#include "fmt/format.h"    // for format
+#include "tl/expected.hpp" // for expected
 
 tt::net::Socket::Socket(nng::socket &&socket, std::filesystem::path address)
     : socket_(std::move(socket)), socket_path_(std::move(address)) {}
@@ -31,3 +32,27 @@ auto tt::net::Socket::GetNetAddress() const -> std::string {
     return fmt::format("ipc://{}", socket_path_.string());
 }
 auto tt::net::Socket::socket() const -> nng::socket_view { return socket_; }
+
+auto tt::net::Socket::ReceiveMessage()
+    -> tl::expected<std::string, std::string> {
+    try {
+        auto buffer = socket_.recv();
+        return std::string{static_cast<const char *>(buffer.data()),
+                           buffer.size()};
+    } catch (nng::exception &e) {
+        return tl::make_unexpected(e.what());
+    }
+}
+
+auto tt::net::Socket::SendMessage(const std::string &message)
+    -> tl::expected<void, std::string> {
+    try {
+        nng::buffer msg = nng::make_buffer(message.size());
+        memcpy(msg.data(), message.data(), message.size());
+        socket_.send(msg);
+        // Success
+        return {};
+    } catch (nng::exception &e) {
+        return tl::make_unexpected(e.what());
+    }
+}

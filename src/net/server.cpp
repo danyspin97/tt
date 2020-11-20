@@ -22,7 +22,6 @@
 
 #include <utility> // for move
 
-#include "nngpp/buffer.h"        // for buffer
 #include "nngpp/protocol/rep0.h" // for open
 #include "nngpp/socket_view.h"   // for socket_view
 
@@ -44,10 +43,6 @@ auto tt::net::Server::Listen() -> bool {
     return true;
 }
 
-auto tt::net::Server::ReceiveMessage() -> std::string {
-    auto buffer = socket().recv();
-    return std::string{static_cast<const char *>(buffer.data()), buffer.size()};
-}
-
 auto tt::net::Server::IsListening() const noexcept -> bool {
     return is_listening_;
+}

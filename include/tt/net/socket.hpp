@@ -25,11 +25,20 @@
 #include "nngpp/socket.h"      // for socket
 #include "nngpp/socket_view.h" // for socket_view
 
+namespace tl {
+template <typename T, typename Z> class expected;
+}
+
 namespace tt::net {
 
 class Socket {
 public:
     Socket(nng::socket &&socket, std::filesystem::path address);
+    ~Socket() = default;
+
+    auto SendMessage(const std::string &message)
+        -> tl::expected<void, std::string>;
+    auto ReceiveMessage() -> tl::expected<std::string, std::string>;
 
 protected:
     [[nodiscard]] auto socket() const -> nng::socket_view;

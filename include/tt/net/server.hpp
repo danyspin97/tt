@@ -32,7 +32,6 @@ public:
     auto Listen() -> bool;
     [[nodiscard]] auto IsListening() const noexcept -> bool;
 
-    auto ReceiveMessage() -> std::string;
 private:
     bool is_listening_ = false;
 };

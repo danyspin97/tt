@@ -46,11 +46,6 @@ auto tt::net::Client::Connect() -> bool {
     return true;
 }
 
-void tt::net::Client::SendMessage(const std::string &message) {
-    nng::buffer msg = nng::make_buffer(message.size());
-    memcpy(msg.data(), message.data(), message.size());
-    socket().send(msg);
-}
-
 auto tt::net::Client::IsConnected() const noexcept -> bool {
     return is_connected_;
+}
