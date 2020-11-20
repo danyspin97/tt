@@ -43,6 +43,11 @@ tt::request::RequestListener::RequestListener(ServiceManager &service_manager,
 void tt::request::RequestListener::Listen() {
     net::Server server{socket_path_};
 
+    // Wait until we cannot listen on the socket
+    while (!server.Listen()) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+
     for (;;) {
         auto buffer = server.ReceiveMessage();
         auto request = RequestFactory::GetRequestFromBuffer(buffer);

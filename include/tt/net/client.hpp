@@ -27,8 +27,14 @@ namespace tt::net {
 class Client : public Socket {
 public:
     explicit Client(std::filesystem::path socket_path);
+    // Connect to the server
+    // Return false on error, true otherwise
+    auto Connect() -> bool;
+    [[nodiscard]] auto IsConnected() const noexcept -> bool;
 
     void SendMessage(const std::string &message);
+private:
+    bool is_connected_ = false;
 };
 
 } // namespace tt::net

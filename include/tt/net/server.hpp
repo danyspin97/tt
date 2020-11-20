@@ -27,8 +27,14 @@ namespace tt::net {
 class Server : public Socket {
 public:
     explicit Server(std::filesystem::path socket_path);
+    // Start listening on this socket
+    // Return false on error, true otherwise
+    auto Listen() -> bool;
+    [[nodiscard]] auto IsListening() const noexcept -> bool;
 
     auto ReceiveMessage() -> std::string;
+private:
+    bool is_listening_ = false;
 };
 
 } // namespace tt::net

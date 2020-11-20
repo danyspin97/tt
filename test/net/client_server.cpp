@@ -30,18 +30,20 @@
 TEST_CASE("Client/Server", "[!mayfail]") {
     SECTION("Send and receive text message") {
         constexpr const char *socket_path = "ipc-test.socket";
-        std::unique_ptr<tt::net::Server> server;
-        std::unique_ptr<tt::net::Client> client;
-        REQUIRE_NOTHROW(server =
-                            std::make_unique<tt::net::Server>(socket_path));
-        REQUIRE_NOTHROW(client =
-                            std::make_unique<tt::net::Client>(socket_path));
+        tt::net::Server server(socket_path);
+        tt::net::Client client(socket_path);
+        REQUIRE_FALSE(server.IsListening());
+        REQUIRE_NOTHROW(server.Listen());
+        REQUIRE(server.IsListening());
+        REQUIRE_FALSE(client.IsConnected());
+        REQUIRE_NOTHROW(client.Connect());
+        REQUIRE(client.IsConnected());
 
         std::string sent_message{"This is a simple message"};
-        REQUIRE_NOTHROW(client->SendMessage(sent_message));
+        REQUIRE_NOTHROW(client.SendMessage(sent_message));
 
         std::string received_message;
-        REQUIRE_NOTHROW(received_message = server->ReceiveMessage());
+        REQUIRE_NOTHROW(received_message = server.ReceiveMessage());
         CHECK(sent_message == received_message);
     }
 }

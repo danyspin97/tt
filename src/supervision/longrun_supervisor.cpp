@@ -48,7 +48,12 @@ tt::LongrunSupervisor::LongrunSupervisor(Longrun &&longrun,
     : longrun_(std::move(longrun)), logger_(std::move(logger)),
       run_supervisor_(longrun_.name(), longrun_.run(), longrun_.environment(),
                       logger_.GetScriptLogger()),
-      ipc_client_(dirs->livedir() / "tt-ipc.socket") {}
+      ipc_client_(dirs->livedir() / "tt-ipc.socket") {
+    // Try connecting two times
+    if (!ipc_client_.Connect()) {
+        ipc_client_.Connect();
+    }
+}
 
 auto tt::LongrunSupervisor::Run() -> bool {
     auto set = GetEmptySignalSet();
@@ -114,6 +119,9 @@ void tt::LongrunSupervisor::ExecuteFinishScript() const {
 }
 
 void tt::LongrunSupervisor::NotifyStatus(ServiceStatus status) {
+    if (!ipc_client_.IsConnected()) {
+        return;
+    }
     request::NotifyServiceStatus request(longrun_.name(), status);
     auto s = request::PackRequest(request);
     ipc_client_.SendMessage(s);

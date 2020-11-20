@@ -30,8 +30,20 @@
 #include "tt/exception.hpp" // for Exception
 
 tt::net::Client::Client(std::filesystem::path socket_path)
-    : Socket(nng::req::open(), std::move(socket_path)) {
-    socket().dial(GetNetAddress().c_str());
+    : Socket(nng::req::open(), std::move(socket_path)) {}
+
+auto tt::net::Client::Connect() -> bool {
+    if (is_connected_) {
+        return true;
+    }
+
+    try {
+        socket().dial(GetNetAddress().c_str());
+        is_connected_ = true;
+    } catch (nng::exception & /*e*/) {
+        return false;
+    }
+    return true;
 }
 
 void tt::net::Client::SendMessage(const std::string &message) {
@@ -39,3 +51,6 @@ void tt::net::Client::SendMessage(const std::string &message) {
     memcpy(msg.data(), message.data(), message.size());
     socket().send(msg);
 }
+
+auto tt::net::Client::IsConnected() const noexcept -> bool {
+    return is_connected_;

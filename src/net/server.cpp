@@ -29,11 +29,25 @@
 #include "tt/exception.hpp" // for Exception
 
 tt::net::Server::Server(std::filesystem::path socket_path)
-    : Socket(nng::rep::open(), std::move(socket_path)) {
-    socket().listen(GetNetAddress().c_str());
+    : Socket(nng::rep::open(), std::move(socket_path)) {}
+
+auto tt::net::Server::Listen() -> bool {
+    if (is_listening_) {
+        return true;
+    }
+    try {
+        socket().listen(GetNetAddress().c_str());
+        is_listening_ = true;
+    } catch (nng::exception & /*e*/) {
+        return false;
+    }
+    return true;
 }
 
 auto tt::net::Server::ReceiveMessage() -> std::string {
     auto buffer = socket().recv();
     return std::string{static_cast<const char *>(buffer.data()), buffer.size()};
 }
+
+auto tt::net::Server::IsListening() const noexcept -> bool {
+    return is_listening_;
