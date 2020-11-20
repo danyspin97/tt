@@ -46,9 +46,12 @@ tt::request::RequestListener::RequestListener(ServiceManager &service_manager,
 void tt::request::RequestListener::Listen() {
     net::Server server{socket_path_};
 
+    auto listen_err = server.Listen();
     // Wait until we cannot listen on the socket
-    while (!server.Listen()) {
+    while (!listen_err) {
+        SPDLOG_CRITICAL(listen_err.error());
         std::this_thread::sleep_for(std::chrono::seconds(1));
+        listen_err = server.Listen();
     }
 
     for (;;) {
@@ -66,7 +69,10 @@ void tt::request::RequestListener::Listen() {
 
         auto reply = request.value()->accept(dispatcher_);
         if (reply) {
-            server.SendMessage(reply.value());
+            auto send_err = server.SendMessage(reply.value());
+            if (!send_err) {
+                SPDLOG_ERROR(send_err.error());
+            }
         }
     }
 }
