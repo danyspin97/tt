@@ -23,18 +23,12 @@
 #include <algorithm>
 #include <utility>
 
-using std::replace;
-using std::string;
-using std::vector;
-
-using tt::InstanceServiceParser;
-
-InstanceServiceParser::InstanceServiceParser(const string &path,
-                                             string instance_name)
+tt::InstanceServiceParser::InstanceServiceParser(const std::string &path,
+                                                 std::string instance_name)
     : ServiceParser(path), instance_name_(std::move(instance_name)) {}
 
-auto InstanceServiceParser::GenerateListFrom(const std::string &path)
-    -> vector<string> {
+auto tt::InstanceServiceParser::GenerateListFrom(const std::string &path)
+    -> std::vector<std::string> {
     auto lines = ServiceParser::GenerateListFrom(path);
     replace(lines.begin(), lines.end(), InstanceToken, instance_name_);
     return lines;

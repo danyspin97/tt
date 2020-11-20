@@ -33,35 +33,26 @@
 #include "tt/parser/service/service_parser.hpp"          // for ServiceParser
 #include "tt/path/dirs.hpp"                              // for Dirs
 
-using std::advance;
-using std::string;
-using std::stringstream;
-using std::vector;
-
-using tt::ServiceNotFoundParserException;
-using tt::ServiceParser;
-using tt::ServicesParser;
-
-ServicesParser::ServicesParser(const std::shared_ptr<Dirs> &dirs)
+tt::ServicesParser::ServicesParser(const std::shared_ptr<Dirs> &dirs)
     : suffix_(dirs->services_suffix()), paths_(dirs->servicedirs()) {}
 
-void ServicesParser::ParseServices(
+void tt::ServicesParser::ParseServices(
     const std::vector<std::string> &service_names) {
     for (const auto &name : service_names) {
         ParseService(name);
     }
 }
 
-void ServicesParser::ParseService(const std::string &service_name) {
+void tt::ServicesParser::ParseService(const std::string &service_name) {
     if (service_map_.count(service_name) != 0U) {
         return;
     }
 
     // Parse instance service
     if (size_t token_index = GetInstanceTokenIndex(service_name);
-        token_index != string::npos) {
-        string split_name = service_name;
-        string instance_name =
+        token_index != std::string::npos) {
+        std::string split_name = service_name;
+        std::string instance_name =
             SplitServiceNameFromInstance(split_name, token_index);
         auto path = GetPathForServiceName(split_name);
         auto service = InstanceServiceParser(path, instance_name).service();
@@ -75,24 +66,25 @@ void ServicesParser::ParseService(const std::string &service_name) {
     ParseDependenciesOfService(service_map_.at(service_name));
 }
 
-auto ServicesParser::GetInstanceTokenIndex(const string &service_name)
+auto tt::ServicesParser::GetInstanceTokenIndex(const std::string &service_name)
     -> size_t {
     return service_name.find('@');
 }
 
-auto ServicesParser::SplitServiceNameFromInstance(string &service_name,
-                                                  size_t token_index)
-    -> string {
+auto tt::ServicesParser::SplitServiceNameFromInstance(std::string &service_name,
+                                                      size_t token_index)
+    -> std::string {
     auto string_iter = service_name.begin();
     advance(string_iter, token_index);
-    string instance{string_iter, service_name.end()};
+    std::string instance{string_iter, service_name.end()};
     service_name = service_name.substr(0, token_index);
     return instance;
 }
 
-auto ServicesParser::GetPathForServiceName(const string &name) -> string {
+auto tt::ServicesParser::GetPathForServiceName(const std::string &name)
+    -> std::string {
     for (const auto &service_dir : paths_) {
-        string service_path = service_dir / std::string{name + suffix_};
+        std::string service_path = service_dir / std::string{name + suffix_};
         // TODO: Check if file is readable
         if (std::filesystem::exists(service_path) &&
             std::filesystem::is_regular_file(service_path)) {
@@ -102,7 +94,7 @@ auto ServicesParser::GetPathForServiceName(const string &name) -> string {
 
     auto msg =
         "Service '" + name + suffix_ + "' could not be found in directories ";
-    stringstream joined_paths;
+    std::stringstream joined_paths;
     for (size_t i = 0; i < paths_.size(); ++i) {
         if (i != 0) {
             joined_paths << ",";
@@ -113,7 +105,7 @@ auto ServicesParser::GetPathForServiceName(const string &name) -> string {
     throw ServiceNotFoundParserException(msg);
 }
 
-void ServicesParser::ParseDependenciesOfService(const Service &service) {
+void tt::ServicesParser::ParseDependenciesOfService(const Service &service) {
     tt::ForEachDependencyOfService(service,
                                    [this](auto name) { ParseService(name); });
 }

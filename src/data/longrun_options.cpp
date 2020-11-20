@@ -20,15 +20,11 @@
 
 #include "tt/data/longrun_options.hpp"
 
-using std::ostream;
-
-using tt::LongrunOptions;
-
 auto tt::LongrunOptions::operator==(const LongrunOptions &rhs) const -> bool {
     return ServiceOptions::operator==(rhs) && optional_ == rhs.optional_;
 }
 
-auto LongrunOptions::Dump(ostream &oss) const -> ostream & {
+auto tt::LongrunOptions::Dump(std::ostream &oss) const -> std::ostream & {
     oss << "\noptional = " << optional();
     ServiceOptions::Dump(oss);
     return oss;

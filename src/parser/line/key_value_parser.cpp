@@ -26,11 +26,7 @@
 #include "tt/parser/line/exception.hpp" // for KeyValueParserLineInvalidExc...
 #include "tt/utils/trim.hpp"            // for trim
 
-using std::string;
-
-using tt::kAssignmentToken;
-
-tt::KeyValueParser::KeyValueParser(string line, bool throw_on_error) {
+tt::KeyValueParser::KeyValueParser(std::string line, bool throw_on_error) {
     line_ = std::move(line);
     throw_on_error_ = throw_on_error;
     ParseLine();
@@ -42,8 +38,8 @@ void tt::KeyValueParser::ParseLine() {
     } else {
         if (throw_on_error_) {
             const auto msg = "Could not find token '" +
-                             string{kAssignmentToken} + "' in line `" + line_ +
-                             "`";
+                             std::string{kAssignmentToken} + "' in line `" +
+                             line_ + "`";
             throw tt::KeyValueParserLineInvalidException(msg);
         }
 
@@ -53,12 +49,12 @@ void tt::KeyValueParser::ParseLine() {
 
 auto tt::KeyValueParser::TryParseLine() -> bool {
     auto token_pos = line_.find(kAssignmentToken);
-    if (token_pos == string::npos) {
+    if (token_pos == std::string::npos) {
         return false;
     }
     key_ = line_.substr(0, token_pos);
     utils::trim(key_);
-    value_ = line_.substr(token_pos + 1, string::npos);
+    value_ = line_.substr(token_pos + 1, std::string::npos);
     utils::trim(value_);
     return true;
 }

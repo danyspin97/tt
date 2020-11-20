@@ -25,28 +25,22 @@
 
 #include "tt/parser/define.hpp"
 
-using std::copy;
-using std::ostream;
-using std::ostream_iterator;
-using std::string;
-
-using tt::ServiceOptions;
-
-auto ServiceOptions::operator==(const ServiceOptions &rhs) const -> bool {
+auto tt::ServiceOptions::operator==(const ServiceOptions &rhs) const -> bool {
     return depends_ == rhs.depends_;
 }
 
-auto ServiceOptions::Dump(ostream &oss) const -> ostream & {
+auto tt::ServiceOptions::Dump(std::ostream &oss) const -> std::ostream & {
     if (!depends_.empty()) {
         oss << "depends = " << tt::kArrayOpenToken << " ";
         copy(depends_.begin(), depends_.end(),
-             ostream_iterator<string>(oss, " "));
+             std::ostream_iterator<std::string>(oss, " "));
         return oss << tt::kArrayCloseToken;
     }
 
     return oss;
 }
 
-auto operator<<(ostream &oss, ServiceOptions const &options) -> ostream & {
+auto operator<<(std::ostream &oss, tt::ServiceOptions const &options)
+    -> std::ostream & {
     return options.Dump(oss);
 }

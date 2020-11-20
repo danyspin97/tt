@@ -20,23 +20,12 @@
 
 #include "tt/parser/section/main_section_builder.hpp"
 
-#include <string> // for allocator, operator==
-
 #include "tt/parser/line/key_value_parser.hpp" // for KeyValueParser
 #include "tt/parser/section/exception.hpp"     // for SectionBuilderException
 #include "tt/parser/section/main_section.hpp"  // for MainSection
 #include "tt/parser/section/utils.hpp"         // for AttributeNotFound
 
-using std::string;
-
-using tt::AttributeIsAlreadySetException;
-using tt::AttributeNotFound;
-using tt::KeyValueParser;
-using tt::MainSectionBuilder;
-using tt::SectionBuilderException;
-using tt::SetThrowsIfNotEmpty;
-
-void MainSectionBuilder::ParseLine(const string &line) {
+void tt::MainSectionBuilder::ParseLine(const std::string &line) {
     try {
         TryParseLine(line);
     } catch (const AttributeIsAlreadySetException & /*e*/) {
@@ -48,7 +37,7 @@ void MainSectionBuilder::ParseLine(const string &line) {
     }
 }
 
-void MainSectionBuilder::TryParseLine(const string &line) {
+void tt::MainSectionBuilder::TryParseLine(const std::string &line) {
     if (IsEmptyLine(line)) {
         return;
     }
@@ -60,8 +49,8 @@ void MainSectionBuilder::TryParseLine(const string &line) {
     SetThrowsIfNotEmpty(GetAttributeForKey(key_), value_);
 }
 
-auto MainSectionBuilder::GetAttributeForKey(const std::string &key)
-    -> string & {
+auto tt::MainSectionBuilder::GetAttributeForKey(const std::string &key)
+    -> std::string & {
     if (key == "name") {
         return main_section_.name;
     }
@@ -75,6 +64,6 @@ auto MainSectionBuilder::GetAttributeForKey(const std::string &key)
     AttributeNotFound(key, "main");
 }
 
-auto MainSectionBuilder::main_section() -> MainSection & {
+auto tt::MainSectionBuilder::main_section() -> MainSection & {
     return main_section_;
 }

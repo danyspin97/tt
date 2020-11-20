@@ -26,8 +26,6 @@
 
 #include "tt/data/exception.hpp" // for ServiceNameDoNotMatchFileExecption
 
-using std::ostream;
-
 tt::ServiceImpl::ServiceImpl(std::string &&name, std::string &&description,
                              std::string &&path)
     : name_(std::move(name)), description_(std::move(description)),
@@ -46,7 +44,7 @@ void tt::ServiceImpl::ValidatePath() const {
     }
 }
 
-auto tt::ServiceImpl::Dump(ostream &oss) const -> ostream & {
+auto tt::ServiceImpl::Dump(std::ostream &oss) const -> std::ostream & {
     oss << "name = " << name();
     if (!description().empty()) {
         oss << "\ndescription = " << description();

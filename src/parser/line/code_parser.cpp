@@ -26,20 +26,13 @@
 #include "tt/parser/line/exception.hpp"
 #include "tt/utils/trim.hpp"
 
-using std::string;
-
-using tt::CodeParser;
-using tt::kAssignmentToken;
-using tt::kCodeCloseToken;
-using tt::kCodeOpenToken;
-
-auto CodeParser::StartParsing(const string &line) -> bool {
+auto tt::CodeParser::StartParsing(const std::string &line) -> bool {
     if (IsParsing()) {
         throw tt::CodeParserIsStillParsingException();
     }
     auto trimmed_line = utils::trim_copy(line);
     auto equal_token_pos = trimmed_line.find(kAssignmentToken);
-    if (equal_token_pos == string::npos) {
+    if (equal_token_pos == std::string::npos) {
         return false;
     }
 
@@ -58,9 +51,9 @@ auto CodeParser::StartParsing(const string &line) -> bool {
     return is_parsing_ = true;
 }
 
-void CodeParser::ParseLine(const string &line) {
+void tt::CodeParser::ParseLine(const std::string &line) {
     auto trimmed_line = utils::trim_copy(line);
-    if (trimmed_line == string{kCodeCloseToken}) {
+    if (trimmed_line == std::string{kCodeCloseToken}) {
         is_parsing_ = false;
         return;
     }
@@ -69,7 +62,7 @@ void CodeParser::ParseLine(const string &line) {
     code_ << "\n";
 }
 
-auto CodeParser::code() const -> string {
+auto tt::CodeParser::code() const -> std::string {
     if (IsParsing()) {
         throw CodeParserIsStillParsingException();
     }

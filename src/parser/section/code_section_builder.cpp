@@ -28,16 +28,10 @@
 #include "tt/parser/section/exception.hpp"     // for SectionBuilderException
 #include "tt/parser/section/utils.hpp"         // for SetThrowsIfNotEmpty
 
-using std::string;
-using tt::CodeSectionBuilder;
-using tt::IsEmptyLine;
-using tt::SectionBuilder;
-using tt::SetThrowsIfNotEmpty;
-
-CodeSectionBuilder::CodeSectionBuilder(std::string section)
+tt::CodeSectionBuilder::CodeSectionBuilder(std::string section)
     : section_(std::move(section)) {}
 
-void CodeSectionBuilder::ParseLine(const std::string &line) {
+void tt::CodeSectionBuilder::ParseLine(const std::string &line) {
     if (code_parser_.IsParsing()) {
         // Continue parsing execute parameter
         code_parser_.ParseLine(line);

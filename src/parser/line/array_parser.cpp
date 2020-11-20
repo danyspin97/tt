@@ -30,26 +30,15 @@
 #include "tt/parser/line/exception.hpp" // for EmptyArrayException, ValuesA...
 #include "tt/utils/trim.hpp"            // for trim, trim_copy
 
-using std::string;
-
-using tt::ArrayParser;
-using tt::EmptyArrayException;
-using tt::EmptyKeyException;
-using tt::ValuesAfterEndingTokenException;
-
-using tt::kArrayCloseToken;
-using tt::kArrayOpenToken;
-using tt::kAssignmentToken;
-
-auto ArrayParser::StartParsing(const string &line) -> bool {
+auto tt::ArrayParser::StartParsing(const std::string &line) -> bool {
     assert(!IsParsing());
 
     auto equal_token_pos = line.find(kAssignmentToken);
-    if (equal_token_pos == string::npos) {
+    if (equal_token_pos == std::string::npos) {
         return false;
     }
     auto parenthesis_pos = line.find(kArrayOpenToken, equal_token_pos + 1);
-    if (parenthesis_pos == string::npos) {
+    if (parenthesis_pos == std::string::npos) {
         return false;
     }
 
@@ -68,28 +57,28 @@ auto ArrayParser::StartParsing(const string &line) -> bool {
 
     is_parsing_ = true;
 
-    UpdateStatus(line.substr(parenthesis_pos + 1, string::npos));
+    UpdateStatus(line.substr(parenthesis_pos + 1, std::string::npos));
 
     return true;
 }
 
-void ArrayParser::ParseLine(const string &line) {
+void tt::ArrayParser::ParseLine(const std::string &line) {
     assert(IsParsing());
     UpdateStatus(line);
 }
 
-void ArrayParser::UpdateStatus(const string &line) {
+void tt::ArrayParser::UpdateStatus(const std::string &line) {
     auto trimmed_line = utils::trim_copy(line);
     if (line.empty()) {
         return;
     }
     auto ending_token_pos = trimmed_line.find(kArrayCloseToken);
-    if (ending_token_pos != string::npos) {
+    if (ending_token_pos != std::string::npos) {
         is_parsing_ = false;
         // There shall be no character after the kArrayCloseToken
         if (ending_token_pos + 1 != trimmed_line.size()) {
             const auto msg = key_ + ": No value allowed after ending token '" +
-                             string{kArrayCloseToken} + "'";
+                             std::string{kArrayCloseToken} + "'";
             throw ValuesAfterEndingTokenException(msg);
         }
     }
@@ -101,9 +90,9 @@ void ArrayParser::UpdateStatus(const string &line) {
     }
 }
 
-void ArrayParser::AddValuesFromLine(const string &line) {
+void tt::ArrayParser::AddValuesFromLine(const std::string &line) {
     std::istringstream iss(line);
     auto old_end = std::end(values_);
-    values_.insert(old_end, std::istream_iterator<string>{iss},
-                   std::istream_iterator<string>());
+    values_.insert(old_end, std::istream_iterator<std::string>{iss},
+                   std::istream_iterator<std::string>());
 }

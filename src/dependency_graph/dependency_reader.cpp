@@ -29,26 +29,21 @@
 #include "tt/data/oneshot.hpp"         // for Oneshot
 #include "tt/data/oneshot_options.hpp" // for OneshotOptions
 
-using tt::Bundle;
-using tt::DependencyReader;
-using tt::Longrun;
-using tt::Oneshot;
-
-void DependencyReader::operator()(const Bundle &bundle) {
+void tt::DependencyReader::operator()(const Bundle &bundle) {
     const auto &options_ = bundle.options();
     dependencies_ = options_.contents();
 }
 
-void DependencyReader::operator()(const Longrun &longrun) {
+void tt::DependencyReader::operator()(const Longrun &longrun) {
     const auto &options_ = longrun.options();
     dependencies_ = options_.dependencies();
 }
 
-void DependencyReader::operator()(const Oneshot &oneshot) {
+void tt::DependencyReader::operator()(const Oneshot &oneshot) {
     const auto &options_ = oneshot.options();
     dependencies_ = options_.dependencies();
 }
 
-void DependencyReader::operator()(std::monostate /*unused*/) const {
+void tt::DependencyReader::operator()(std::monostate /*unused*/) const {
     assert(false);
 }

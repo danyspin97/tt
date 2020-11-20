@@ -27,16 +27,10 @@
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound
 #include "tt/signal.hpp"                   // for ParseSignalFromString
 
-using std::string;
-
-using tt::AttributeNotFound;
-using tt::Script;
-using tt::ScriptBuilder;
-
-ScriptBuilder::ScriptBuilder(const std::string &section)
+tt::ScriptBuilder::ScriptBuilder(const std::string &section)
     : CodeSectionBuilder(section) {}
 
-void ScriptBuilder::EndParsing() {
+void tt::ScriptBuilder::EndParsing() {
     if (execute_.empty()) {
         const auto error_message =
             "Code was not supplied in section [" + section_ + "]";
@@ -46,7 +40,8 @@ void ScriptBuilder::EndParsing() {
     finished_ = true;
 }
 
-auto ScriptBuilder::GetAttributeForKey(const string &key) -> string & {
+auto tt::ScriptBuilder::GetAttributeForKey(const std::string &key)
+    -> std::string & {
     if (key == "build") {
         return type_;
     }
@@ -74,7 +69,8 @@ auto ScriptBuilder::GetAttributeForKey(const string &key) -> string & {
 
     AttributeNotFound(key, section_);
 }
-auto ScriptBuilder::GetCodeAttributeForKey(const string &key) -> string & {
+auto tt::ScriptBuilder::GetCodeAttributeForKey(const std::string &key)
+    -> std::string & {
     if (key == "execute") {
         return execute_;
     }
@@ -133,7 +129,7 @@ void tt::ScriptBuilder::SetOptionalAttributeForScript(Script &script) const {
     }
 }
 
-auto ScriptBuilder::HasScript() const -> bool { return finished_; }
+auto tt::ScriptBuilder::HasScript() const -> bool { return finished_; }
 
 auto tt::ScriptBuilder::execute() const -> const std::string & {
     return execute_;

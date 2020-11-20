@@ -25,15 +25,8 @@
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound
 #include "tt/utils/parse_boolean.hpp"      // for ParseBoolean
 
-using std::string;
-
-using tt::ArrayParser;
-using tt::AttributeNotFound;
-using tt::OneshotOptions;
-using tt::OneshotOptionsBuilder;
-
-void OneshotOptionsBuilder::TrySetAttributeForKey(const string &key,
-                                                  const string &value) {
+void tt::OneshotOptionsBuilder::TrySetAttributeForKey(
+    const std::string &key, const std::string &value) {
     if (key == "optional") {
         options_.optional(utils::ParseBoolean(value));
         return;
@@ -42,7 +35,7 @@ void OneshotOptionsBuilder::TrySetAttributeForKey(const string &key,
     AttributeNotFound(key, "options");
 }
 
-void OneshotOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
+void tt::OneshotOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
     const auto key = parser.key();
     if (key == "depends") {
         options_.dependencies(parser.values());
@@ -52,6 +45,6 @@ void OneshotOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
     AttributeNotFound(key, "options");
 }
 
-auto OneshotOptionsBuilder::options() -> OneshotOptions && {
+auto tt::OneshotOptionsBuilder::options() -> OneshotOptions && {
     return std::move(options_);
 }

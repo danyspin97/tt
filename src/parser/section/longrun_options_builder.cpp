@@ -25,13 +25,7 @@
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound
 #include "tt/utils/parse_boolean.hpp"      // for ParseBoolean
 
-using std::string;
-
-using tt::AttributeNotFound;
-using tt::LongrunOptions;
-using tt::LongrunOptionsBuilder;
-
-void LongrunOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
+void tt::LongrunOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
     const auto key = parser.key();
     if (key == "depends") {
         options_.dependencies(parser.values());
@@ -41,8 +35,8 @@ void LongrunOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
     AttributeNotFound(key, "options");
 }
 
-void LongrunOptionsBuilder::TrySetAttributeForKey(const string &key,
-                                                  const string &value) {
+void tt::LongrunOptionsBuilder::TrySetAttributeForKey(
+    const std::string &key, const std::string &value) {
     if (key == "optional") {
         options_.optional(utils::ParseBoolean(value));
     } else {
@@ -50,6 +44,6 @@ void LongrunOptionsBuilder::TrySetAttributeForKey(const string &key,
     }
 }
 
-auto LongrunOptionsBuilder::options() -> LongrunOptions && {
+auto tt::LongrunOptionsBuilder::options() -> LongrunOptions && {
     return std::move(options_);
 }

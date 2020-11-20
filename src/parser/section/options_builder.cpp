@@ -28,18 +28,7 @@
 #include "tt/parser/section/utils.hpp"         // for IsEmptyLine
 #include "tt/utils/parse_boolean.hpp"          // for BooleanParseException
 
-using std::string;
-
-using tt::AttributeNotFoundException;
-using tt::EmptyArrayException;
-using tt::EmptyKeyException;
-using tt::IsEmptyLine;
-using tt::KeyValueParser;
-using tt::OptionsBuilder;
-using tt::SectionBuilderException;
-using tt::ValuesAfterEndingTokenException;
-
-void OptionsBuilder::ParseLine(const string &line) {
+void tt::OptionsBuilder::ParseLine(const std::string &line) {
     if (IsEmptyLine(line)) {
         return;
     }
@@ -50,8 +39,8 @@ void OptionsBuilder::ParseLine(const string &line) {
 
     auto key_value_parser = KeyValueParser(line);
     if (key_value_parser.IsLineValid()) {
-        const string key = key_value_parser.key();
-        const string value = key_value_parser.value();
+        const std::string key = key_value_parser.key();
+        const std::string value = key_value_parser.value();
         SetAttributeForKey(key, value);
         return;
     }
@@ -59,14 +48,14 @@ void OptionsBuilder::ParseLine(const string &line) {
     throw SectionBuilderException(line + "\n is not valid");
 }
 
-void OptionsBuilder::EndParsing() {
+void tt::OptionsBuilder::EndParsing() {
     if (array_parser_.IsParsing()) {
         throw SectionBuilderException(
             array_parser_.key() + " has not been closed in section [options]");
     }
 }
 
-auto OptionsBuilder::ParseMultilineValue(const string &line) -> bool {
+auto tt::OptionsBuilder::ParseMultilineValue(const std::string &line) -> bool {
     try {
         return TryParseMultilineValue(line);
     } catch (const AttributeNotFoundException &e) {
@@ -80,7 +69,8 @@ auto OptionsBuilder::ParseMultilineValue(const string &line) -> bool {
     }
 }
 
-auto OptionsBuilder::TryParseMultilineValue(const string &line) -> bool {
+auto tt::OptionsBuilder::TryParseMultilineValue(const std::string &line)
+    -> bool {
     if (array_parser_.IsParsing()) {
         array_parser_.ParseLine(line);
         CheckParserHasFinished();
@@ -95,15 +85,15 @@ auto OptionsBuilder::TryParseMultilineValue(const string &line) -> bool {
     return false;
 }
 
-void OptionsBuilder::CheckParserHasFinished() {
+void tt::OptionsBuilder::CheckParserHasFinished() {
     if (!array_parser_.IsParsing()) {
         SaveValuesOfParser(array_parser_);
         array_parser_.Reset();
     }
 }
 
-void OptionsBuilder::SetAttributeForKey(const string &key,
-                                        const string &value) {
+void tt::OptionsBuilder::SetAttributeForKey(const std::string &key,
+                                            const std::string &value) {
     static const auto *const section_err_msg = " in section [options]";
     try {
         TrySetAttributeForKey(key, value);

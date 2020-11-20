@@ -32,21 +32,14 @@ namespace tt {
 class SectionBuilder;
 } // namespace tt
 
-using std::string;
-
-using tt::Bundle;
-using tt::BundleDirector;
-using tt::Exception;
-using tt::SectionBuilder;
-
-auto BundleDirector::InstanceService(string &&path) -> tt::Service {
+auto tt::BundleDirector::InstanceService(std::string &&path) -> tt::Service {
     auto &main_section = main_section_builder_.main_section();
     return Bundle(std::move(main_section.name),
                   std::move(main_section.description), std::move(path),
                   std::move(options_builder_.options()));
 }
 
-auto BundleDirector::GetBuilderForSection(const std::string &section)
+auto tt::BundleDirector::GetBuilderForSection(const std::string &section)
     -> SectionBuilder * {
     if (section == "main") {
         return &main_section_builder_;

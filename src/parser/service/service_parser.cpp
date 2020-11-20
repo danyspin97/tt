@@ -33,24 +33,15 @@
 #include "tt/parser/service/parser_factory.hpp"   // for ParserFactory
 #include "tt/parser/service/service_director.hpp" // for ServiceDirector
 
-using std::ifstream;
-using std::string;
-using std::stringstream;
-using std::vector;
-
-using tt::Exception;
-using tt::KeyValueParser;
-using tt::SectionLineParser;
-using tt::ServiceParser;
-
-auto ServiceParser::GenerateListFrom(const string &path) -> vector<string> {
-    vector<string> lines;
-    ifstream file{path};
+auto tt::ServiceParser::GenerateListFrom(const std::string &path)
+    -> std::vector<std::string> {
+    std::vector<std::string> lines;
+    std::ifstream file{path};
     const auto size = std::filesystem::file_size(path);
-    string section(size, ' ');
+    std::string section(size, ' ');
     file.read(section.data(), size);
-    stringstream section_stream(section);
-    string line;
+    std::stringstream section_stream(section);
+    std::string line;
     while (getline(section_stream, line, '\n')) {
         lines.push_back(line);
     }
@@ -58,7 +49,7 @@ auto ServiceParser::GenerateListFrom(const string &path) -> vector<string> {
     return lines;
 }
 
-ServiceParser::ServiceParser(string path)
+tt::ServiceParser::ServiceParser(std::string path)
     : path_(std::move(path)), service_(ParseService()) {}
 
 auto tt::ServiceParser::ParseService() -> tt::Service {
@@ -68,8 +59,8 @@ auto tt::ServiceParser::ParseService() -> tt::Service {
     return director->ParseAndGetService(service_lines, std::move(path_));
 }
 
-auto ServiceParser::GetTypeFromService(
-    const vector<string> &service_lines) const -> string {
+auto tt::ServiceParser::GetTypeFromService(
+    const std::vector<std::string> &service_lines) const -> std::string {
     auto main_section_index = GetMainSectionIndex(service_lines);
     for (auto i = main_section_index; i < service_lines.size(); i++) {
         auto key_value_parser = KeyValueParser(service_lines.at(i));
@@ -82,8 +73,8 @@ auto ServiceParser::GetTypeFromService(
     throw Exception(msg);
 }
 
-auto ServiceParser::GetMainSectionIndex(
-    const vector<string> &service_lines) const -> size_t {
+auto tt::ServiceParser::GetMainSectionIndex(
+    const std::vector<std::string> &service_lines) const -> size_t {
     size_t index = 0;
     for (const auto &line : service_lines) {
         auto section_line_parser = SectionLineParser(line);
@@ -99,4 +90,4 @@ auto ServiceParser::GetMainSectionIndex(
     throw Exception(msg);
 }
 
-auto ServiceParser::service() const -> tt::Service { return service_; }
+auto tt::ServiceParser::service() const -> tt::Service { return service_; }

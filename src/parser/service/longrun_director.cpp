@@ -31,18 +31,7 @@
 #include "tt/parser/section/main_section_builder.hpp"    // for MainSection...
 #include "tt/parser/section/script_builder.hpp"          // for ScriptBuilder
 
-namespace tt {
-class SectionBuilder;
-} // namespace tt
-
-using std::string;
-
-using tt::Exception;
-using tt::Longrun;
-using tt::LongrunDirector;
-using tt::SectionBuilder;
-
-auto LongrunDirector::InstanceService(string &&path) -> tt::Service {
+auto tt::LongrunDirector::InstanceService(std::string &&path) -> tt::Service {
     auto &main_section = main_section_builder_.main_section();
     if (!run_script_builder_.HasScript()) {
         throw Exception("Service '" + main_section.name +
@@ -62,7 +51,7 @@ auto LongrunDirector::InstanceService(string &&path) -> tt::Service {
     return service;
 }
 
-auto LongrunDirector::GetBuilderForSection(const string &section)
+auto tt::LongrunDirector::GetBuilderForSection(const std::string &section)
     -> SectionBuilder * {
     if (section == "main") {
         return &main_section_builder_;

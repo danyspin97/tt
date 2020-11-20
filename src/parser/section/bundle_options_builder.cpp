@@ -25,16 +25,7 @@
 #include "tt/parser/section/exception.hpp" // for SectionBuilderException
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound, IsEmpt...
 
-using std::string;
-
-using tt::ArrayParser;
-using tt::AttributeNotFound;
-using tt::BundleOptions;
-using tt::BundleOptionsBuilder;
-using tt::IsEmptyLine;
-using tt::SectionBuilderException;
-
-void BundleOptionsBuilder::ParseLine(const string &line) {
+void tt::BundleOptionsBuilder::ParseLine(const std::string &line) {
     if (IsEmptyLine(line)) {
         return;
     }
@@ -46,7 +37,7 @@ void BundleOptionsBuilder::ParseLine(const string &line) {
     throw SectionBuilderException(line + " : not valid in section [options]");
 }
 
-void BundleOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
+void tt::BundleOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
     const auto &key = parser.key();
     if (key == "contents") {
         options_.contents(parser.values());
@@ -57,12 +48,12 @@ void BundleOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
     }
 }
 
-void BundleOptionsBuilder::TrySetAttributeForKey(const string & /*key*/,
-                                                 const string & /*value*/) {
+void tt::BundleOptionsBuilder::TrySetAttributeForKey(
+    const std::string & /*key*/, const std::string & /*value*/) {
     throw SectionBuilderException("No key is allowed in section [options]");
 }
 
-void BundleOptionsBuilder::EndParsing() {
+void tt::BundleOptionsBuilder::EndParsing() {
     OptionsBuilder::EndParsing();
     if (options_.contents().empty()) {
         throw SectionBuilderException(
@@ -70,6 +61,6 @@ void BundleOptionsBuilder::EndParsing() {
     }
 }
 
-auto BundleOptionsBuilder::options() -> BundleOptions && {
+auto tt::BundleOptionsBuilder::options() -> BundleOptions && {
     return std::move(options_);
 }

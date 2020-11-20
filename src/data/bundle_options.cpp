@@ -24,20 +24,13 @@
 #include <iterator>  // for ostream_iterator
 #include <ostream>   // for operator<<, ostream, basic_ostream
 
-using std::copy;
-using std::ostream;
-using std::ostream_iterator;
-using std::string;
-
-using tt::BundleOptions;
-
-auto BundleOptions::operator==(const BundleOptions &rhs) const -> bool {
+auto tt::BundleOptions::operator==(const BundleOptions &rhs) const -> bool {
     return contents_ == rhs.contents_;
 }
 
-auto BundleOptions::Dump(ostream &oss) const -> ostream & {
+auto tt::BundleOptions::Dump(std::ostream &oss) const -> std::ostream & {
     oss << "contents = ( ";
     copy(contents_.begin(), contents_.end(),
-         ostream_iterator<string>(oss, " "));
+         std::ostream_iterator<std::string>(oss, " "));
     return oss << " )";
 }

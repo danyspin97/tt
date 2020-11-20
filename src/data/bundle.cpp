@@ -24,26 +24,22 @@
 
 #include "tt/data/service_options.hpp" // for operator<<
 
-using std::ostream;
-
-using tt::Bundle;
-
-Bundle::Bundle(std::string &&name, std::string &&description,
-               std::string &&path, BundleOptions &&options)
+tt::Bundle::Bundle(std::string &&name, std::string &&description,
+                   std::string &&path, BundleOptions &&options)
     : ServiceImpl(std::move(name), std::move(description), std::move(path)),
       options_(std::move(options)) {}
 
-auto Bundle::operator==(const Bundle &rhs) const -> bool {
+auto tt::Bundle::operator==(const Bundle &rhs) const -> bool {
     return ServiceImpl::operator==(rhs) && options_ == rhs.options_;
 }
 
-auto Bundle::Dump(ostream &oss) const -> ostream & {
+auto tt::Bundle::Dump(std::ostream &oss) const -> std::ostream & {
     oss << "[main]\n"
         << "\ntype = bundle";
     ServiceImpl::Dump(oss);
     return oss << "\n\n[options]\n" << options();
 }
 
-auto operator<<(std::ostream &oss, const Bundle &bundle) -> std::ostream & {
+auto operator<<(std::ostream &oss, const tt::Bundle &bundle) -> std::ostream & {
     return bundle.Dump(oss);
 }

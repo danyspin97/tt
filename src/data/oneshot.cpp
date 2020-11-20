@@ -25,24 +25,20 @@
 
 #include "tt/data/service_options.hpp" // for operator<<
 
-using std::ostream;
-
-using tt::Oneshot;
-
-Oneshot::Oneshot(std::string &&name, std::string &&description,
-                 std::string &&path, OneshotOptions &&options,
-                 Environment &&environment, MainScript &&start)
+tt::Oneshot::Oneshot(std::string &&name, std::string &&description,
+                     std::string &&path, OneshotOptions &&options,
+                     Environment &&environment, MainScript &&start)
     : ServiceImpl(std::move(name), std::move(description), std::move(path)),
       options_(std::move(options)), environment_(std::move(environment)),
       start_(std::move(start)) {}
 
-auto Oneshot::operator==(const Oneshot &rhs) const -> bool {
+auto tt::Oneshot::operator==(const Oneshot &rhs) const -> bool {
     return ServiceImpl::operator==(rhs) && options_ == rhs.options_ &&
            environment_ == rhs.environment_ && start_ == rhs.start_ &&
            stop_ == rhs.stop_;
 }
 
-auto Oneshot::Dump(ostream &oss) const -> ostream & {
+auto tt::Oneshot::Dump(std::ostream &oss) const -> std::ostream & {
     oss << "[main]\n";
     ServiceImpl::Dump(oss);
     oss << "\ntype = oneshot";
@@ -57,6 +53,7 @@ auto Oneshot::Dump(ostream &oss) const -> ostream & {
     return oss;
 }
 
-auto operator<<(std::ostream &oss, const Oneshot &oneshot) -> std::ostream & {
+auto operator<<(std::ostream &oss, const tt::Oneshot &oneshot)
+    -> std::ostream & {
     return oneshot.Dump(oss);
 }

@@ -23,12 +23,7 @@
 #include "tt/parser/define.hpp"
 #include "tt/utils/trim.hpp"
 
-using std::string;
-
-using tt::kSectionOpenToken;
-using tt::SectionLineParser;
-
-void SectionLineParser::ParseLine() {
+void tt::SectionLineParser::ParseLine() {
     valid_ = false;
     utils::trim(line_);
     if (line_[0] != kSectionOpenToken) {
@@ -36,7 +31,7 @@ void SectionLineParser::ParseLine() {
     }
 
     auto end_token_pos = line_.find(kSectionCloseToken);
-    if (end_token_pos == string::npos) {
+    if (end_token_pos == std::string::npos) {
         return;
     }
 

@@ -28,22 +28,15 @@
 #include "tt/parser/section/exception.hpp"        // for DummyBuilderException
 #include "tt/parser/section/section_builder.hpp"  // for SectionBuilder
 
-using std::string;
-using std::vector;
-
-using tt::Exception;
-using tt::SectionBuilder;
-using tt::SectionLineParser;
-using tt::ServiceDirector;
-
-auto ServiceDirector::ParseAndGetService(const vector<string> &service_lines,
-                                         string &&path) -> tt::Service {
+auto tt::ServiceDirector::ParseAndGetService(
+    const std::vector<std::string> &service_lines, std::string &&path)
+    -> tt::Service {
     service_lines_ = service_lines;
     ParseSections();
     return InstanceService(std::move(path));
 }
 
-void ServiceDirector::ParseSections() {
+void tt::ServiceDirector::ParseSections() {
     try {
         TryParseSections();
     } catch (const DummyBuilderException & /*e*/) {
@@ -51,7 +44,7 @@ void ServiceDirector::ParseSections() {
     }
 }
 
-void ServiceDirector::TryParseSections() {
+void tt::ServiceDirector::TryParseSections() {
     SectionBuilder *current_builder = &dummy_builder_;
     for (const auto &line : service_lines_) {
         auto section_line_parser = SectionLineParser(line);

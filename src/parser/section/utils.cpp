@@ -28,29 +28,22 @@
 #include "tt/parser/section/exception.hpp"       // for AttributeNotFoundEx...
 #include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
-using std::getline;
-using std::ifstream;
-using std::string;
-using std::stringstream;
-
-using tt::AttributeNotFoundException;
-using tt::SectionBuilder;
-
-void tt::TestBuilderWithFile(SectionBuilder &builder, const string &path) {
+void tt::TestBuilderWithFile(SectionBuilder &builder, const std::string &path) {
     // https://stackoverflow.com/a/40903508
-    ifstream f{path};
+    std::ifstream f{path};
     const auto size = std::filesystem::file_size(path);
-    string section(size, ' ');
+    std::string section(size, ' ');
     f.read(section.data(), size);
-    stringstream section_stream(section);
-    string line;
+    std::stringstream section_stream(section);
+    std::string line;
     while (getline(section_stream, line, '\n')) {
         builder.ParseLine(line);
     }
     builder.EndParsing();
 }
 
-void tt::AttributeNotFound(const string &attribute, const string &section) {
+void tt::AttributeNotFound(const std::string &attribute,
+                           const std::string &section) {
     const auto error_message =
         "Key '" + attribute + "' is not allowed in section [" + section + "]";
     throw AttributeNotFoundException(error_message);

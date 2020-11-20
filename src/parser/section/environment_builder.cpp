@@ -28,40 +28,30 @@
 #include "tt/parser/section/exception.hpp"     // for EnvironmentKeyNotVali...
 #include "tt/parser/section/utils.hpp"         // for IsEmptyLine
 
-using std::string;
-
-using tt::Environment;
-using tt::EnvironmentBuilder;
-using tt::EnvironmentKeyNotValidException;
-using tt::IsEmptyLine;
-using tt::KeyValueParser;
-using tt::KeyValueParserLineInvalidException;
-using tt::SectionBuilderException;
-
-void EnvironmentBuilder::ParseLine(const string &line) {
+void tt::EnvironmentBuilder::ParseLine(const std::string &line) {
     try {
         TryParseLine(line);
     } catch (const KeyValueParserLineInvalidException &e) {
-        const string msg = e.msg() + " in [config] section";
+        const std::string msg = e.msg() + " in [config] section";
         throw SectionBuilderException(msg);
     } catch (const EnvironmentKeyNotValidException &e) {
-        const string msg = e.msg() + " in [config] section";
+        const std::string msg = e.msg() + " in [config] section";
         throw SectionBuilderException(msg);
     } catch (const EnvironmentKeyAlreadySetException &e) {
-        const string msg = e.msg() + " in [config] section";
+        const std::string msg = e.msg() + " in [config] section";
         throw SectionBuilderException(msg);
     }
 }
 
-void EnvironmentBuilder::TryParseLine(const string &line) {
+void tt::EnvironmentBuilder::TryParseLine(const std::string &line) {
     if (IsEmptyLine(line)) {
         return;
     }
 
     auto key_value_parser = KeyValueParser(line, true);
-    const string key = key_value_parser.key();
+    const std::string key = key_value_parser.key();
     CheckKeyIsValid(key);
-    const string value = key_value_parser.value();
+    const std::string value = key_value_parser.value();
 
     if (!environment_.SetUnique(key, value)) {
         const auto msg = "Key " + key + " has been already set";
@@ -69,7 +59,7 @@ void EnvironmentBuilder::TryParseLine(const string &line) {
     }
 }
 
-void EnvironmentBuilder::CheckKeyIsValid(const string &key) {
+void tt::EnvironmentBuilder::CheckKeyIsValid(const std::string &key) {
     if (isdigit(key[0]) != 0) {
         const auto msg = "Key " + key + " cannot start with a digit";
         throw EnvironmentKeyNotValidException(msg);
@@ -78,12 +68,12 @@ void EnvironmentBuilder::CheckKeyIsValid(const string &key) {
     for (char c : key) {
         if ((isalnum(c) == 0) && c != '_') {
             const auto msg =
-                "Character " + string{c} + " not valid in key " + key;
+                "Character " + std::string{c} + " not valid in key " + key;
             throw EnvironmentKeyNotValidException(msg);
         }
     }
 }
 
-auto EnvironmentBuilder::environment() -> Environment && {
+auto tt::EnvironmentBuilder::environment() -> Environment && {
     return std::move(environment_);
 }

@@ -27,26 +27,22 @@
 #include "tt/data/script.hpp" // for Script, Script::Type, operator<<
 #include "tt/signal.hpp"      // for GetSignalName
 
-using std::ostream;
-
-using tt::Script;
-
-Script::Script(Type type, std::string &&execute)
+tt::Script::Script(Type type, std::string &&execute)
     : execute_(std::move(execute)), type_(type) {}
 
-Script::Script(Type type, std::string &&execute, std::string &&user,
-               std::string &&group)
+tt::Script::Script(Type type, std::string &&execute, std::string &&user,
+                   std::string &&group)
     : execute_(std::move(execute)), type_(type), user_(std::move(user)),
       group_(std::move(group)) {}
 
-auto Script::operator==(const Script &rhs) const -> bool {
+auto tt::Script::operator==(const Script &rhs) const -> bool {
     return execute_ == rhs.execute_ && user_ == rhs.user_ &&
            group_ == rhs.group_ && timeout_ == rhs.timeout_ &&
            timeout_kill_ == rhs.timeout_kill_ &&
            down_signal_ == rhs.down_signal_ && max_death_ == rhs.max_death_;
 }
 
-auto Script::Dump(ostream &oss) const -> ostream & {
+auto tt::Script::Dump(std::ostream &oss) const -> std::ostream & {
     // TODO: Convert from Type to string
     // o << "type = " << type() << "\n";
     oss << "execute = (\n" << execute() << "\n)";
@@ -63,6 +59,6 @@ auto Script::Dump(ostream &oss) const -> ostream & {
     return oss;
 }
 
-auto operator<<(ostream &oss, const Script &script) -> ostream & {
+auto operator<<(std::ostream &oss, const tt::Script &script) -> std::ostream & {
     return script.Dump(oss);
 }

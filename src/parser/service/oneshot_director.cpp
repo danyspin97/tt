@@ -29,18 +29,7 @@
 #include "tt/parser/section/oneshot_options_builder.hpp" // for OneshotOpti...
 #include "tt/parser/section/script_builder.hpp"          // for ScriptBuilder
 
-namespace tt {
-class SectionBuilder;
-} // namespace tt
-
-using std::string;
-
-using tt::Exception;
-using tt::Oneshot;
-using tt::OneshotDirector;
-using tt::SectionBuilder;
-
-auto OneshotDirector::InstanceService(string &&path) -> tt::Service {
+auto tt::OneshotDirector::InstanceService(std::string &&path) -> tt::Service {
     auto &main_section = main_section_builder_.main_section();
     if (!start_script_builder_.HasScript()) {
         throw Exception("Service '" + main_section.name +
@@ -60,7 +49,7 @@ auto OneshotDirector::InstanceService(string &&path) -> tt::Service {
     return service;
 }
 
-auto OneshotDirector::GetBuilderForSection(const string &section)
+auto tt::OneshotDirector::GetBuilderForSection(const std::string &section)
     -> SectionBuilder * {
     if (section == "main") {
         return &main_section_builder_;

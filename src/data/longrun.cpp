@@ -25,24 +25,20 @@
 
 #include "tt/data/service_options.hpp" // for operator<<
 
-using std::ostream;
-
-using tt::Longrun;
-
-Longrun::Longrun(std::string &&name, std::string &&description,
-                 std::string &&path, LongrunOptions &&options,
-                 Environment &&environment, LongLivedScript &&run)
+tt::Longrun::Longrun(std::string &&name, std::string &&description,
+                     std::string &&path, LongrunOptions &&options,
+                     Environment &&environment, LongLivedScript &&run)
     : ServiceImpl(std::move(name), std::move(description), std::move(path)),
       options_(std::move(options)), environment_(std::move(environment)),
       run_(std::move(run)) {}
 
-auto Longrun::operator==(const Longrun &rhs) const -> bool {
+auto tt::Longrun::operator==(const Longrun &rhs) const -> bool {
     return ServiceImpl::operator==(rhs) && run_ == rhs.run_ &&
            finish_ == rhs.finish_ && options_ == rhs.options_ &&
            environment_ == rhs.environment_;
 }
 
-auto Longrun::Dump(ostream &oss) const -> ostream & {
+auto tt::Longrun::Dump(std::ostream &oss) const -> std::ostream & {
     oss << "[main]\n";
     ServiceImpl::Dump(oss);
     oss << "\ntype = longrun";
@@ -57,6 +53,7 @@ auto Longrun::Dump(ostream &oss) const -> ostream & {
     return oss;
 }
 
-auto operator<<(std::ostream &oss, Longrun const &longrun) -> std::ostream & {
+auto operator<<(std::ostream &oss, tt::Longrun const &longrun)
+    -> std::ostream & {
     return longrun.Dump(oss);
 }

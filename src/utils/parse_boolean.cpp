@@ -22,9 +22,7 @@
 
 #include <string>
 
-using std::string;
-
-auto tt::utils::ParseBoolean(const string &value) -> bool {
+auto tt::utils::ParseBoolean(const std::string &value) -> bool {
     if (value == "yes") {
         return true;
     }
