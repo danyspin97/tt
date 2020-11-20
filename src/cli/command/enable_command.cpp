@@ -77,8 +77,7 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
     }
 
     ServicesParser parser(dirs());
-    parser.ParseServices(service_list);
-    std::vector<tt::Service> services = parser.services();
+    std::vector<tt::Service> services = parser.ParseServices(service_list);
 
     if (no_update_dependencies_) {
         services.erase(std::remove_if(services.begin(), services.end(),

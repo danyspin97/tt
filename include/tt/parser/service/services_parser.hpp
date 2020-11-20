@@ -22,7 +22,9 @@
 
 #include <cstddef>       // for size_t
 #include <filesystem>    // for path
+#include <future>        // for future
 #include <memory>        // for shared_ptr
+#include <shared_mutex>  // for shared_mutex
 #include <string>        // for string, hash
 #include <unordered_map> // for unordered_map
 #include <vector>        // for vector
@@ -36,11 +38,11 @@ class ServicesParser {
 public:
     explicit ServicesParser(const std::shared_ptr<Dirs> &dirs);
 
-    auto services() const -> std::vector<Service>;
-    void ParseServices(const std::vector<std::string> &service_names);
+    auto ParseServices(const std::vector<std::string> &service_names)
+        -> std::vector<Service>;
 
 private:
-    void ParseService(const std::string &service_name);
+    auto ParseService(const std::string &service_name) -> Service;
     void ParseDependenciesOfService(const Service &service);
     static auto GetInstanceTokenIndex(const std::string &service_name)
         -> size_t;
@@ -48,8 +50,14 @@ private:
                                              size_t token_index) -> std::string;
     auto GetPathForServiceName(const std::string &name) -> std::string;
 
+    std::mutex services_to_parse_mutex_;
+    std::mutex futures_mutex_;
     std::string suffix_;
     std::vector<std::filesystem::path> paths_;
-    std::unordered_map<std::string, Service> service_map_;
+    std::atomic_uint16_t service_to_parse_;
+    std::vector<std::string> service_names_to_parse_;
+    std::vector<std::future<Service>> futures_;
+    std::condition_variable future_cv_;
+    std::condition_variable services_cv_;
 };
 } // namespace tt
