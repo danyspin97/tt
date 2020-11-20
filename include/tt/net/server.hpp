@@ -20,7 +20,11 @@
 
 #pragma once
 
-#include "tt/net/socket.hpp" // for Socket, Socket::Protocol
+#include "tt/net/socket.hpp" // for Socket
+
+namespace tl {
+template <typename T, typename Z> class expected;
+}
 
 namespace tt::net {
 
@@ -29,11 +33,8 @@ public:
     explicit Server(std::filesystem::path socket_path);
     // Start listening on this socket
     // Return false on error, true otherwise
-    auto Listen() -> bool;
+    auto Listen() -> tl::expected<void, std::string>;
     [[nodiscard]] auto IsListening() const noexcept -> bool;
-
-private:
-    bool is_listening_ = false;
 };
 
 } // namespace tt::net

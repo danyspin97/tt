@@ -20,7 +20,11 @@
 
 #pragma once
 
-#include "tt/net/socket.hpp" // for Socket, Socket::Protocol
+#include "tt/net/socket.hpp" // for IpcSocket
+
+namespace tl {
+template <typename T, typename Z> class expected;
+}
 
 namespace tt::net {
 
@@ -29,11 +33,8 @@ public:
     explicit Client(std::filesystem::path socket_path);
     // Connect to the server
     // Return false on error, true otherwise
-    auto Connect() -> bool;
+    auto Connect() -> tl::expected<void, std::string>;
     [[nodiscard]] auto IsConnected() const noexcept -> bool;
-
-private:
-    bool is_connected_ = false;
 };
 
 } // namespace tt::net

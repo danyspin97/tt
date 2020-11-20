@@ -23,29 +23,20 @@
 #include <cstring> // for memcpy
 #include <utility> // for move
 
-#include "nngpp/buffer.h"        // for buffer, make_buffer
+#include "tl/expected.hpp" // for expected
+
 #include "nngpp/protocol/req0.h" // for open
 #include "nngpp/socket_view.h"   // for socket_view
 
 #include "tt/exception.hpp" // for Exception
 
 tt::net::Client::Client(std::filesystem::path socket_path)
-    : Socket(nng::req::open(), std::move(socket_path)) {}
+    : Socket(Socket::Mode::Client, std::move(socket_path)) {}
 
-auto tt::net::Client::Connect() -> bool {
-    if (is_connected_) {
-        return true;
-    }
-
-    try {
-        socket().dial(GetNetAddress().c_str());
-        is_connected_ = true;
-    } catch (nng::exception & /*e*/) {
-        return false;
-    }
-    return true;
+auto tt::net::Client::Connect() -> tl::expected<void, std::string> {
+    return Socket::Connect();
 }
 
 auto tt::net::Client::IsConnected() const noexcept -> bool {
-    return is_connected_;
+    return Socket::IsConnected();
 }

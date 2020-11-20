@@ -25,24 +25,17 @@
 #include "nngpp/protocol/rep0.h" // for open
 #include "nngpp/socket_view.h"   // for socket_view
 
+#include "tl/expected.hpp" // for expected
+
 #include "tt/exception.hpp" // for Exception
 
 tt::net::Server::Server(std::filesystem::path socket_path)
-    : Socket(nng::rep::open(), std::move(socket_path)) {}
+    : Socket(Socket::Mode::Server, std::move(socket_path)) {}
 
-auto tt::net::Server::Listen() -> bool {
-    if (is_listening_) {
-        return true;
-    }
-    try {
-        socket().listen(GetNetAddress().c_str());
-        is_listening_ = true;
-    } catch (nng::exception & /*e*/) {
-        return false;
-    }
-    return true;
+auto tt::net::Server::Listen() -> tl::expected<void, std::string> {
+    return Socket::Connect();
 }
 
 auto tt::net::Server::IsListening() const noexcept -> bool {
-    return is_listening_;
+    return Socket::IsConnected();
 }

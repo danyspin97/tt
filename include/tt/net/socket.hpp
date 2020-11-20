@@ -33,19 +33,33 @@ namespace tt::net {
 
 class Socket {
 public:
-    Socket(nng::socket &&socket, std::filesystem::path address);
+    enum class Mode {
+        Client = 0,
+        Server = 1,
+    };
+
+    Socket() = delete;
     ~Socket() = default;
 
+protected:
+    Socket(Mode, std::filesystem::path address);
+
+public:
     auto SendMessage(const std::string &message)
         -> tl::expected<void, std::string>;
     auto ReceiveMessage() -> tl::expected<std::string, std::string>;
 
 protected:
-    [[nodiscard]] auto socket() const -> nng::socket_view;
+    auto Connect() -> tl::expected<void, std::string>;
+    [[nodiscard]] auto IsConnected() const noexcept -> bool;
 
-    [[nodiscard]] auto GetNetAddress() const -> std::string;
+    [[nodiscard]] auto socket() -> nng::socket_view;
 
 private:
+    [[nodiscard]] auto GetNetAddress() const -> std::string;
+
+    Mode mode_;
+    bool is_connected_ = false;
     nng::socket socket_;
     std::filesystem::path socket_path_;
 };
