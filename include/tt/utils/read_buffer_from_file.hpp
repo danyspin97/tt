@@ -20,8 +20,8 @@
 
 #pragma once
 
+#include <cstdint>    // for uint8_t
 #include <filesystem> // for path
-#include <cstdint>   // for uint8_t
 #include <vector>     // for vector
 
 namespace tt::utils {

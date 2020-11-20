@@ -33,7 +33,7 @@
 namespace tt::test {
 
 // Divide a string by newlines and add [stdout] (or stderr) at the start
-auto GetExpectedOutput(bool is_stdout, const std::string& output) {
+auto GetExpectedOutput(bool is_stdout, const std::string &output) {
     std::string type = is_stdout ? "stdout" : "stderr";
     std::stringstream ss{output};
     std::stringstream res{output};
@@ -45,8 +45,8 @@ auto GetExpectedOutput(bool is_stdout, const std::string& output) {
     return res.str();
 }
 
-void TestOutput(const std::string& test_name, const std::string& echo_args,
-                const std::string& output, bool is_stdout) {
+void TestOutput(const std::string &test_name, const std::string &echo_args,
+                const std::string &output, bool is_stdout) {
     std::string command = std::string{is_stdout ? "" : ">&2 "} + "echo " +
                           echo_args + " " + output;
     // We can only redirect when using bash

@@ -20,9 +20,9 @@
 
 #pragma once
 
+#include <cstddef>       // for size_t
 #include <filesystem>    // for path
 #include <memory>        // for shared_ptr
-#include <cstddef>      // for size_t
 #include <string>        // for string, hash
 #include <unordered_map> // for unordered_map
 #include <vector>        // for vector

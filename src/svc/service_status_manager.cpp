@@ -32,7 +32,7 @@ tt::ServiceStatusManager::ServiceStatusManager(
     const std::vector<std::string> &services,
     ServiceLoggerRegistry &logger_registry)
     : logger_registry_(logger_registry) {
-    for (const auto& service : services) {
+    for (const auto &service : services) {
         services_.emplace(service,
                           std::make_pair(ServiceStatus::Reset,
                                          std::make_unique<WaitOnStart>()));

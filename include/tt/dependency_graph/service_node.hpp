@@ -20,10 +20,10 @@
 
 #pragma once
 
-#include <iosfwd>   // for ostream
 #include <cstdint> // for uint32_t
-#include <string>   // for string
-#include <variant>  // for monostate
+#include <iosfwd>  // for ostream
+#include <string>  // for string
+#include <variant> // for monostate
 
 #include "bitsery/ext/growable.h"    // for Growable
 #include "bitsery/ext/std_variant.h" // IWYU pragma: keep for StdVariant

@@ -21,8 +21,8 @@
 #pragma once
 
 #include <cstddef> // for size_t
-#include <string>   // for string
-#include <vector>   // for vector
+#include <string>  // for string
+#include <vector>  // for vector
 
 #include "tt/data/service.hpp" // for Service
 
