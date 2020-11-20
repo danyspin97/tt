@@ -24,6 +24,8 @@
 
 #include <nlohmann/json.hpp> // for json, detail::exception
 
+#include "tl/expected.hpp" // for expected
+
 #include "tt/exception.hpp"                             // for Exception
 #include "tt/request/adapter/notify_service_statup.hpp" // IWYU pragma: keep
 #include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus

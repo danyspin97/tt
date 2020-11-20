@@ -64,6 +64,9 @@ void tt::request::RequestListener::Listen() {
             continue;
         }
 
-        tt::LaunchAsync([this, &request]() { request.value()->accept(dispatcher_); });
+        auto reply = request.value()->accept(dispatcher_);
+        if (reply) {
+            server.SendMessage(reply.value());
+        }
     }
 }

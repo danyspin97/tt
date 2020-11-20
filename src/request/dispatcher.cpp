@@ -25,8 +25,9 @@
 tt::request::Dispatcher::Dispatcher(ServiceManager &service_manager)
     : service_manager_(service_manager) {}
 
-void tt::request::Dispatcher::operator()(
-    std::shared_ptr<NotifyServiceStatus> notify) {
+auto tt::request::Dispatcher::operator()(
+    std::shared_ptr<NotifyServiceStatus> notify) -> std::optional<std::string> {
     service_manager_.status_manager().ChangeStatusOfService(notify->service(),
                                                             notify->status());
+    return {};
 }

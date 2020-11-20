@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include <memory> // for unique_ptr
+#include <memory>   // for unique_ptr
+#include <optional> // for optional
 
 namespace tt::request {
 
@@ -29,7 +30,8 @@ class NotifyServiceStatus;
 class Visitor {
 public:
     virtual ~Visitor() = default;
-    virtual void operator()(std::shared_ptr<NotifyServiceStatus> notify) = 0;
+    virtual auto operator()(std::shared_ptr<NotifyServiceStatus> notify)
+        -> std::optional<std::string> = 0;
 };
 
 } // namespace tt::request

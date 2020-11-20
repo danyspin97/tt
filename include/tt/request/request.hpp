@@ -20,13 +20,16 @@
 
 #pragma once
 
+#include <optional> // for optional
+#include <string>   // for string
+
 namespace tt::request {
 class Visitor;
 
 class Request {
 public:
     virtual ~Request() = default;
-    virtual void accept(Visitor &visitor) = 0;
+    virtual auto accept(Visitor &visitor) -> std::optional<std::string> = 0;
 };
 
 } // namespace tt::request

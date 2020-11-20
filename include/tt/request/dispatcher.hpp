@@ -33,7 +33,8 @@ class Dispatcher : public Visitor {
 public:
     explicit Dispatcher(ServiceManager &service_manager);
 
-    void operator()(std::shared_ptr<NotifyServiceStatus> notify);
+    auto operator()(std::shared_ptr<NotifyServiceStatus> notify)
+        -> std::optional<std::string> override;
 
 private:
     ServiceManager &service_manager_;

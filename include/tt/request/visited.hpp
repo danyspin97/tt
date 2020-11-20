@@ -30,7 +30,9 @@ namespace tt::request {
 template <typename T>
 class Visited : public Request, public std::enable_shared_from_this<T> {
 public:
-    void accept(Visitor &visitor) { visitor(this->shared_from_this()); }
+    auto accept(Visitor &visitor) -> std::optional<std::string> override {
+        return visitor(this->shared_from_this());
+    }
 };
 
 } // namespace tt::request
