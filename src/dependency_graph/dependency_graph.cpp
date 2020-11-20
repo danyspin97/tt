@@ -177,34 +177,32 @@ void tt::DependencyGraph::RemoveServices(
 
         auto &node = GetNodeFromName(service);
         if (!IsNodeRequired(node)) {
-            RemoveNode(node);
+            RemoveNode(service);
         }
     }
 }
 
-void tt::DependencyGraph::RemoveNode(const ServiceNode &node) {
-    ForEachDependencyOfNode(node, [this, &node](ServiceNode &dep_node) {
-        dep_node.RemoveDependant(node.name());
+void tt::DependencyGraph::RemoveNode(std::string service_name) {
+    auto &node = GetNodeFromName(service_name);
+    ForEachDependencyOfNode(node, [this, &service_name](ServiceNode &dep_node) {
+        dep_node.RemoveDependant(service_name);
         if (!IsNodeRequired(dep_node)) {
-            RemoveNode(dep_node);
+            RemoveNode(dep_node.name());
         }
     });
 
-    const auto &node_to_remove_name = node.name();
-    auto index = name_to_index_[node_to_remove_name];
+    auto index = name_to_index_[service_name];
     if (index == nodes_.size() - 1) {
         nodes_.pop_back();
-        name_to_index_.erase(node_to_remove_name);
+        name_to_index_.erase(service_name);
         return;
     }
 
-    const auto &end_node_name = nodes_.back().name();
-    std::swap(nodes_[index], nodes_.back());
-    std::swap(name_to_index_[node_to_remove_name],
-              name_to_index_[end_node_name]);
+    const auto end_node_name = nodes_.back().name();
+    nodes_[index] = std::move(nodes_.back());
+    name_to_index_[end_node_name] = index;
     nodes_.pop_back();
-    // end_node_name is now a reference to node.name(), due to the first swap
-    name_to_index_.erase(end_node_name);
+    name_to_index_.erase(service_name);
 }
 
 void tt::DependencyGraph::AddEnabledServices(
@@ -216,7 +214,7 @@ void tt::DependencyGraph::AddEnabledServices(
 void tt::DependencyGraph::UpdateDependants() {
     for (const auto &node : nodes_) {
         if (!IsNodeRequired(node)) {
-            RemoveNode(node);
+            RemoveNode(node.name());
         }
     }
 }

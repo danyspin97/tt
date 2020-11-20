@@ -74,7 +74,7 @@ private:
     auto ReplaceExistingNodes(std::vector<Service>::iterator begin,
                               std::vector<Service>::iterator end) -> bool;
     void RemoveService(const ServiceNode &node);
-    void RemoveNode(const ServiceNode &node);
+    void RemoveNode(std::string service_name);
     // Split the vector in two parts: the first contains new services,
     // the second one contains existing services. Return an iterator to the
     // first service of the second part

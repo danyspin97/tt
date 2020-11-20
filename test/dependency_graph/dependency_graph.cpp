@@ -119,4 +119,28 @@ TEST_CASE("DependencyChecker") {
 
         CHECK(graph.services().size() == 2);
     }
+
+    SECTION("Remove and add a service") {
+        const std::string service_name = "test-service";
+        const std::string dummy_path = "../test/dependency_graph/dummy";
+        std::vector<std::string> filenames = {dummy_path};
+        REQUIRE_NOTHROW(
+            tt::AddTestDependenciesToGraph(graph, {"dummy"}, filenames));
+        REQUIRE(graph.services().size() == 1);
+
+        filenames = {"../test/dependency_graph/version3/" + service_name};
+        REQUIRE_NOTHROW(
+            tt::AddTestDependenciesToGraph(graph, {service_name}, filenames));
+        REQUIRE(graph.services().size() == 2);
+
+        REQUIRE_NOTHROW(graph.RemoveServices({"dummy"}));
+        REQUIRE(graph.services().size() == 2);
+        REQUIRE_NOTHROW(graph.RemoveServices({service_name}));
+        REQUIRE(graph.services().empty());
+
+        filenames.push_back(dummy_path);
+        REQUIRE_NOTHROW(
+            tt::AddTestDependenciesToGraph(graph, {service_name}, filenames));
+        REQUIRE(graph.services().size() == 2);
+    }
 }
