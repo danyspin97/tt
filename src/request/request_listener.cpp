@@ -59,7 +59,11 @@ void tt::request::RequestListener::Listen() {
         }
 
         auto request = RequestFactory::GetRequestFromBuffer(buffer.value());
+        if (!request) {
+            SPDLOG_WARN(request.error());
+            continue;
+        }
 
-        tt::LaunchAsync([this, &request]() { request->accept(dispatcher_); });
+        tt::LaunchAsync([this, &request]() { request.value()->accept(dispatcher_); });
     }
 }

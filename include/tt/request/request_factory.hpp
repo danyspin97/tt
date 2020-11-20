@@ -23,6 +23,10 @@
 #include <memory> // for unique_ptr
 #include <string> // for string
 
+namespace tl {
+template <typename T, typename Z> class expected;
+}
+
 namespace tt::request {
 
 class Request;
@@ -30,7 +34,7 @@ class Request;
 class RequestFactory {
 public:
     static auto GetRequestFromBuffer(const std::string &buffer)
-        -> std::shared_ptr<Request>;
+        -> tl::expected<std::shared_ptr<Request>, std::string>;
 };
 
 } // namespace tt::request

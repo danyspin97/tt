@@ -31,18 +31,22 @@
 using json = nlohmann::json;
 
 auto tt::request::RequestFactory::GetRequestFromBuffer(
-    const std::string &buffer) -> std::shared_ptr<Request> try {
-    json j = json::parse(buffer);
+    const std::string &buffer)
+    -> tl::expected<std::shared_ptr<Request>, std::string> {
+    try {
+        json j = json::parse(buffer);
 
-    // ComplexRequest:
-    //     request_name: "complex_action"
-    //     request: { request_object }
-    std::string request_name = j.at("request_name");
+        // ComplexRequest:
+        //     request_name: "complex_action"
+        //     request: { request_object }
+        std::string request_name = j.at("request_name");
 
-    if (request_name == NotifyServiceStatus::request_name) {
-        return std::make_shared<NotifyServiceStatus>(j.at("request"));
+        if (request_name == NotifyServiceStatus::request_name) {
+            return std::make_shared<NotifyServiceStatus>(j.at("request"));
+        }
+        return tl::make_unexpected(request_name +
+                                   " is not a valid request name");
+    } catch (const nlohmann::detail::exception &e) {
+        return tl::make_unexpected(e.what());
     }
-    throw tt::Exception(request_name + " is not a supported request");
-} catch (const nlohmann::detail::exception & /*e*/) {
-    throw tt::Exception("There was an error while parsing the request");
 }

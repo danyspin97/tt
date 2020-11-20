@@ -22,6 +22,8 @@
 
 #include "catch2/catch.hpp" // for operator""_catch_sr
 
+#include "tl/expected.hpp" // for expected
+
 #include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
 #include "tt/request/pack_request.hpp"          // for PackAction
 #include "tt/request/request.hpp"               // for Action
@@ -35,8 +37,11 @@ TEST_CASE("ActionFactory") {
         auto deserialized_request =
             tt::request::RequestFactory::GetRequestFromBuffer(buffer);
 
+        REQUIRE(deserialized_request);
+
         CHECK_NOTHROW(
-            std::is_same_v<std::decay_t<decltype(deserialized_request.get())>,
-                           tt::request::NotifyServiceStatus>);
+            std::is_same_v<
+                std::decay_t<decltype(deserialized_request.value().get())>,
+                tt::request::NotifyServiceStatus>);
     }
 }
