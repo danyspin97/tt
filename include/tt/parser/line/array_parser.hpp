@@ -48,12 +48,11 @@ public:
         return std::move(values_);
     }
 
-    ArrayParser() = default;
-
-    auto StartParsing(const std::string &line)
+    [[nodiscard]] auto StartParsing(const std::string &line) noexcept
         -> tl::expected<bool, ParserError>;
 
-    auto ParseLine(const std::string &line) -> tl::expected<void, ParserError>;
+    [[nodiscard]] auto ParseLine(const std::string &line) noexcept
+        -> tl::expected<void, ParserError>;
 
     void Reset() {
         is_parsing_ = false;

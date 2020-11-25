@@ -33,7 +33,7 @@
 #include "tt/parser/section/exception.hpp"     // for SectionBuilderException
 #include "tt/parser/section/utils.hpp"         // for SetThrowsIfNotEmpty
 
-auto tt::CodeSectionBuilder::ParseLine(const std::string &line)
+auto tt::CodeSectionBuilder::ParseLine(const std::string &line) noexcept
     -> tl::expected<void, ParserError> {
     if (code_parser_.IsParsing()) {
         // Continue parsing execute parameter
@@ -65,7 +65,7 @@ auto tt::CodeSectionBuilder::ParseLine(const std::string &line)
     return SectionBuilder::ParseLine(line);
 }
 
-auto tt::CodeSectionBuilder::SetCodeAttribute()
+auto tt::CodeSectionBuilder::SetCodeAttribute() noexcept
     -> tl::expected<void, ParserError> {
     auto key = code_parser_.key();
     auto valid_keys = GetValidCodeAttributes();
@@ -79,7 +79,8 @@ auto tt::CodeSectionBuilder::SetCodeAttribute()
     return SetAttribute(key, code_parser_.code());
 }
 
-auto tt::CodeSectionBuilder::EndParsing() -> tl::expected<void, ParserError> {
+auto tt::CodeSectionBuilder::EndParsing() noexcept
+    -> tl::expected<void, ParserError> {
     if (auto ret = SectionBuilder::EndParsing(); !ret.has_value()) {
         return ret;
     }

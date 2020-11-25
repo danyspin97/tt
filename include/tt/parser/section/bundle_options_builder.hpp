@@ -30,17 +30,20 @@ namespace tt {
 
 class BundleOptionsBuilder : public SectionBuilder {
 public:
-    BundleOptionsBuilder();
+    BundleOptionsBuilder() noexcept;
 
-    [[nodiscard]] auto options() -> BundleOptions &&;
+    [[nodiscard]] auto options() noexcept -> BundleOptions &&;
 
-    auto EndParsing() -> tl::expected<void, ParserError> override;
+    [[nodiscard]] auto EndParsing() noexcept
+        -> tl::expected<void, ParserError> override;
 
 protected:
-    auto GetValidAttributes() const -> std::vector<std::string> override {
+    [[nodiscard]] auto GetValidAttributes() const noexcept
+        -> std::vector<std::string> override {
         return {};
     }
-    auto GetValidArrayAttributes() const -> std::vector<std::string> override;
+    [[nodiscard]] auto GetValidArrayAttributes() const noexcept
+        -> std::vector<std::string> override;
 
 private:
     BundleOptions options_;

@@ -29,7 +29,7 @@
 #include "tt/parser/section/long_lived_script_builder.hpp" // for LongLived...
 #include "tt/parser/section/main_script_builder.hpp"       // for MainScrip...
 
-auto tt::LongLivedScriptBuilder::GetValidAttributes() const
+auto tt::LongLivedScriptBuilder::GetValidAttributes() const noexcept
     -> std::vector<std::string> {
     auto valid_attributes = MainScriptBuilder::GetValidAttributes();
     valid_attributes.emplace_back("notify");
@@ -37,7 +37,8 @@ auto tt::LongLivedScriptBuilder::GetValidAttributes() const
 }
 
 auto tt::LongLivedScriptBuilder::SetOptionalAttributeForLongLivedScript(
-    LongLivedScript &long_lived_script) -> tl::expected<void, ParserError> {
+    LongLivedScript &long_lived_script) noexcept
+    -> tl::expected<void, ParserError> {
     if (auto notify = GetAttribute("notify")) {
         try {
             long_lived_script.notify(stoi(notify.value()));
@@ -51,7 +52,7 @@ auto tt::LongLivedScriptBuilder::SetOptionalAttributeForLongLivedScript(
     return SetOptionalAttributeForMainScript(long_lived_script);
 }
 
-auto tt::LongLivedScriptBuilder::CreateScript()
+auto tt::LongLivedScriptBuilder::CreateScript() noexcept
     -> tl::expected<void, ParserError> {
     auto script_attributes = GetScriptAttributes();
     if (!script_attributes.has_value()) {
@@ -63,6 +64,12 @@ auto tt::LongLivedScriptBuilder::CreateScript()
     return SetOptionalAttributeForLongLivedScript(long_lived_script_.value());
 }
 
-auto tt::LongLivedScriptBuilder::long_lived_script() -> LongLivedScript {
+auto tt::LongLivedScriptBuilder::long_lived_script() const noexcept
+    -> LongLivedScript {
+    return long_lived_script_.value();
+}
+
+auto tt::LongLivedScriptBuilder::long_lived_script() noexcept
+    -> LongLivedScript {
     return std::move(long_lived_script_.value());
 }

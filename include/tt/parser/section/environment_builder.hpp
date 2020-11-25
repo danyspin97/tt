@@ -36,26 +36,30 @@ class Environment;
 
 class EnvironmentBuilder : public SectionBuilder {
 public:
-    EnvironmentBuilder();
+    EnvironmentBuilder() noexcept;
 
-    [[nodiscard]] auto environment() -> Environment &&;
+    [[nodiscard]] auto environment() const noexcept -> Environment;
+    [[nodiscard]] auto environment() noexcept -> Environment &&;
 
-    auto ParseLine(const std::string &line) noexcept
+    [[nodiscard]] auto ParseLine(const std::string &line) noexcept
         -> tl::expected<void, ParserError> override;
-    auto EndParsing() noexcept -> tl::expected<void, ParserError> override;
+    [[nodiscard]] auto EndParsing() noexcept
+        -> tl::expected<void, ParserError> override;
 
 protected:
-    auto GetValidAttributes() const -> std::vector<std::string> override {
+    [[nodiscard]] auto GetValidAttributes() const noexcept
+        -> std::vector<std::string> override {
         return {};
     }
-    auto GetValidArrayAttributes() const -> std::vector<std::string> override {
+    [[nodiscard]] auto GetValidArrayAttributes() const noexcept
+        -> std::vector<std::string> override {
         return {};
     }
 
 private:
-    auto TryParseLine(const std::string &line) noexcept
+    [[nodiscard]] auto TryParseLine(const std::string &line) noexcept
         -> tl::expected<void, ParserError>;
-    static auto CheckKeyIsValid(const std::string &key) noexcept
+    [[nodiscard]] static auto CheckKeyIsValid(const std::string &key) noexcept
         -> tl::expected<void, ParserError>;
 
     Environment environment_;

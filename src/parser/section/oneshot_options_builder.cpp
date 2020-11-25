@@ -28,10 +28,10 @@
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound
 #include "tt/utils/parse_boolean.hpp"      // for ParseBoolean
 
-tt::OneshotOptionsBuilder::OneshotOptionsBuilder()
+tt::OneshotOptionsBuilder::OneshotOptionsBuilder() noexcept
     : SectionBuilder("options") {}
 
-auto tt::OneshotOptionsBuilder::EndParsing()
+auto tt::OneshotOptionsBuilder::EndParsing() noexcept
     -> tl::expected<void, ParserError> {
     if (auto ret = SectionBuilder::EndParsing(); !ret.has_value()) {
         return ret;
@@ -54,16 +54,16 @@ auto tt::OneshotOptionsBuilder::EndParsing()
     return {};
 }
 
-auto tt::OneshotOptionsBuilder::GetValidAttributes() const
+auto tt::OneshotOptionsBuilder::GetValidAttributes() const noexcept
     -> std::vector<std::string> {
     return {"optional"};
 }
 
-auto tt::OneshotOptionsBuilder::GetValidArrayAttributes() const
+auto tt::OneshotOptionsBuilder::GetValidArrayAttributes() const noexcept
     -> std::vector<std::string> {
     return {"depends"};
 }
 
-auto tt::OneshotOptionsBuilder::options() -> OneshotOptions && {
+auto tt::OneshotOptionsBuilder::options() noexcept -> OneshotOptions {
     return std::move(options_);
 }

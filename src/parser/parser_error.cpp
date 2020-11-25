@@ -3,7 +3,7 @@
 
 #include "fmt/format.h"
 
-tt::ParserError::ParserError(Type type, std::string err_msg)
+tt::ParserError::ParserError(Type type, std::string err_msg) noexcept
     : type_(type), err_msg_(std::move(err_msg)) {}
 
 void tt::ParserError::Chain(const std::string &err_msg) noexcept {

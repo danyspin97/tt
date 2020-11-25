@@ -41,30 +41,36 @@ public:
     SectionBuilder() = delete;
     virtual ~SectionBuilder() = default;
 
-    virtual auto ParseLine(const std::string &line)
+    [[nodiscard]] virtual auto ParseLine(const std::string &line) noexcept
         -> tl::expected<void, ParserError>;
-    virtual auto EndParsing() -> tl::expected<void, ParserError>;
+    [[nodiscard]] virtual auto EndParsing() noexcept
+        -> tl::expected<void, ParserError>;
 
-    auto SectionParsed() const -> bool;
+    [[nodiscard]] auto SectionParsed() const -> bool;
 
 protected:
-    auto ParseMultilineValue(const std::string &line)
+    [[nodiscard]] auto ParseMultilineValue(const std::string &line) noexcept
         -> tl::expected<bool, ParserError>;
 
-    auto GetAttribute(const std::string &key) const
+    [[nodiscard]] auto GetAttribute(const std::string &key) const noexcept
         -> std::optional<std::string>;
-    auto SetAttribute(std::string key, std::string value)
+    [[nodiscard]] auto SetAttribute(std::string key, std::string value) noexcept
         -> tl::expected<void, ParserError>;
-    auto GetArrayAttribute(const std::string &key) const
+    [[nodiscard]] auto GetArrayAttribute(const std::string &key) const noexcept
         -> std::optional<std::vector<std::string>>;
-    auto SetArrayAttribute(std::string key, std::vector<std::string> value)
+    [[nodiscard]] auto
+    SetArrayAttribute(std::string key,
+                      const std::vector<std::string> &value) noexcept
         -> tl::expected<void, ParserError>;
 
-    virtual auto GetValidAttributes() const -> std::vector<std::string> = 0;
-    virtual auto GetValidArrayAttributes() const
+    [[nodiscard]] virtual auto GetValidAttributes() const noexcept
+        -> std::vector<std::string> = 0;
+    [[nodiscard]] virtual auto GetValidArrayAttributes() const noexcept
         -> std::vector<std::string> = 0;
 
-    auto section() -> std::string { return section_; }
+    [[nodiscard]] auto section() const noexcept -> std::string {
+        return section_;
+    }
 
 private:
     bool finished_ = false;

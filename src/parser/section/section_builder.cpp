@@ -10,7 +10,7 @@
 tt::SectionBuilder::SectionBuilder(std::string section)
     : section_(std::move(section)) {}
 
-auto tt::SectionBuilder::ParseLine(const std::string &line)
+auto tt::SectionBuilder::ParseLine(const std::string &line) noexcept
     -> tl::expected<void, ParserError> {
     const std::string section_err_msg =
         fmt::format(" in [{}] section", section_);
@@ -42,7 +42,8 @@ auto tt::SectionBuilder::ParseLine(const std::string &line)
     return tl::unexpected(key_value_pair.error());
 }
 
-auto tt::SectionBuilder::EndParsing() -> tl::expected<void, ParserError> {
+auto tt::SectionBuilder::EndParsing() noexcept
+    -> tl::expected<void, ParserError> {
     if (array_parser_.IsParsing()) {
         return make_parser_error<void>(
             ParserError::Type::ArrayValueNotClosed,
@@ -54,7 +55,7 @@ auto tt::SectionBuilder::EndParsing() -> tl::expected<void, ParserError> {
     return {};
 }
 
-auto tt::SectionBuilder::ParseMultilineValue(const std::string &line)
+auto tt::SectionBuilder::ParseMultilineValue(const std::string &line) noexcept
     -> tl::expected<bool, ParserError> {
     if (array_parser_.IsParsing()) {
         if (auto ret = array_parser_.ParseLine(line); !ret.has_value()) {
@@ -91,7 +92,8 @@ auto tt::SectionBuilder::ParseMultilineValue(const std::string &line)
     return false;
 }
 
-auto tt::SectionBuilder::SetAttribute(std::string key, std::string value)
+auto tt::SectionBuilder::SetAttribute(std::string key,
+                                      std::string value) noexcept
     -> tl::expected<void, ParserError> {
     auto valid_keys = GetValidAttributes();
     if (std::find(valid_keys.begin(), valid_keys.end(), key) ==
@@ -111,7 +113,7 @@ auto tt::SectionBuilder::SetAttribute(std::string key, std::string value)
     return {};
 }
 
-auto tt::SectionBuilder::GetAttribute(const std::string &key) const
+auto tt::SectionBuilder::GetAttribute(const std::string &key) const noexcept
     -> std::optional<std::string> {
     if (auto value = values_.find(key); value != values_.end()) {
         return value->second;
@@ -120,8 +122,8 @@ auto tt::SectionBuilder::GetAttribute(const std::string &key) const
     return {};
 }
 
-auto tt::SectionBuilder::SetArrayAttribute(std::string key,
-                                           std::vector<std::string> value)
+auto tt::SectionBuilder::SetArrayAttribute(
+    std::string key, const std::vector<std::string> &value) noexcept
     -> tl::expected<void, ParserError> {
     auto valid_keys = GetValidArrayAttributes();
     if (std::find(valid_keys.begin(), valid_keys.end(), key) ==
@@ -141,8 +143,8 @@ auto tt::SectionBuilder::SetArrayAttribute(std::string key,
     return {};
 }
 
-auto tt::SectionBuilder::GetArrayAttribute(const std::string &key) const
-    -> std::optional<std::vector<std::string>> {
+auto tt::SectionBuilder::GetArrayAttribute(const std::string &key)
+    const noexcept -> std::optional<std::vector<std::string>> {
     if (auto value = array_values_.find(key); value != array_values_.end()) {
         return value->second;
     }

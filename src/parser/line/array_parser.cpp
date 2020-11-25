@@ -33,7 +33,7 @@
 #include "tt/parser/parser_error.hpp"   // for ParserError
 #include "tt/utils/trim.hpp"            // for trim, trim_copy
 
-auto tt::ArrayParser::StartParsing(const std::string &line)
+auto tt::ArrayParser::StartParsing(const std::string &line) noexcept
     -> tl::expected<bool, ParserError> {
     assert(!IsParsing());
 
@@ -68,7 +68,7 @@ auto tt::ArrayParser::StartParsing(const std::string &line)
     return true;
 }
 
-auto tt::ArrayParser::ParseLine(const std::string &line)
+auto tt::ArrayParser::ParseLine(const std::string &line) noexcept
     -> tl::expected<void, ParserError> {
     assert(IsParsing());
 

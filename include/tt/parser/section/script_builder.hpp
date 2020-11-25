@@ -30,22 +30,28 @@ namespace tt {
 
 class ScriptBuilder : public CodeSectionBuilder {
 public:
-    explicit ScriptBuilder(const std::string &section);
-    auto script() -> Script;
-    auto EndParsing() -> tl::expected<void, ParserError> override;
+    explicit ScriptBuilder(const std::string &section) noexcept;
+    [[nodiscard]] auto script() const noexcept -> Script;
+    [[nodiscard]] auto EndParsing() noexcept
+        -> tl::expected<void, ParserError> override;
 
 protected:
     virtual auto CreateScript() -> tl::expected<void, ParserError>;
-    virtual auto GetScriptAttributes()
+    [[nodiscard]] auto GetScriptAttributes() noexcept
         -> tl::expected<std::pair<Script::Type, std::string>, ParserError>;
 
-    auto GetValidAttributes() const -> std::vector<std::string> override;
-    auto GetValidArrayAttributes() const -> std::vector<std::string> override {
+    [[nodiscard]] auto GetValidAttributes() const noexcept
+        -> std::vector<std::string> override;
+    [[nodiscard]] auto GetValidArrayAttributes() const noexcept
+        -> std::vector<std::string> override {
         return {};
     }
-    auto GetValidCodeAttributes() const -> std::vector<std::string> override;
-    auto GetParsedType() const -> tl::expected<Script::Type, ParserError>;
-    auto SetOptionalAttributeForScript(Script &script) const
+    [[nodiscard]] auto GetValidCodeAttributes() const noexcept
+        -> std::vector<std::string> override;
+    [[nodiscard]] auto GetParsedType() const noexcept
+        -> tl::expected<Script::Type, ParserError>;
+    [[nodiscard]] auto
+    SetOptionalAttributeForScript(Script &script) const noexcept
         -> tl::expected<void, ParserError>;
 
 private:

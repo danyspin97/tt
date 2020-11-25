@@ -4,9 +4,9 @@
 #include "tt/parser/parser_error.hpp"  // for ParserError
 #include "tt/parser/section/utils.hpp" // for IsEmptyLine
 
-tt::DummyBuilder::DummyBuilder() : SectionBuilder("dummy") {}
+tt::DummyBuilder::DummyBuilder() noexcept : SectionBuilder("dummy") {}
 
-auto tt::DummyBuilder::ParseLine(const std::string &line)
+auto tt::DummyBuilder::ParseLine(const std::string &line) noexcept
     -> tl::expected<void, ParserError> {
     if (IsEmptyLine(line)) {
         return {};

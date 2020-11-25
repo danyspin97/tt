@@ -32,12 +32,12 @@ public:
     }
     [[nodiscard]] auto IsLineValid() const noexcept -> bool { return valid_; }
 
-    explicit SectionLineParser(const std::string &line) {
+    explicit SectionLineParser(const std::string &line) noexcept {
         line_ = line;
         ParseLine();
     }
 
-    [[nodiscard]] auto GetSectionOrDefault(std::string _default) const
+    [[nodiscard]] auto GetSectionOrDefault(std::string _default) const noexcept
         -> std::string {
         if (IsLineValid()) {
             return section_;
@@ -47,7 +47,7 @@ public:
     }
 
 private:
-    void ParseLine();
+    void ParseLine() noexcept;
 
     std::string line_;
     std::string section_;

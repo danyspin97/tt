@@ -28,7 +28,7 @@
 #include "tt/parser/parser_error.hpp" // for ParserError
 #include "tt/utils/trim.hpp"
 
-auto tt::CodeParser::StartParsing(const std::string &line)
+auto tt::CodeParser::StartParsing(const std::string &line) noexcept
     -> tl::expected<bool, ParserError> {
     assert(!IsParsing());
     auto trimmed_line = utils::trim_copy(line);
@@ -67,7 +67,7 @@ void tt::CodeParser::ParseLine(const std::string &line) {
     code_ << "\n";
 }
 
-auto tt::CodeParser::code() const -> std::string {
+auto tt::CodeParser::code() const noexcept -> std::string {
     assert(!IsParsing());
 
     auto code = code_.str();

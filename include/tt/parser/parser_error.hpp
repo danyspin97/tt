@@ -41,11 +41,11 @@ public:
         ServiceNotFound,
     };
 
-    ParserError(Type type, std::string err_msg);
+    ParserError(Type type, std::string err_msg) noexcept;
     ParserError(ParserError &&rhs) noexcept = default;
     ParserError(const ParserError &rhs) noexcept = default;
-    [[nodiscard]] auto msg() const -> std::string { return err_msg_; }
-    [[nodiscard]] auto type() const -> Type { return type_; }
+    [[nodiscard]] auto msg() const noexcept -> std::string { return err_msg_; }
+    [[nodiscard]] auto type() const noexcept -> Type { return type_; }
     void Chain(const std::string &err_msg) noexcept;
 
 private:
@@ -54,13 +54,15 @@ private:
 };
 
 template <typename T>
-inline auto make_parser_error(ParserError::Type type, std::string err_msg)
+[[nodiscard]] inline auto make_parser_error(ParserError::Type type,
+                                            std::string err_msg) noexcept
     -> tl::expected<T, ParserError> {
     return tl::make_unexpected(ParserError(type, std::move(err_msg)));
 }
 
 template <typename T>
-inline auto chain_parser_error(ParserError error, const std::string &err_msg)
+[[nodiscard]] inline auto
+chain_parser_error(ParserError error, const std::string &err_msg) noexcept
     -> tl::expected<T, ParserError> {
     error.Chain(err_msg);
     return tl::make_unexpected(std::move(error));

@@ -36,20 +36,22 @@ class BuilderTest : public SectionBuilder {
 public:
     BuilderTest() : SectionBuilder("test") {}
 
-    auto ParseLine(const std::string & /*line*/)
+    auto ParseLine(const std::string & /*line*/) noexcept
         -> tl::expected<void, ParserError> override {
         time_parsed_++;
         return {};
     }
 
-    auto EndParsing() -> tl::expected<void, ParserError> override {
+    auto EndParsing() noexcept -> tl::expected<void, ParserError> override {
         return SectionBuilder::EndParsing();
     }
 
-    auto GetValidAttributes() const -> std::vector<std::string> override {
+    auto GetValidAttributes() const noexcept
+        -> std::vector<std::string> override {
         return {};
     }
-    auto GetValidArrayAttributes() const -> std::vector<std::string> override {
+    auto GetValidArrayAttributes() const noexcept
+        -> std::vector<std::string> override {
         return {};
     }
 
@@ -58,13 +60,13 @@ public:
 
 class ServiceDirectorTest : public ServiceDirector {
 public:
-    auto InstanceService(std::string && /*path*/)
+    auto InstanceService(std::string && /*path*/) noexcept
         -> tl::expected<Service, ParserError> override {
         tt::BundleOptions options;
         return tt::Bundle("mybundle", "", "/mybundle", std::move(options));
     }
 
-    auto GetBuilderForSection(const std::string & /*section*/)
+    auto GetBuilderForSection(const std::string & /*section*/) noexcept
         -> tl::expected<SectionBuilder *, ParserError> override {
         return &builder_test_;
     }

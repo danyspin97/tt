@@ -33,7 +33,7 @@ class ParserError;
 
 class KeyValueParser {
 public:
-    static auto ParseLine(std::string_view line)
+    [[nodiscard]] static auto ParseLine(std::string_view line) noexcept
         -> tl::expected<std::pair<std::string, std::string>, ParserError>;
 };
 

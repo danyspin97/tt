@@ -30,13 +30,17 @@ namespace tt {
 class MainScriptBuilder : public ScriptBuilder {
 public:
     using ScriptBuilder::ScriptBuilder;
-    auto main_script() -> MainScript;
+    [[nodiscard]] auto main_script() const noexcept -> MainScript;
+    [[nodiscard]] auto main_script() noexcept -> MainScript;
 
 protected:
-    auto CreateScript() -> tl::expected<void, ParserError> override;
-    auto GetValidAttributes() const -> std::vector<std::string> override;
-    auto SetOptionalAttributeForMainScript(MainScript &main_script)
-        -> tl::expected<void, ParserError> const;
+    [[nodiscard]] auto CreateScript() noexcept
+        -> tl::expected<void, ParserError> override;
+    [[nodiscard]] auto GetValidAttributes() const noexcept
+        -> std::vector<std::string> override;
+    [[nodiscard]] auto
+    SetOptionalAttributeForMainScript(MainScript &main_script) const noexcept
+        -> tl::expected<void, ParserError>;
 
 private:
     std::optional<MainScript> main_script_;

@@ -23,7 +23,7 @@
 #include "tt/parser/define.hpp"
 #include "tt/utils/trim.hpp"
 
-void tt::SectionLineParser::ParseLine() {
+void tt::SectionLineParser::ParseLine() noexcept {
     valid_ = false;
     utils::trim(line_);
     if (line_[0] != kSectionOpenToken) {

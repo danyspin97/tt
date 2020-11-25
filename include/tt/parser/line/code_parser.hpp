@@ -34,12 +34,14 @@ class ParserError;
 
 class CodeParser {
 public:
-    auto key() const -> std::string { return key_; }
-    auto code() const -> std::string;
+    [[nodiscard]] auto key() const noexcept -> std::string { return key_; }
+    [[nodiscard]] auto code() const noexcept -> std::string;
 
-    auto IsParsing() const -> bool { return is_parsing_; }
+    [[nodiscard]] auto IsParsing() const noexcept -> bool {
+        return is_parsing_;
+    }
     void ParseLine(const std::string &line);
-    auto StartParsing(const std::string &line)
+    [[nodiscard]] auto StartParsing(const std::string &line) noexcept
         -> tl::expected<bool, ParserError>;
 
     void Reset() {

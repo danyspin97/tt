@@ -35,15 +35,18 @@ class ArrayParser;
 
 class OneshotOptionsBuilder : public SectionBuilder {
 public:
-    OneshotOptionsBuilder();
+    OneshotOptionsBuilder() noexcept;
 
-    [[nodiscard]] auto options() -> OneshotOptions &&;
+    [[nodiscard]] auto options() noexcept -> OneshotOptions;
 
-    auto EndParsing() -> tl::expected<void, ParserError> override;
+    [[nodiscard]] auto EndParsing() noexcept
+        -> tl::expected<void, ParserError> override;
 
 protected:
-    auto GetValidAttributes() const -> std::vector<std::string> override;
-    auto GetValidArrayAttributes() const -> std::vector<std::string> override;
+    [[nodiscard]] auto GetValidAttributes() const noexcept
+        -> std::vector<std::string> override;
+    [[nodiscard]] auto GetValidArrayAttributes() const noexcept
+        -> std::vector<std::string> override;
 
 private:
     OneshotOptions options_;

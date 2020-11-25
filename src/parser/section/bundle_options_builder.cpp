@@ -28,14 +28,16 @@
 #include "tt/parser/section/exception.hpp" // for SectionBuilderException
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound, IsEmpt...
 
-tt::BundleOptionsBuilder::BundleOptionsBuilder() : SectionBuilder("options") {}
+tt::BundleOptionsBuilder::BundleOptionsBuilder() noexcept
+    : SectionBuilder("options") {}
 
-auto tt::BundleOptionsBuilder::GetValidArrayAttributes() const
+auto tt::BundleOptionsBuilder::GetValidArrayAttributes() const noexcept
     -> std::vector<std::string> {
     return {"contents", "dependencies"};
 }
 
-auto tt::BundleOptionsBuilder::EndParsing() -> tl::expected<void, ParserError> {
+auto tt::BundleOptionsBuilder::EndParsing() noexcept
+    -> tl::expected<void, ParserError> {
     if (auto ret = SectionBuilder::EndParsing(); !ret.has_value()) {
         return ret;
     }
@@ -56,6 +58,6 @@ auto tt::BundleOptionsBuilder::EndParsing() -> tl::expected<void, ParserError> {
     return {};
 }
 
-auto tt::BundleOptionsBuilder::options() -> BundleOptions && {
+auto tt::BundleOptionsBuilder::options() noexcept -> BundleOptions && {
     return std::move(options_);
 }

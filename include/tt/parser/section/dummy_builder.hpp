@@ -27,16 +27,18 @@ namespace tt {
 
 class DummyBuilder : public SectionBuilder {
 public:
-    DummyBuilder();
+    DummyBuilder() noexcept;
 
-    auto ParseLine(const std::string &line)
+    auto ParseLine(const std::string &line) noexcept
         -> tl::expected<void, ParserError> override;
 
 protected:
-    auto GetValidAttributes() const -> std::vector<std::string> override {
+    auto GetValidAttributes() const noexcept
+        -> std::vector<std::string> override {
         return {};
     }
-    auto GetValidArrayAttributes() const -> std::vector<std::string> override {
+    auto GetValidArrayAttributes() const noexcept
+        -> std::vector<std::string> override {
         return {};
     }
 };

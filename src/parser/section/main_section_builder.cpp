@@ -26,14 +26,16 @@
 #include "tt/parser/section/main_section.hpp"  // for MainSection
 #include "tt/parser/section/utils.hpp"         // for AttributeNotFound
 
-tt::MainSectionBuilder::MainSectionBuilder() : SectionBuilder("main") {}
+tt::MainSectionBuilder::MainSectionBuilder() noexcept
+    : SectionBuilder("main") {}
 
-auto tt::MainSectionBuilder::GetValidAttributes() const
+auto tt::MainSectionBuilder::GetValidAttributes() const noexcept
     -> std::vector<std::string> {
     return {"name", "description", "type"};
 }
 
-auto tt::MainSectionBuilder::EndParsing() -> tl::expected<void, ParserError> {
+auto tt::MainSectionBuilder::EndParsing() noexcept
+    -> tl::expected<void, ParserError> {
     if (auto ret = SectionBuilder::EndParsing(); !ret.has_value()) {
         return ret;
     }
@@ -65,6 +67,6 @@ auto tt::MainSectionBuilder::EndParsing() -> tl::expected<void, ParserError> {
     return {};
 }
 
-auto tt::MainSectionBuilder::main_section() -> MainSection & {
-    return main_section_;
+auto tt::MainSectionBuilder::main_section() noexcept -> MainSection & {
+    return std::ref(main_section_);
 }

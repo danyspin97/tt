@@ -29,7 +29,7 @@
 #include "tt/parser/parser_error.hpp"   // for ParserError
 #include "tt/utils/trim.hpp"            // for trim
 
-auto tt::KeyValueParser::ParseLine(std::string_view line)
+auto tt::KeyValueParser::ParseLine(std::string_view line) noexcept
     -> tl::expected<std::pair<std::string, std::string>, ParserError> {
     auto token_pos = line.find(kAssignmentToken);
     if (token_pos == std::string::npos) {

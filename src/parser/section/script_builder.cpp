@@ -30,10 +30,11 @@
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound
 #include "tt/signal.hpp"                   // for ParseSignalFromString
 
-tt::ScriptBuilder::ScriptBuilder(const std::string &section)
+tt::ScriptBuilder::ScriptBuilder(const std::string &section) noexcept
     : CodeSectionBuilder(section) {}
 
-auto tt::ScriptBuilder::EndParsing() -> tl::expected<void, ParserError> {
+auto tt::ScriptBuilder::EndParsing() noexcept
+    -> tl::expected<void, ParserError> {
     if (auto ret = CodeSectionBuilder::EndParsing(); !ret.has_value()) {
         return ret;
     }
@@ -47,7 +48,7 @@ auto tt::ScriptBuilder::EndParsing() -> tl::expected<void, ParserError> {
     return {};
 }
 
-auto tt::ScriptBuilder::GetScriptAttributes()
+auto tt::ScriptBuilder::GetScriptAttributes() noexcept
     -> tl::expected<std::pair<Script::Type, std::string>, ParserError> {
     auto execute = GetAttribute("execute");
     if (!execute.has_value()) {
@@ -76,17 +77,18 @@ auto tt::ScriptBuilder::CreateScript() -> tl::expected<void, ParserError> {
     return SetOptionalAttributeForScript(script_.value());
 }
 
-auto tt::ScriptBuilder::GetValidAttributes() const -> std::vector<std::string> {
+auto tt::ScriptBuilder::GetValidAttributes() const noexcept
+    -> std::vector<std::string> {
     return {"build",       "execute",  "group",   "user",
             "down_signal", "maxdeath", "timeout", "timeout_kill"};
 }
 
-auto tt::ScriptBuilder::GetValidCodeAttributes() const
+auto tt::ScriptBuilder::GetValidCodeAttributes() const noexcept
     -> std::vector<std::string> {
     return {"execute"};
 }
 
-auto tt::ScriptBuilder::GetParsedType() const
+auto tt::ScriptBuilder::GetParsedType() const noexcept
     -> tl::expected<Script::Type, ParserError> {
     auto type = GetAttribute("build");
     if (!type.has_value()) {
@@ -113,8 +115,8 @@ auto tt::ScriptBuilder::GetParsedType() const
 }
 
 namespace tt {
-auto convert_int(std::function<void()> f, std::string key, std::string value)
-    -> tl::expected<void, ParserError> {
+auto convert_int(const std::function<void()> &f, const std::string &key,
+                 const std::string &value) -> tl::expected<void, ParserError> {
     try {
         std::invoke(f);
     } catch (std::invalid_argument & /*e*/) {
@@ -132,10 +134,12 @@ auto convert_int(std::function<void()> f, std::string key, std::string value)
 }
 } // namespace tt
 
-auto tt::ScriptBuilder::script() -> Script { return script_.value(); }
+auto tt::ScriptBuilder::script() const noexcept -> Script {
+    return script_.value();
+}
 
-auto tt::ScriptBuilder::SetOptionalAttributeForScript(Script &script) const
-    -> tl::expected<void, ParserError> {
+auto tt::ScriptBuilder::SetOptionalAttributeForScript(
+    Script &script) const noexcept -> tl::expected<void, ParserError> {
     if (auto user = GetAttribute("user")) {
         script.user(user.value());
     }

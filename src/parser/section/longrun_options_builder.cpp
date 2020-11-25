@@ -26,20 +26,20 @@
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound
 #include "tt/utils/parse_boolean.hpp"      // for ParseBoolean
 
-tt::LongrunOptionsBuilder::LongrunOptionsBuilder()
+tt::LongrunOptionsBuilder::LongrunOptionsBuilder() noexcept
     : SectionBuilder("options") {}
 
-auto tt::LongrunOptionsBuilder::GetValidAttributes() const
+auto tt::LongrunOptionsBuilder::GetValidAttributes() const noexcept
     -> std::vector<std::string> {
     return {"optional"};
 }
 
-auto tt::LongrunOptionsBuilder::GetValidArrayAttributes() const
+auto tt::LongrunOptionsBuilder::GetValidArrayAttributes() const noexcept
     -> std::vector<std::string> {
     return {"depends"};
 }
 
-auto tt::LongrunOptionsBuilder::EndParsing()
+auto tt::LongrunOptionsBuilder::EndParsing() noexcept
     -> tl::expected<void, ParserError> {
     if (auto ret = SectionBuilder::EndParsing(); !ret.has_value()) {
         return ret;

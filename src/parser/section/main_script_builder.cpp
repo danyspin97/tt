@@ -29,7 +29,7 @@
 #include "tt/parser/section/script_builder.hpp"      // for ScriptBuilder
 #include "tt/utils/parse_boolean.hpp"                // for ParseBoolean
 
-auto tt::MainScriptBuilder::GetValidAttributes() const
+auto tt::MainScriptBuilder::GetValidAttributes() const noexcept
     -> std::vector<std::string> {
     auto valid_attributes = ScriptBuilder::GetValidAttributes();
     valid_attributes.emplace_back("autostart");
@@ -37,7 +37,7 @@ auto tt::MainScriptBuilder::GetValidAttributes() const
 }
 
 auto tt::MainScriptBuilder::SetOptionalAttributeForMainScript(
-    MainScript &main_script) -> tl::expected<void, ParserError> const {
+    MainScript &main_script) const noexcept -> tl::expected<void, ParserError> {
     auto autostart = GetAttribute("autostart");
     if (autostart.has_value()) {
         auto ret = utils::ParseBoolean(autostart.value());
@@ -50,8 +50,8 @@ auto tt::MainScriptBuilder::SetOptionalAttributeForMainScript(
 
     return SetOptionalAttributeForScript(main_script);
 }
-
-auto tt::MainScriptBuilder::CreateScript() -> tl::expected<void, ParserError> {
+auto tt::MainScriptBuilder::CreateScript() noexcept
+    -> tl::expected<void, ParserError> {
     auto script_attributes = GetScriptAttributes();
     if (!script_attributes.has_value()) {
         return tl::unexpected(script_attributes.error());
@@ -61,6 +61,10 @@ auto tt::MainScriptBuilder::CreateScript() -> tl::expected<void, ParserError> {
     return SetOptionalAttributeForMainScript(main_script_.value());
 }
 
-auto tt::MainScriptBuilder::main_script() -> MainScript {
+auto tt::MainScriptBuilder::main_script() const noexcept -> MainScript {
     return main_script_.value();
+}
+
+auto tt::MainScriptBuilder::main_script() noexcept -> MainScript {
+    return std::move(main_script_.value());
 }

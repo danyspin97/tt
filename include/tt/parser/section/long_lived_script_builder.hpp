@@ -30,13 +30,16 @@ namespace tt {
 class LongLivedScriptBuilder : public MainScriptBuilder {
 public:
     using MainScriptBuilder::MainScriptBuilder;
-    auto long_lived_script() -> LongLivedScript;
+    [[nodiscard]] auto long_lived_script() const noexcept -> LongLivedScript;
+    [[nodiscard]] auto long_lived_script() noexcept -> LongLivedScript;
 
 protected:
-    auto CreateScript() -> tl::expected<void, ParserError> override;
-    auto GetValidAttributes() const -> std::vector<std::string> override;
-    auto
-    SetOptionalAttributeForLongLivedScript(LongLivedScript &long_lived_script)
+    [[nodiscard]] auto CreateScript() noexcept
+        -> tl::expected<void, ParserError> override;
+    [[nodiscard]] auto GetValidAttributes() const noexcept
+        -> std::vector<std::string> override;
+    [[nodiscard]] auto SetOptionalAttributeForLongLivedScript(
+        LongLivedScript &long_lived_script) noexcept
         -> tl::expected<void, ParserError>;
 
 private:

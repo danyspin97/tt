@@ -31,15 +31,18 @@ class CodeSectionBuilder : public SectionBuilder {
 public:
     using SectionBuilder::SectionBuilder;
 
-    auto ParseLine(const std::string &line)
+    [[nodiscard]] auto ParseLine(const std::string &line) noexcept
         -> tl::expected<void, ParserError> override;
-    auto EndParsing() -> tl::expected<void, ParserError> override;
+    [[nodiscard]] auto EndParsing() noexcept
+        -> tl::expected<void, ParserError> override;
 
 protected:
-    virtual auto GetValidCodeAttributes() const -> std::vector<std::string> = 0;
+    [[nodiscard]] virtual auto GetValidCodeAttributes() const noexcept
+        -> std::vector<std::string> = 0;
 
 private:
-    auto SetCodeAttribute() -> tl::expected<void, ParserError>;
+    [[nodiscard]] auto SetCodeAttribute() noexcept
+        -> tl::expected<void, ParserError>;
 
     CodeParser code_parser_ = CodeParser();
 };

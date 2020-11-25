@@ -72,7 +72,8 @@ TEST_CASE("ArrayParser") {
         REQUIRE(ret.value());
         CHECK(parser.IsParsing());
 
-        parser.ParseLine(string{kArrayCloseToken});
+        auto parser_res = parser.ParseLine(string{kArrayCloseToken});
+        REQUIRE(parser_res.has_value());
         CHECK(parser.values() == std::vector<std::string>{"bar"});
         CHECK_FALSE(parser.IsParsing());
     }

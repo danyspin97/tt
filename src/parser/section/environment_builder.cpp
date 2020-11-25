@@ -32,8 +32,8 @@
 #include "tt/parser/parser_error.hpp"          // for ParserError
 #include "tt/parser/section/exception.hpp"     // for EnvironmentKeyNotVali...
 #include "tt/parser/section/utils.hpp"         // for IsEmptyLine
-
-tt::EnvironmentBuilder::EnvironmentBuilder() : SectionBuilder("config") {}
+tt::EnvironmentBuilder::EnvironmentBuilder() noexcept
+    : SectionBuilder("config") {}
 
 auto tt::EnvironmentBuilder::ParseLine(const std::string &line) noexcept
     -> tl::expected<void, ParserError> {
@@ -87,7 +87,11 @@ auto tt::EnvironmentBuilder::CheckKeyIsValid(const std::string &key) noexcept
     return {};
 }
 
-auto tt::EnvironmentBuilder::environment() -> Environment && {
+auto tt::EnvironmentBuilder::environment() const noexcept -> Environment {
+    return environment_;
+}
+
+auto tt::EnvironmentBuilder::environment() noexcept -> Environment && {
     return std::move(environment_);
 }
 

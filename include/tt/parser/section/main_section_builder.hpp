@@ -31,15 +31,18 @@ struct MainSection;
 
 class MainSectionBuilder : public SectionBuilder {
 public:
-    MainSectionBuilder();
+    MainSectionBuilder() noexcept;
 
-    [[nodiscard]] auto main_section() -> MainSection &;
+    [[nodiscard]] auto main_section() noexcept -> MainSection &;
 
-    auto EndParsing() -> tl::expected<void, ParserError> override;
+    [[nodiscard]] auto EndParsing() noexcept
+        -> tl::expected<void, ParserError> override;
 
 protected:
-    auto GetValidAttributes() const -> std::vector<std::string> override;
-    auto GetValidArrayAttributes() const -> std::vector<std::string> override {
+    [[nodiscard]] auto GetValidAttributes() const noexcept
+        -> std::vector<std::string> override;
+    [[nodiscard]] auto GetValidArrayAttributes() const noexcept
+        -> std::vector<std::string> override {
         return {};
     }
 
