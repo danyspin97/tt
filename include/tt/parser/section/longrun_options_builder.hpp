@@ -24,20 +24,21 @@
 #include <string> // for string
 
 #include "tt/data/longrun_options.hpp"           // for LongrunOptions
-#include "tt/parser/section/options_builder.hpp" // for OptionsBuilder
+#include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
 namespace tt {
-class ArrayParser;
 
-class LongrunOptionsBuilder : public OptionsBuilder {
+class LongrunOptionsBuilder : public SectionBuilder {
 public:
-    LongrunOptionsBuilder() = default;
+    LongrunOptionsBuilder();
 
     [[nodiscard]] auto options() -> LongrunOptions &&;
 
-    void SaveValuesOfParser(const ArrayParser &parser) override;
-    void TrySetAttributeForKey(const std::string &key,
-                               const std::string &value) override;
+    auto EndParsing() -> tl::expected<void, ParserError> override;
+
+protected:
+    auto GetValidAttributes() const -> std::vector<std::string> override;
+    auto GetValidArrayAttributes() const -> std::vector<std::string> override;
 
 private:
     LongrunOptions options_;

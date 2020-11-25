@@ -22,20 +22,25 @@
 
 #include <utility> // for move
 
+#include "fmt/format.h" // for format
+
 #include "tt/data/long_lived_script.hpp"                 // for LongLivedSc...
 #include "tt/data/longrun.hpp"                           // for Longrun
 #include "tt/data/service.hpp"                           // for Service
-#include "tt/exception.hpp"                              // for Exception
+#include "tt/parser/parser_error.hpp"                    // for ParserError
 #include "tt/parser/section/environment_builder.hpp"     // for Environment...
 #include "tt/parser/section/longrun_options_builder.hpp" // for LongrunOpti...
 #include "tt/parser/section/main_section_builder.hpp"    // for MainSection...
 #include "tt/parser/section/script_builder.hpp"          // for ScriptBuilder
 
-auto tt::LongrunDirector::InstanceService(std::string &&path) -> tt::Service {
+auto tt::LongrunDirector::InstanceService(std::string &&path)
+    -> tl::expected<Service, ParserError> {
     auto &main_section = main_section_builder_.main_section();
-    if (!run_script_builder_.HasScript()) {
-        throw Exception("Service '" + main_section.name +
-                        "' does not have a [run] section");
+    if (!run_script_builder_.SectionParsed()) {
+        return make_parser_error<Service>(
+            ParserError::Type::MissingRunSection,
+            fmt::format("Missing [run] section for service '{}'",
+                        main_section.name));
     }
 
     auto service = Longrun(std::move(main_section.name),
@@ -44,7 +49,7 @@ auto tt::LongrunDirector::InstanceService(std::string &&path) -> tt::Service {
                            std::move(env_section_builder_.environment()),
                            run_script_builder_.long_lived_script());
 
-    if (finish_script_builder_.HasScript()) {
+    if (finish_script_builder_.SectionParsed()) {
         service.finish(finish_script_builder_.script());
     }
 
@@ -52,7 +57,7 @@ auto tt::LongrunDirector::InstanceService(std::string &&path) -> tt::Service {
 }
 
 auto tt::LongrunDirector::GetBuilderForSection(const std::string &section)
-    -> SectionBuilder * {
+    -> tl::expected<SectionBuilder *, ParserError> {
     if (section == "main") {
         return &main_section_builder_;
     }
@@ -69,6 +74,7 @@ auto tt::LongrunDirector::GetBuilderForSection(const std::string &section)
         return &options_builder_;
     }
 
-    auto msg = "Section '" + section + "' is not supported";
-    throw Exception(msg);
+    return make_parser_error<SectionBuilder *>(
+        ParserError::Type::InvalidSection,
+        fmt::format("Section '{}' is not supported", section));
 }

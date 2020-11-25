@@ -33,22 +33,25 @@
 
 namespace tt {
 class Dirs;
+class ParserError;
 
 class ServicesParser {
 public:
     explicit ServicesParser(const std::shared_ptr<Dirs> &dirs);
 
     auto ParseServices(const std::vector<std::string> &service_names)
-        -> std::vector<Service>;
+        -> tl::expected<std::vector<Service>, ParserError>;
 
 private:
-    auto ParseService(const std::string &service_name) -> Service;
+    auto ParseService(const std::string &service_name)
+        -> tl::expected<Service, ParserError>;
     void ParseDependenciesOfService(const Service &service);
     static auto GetInstanceTokenIndex(const std::string &service_name)
         -> size_t;
     static auto SplitServiceNameFromInstance(std::string &service,
                                              size_t token_index) -> std::string;
-    auto GetPathForServiceName(const std::string &name) -> std::string;
+    auto GetPathForServiceName(const std::string &name)
+        -> tl::expected<std::string, ParserError>;
 
     std::mutex services_to_parse_mutex_;
     std::mutex futures_mutex_;
@@ -56,7 +59,7 @@ private:
     std::vector<std::filesystem::path> paths_;
     std::atomic_uint16_t service_to_parse_;
     std::vector<std::string> service_names_to_parse_;
-    std::vector<std::future<Service>> futures_;
+    std::vector<std::future<tl::expected<Service, ParserError>>> futures_;
     std::condition_variable future_cv_;
     std::condition_variable services_cv_;
 };

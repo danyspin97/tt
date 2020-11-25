@@ -23,14 +23,19 @@
 #include <memory>
 #include <string>
 
+namespace tl {
+template <typename T, typename Z> class expected;
+} // namespace tl
+
 namespace tt {
 
 class ServiceDirector;
+class ParserError;
 
 class ParserFactory {
 public:
     static auto GetDirectorPerType(const std::string &type)
-        -> std::unique_ptr<ServiceDirector>;
+        -> tl::expected<std::unique_ptr<ServiceDirector>, ParserError>;
 };
 
 } // namespace tt

@@ -23,6 +23,10 @@
 
 #include <string> // for string
 
+namespace tl {
+template <typename T, typename Z> class expected;
+}
+
 namespace tt {
 
 enum class Signal : std::uint8_t {
@@ -34,7 +38,8 @@ enum class Signal : std::uint8_t {
 };
 
 auto GetSignalName(Signal signal) -> std::string;
-auto ParseSignalFromString(const std::string &signal) -> Signal;
+auto ParseSignalFromString(const std::string &signal)
+    -> tl::expected<Signal, std::string>;
 
 } // namespace tt
 

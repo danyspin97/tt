@@ -22,39 +22,23 @@
 
 #include <utility> // for move
 
+#include "fmt/format.h" // for format
+
 #include "tt/parser/define.hpp"         // for kAssignmentToken
 #include "tt/parser/line/exception.hpp" // for KeyValueParserLineInvalidExc...
+#include "tt/parser/parser_error.hpp"   // for ParserError
 #include "tt/utils/trim.hpp"            // for trim
 
-tt::KeyValueParser::KeyValueParser(std::string line, bool throw_on_error) {
-    line_ = std::move(line);
-    throw_on_error_ = throw_on_error;
-    ParseLine();
-}
-
-void tt::KeyValueParser::ParseLine() {
-    if (TryParseLine()) {
-        valid_ = true;
-    } else {
-        if (throw_on_error_) {
-            const auto msg = "Could not find token '" +
-                             std::string{kAssignmentToken} + "' in line `" +
-                             line_ + "`";
-            throw tt::KeyValueParserLineInvalidException(msg);
-        }
-
-        valid_ = false;
-    }
-}
-
-auto tt::KeyValueParser::TryParseLine() -> bool {
-    auto token_pos = line_.find(kAssignmentToken);
+auto tt::KeyValueParser::ParseLine(std::string_view line)
+    -> tl::expected<std::pair<std::string, std::string>, ParserError> {
+    auto token_pos = line.find(kAssignmentToken);
     if (token_pos == std::string::npos) {
-        return false;
+        return make_parser_error<std::pair<std::string, std::string>>(
+            ParserError::Type::InvalidLine, "Invalid line");
     }
-    key_ = line_.substr(0, token_pos);
-    utils::trim(key_);
-    value_ = line_.substr(token_pos + 1, std::string::npos);
-    utils::trim(value_);
-    return true;
+    std::string key{line.substr(0, token_pos)};
+    utils::trim(key);
+    std::string value{line.substr(token_pos + 1, std::string::npos)};
+    utils::trim(value);
+    return std::make_pair(std::move(key), std::move(value));
 }

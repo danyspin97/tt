@@ -26,11 +26,15 @@
 #include <sstream>   // for basic_istream, istringstream
 #include <string>    // for string, allocator, operator+
 
+#include "fmt/format.h" // for format
+
 #include "tt/parser/define.hpp"         // for kArrayCloseToken, kArrayOpen...
 #include "tt/parser/line/exception.hpp" // for EmptyArrayException, ValuesA...
+#include "tt/parser/parser_error.hpp"   // for ParserError
 #include "tt/utils/trim.hpp"            // for trim, trim_copy
 
-auto tt::ArrayParser::StartParsing(const std::string &line) -> bool {
+auto tt::ArrayParser::StartParsing(const std::string &line)
+    -> tl::expected<bool, ParserError> {
     assert(!IsParsing());
 
     auto equal_token_pos = line.find(kAssignmentToken);
@@ -52,42 +56,46 @@ auto tt::ArrayParser::StartParsing(const std::string &line) -> bool {
     key_ = line.substr(0, equal_token_pos);
     utils::trim(key_);
     if (key_.empty()) {
-        throw EmptyKeyException();
+        return make_parser_error<bool>(ParserError::Type::EmptyKey,
+                                       "Found empty key");
     }
 
     is_parsing_ = true;
-
-    UpdateStatus(line.substr(parenthesis_pos + 1, std::string::npos));
-
+    auto ret = ParseLine(line.substr(parenthesis_pos + 1, std::string::npos));
+    if (!ret.has_value()) {
+        return chain_parser_error<bool>(std::move(ret.error()), "");
+    }
     return true;
 }
 
-void tt::ArrayParser::ParseLine(const std::string &line) {
+auto tt::ArrayParser::ParseLine(const std::string &line)
+    -> tl::expected<void, ParserError> {
     assert(IsParsing());
-    UpdateStatus(line);
-}
 
-void tt::ArrayParser::UpdateStatus(const std::string &line) {
     auto trimmed_line = utils::trim_copy(line);
     if (line.empty()) {
-        return;
+        return {};
     }
     auto ending_token_pos = trimmed_line.find(kArrayCloseToken);
     if (ending_token_pos != std::string::npos) {
         is_parsing_ = false;
         // There shall be no character after the kArrayCloseToken
         if (ending_token_pos + 1 != trimmed_line.size()) {
-            const auto msg = key_ + ": No value allowed after ending token '" +
-                             std::string{kArrayCloseToken} + "'";
-            throw ValuesAfterEndingTokenException(msg);
+            return make_parser_error<void>(
+                ParserError::Type::ArrayValueAfterClosingToken,
+                fmt::format("Found value after closing token '{}' for '{}'",
+                            std::string{kArrayCloseToken}, key_));
         }
     }
     AddValuesFromLine(trimmed_line.substr(0, ending_token_pos));
 
     if (!IsParsing() && values_.empty()) {
-        const auto msg = key_ + ": Empty array is not allowed";
-        throw EmptyArrayException(msg);
+        return make_parser_error<void>(
+            ParserError::Type::ArrayValueIsEmpty,
+            fmt::format("Array '{}' is empty", key_));
     }
+
+    return {};
 }
 
 void tt::ArrayParser::AddValuesFromLine(const std::string &line) {

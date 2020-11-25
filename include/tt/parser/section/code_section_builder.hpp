@@ -29,19 +29,18 @@ namespace tt {
 
 class CodeSectionBuilder : public SectionBuilder {
 public:
-    void ParseLine(const std::string &line) override;
+    using SectionBuilder::SectionBuilder;
+
+    auto ParseLine(const std::string &line)
+        -> tl::expected<void, ParserError> override;
+    auto EndParsing() -> tl::expected<void, ParserError> override;
 
 protected:
-    explicit CodeSectionBuilder(std::string section);
-
-    virtual auto GetCodeAttributeForKey(const std::string &key)
-        -> std::string & = 0;
-    virtual auto GetAttributeForKey(const std::string &key)
-        -> std::string & = 0;
-
-    std::string section_;
+    virtual auto GetValidCodeAttributes() const -> std::vector<std::string> = 0;
 
 private:
+    auto SetCodeAttribute() -> tl::expected<void, ParserError>;
+
     CodeParser code_parser_ = CodeParser();
 };
 

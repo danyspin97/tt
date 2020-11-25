@@ -19,18 +19,21 @@
  */
 
 #include "tt/signal.hpp"
+
 #include "catch2/catch.hpp"
+
+#include "tl/expected.hpp" // for expected
 
 using std::string;
 using tt::ParseSignalFromString;
 using tt::Signal;
 
 TEST_CASE("ParseSignalFromString") {
-    CHECK(ParseSignalFromString("SIGHUP") == Signal::kSigHup);
-    CHECK(ParseSignalFromString("SIGINT") == Signal::kSigInt);
-    CHECK(ParseSignalFromString("SIGQUIT") == Signal::kSigQuit);
-    CHECK(ParseSignalFromString("SIGKILL") == Signal::kSigKill);
-    CHECK(ParseSignalFromString("SIGTERM") == Signal::kSigTerm);
+    CHECK(ParseSignalFromString("SIGHUP").value() == Signal::kSigHup);
+    CHECK(ParseSignalFromString("SIGINT").value() == Signal::kSigInt);
+    CHECK(ParseSignalFromString("SIGQUIT").value() == Signal::kSigQuit);
+    CHECK(ParseSignalFromString("SIGKILL").value() == Signal::kSigKill);
+    CHECK(ParseSignalFromString("SIGTERM").value() == Signal::kSigTerm);
 }
 
 TEST_CASE("GetSignalName") {
@@ -42,5 +45,5 @@ TEST_CASE("GetSignalName") {
 }
 
 TEST_CASE("ParseSignalFromString with exception") {
-    REQUIRE_THROWS(ParseSignalFromString(""));
+    REQUIRE_FALSE(ParseSignalFromString("").has_value());
 }

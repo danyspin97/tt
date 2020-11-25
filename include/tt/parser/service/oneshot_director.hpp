@@ -40,9 +40,10 @@ class OneshotDirector : public ServiceDirector {
 public:
     OneshotDirector() = default;
 
-    auto InstanceService(std::string &&path) -> Service override;
+    auto InstanceService(std::string &&path)
+        -> tl::expected<Service, ParserError> override;
     auto GetBuilderForSection(const std::string &section)
-        -> SectionBuilder * override;
+        -> tl::expected<SectionBuilder *, ParserError> override;
 
 private:
     MainSectionBuilder main_section_builder_;

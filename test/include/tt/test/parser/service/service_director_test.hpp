@@ -26,6 +26,7 @@
 #include "tt/data/bundle.hpp"                     // for Bundle
 #include "tt/data/bundle_options.hpp"             // for BundleOptions
 #include "tt/data/service.hpp"                    // for Service
+#include "tt/parser/parser_error.hpp"             // for ParserError
 #include "tt/parser/section/section_builder.hpp"  // for SectionBuilder
 #include "tt/parser/service/service_director.hpp" // for ServiceDirector
 
@@ -33,23 +34,38 @@ namespace tt {
 
 class BuilderTest : public SectionBuilder {
 public:
-    void ParseLine(const std::string & /*line*/) override { time_parsed_++; }
+    BuilderTest() : SectionBuilder("test") {}
 
-    void EndParsing() override { finished_ = true; }
+    auto ParseLine(const std::string & /*line*/)
+        -> tl::expected<void, ParserError> override {
+        time_parsed_++;
+        return {};
+    }
 
-    int time_parsed_;
-    bool finished_ = false;
+    auto EndParsing() -> tl::expected<void, ParserError> override {
+        return SectionBuilder::EndParsing();
+    }
+
+    auto GetValidAttributes() const -> std::vector<std::string> override {
+        return {};
+    }
+    auto GetValidArrayAttributes() const -> std::vector<std::string> override {
+        return {};
+    }
+
+    int time_parsed_{};
 };
 
 class ServiceDirectorTest : public ServiceDirector {
 public:
-    auto InstanceService(std::string && /*path*/) -> Service override {
+    auto InstanceService(std::string && /*path*/)
+        -> tl::expected<Service, ParserError> override {
         tt::BundleOptions options;
         return tt::Bundle("mybundle", "", "/mybundle", std::move(options));
     }
 
     auto GetBuilderForSection(const std::string & /*section*/)
-        -> SectionBuilder * override {
+        -> tl::expected<SectionBuilder *, ParserError> override {
         return &builder_test_;
     }
 

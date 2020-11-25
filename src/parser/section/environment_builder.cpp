@@ -22,58 +22,78 @@
 
 #include <cctype> // for isalnum, isdigit
 
+#include "fmt/format.h" // for format
+
+#include "tl/expected.hpp" // for expected
+
 #include "tt/data/environment.hpp"             // for Environment
 #include "tt/parser/line/exception.hpp"        // for KeyValueParserLineInv...
 #include "tt/parser/line/key_value_parser.hpp" // for KeyValueParser
+#include "tt/parser/parser_error.hpp"          // for ParserError
 #include "tt/parser/section/exception.hpp"     // for EnvironmentKeyNotVali...
 #include "tt/parser/section/utils.hpp"         // for IsEmptyLine
 
-void tt::EnvironmentBuilder::ParseLine(const std::string &line) {
-    try {
-        TryParseLine(line);
-    } catch (const KeyValueParserLineInvalidException &e) {
-        const std::string msg = e.msg() + " in [config] section";
-        throw SectionBuilderException(msg);
-    } catch (const EnvironmentKeyNotValidException &e) {
-        const std::string msg = e.msg() + " in [config] section";
-        throw SectionBuilderException(msg);
-    } catch (const EnvironmentKeyAlreadySetException &e) {
-        const std::string msg = e.msg() + " in [config] section";
-        throw SectionBuilderException(msg);
+tt::EnvironmentBuilder::EnvironmentBuilder() : SectionBuilder("config") {}
+
+auto tt::EnvironmentBuilder::ParseLine(const std::string &line) noexcept
+    -> tl::expected<void, ParserError> {
+    auto ret = TryParseLine(line);
+    if (!ret) {
+        return chain_parser_error<void>(std::move(ret.error()),
+                                        " in [config] section");
     }
+    return {};
 }
 
-void tt::EnvironmentBuilder::TryParseLine(const std::string &line) {
+auto tt::EnvironmentBuilder::TryParseLine(const std::string &line) noexcept
+    -> tl::expected<void, ParserError> {
     if (IsEmptyLine(line)) {
-        return;
+        return {};
     }
 
-    auto key_value_parser = KeyValueParser(line, true);
-    const std::string key = key_value_parser.key();
-    CheckKeyIsValid(key);
-    const std::string value = key_value_parser.value();
-
-    if (!environment_.SetUnique(key, value)) {
-        const auto msg = "Key " + key + " has been already set";
-        throw tt::EnvironmentKeyAlreadySetException(msg);
+    auto key_value_pair = KeyValueParser::ParseLine(line);
+    if (!key_value_pair.has_value()) {
+        return chain_parser_error<void>(key_value_pair.error(), "");
     }
+    auto is_key_valid = CheckKeyIsValid(key_value_pair.value().first);
+    if (!is_key_valid.has_value()) {
+        return chain_parser_error<void>(is_key_valid.error(), "");
+    }
+    auto ret = environment_.SetUnique(key_value_pair.value().first,
+                                      key_value_pair.value().second);
+    if (!ret.has_value()) {
+        return make_parser_error<void>(
+            ParserError::Type::EnvironmentKeyAlreadySet,
+            std::move(ret.error()));
+    }
+    return {};
 }
 
-void tt::EnvironmentBuilder::CheckKeyIsValid(const std::string &key) {
+auto tt::EnvironmentBuilder::CheckKeyIsValid(const std::string &key) noexcept
+    -> tl::expected<void, ParserError> {
     if (isdigit(key[0]) != 0) {
-        const auto msg = "Key " + key + " cannot start with a digit";
-        throw EnvironmentKeyNotValidException(msg);
+        auto err_msg = fmt::format("Key '{}' cannot start with a digit", key);
+        return tl::make_unexpected(ParserError(
+            ParserError::Type::EnvironmentKeyNotValid, std::move(err_msg)));
     }
 
     for (char c : key) {
         if ((isalnum(c) == 0) && c != '_') {
-            const auto msg =
-                "Character " + std::string{c} + " not valid in key " + key;
-            throw EnvironmentKeyNotValidException(msg);
+            auto err_msg = fmt::format("Character '{}' not valid in key '{}'",
+                                       std::string{c}, key);
+            return make_parser_error<void>(
+                ParserError::Type::EnvironmentKeyNotValid, std::move(err_msg));
         }
     }
+
+    return {};
 }
 
 auto tt::EnvironmentBuilder::environment() -> Environment && {
     return std::move(environment_);
+}
+
+auto tt::EnvironmentBuilder::EndParsing() noexcept
+    -> tl::expected<void, tt::ParserError> {
+    return {};
 }

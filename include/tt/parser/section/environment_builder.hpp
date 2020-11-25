@@ -26,21 +26,37 @@
 #include "tt/data/environment.hpp"               // for Environment
 #include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
+namespace tl {
+template <typename T, typename Z> class expected;
+}
+
 namespace tt {
+
 class Environment;
 
 class EnvironmentBuilder : public SectionBuilder {
 public:
-    EnvironmentBuilder() = default;
+    EnvironmentBuilder();
 
     [[nodiscard]] auto environment() -> Environment &&;
 
-    void ParseLine(const std::string &line) override;
-    void EndParsing() override {}
+    auto ParseLine(const std::string &line) noexcept
+        -> tl::expected<void, ParserError> override;
+    auto EndParsing() noexcept -> tl::expected<void, ParserError> override;
+
+protected:
+    auto GetValidAttributes() const -> std::vector<std::string> override {
+        return {};
+    }
+    auto GetValidArrayAttributes() const -> std::vector<std::string> override {
+        return {};
+    }
 
 private:
-    void TryParseLine(const std::string &line);
-    static void CheckKeyIsValid(const std::string &key);
+    auto TryParseLine(const std::string &line) noexcept
+        -> tl::expected<void, ParserError>;
+    static auto CheckKeyIsValid(const std::string &key) noexcept
+        -> tl::expected<void, ParserError>;
 
     Environment environment_;
 };

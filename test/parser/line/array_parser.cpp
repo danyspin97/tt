@@ -23,6 +23,7 @@
 #include "catch2/catch.hpp"
 
 #include "tt/parser/define.hpp"
+#include "tt/parser/parser_error.hpp" // for ParserError
 
 using std::string;
 
@@ -33,11 +34,14 @@ TEST_CASE("ArrayParser") {
     auto parser = tt::ArrayParser();
 
     SECTION("Parse valid values") {
-        REQUIRE(parser.StartParsing("foo=" + string{kArrayOpenToken}));
+        auto ret = parser.StartParsing("foo=" + string{kArrayOpenToken});
+        REQUIRE(ret.has_value());
+        CHECK(ret.value());
         CHECK(parser.IsParsing());
         CHECK(parser.key() == "foo");
 
-        parser.ParseLine("   bar" + string{kArrayCloseToken});
+        auto ret2 = parser.ParseLine("   bar" + string{kArrayCloseToken});
+        REQUIRE(ret2.has_value());
         CHECK_FALSE(parser.IsParsing());
         auto values = parser.values();
         CHECK(values == std::vector<std::string>{"bar"});
@@ -54,14 +58,18 @@ TEST_CASE("ArrayParser") {
     SECTION("Parse a one-line") {
         const string line = "foo = " + string{kArrayOpenToken} + "bar foobar" +
                             string{kArrayCloseToken};
-        REQUIRE(parser.StartParsing(line));
+        auto ret = parser.StartParsing(line);
+        REQUIRE(ret.has_value());
+        CHECK(ret.value());
         CHECK_FALSE(parser.IsParsing());
         CHECK(parser.values() == std::vector<std::string>{"bar", "foobar"});
     }
 
     SECTION("Parse ending token with no values") {
-        REQUIRE(
-            parser.StartParsing("foo = " + string{kArrayOpenToken} + "bar"));
+        auto ret =
+            parser.StartParsing("foo = " + string{kArrayOpenToken} + "bar");
+        REQUIRE(ret.has_value());
+        REQUIRE(ret.value());
         CHECK(parser.IsParsing());
 
         parser.ParseLine(string{kArrayCloseToken});
@@ -70,14 +78,19 @@ TEST_CASE("ArrayParser") {
     }
 
     SECTION("Parse invalid line") {
-        CHECK_FALSE(parser.StartParsing("foo"));
+        auto ret = parser.StartParsing("foo");
+        CHECK(ret.has_value());
+        CHECK_FALSE(ret.value());
         CHECK_FALSE(parser.IsParsing());
 
-        CHECK_FALSE(parser.StartParsing("foo = bar" + string{kArrayOpenToken}));
+        auto ret2 = parser.StartParsing("foo = bar" + string{kArrayOpenToken});
+        REQUIRE(ret.has_value());
+        CHECK_FALSE(ret.value());
     }
 
-    SECTION("Parse line with ending token and now values") {
-        CHECK_THROWS(parser.StartParsing("foo = " + string{kArrayOpenToken} +
-                                         string{kArrayCloseToken}));
+    SECTION("Parse line with ending token and no values") {
+        auto ret = parser.StartParsing("foo = " + string{kArrayOpenToken} +
+                                       string{kArrayCloseToken});
+        CHECK_FALSE(ret.has_value());
     }
 }

@@ -32,7 +32,7 @@ namespace tt {
 
 using Service = std::variant<std::monostate, Bundle, Longrun, Oneshot>;
 
-} // namespace tt
-
 auto operator<<(std::ostream &oss, const tt::Service &service)
     -> std::ostream &;
+
+} // namespace tt

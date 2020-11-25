@@ -22,6 +22,7 @@
 
 #include "tt/data/service.hpp"
 #include "tt/dependency_graph/dependency_graph.hpp"
+#include "tt/parser/parser_error.hpp" // for ParserError
 #include "tt/parser/service/service_parser.hpp"
 
 void tt::AddTestDependenciesToGraph(
@@ -30,9 +31,10 @@ void tt::AddTestDependenciesToGraph(
     const std::vector<std::string> &filenames) {
     auto services = std::vector<tt::Service>{};
     for (const auto &file : filenames) {
-        auto parser = tt::ServiceParser(file);
-        auto service = parser.service();
-        services.push_back(service);
+        auto parser = tt::ServiceParser();
+        auto service = parser.ParseService(file);
+        assert(service.has_value());
+        services.push_back(service.value());
     }
     graph.AddServices(services_to_enable, services);
 }

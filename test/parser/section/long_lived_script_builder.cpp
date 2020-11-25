@@ -26,13 +26,16 @@
 #include "catch2/catch.hpp" // for SourceLineInfo, operator""_...
 
 #include "tt/data/long_lived_script.hpp" // for LongLivedScript
+#include "tt/parser/parser_error.hpp"    // for ParserError
 #include "tt/parser/section/utils.hpp"   // for TestBuilderWithFile
 
 TEST_CASE("LongLivedScriptBuilder") {
     auto builder = tt::LongLivedScriptBuilder("test");
     SECTION("Parse valid script section") {
-        TestBuilderWithFile(builder, "../test/data/long_lived_script_section");
+        auto ret = TestBuilderWithFile(
+            builder, "../test/data/long_lived_script_section");
         tt::LongLivedScript s = builder.long_lived_script();
+        REQUIRE(ret.has_value());
 
         CHECK(s.notify());
         CHECK(s.notify().value() == 3);
@@ -40,6 +43,6 @@ TEST_CASE("LongLivedScriptBuilder") {
     }
 
     SECTION("Parse invalid line") {
-        REQUIRE_THROWS(builder.ParseLine("invalid"));
+        CHECK_FALSE(builder.ParseLine("invalid").has_value());
     }
 }

@@ -21,10 +21,11 @@
 #include "tt/parser/section/dummy_builder.hpp"
 #include "catch2/catch.hpp"
 
-using tt::DummyBuilder;
+#include "tt/parser/parser_error.hpp" // for ParserError
 
 TEST_CASE("DummyBuilder throw an exception") {
-    auto builder = DummyBuilder();
+    auto builder = tt::DummyBuilder();
 
-    REQUIRE_THROWS(builder.ParseLine("foobar"));
+    CHECK(builder.ParseLine("").has_value());
+    CHECK_FALSE(builder.ParseLine("foobar").has_value());
 }

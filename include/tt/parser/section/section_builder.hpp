@@ -21,16 +21,57 @@
 #ifndef TT_SECTION_BUILDER_HPP_
 #define TT_SECTION_BUILDER_HPP_
 
-#include <string>
+#include <string>        // for string
+#include <unordered_map> // for unordered_map
+#include <vector>        // for vector
+
+#include "tt/parser/line/array_parser.hpp" // for ArrayParser
+
+namespace tl {
+template <typename T, typename Z> class expected;
+}
 
 namespace tt {
 
+class ParserError;
+
 class SectionBuilder {
 public:
-    virtual void ParseLine(const std::string &line) = 0;
-    virtual void EndParsing() = 0;
-
+    explicit SectionBuilder(std::string section);
+    SectionBuilder() = delete;
     virtual ~SectionBuilder() = default;
+
+    virtual auto ParseLine(const std::string &line)
+        -> tl::expected<void, ParserError>;
+    virtual auto EndParsing() -> tl::expected<void, ParserError>;
+
+    auto SectionParsed() const -> bool;
+
+protected:
+    auto ParseMultilineValue(const std::string &line)
+        -> tl::expected<bool, ParserError>;
+
+    auto GetAttribute(const std::string &key) const
+        -> std::optional<std::string>;
+    auto SetAttribute(std::string key, std::string value)
+        -> tl::expected<void, ParserError>;
+    auto GetArrayAttribute(const std::string &key) const
+        -> std::optional<std::vector<std::string>>;
+    auto SetArrayAttribute(std::string key, std::vector<std::string> value)
+        -> tl::expected<void, ParserError>;
+
+    virtual auto GetValidAttributes() const -> std::vector<std::string> = 0;
+    virtual auto GetValidArrayAttributes() const
+        -> std::vector<std::string> = 0;
+
+    auto section() -> std::string { return section_; }
+
+private:
+    bool finished_ = false;
+    std::string section_;
+    std::unordered_map<std::string, std::string> values_;
+    std::unordered_map<std::string, std::vector<std::string>> array_values_;
+    ArrayParser array_parser_;
 };
 
 } // namespace tt

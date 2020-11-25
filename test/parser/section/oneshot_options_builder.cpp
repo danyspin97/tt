@@ -25,41 +25,32 @@
 #include "catch2/catch.hpp" // for SourceLineInfo, operator""_ca...
 
 #include "tt/data/oneshot_options.hpp" // for OneshotOptions
+#include "tt/parser/parser_error.hpp"  // for ParserError
 #include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
 
-namespace tt {
-class SectionBuilderException;
-} // namespace tt
-
-using std::string;
-using std::vector;
-
-using tt::OneshotOptionsBuilder;
-using tt::SectionBuilderException;
-using tt::TestBuilderWithFile;
-
 TEST_CASE("OneshotOptionsBuilder") {
-    OneshotOptionsBuilder builder;
+    tt::OneshotOptionsBuilder builder;
 
     SECTION("Parse valid section") {
-        TestBuilderWithFile(builder, "../test/data/oneshot_options_section");
+        auto ret = TestBuilderWithFile(builder,
+                                       "../test/data/oneshot_options_section");
+        REQUIRE(ret.has_value());
 
-        auto expected_deps = vector<string>{"foo", "bar"};
+        auto expected_deps = std::vector<std::string>{"foo", "bar"};
         CHECK(builder.options().optional() == true);
         CHECK(builder.options().dependencies() == expected_deps);
     }
 
     SECTION("Parse invalid sections") {
-        const auto testFiles =
-            vector<string>{"empty_multiline_value",    "invalid",
-                           "invalid_multiline_value",  "invalid_quotes",
-                           "invalid_boolean",          "unclosed_quotes",
-                           "unclosed_multiline_value", "unknown_key",
-                           "unknown_multiline_value"};
+        const auto testFiles = std::vector<std::string>{
+            "empty_multiline_value",    "invalid",
+            "invalid_multiline_value",  "invalid_quotes",
+            "invalid_boolean",          "unclosed_quotes",
+            "unclosed_multiline_value", "unknown_key",
+            "unknown_multiline_value"};
         for (const auto &test : testFiles) {
-            CHECK_THROWS_AS(
-                TestBuilderWithFile(builder, "../test/data/" + test),
-                SectionBuilderException);
+            CHECK_FALSE(TestBuilderWithFile(builder, "../test/data/" + test)
+                            .has_value());
         }
     }
 }

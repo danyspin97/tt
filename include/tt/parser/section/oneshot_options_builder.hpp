@@ -24,21 +24,26 @@
 #include <string> // for string
 
 #include "tt/data/oneshot_options.hpp"           // for OneshotOptions
-#include "tt/parser/section/options_builder.hpp" // for OptionsBuilder
+#include "tt/parser/section/section_builder.hpp" // for OptionsBuilder
+
+namespace tl {
+template <typename T, typename Z> class expected;
+}
 
 namespace tt {
 class ArrayParser;
 
-class OneshotOptionsBuilder : public OptionsBuilder {
+class OneshotOptionsBuilder : public SectionBuilder {
 public:
-    OneshotOptionsBuilder() = default;
+    OneshotOptionsBuilder();
 
     [[nodiscard]] auto options() -> OneshotOptions &&;
 
+    auto EndParsing() -> tl::expected<void, ParserError> override;
+
 protected:
-    void TrySetAttributeForKey(const std::string &key,
-                               const std::string &value) override;
-    void SaveValuesOfParser(const ArrayParser &parser) override;
+    auto GetValidAttributes() const -> std::vector<std::string> override;
+    auto GetValidArrayAttributes() const -> std::vector<std::string> override;
 
 private:
     OneshotOptions options_;

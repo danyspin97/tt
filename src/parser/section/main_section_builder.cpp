@@ -21,47 +21,48 @@
 #include "tt/parser/section/main_section_builder.hpp"
 
 #include "tt/parser/line/key_value_parser.hpp" // for KeyValueParser
+#include "tt/parser/parser_error.hpp"          // for ParserError
 #include "tt/parser/section/exception.hpp"     // for SectionBuilderException
 #include "tt/parser/section/main_section.hpp"  // for MainSection
 #include "tt/parser/section/utils.hpp"         // for AttributeNotFound
 
-void tt::MainSectionBuilder::ParseLine(const std::string &line) {
-    try {
-        TryParseLine(line);
-    } catch (const AttributeIsAlreadySetException & /*e*/) {
-        const auto msg =
-            "\"" + key_ + "\" was already set while parsing [main] section";
-        throw SectionBuilderException(msg);
-    } catch (const AttributeNotFoundException &e) {
-        throw SectionBuilderException(e.msg());
-    }
+tt::MainSectionBuilder::MainSectionBuilder() : SectionBuilder("main") {}
+
+auto tt::MainSectionBuilder::GetValidAttributes() const
+    -> std::vector<std::string> {
+    return {"name", "description", "type"};
 }
 
-void tt::MainSectionBuilder::TryParseLine(const std::string &line) {
-    if (IsEmptyLine(line)) {
-        return;
+auto tt::MainSectionBuilder::EndParsing() -> tl::expected<void, ParserError> {
+    if (auto ret = SectionBuilder::EndParsing(); !ret.has_value()) {
+        return ret;
     }
 
-    const auto keyValueParser = KeyValueParser(line, true);
-    key_ = keyValueParser.key();
-    value_ = keyValueParser.value();
-
-    SetThrowsIfNotEmpty(GetAttributeForKey(key_), value_);
-}
-
-auto tt::MainSectionBuilder::GetAttributeForKey(const std::string &key)
-    -> std::string & {
-    if (key == "name") {
-        return main_section_.name;
+    auto name = GetAttribute("name");
+    if (!name.has_value()) {
+        return make_parser_error<void>(
+            ParserError::Type::MissingValueInMainSection,
+            "Missing name in [main] section");
     }
-    if (key == "description") {
-        return main_section_.description;
+    main_section_.name = std::move(name.value());
+
+    auto description = GetAttribute("description");
+    if (!description.has_value()) {
+        return make_parser_error<void>(
+            ParserError::Type::MissingValueInMainSection,
+            "Missing description in [main] section");
     }
-    if (key == "type") {
-        return main_section_.type;
+    main_section_.description = std::move(description.value());
+
+    auto type = GetAttribute("type");
+    if (!type.has_value()) {
+        return make_parser_error<void>(
+            ParserError::Type::MissingValueInMainSection,
+            "Missing type in [main] section");
     }
 
-    AttributeNotFound(key, "main");
+    main_section_.type = std::move(type.value());
+    return {};
 }
 
 auto tt::MainSectionBuilder::main_section() -> MainSection & {

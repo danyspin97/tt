@@ -26,26 +26,18 @@
 #include "catch2/catch.hpp" // for SourceLineInfo, operator""_ca...
 
 #include "tt/data/longrun_options.hpp" // for LongrunOptions
+#include "tt/parser/parser_error.hpp"  // for ParserError
 #include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
 
-namespace tt {
-class SectionBuilderException;
-} // namespace tt
-
-using std::string;
-using std::vector;
-
-using tt::LongrunOptionsBuilder;
-using tt::SectionBuilderException;
-using tt::TestBuilderWithFile;
-
 TEST_CASE("LongrunOptionsBuilder") {
-    LongrunOptionsBuilder builder;
+    tt::LongrunOptionsBuilder builder;
 
     SECTION("Parse valid section") {
-        TestBuilderWithFile(builder, "../test/data/longrun_options_section");
+        auto ret = TestBuilderWithFile(builder,
+                                       "../test/data/longrun_options_section");
+        REQUIRE(ret.has_value());
 
-        auto expected_deps = vector<string>{"foo", "bar"};
+        auto expected_deps = std::vector<std::string>{"foo", "bar"};
 
         CHECK(builder.options().dependencies() == expected_deps);
         CHECK(builder.options().optional() == true);
@@ -63,9 +55,9 @@ TEST_CASE("LongrunOptionsBuilder") {
                                 "unknown_key",
                                 "unknown_multiline_value"};
         for (const auto &test : testFiles) {
-            CHECK_THROWS_AS(
-                TestBuilderWithFile(builder, string{"../test/data/"} + test),
-                SectionBuilderException);
+            CHECK_FALSE(TestBuilderWithFile(builder,
+                                            std::string{"../test/data/"} + test)
+                            .has_value());
         }
     }
 }

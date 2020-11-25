@@ -21,19 +21,6 @@
 #include "catch2/catch.hpp"
 
 using tt::IsEmptyLine;
-using tt::SetThrowsIfNotEmpty;
-
-TEST_CASE("SetThrowsIfNotEmpty on a non empty string") {
-    std::string mystring = "oldValue";
-    REQUIRE_THROWS(SetThrowsIfNotEmpty(mystring, "newValue"));
-}
-
-TEST_CASE("SetThrowsIfNotEmpty on a empty string") {
-    std::string mystring;
-    const auto *newValue = "newValue";
-    SetThrowsIfNotEmpty(mystring, newValue);
-    REQUIRE(mystring == newValue);
-}
 
 TEST_CASE("Run IsEmptyLine on empty lines") {
     CHECK(IsEmptyLine(""));

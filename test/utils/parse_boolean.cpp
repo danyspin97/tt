@@ -22,16 +22,22 @@
 
 #include "catch2/catch.hpp" // for SourceLineInfo, operator""_cat...
 
+#include "tl/expected.hpp" // for expected
+
 #include "tt/utils/parse_boolean.hpp" // for ParseBoolean, BooleanParseExce...
 
 TEST_CASE("ParseBoolean") {
     SECTION("Parse valid values") {
-        CHECK(tt::utils::ParseBoolean("yes"));
-        CHECK_FALSE(tt::utils::ParseBoolean("no"));
+        auto ret = tt::utils::ParseBoolean("yes");
+        REQUIRE(ret.has_value());
+        CHECK(ret.value());
+        ret = tt::utils::ParseBoolean("no");
+        REQUIRE(ret.has_value());
+        CHECK_FALSE(ret.value());
     }
 
     SECTION("Parse invalid values") {
-        CHECK_THROWS_AS(tt::utils::ParseBoolean("foo"),
-                        tt::utils::BooleanParseException);
+        auto ret = tt::utils::ParseBoolean("foo");
+        CHECK_FALSE(ret.has_value());
     }
 }

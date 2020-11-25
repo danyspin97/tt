@@ -33,11 +33,13 @@ public:
     auto main_script() -> MainScript;
 
 protected:
-    auto GetAttributeForKey(const std::string &key) -> std::string & override;
-    void SetOptionalAttributeForMainScript(MainScript &main_script) const;
+    auto CreateScript() -> tl::expected<void, ParserError> override;
+    auto GetValidAttributes() const -> std::vector<std::string> override;
+    auto SetOptionalAttributeForMainScript(MainScript &main_script)
+        -> tl::expected<void, ParserError> const;
 
 private:
-    std::string autostart_;
+    std::optional<MainScript> main_script_;
 };
 
 } // namespace tt

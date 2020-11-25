@@ -20,9 +20,12 @@
 
 #include "tt/utils/parse_boolean.hpp"
 
-#include <string>
+#include "fmt/format.h" // for format
 
-auto tt::utils::ParseBoolean(const std::string &value) -> bool {
+#include "tl/expected.hpp" // for expected
+
+auto tt::utils::ParseBoolean(const std::string &value)
+    -> tl::expected<bool, std::string> {
     if (value == "yes") {
         return true;
     }
@@ -30,8 +33,8 @@ auto tt::utils::ParseBoolean(const std::string &value) -> bool {
         return false;
     }
 
-    const auto msg =
-        "A boolean value shall be either 'yes' or 'no' the value given was '" +
-        value + "'";
-    throw BooleanParseException(msg);
+    return tl::make_unexpected(
+        fmt::format("A boolean value shall be either 'yes' or 'no' the value "
+                    "given was '{}'",
+                    value));
 }

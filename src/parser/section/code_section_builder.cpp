@@ -23,43 +23,74 @@
 #include <string>  // for allocator, operator+
 #include <utility> // for move
 
+#include "fmt/format.h" // for format
+
+#include "tl/expected.hpp" // for expected
+
 #include "tt/parser/line/code_parser.hpp"      // for CodeParser
 #include "tt/parser/line/key_value_parser.hpp" // for KeyValueParser
+#include "tt/parser/parser_error.hpp"          // for ParserError
 #include "tt/parser/section/exception.hpp"     // for SectionBuilderException
 #include "tt/parser/section/utils.hpp"         // for SetThrowsIfNotEmpty
 
-tt::CodeSectionBuilder::CodeSectionBuilder(std::string section)
-    : section_(std::move(section)) {}
-
-void tt::CodeSectionBuilder::ParseLine(const std::string &line) {
+auto tt::CodeSectionBuilder::ParseLine(const std::string &line)
+    -> tl::expected<void, ParserError> {
     if (code_parser_.IsParsing()) {
         // Continue parsing execute parameter
         code_parser_.ParseLine(line);
         if (!code_parser_.IsParsing()) {
-            SetThrowsIfNotEmpty(GetCodeAttributeForKey(code_parser_.key()),
-                                code_parser_.code());
+            auto ret = SetCodeAttribute();
+            if (!ret.has_value()) {
+                return chain_parser_error<void>(
+                    std::move(ret.error()),
+                    fmt::format("in [{}] section", section()));
+            }
             code_parser_.Reset();
         }
-        return;
+        return {};
     }
 
     if (IsEmptyLine(line)) {
-        return;
+        return {};
     }
 
-    if (code_parser_.StartParsing(line)) {
-        return;
+    auto ret = code_parser_.StartParsing(line);
+    if (!ret.has_value()) {
+        return chain_parser_error<void>(std::move(ret.error()), "");
     }
 
-    auto key_value_parser = KeyValueParser(line);
-    if (key_value_parser.IsLineValid()) {
-        auto key = key_value_parser.key();
-        auto value = key_value_parser.value();
-        SetThrowsIfNotEmpty(GetAttributeForKey(key), value);
-        return;
+    if (ret.value()) {
+        return {};
     }
 
-    const auto msg =
-        line + "\n\tis not valid while parsing [" + section_ + "] section";
-    throw SectionBuilderException(msg);
+    return SectionBuilder::ParseLine(line);
+}
+
+auto tt::CodeSectionBuilder::SetCodeAttribute()
+    -> tl::expected<void, ParserError> {
+    auto key = code_parser_.key();
+    auto valid_keys = GetValidCodeAttributes();
+    if (std::find(valid_keys.begin(), valid_keys.end(), key) ==
+        valid_keys.end()) {
+        return make_parser_error<void>(
+            ParserError::Type::CodeSectionInvalidKey,
+            fmt::format("Key '{}' does not accept code", key));
+    }
+
+    return SetAttribute(key, code_parser_.code());
+}
+
+auto tt::CodeSectionBuilder::EndParsing() -> tl::expected<void, ParserError> {
+    if (auto ret = SectionBuilder::EndParsing(); !ret.has_value()) {
+        return ret;
+    }
+
+    if (code_parser_.IsParsing()) {
+        return make_parser_error<void>(
+            ParserError::Type::ArrayValueNotClosed,
+            fmt::format("Array value '{}' has not been closed",
+                        code_parser_.key()));
+    }
+
+    return {};
 }

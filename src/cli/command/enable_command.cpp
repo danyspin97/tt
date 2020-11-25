@@ -26,6 +26,8 @@
 #include "tt/dependency_graph/get_graph_filename.hpp"
 #include "tt/dependency_graph/utils.hpp" // for GetName
 #include "tt/file_lock.hpp"              // for FileLock
+#include "tt/log/cli_logger.hpp"         // for CliLogger
+#include "tt/parser/parser_error.hpp"    // for ParserError
 #include "tt/parser/service/services_parser.hpp"
 #include "tt/path/dirs.hpp"
 #include "tt/utils/deserialize.hpp"
@@ -77,8 +79,13 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
     }
 
     ServicesParser parser(dirs());
-    std::vector<tt::Service> services = parser.ParseServices(service_list);
+    auto ret = parser.ParseServices(service_list);
+    if (!ret.has_value()) {
+        logger()->LogError("{}", ret.error().msg());
+        return 1;
+    }
 
+    auto services = ret.value();
     if (no_update_dependencies_) {
         services.erase(std::remove_if(services.begin(), services.end(),
                                       [graph](const auto &service) {

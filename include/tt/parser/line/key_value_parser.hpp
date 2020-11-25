@@ -23,27 +23,18 @@
 
 #include <string>
 
+namespace tl {
+template <typename T, typename Z> class expected;
+} // namespace tl
+
 namespace tt {
+
+class ParserError;
 
 class KeyValueParser {
 public:
-    [[nodiscard]] auto key() const noexcept -> std::string { return key_; }
-
-    [[nodiscard]] auto value() const noexcept -> std::string { return value_; }
-
-    [[nodiscard]] auto IsLineValid() const noexcept -> bool { return valid_; }
-
-    explicit KeyValueParser(std::string line, bool throw_on_error = false);
-
-private:
-    void ParseLine();
-    auto TryParseLine() -> bool;
-
-    std::string line_;
-    std::string key_;
-    std::string value_;
-    bool valid_{};
-    bool throw_on_error_;
+    static auto ParseLine(std::string_view line)
+        -> tl::expected<std::pair<std::string, std::string>, ParserError>;
 };
 
 } // namespace tt

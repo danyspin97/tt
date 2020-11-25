@@ -22,10 +22,13 @@
 
 #include "catch2/catch.hpp" // for SourceLineInfo, Section, StringRef, oper...
 
+#include "tt/parser/parser_error.hpp" // for ParserError
+
 using tt::ServiceParser;
 
 TEST_CASE("ServiceParser") {
+    ServiceParser parser;
     SECTION("Parse a service with no section") {
-        REQUIRE_THROWS(ServiceParser("../test/data/noSection"));
+        REQUIRE_THROWS(parser.ParseService("../test/data/noSection"));
     }
 }

@@ -31,6 +31,8 @@
 #include "spdlog/spdlog.h"
 
 #include "tt/data/service.hpp"
+#include "tt/log/cli_logger.hpp"      // for CliLogger
+#include "tt/parser/parser_error.hpp" // for ParserError
 #include "tt/parser/service/service_parser.hpp"
 #include "tt/path/dirs.hpp"
 #include "tt/utils/serialize.hpp"
@@ -62,13 +64,17 @@ auto tt::cli::SerializeCommand::ParseLongrunFromFile() -> int {
         spdlog::error("Service {} does not exist", service_name);
     }
 
-    auto parser = ServiceParser(service_name);
-    auto service = parser.service();
-    if (service.index() != 2) {
-        spdlog::error("Service {} is not of type longrun", service_name);
+    auto parser = ServiceParser();
+    auto service = parser.ParseService(service_name);
+    if (!service.has_value()) {
+        logger()->LogError("{}", service.error().msg());
+        return 255;
+    }
+    if (service.value().index() != 2) {
+        logger()->LogError("Service {} is not of type longrun", service_name);
         return 255;
     }
 
-    longrun_ = std::make_unique<Longrun>(std::get<Longrun>(service));
+    longrun_ = std::make_unique<Longrun>(std::get<Longrun>(service.value()));
     return 0;
 }

@@ -25,6 +25,7 @@
 #include "catch2/catch.hpp" // for operator""_catch_sr, SourceLi...
 
 #include "tt/data/oneshot.hpp"         // for Oneshot
+#include "tt/parser/parser_error.hpp"  // for ParserError
 #include "tt/parser/service/utils.hpp" // for GetLinesFromFile
 
 TEST_CASE("OneshotDirector") {
@@ -33,7 +34,8 @@ TEST_CASE("OneshotDirector") {
     SECTION("Test init-fsck.system service") {
         auto lines = tt::GetLinesFromFile("../test/data/init-fsck.system");
         auto service = director.ParseAndGetService(lines, "/tmp/init-fsck");
-        auto oneshot = std::get<tt::Oneshot>(service);
+        REQUIRE(service.has_value());
+        auto oneshot = std::get<tt::Oneshot>(service.value());
 
         CHECK(oneshot.name() == "init-fsck");
         CHECK(oneshot.environment().Get("CMDARGS") == "-d");
@@ -41,13 +43,13 @@ TEST_CASE("OneshotDirector") {
 
     SECTION("Test service without [start] section") {
         auto lines = tt::GetLinesFromFile("../test/data/nostart");
-        CHECK_THROWS_WITH(director.ParseAndGetService(lines, "/tmp/nostart"),
-                          "Service 'nostart' does not have a [start] section");
+        CHECK_FALSE(
+            director.ParseAndGetService(lines, "/tmp/nostart").has_value());
     }
 
     SECTION("Test service with unknown section") {
         auto lines = tt::GetLinesFromFile("../test/data/unknown_section");
-        CHECK_THROWS_WITH(director.ParseAndGetService(lines, "/tmp/nostart"),
-                          "Section 'unknown' is not supported");
+        CHECK_FALSE(
+            director.ParseAndGetService(lines, "/tmp/nostart").has_value());
     }
 }

@@ -28,17 +28,16 @@
 #include "tt/data/environment.hpp"     // for Environment
 #include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
 
-using std::map;
-using std::string;
-
-using tt::EnvironmentBuilder;
+#include "tt/parser/parser_error.hpp" // for ParserError
 
 TEST_CASE("EnvironmentBuilder") {
-    EnvironmentBuilder builder;
+    tt::EnvironmentBuilder builder;
 
     SECTION("Parse valid section") {
-        TestBuilderWithFile(builder, "../test/data/environment_section");
-        map<string, string> expected;
+        auto ret =
+            TestBuilderWithFile(builder, "../test/data/environment_section");
+        REQUIRE(ret.has_value());
+        std::map<std::string, std::string> expected;
         expected["CMDARGS"] = "-d --nofork";
         expected["LOGLEVEL"] = "0";
         for (auto &pair : expected) {
@@ -47,8 +46,10 @@ TEST_CASE("EnvironmentBuilder") {
     }
 
     SECTION("Parse invalid section") {
-        CHECK_THROWS(TestBuilderWithFile(builder, "../test/data/invalid"));
-        CHECK_THROWS(
-            TestBuilderWithFile(builder, "../test/data/invalid_environment"));
+        CHECK_FALSE(
+            TestBuilderWithFile(builder, "../test/data/invalid").has_value());
+        CHECK_FALSE(
+            TestBuilderWithFile(builder, "../test/data/invalid_environment")
+                .has_value());
     }
 }

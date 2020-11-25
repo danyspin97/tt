@@ -26,11 +26,16 @@
 #include "tt/parser/section/exception.hpp" // for ParamIsNotEmptyException
 #include "tt/utils/trim.hpp"               // for trim_copy
 
+namespace tl {
+template <typename T, typename Z> class expected;
+}
+
 namespace tt {
+class ParserError;
 class SectionBuilder;
 
-[[noreturn]] void AttributeNotFound(const std::string &attribute,
-                                    const std::string &section);
+auto KeyNotFound(const std::string &attribute, const std::string &section)
+    -> tl::expected<void, ParserError>;
 
 // Is called many times during parsing, allow inlining
 inline auto IsEmptyLine(const std::string &line) -> bool {
@@ -38,16 +43,8 @@ inline auto IsEmptyLine(const std::string &line) -> bool {
     return strippedLine.empty() || strippedLine[0] == '#';
 }
 
-inline void SetThrowsIfNotEmpty(std::string &param,
-                                const std::string &newValue) {
-    if (!param.empty()) {
-        throw ParamIsNotEmptyException();
-    }
-
-    param.append(newValue);
-}
-
-void TestBuilderWithFile(SectionBuilder &builder, const std::string &path);
+auto TestBuilderWithFile(SectionBuilder &builder, const std::string &path)
+    -> tl::expected<void, ParserError>;
 
 } // namespace tt
 

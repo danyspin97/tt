@@ -22,18 +22,23 @@
 
 #include <utility> // for move
 
+#include "fmt/format.h" // for format
+
 #include "tt/data/oneshot.hpp"                           // for Oneshot
-#include "tt/exception.hpp"                              // for Exception
+#include "tt/parser/parser_error.hpp"                    // for ParserError
 #include "tt/parser/section/environment_builder.hpp"     // for Environment...
 #include "tt/parser/section/main_section_builder.hpp"    // for MainSection...
 #include "tt/parser/section/oneshot_options_builder.hpp" // for OneshotOpti...
 #include "tt/parser/section/script_builder.hpp"          // for ScriptBuilder
 
-auto tt::OneshotDirector::InstanceService(std::string &&path) -> tt::Service {
+auto tt::OneshotDirector::InstanceService(std::string &&path)
+    -> tl::expected<Service, ParserError> {
     auto &main_section = main_section_builder_.main_section();
-    if (!start_script_builder_.HasScript()) {
-        throw Exception("Service '" + main_section.name +
-                        "' does not have a [start] section");
+    if (!start_script_builder_.SectionParsed()) {
+        return make_parser_error<Service>(
+            ParserError::Type::MissingStartSection,
+            fmt::format("Service '{}' does not have a [start] section",
+                        main_section.name));
     }
 
     auto service = Oneshot(std::move(main_section.name),
@@ -42,7 +47,7 @@ auto tt::OneshotDirector::InstanceService(std::string &&path) -> tt::Service {
                            std::move(env_section_builder_.environment()),
                            start_script_builder_.main_script());
 
-    if (stop_script_builder_.HasScript()) {
+    if (stop_script_builder_.SectionParsed()) {
         service.stop(stop_script_builder_.script());
     }
 
@@ -50,7 +55,7 @@ auto tt::OneshotDirector::InstanceService(std::string &&path) -> tt::Service {
 }
 
 auto tt::OneshotDirector::GetBuilderForSection(const std::string &section)
-    -> SectionBuilder * {
+    -> tl::expected<SectionBuilder *, ParserError> {
     if (section == "main") {
         return &main_section_builder_;
     }
@@ -66,6 +71,7 @@ auto tt::OneshotDirector::GetBuilderForSection(const std::string &section)
     if (section == "options") {
         return &options_builder_;
     }
-    auto msg = "Section '" + section + "' is not supported";
-    throw Exception(msg);
+    return make_parser_error<SectionBuilder *>(
+        ParserError::Type::InvalidSection,
+        fmt::format("Section '{}' is not supported", section));
 }

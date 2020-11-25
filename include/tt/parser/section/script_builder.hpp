@@ -32,38 +32,24 @@ class ScriptBuilder : public CodeSectionBuilder {
 public:
     explicit ScriptBuilder(const std::string &section);
     auto script() -> Script;
-    auto HasScript() const -> bool;
-    void EndParsing() override;
+    auto EndParsing() -> tl::expected<void, ParserError> override;
 
 protected:
-    auto GetAttributeForKey(const std::string &key) -> std::string & override;
-    auto GetCodeAttributeForKey(const std::string &key)
-        -> std::string & override;
-    auto GetParsedType() const -> Script::Type;
-    void SetOptionalAttributeForScript(Script &script) const;
+    virtual auto CreateScript() -> tl::expected<void, ParserError>;
+    virtual auto GetScriptAttributes()
+        -> tl::expected<std::pair<Script::Type, std::string>, ParserError>;
 
-    auto execute() const -> const std::string &;
-    void execute(std::string &&);
-    auto execute() -> std::string &&;
-    auto type() const -> const std::string &;
-    void type(const std::string &type);
-    auto user() const -> const std::string &;
-    void user(const std::string &);
-    auto user() -> std::string &&;
-    auto group() const -> const std::string &;
-    void group(const std::string &);
-    auto group() -> std::string &&;
+    auto GetValidAttributes() const -> std::vector<std::string> override;
+    auto GetValidArrayAttributes() const -> std::vector<std::string> override {
+        return {};
+    }
+    auto GetValidCodeAttributes() const -> std::vector<std::string> override;
+    auto GetParsedType() const -> tl::expected<Script::Type, ParserError>;
+    auto SetOptionalAttributeForScript(Script &script) const
+        -> tl::expected<void, ParserError>;
 
 private:
-    std::string type_;
-    std::string user_;
-    std::string group_;
-    std::string execute_;
-    std::string down_signal_;
-    std::string max_death_;
-    std::string timeout_;
-    std::string timeout_kill_;
-    bool finished_ = false;
+    std::optional<Script> script_;
 };
 
 } // namespace tt

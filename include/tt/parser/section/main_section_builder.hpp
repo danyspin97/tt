@@ -31,20 +31,20 @@ struct MainSection;
 
 class MainSectionBuilder : public SectionBuilder {
 public:
-    MainSectionBuilder() = default;
+    MainSectionBuilder();
 
     [[nodiscard]] auto main_section() -> MainSection &;
 
-    void ParseLine(const std::string &line) override;
-    void EndParsing() override {}
+    auto EndParsing() -> tl::expected<void, ParserError> override;
+
+protected:
+    auto GetValidAttributes() const -> std::vector<std::string> override;
+    auto GetValidArrayAttributes() const -> std::vector<std::string> override {
+        return {};
+    }
 
 private:
-    void TryParseLine(const std::string &line);
-    auto GetAttributeForKey(const std::string &key) -> std::string &;
     MainSection main_section_;
-
-    std::string key_;
-    std::string value_;
 };
 
 } // namespace tt

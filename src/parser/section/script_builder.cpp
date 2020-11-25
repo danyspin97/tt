@@ -23,6 +23,9 @@
 #include <string>  // for string, operator==, alloc...
 #include <utility> // for move
 
+#include "fmt/format.h" // for format
+
+#include "tt/parser/parser_error.hpp"      // for ParserError
 #include "tt/parser/section/exception.hpp" // for CodeNotSuppliedInScriptPa...
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound
 #include "tt/signal.hpp"                   // for ParseSignalFromString
@@ -30,131 +33,156 @@
 tt::ScriptBuilder::ScriptBuilder(const std::string &section)
     : CodeSectionBuilder(section) {}
 
-void tt::ScriptBuilder::EndParsing() {
-    if (execute_.empty()) {
-        const auto error_message =
-            "Code was not supplied in section [" + section_ + "]";
-        throw tt::CodeNotSuppliedInScriptParserException(error_message);
+auto tt::ScriptBuilder::EndParsing() -> tl::expected<void, ParserError> {
+    if (auto ret = CodeSectionBuilder::EndParsing(); !ret.has_value()) {
+        return ret;
     }
 
-    finished_ = true;
+    auto ret = CreateScript();
+    if (!ret.has_value()) {
+        return chain_parser_error<void>(
+            ret.error(), fmt::format(" in [{}] section", section()));
+    }
+
+    return {};
 }
 
-auto tt::ScriptBuilder::GetAttributeForKey(const std::string &key)
-    -> std::string & {
-    if (key == "build") {
-        return type_;
-    }
-    if (key == "execute") {
-        return execute_;
-    }
-    if (key == "group") {
-        return group_;
-    }
-    if (key == "user") {
-        return user_;
-    }
-    if (key == "down_signal") {
-        return down_signal_;
-    }
-    if (key == "maxdeath") {
-        return max_death_;
-    }
-    if (key == "timeout") {
-        return timeout_;
-    }
-    if (key == "timeout_kill") {
-        return timeout_kill_;
+auto tt::ScriptBuilder::GetScriptAttributes()
+    -> tl::expected<std::pair<Script::Type, std::string>, ParserError> {
+    auto execute = GetAttribute("execute");
+    if (!execute.has_value()) {
+        return make_parser_error<std::pair<Script::Type, std::string>>(
+            ParserError::Type::MissingExecute,
+            fmt::format("'execute' is was not supplied in [{}] section",
+                        section()));
     }
 
-    AttributeNotFound(key, section_);
-}
-auto tt::ScriptBuilder::GetCodeAttributeForKey(const std::string &key)
-    -> std::string & {
-    if (key == "execute") {
-        return execute_;
+    auto type = GetParsedType();
+    if (!type.has_value()) {
+        return chain_parser_error<std::pair<Script::Type, std::string>>(
+            type.error(), fmt::format(" in [{}] section", section()));
     }
 
-    AttributeNotFound(key, section_);
+    return std::make_pair(type.value(), std::move(execute.value()));
 }
 
-auto tt::ScriptBuilder::GetParsedType() const -> Script::Type {
-    // TODO: add "path" type
-    if (type_ == "execline") {
+auto tt::ScriptBuilder::CreateScript() -> tl::expected<void, ParserError> {
+    auto script_attributes = GetScriptAttributes();
+    if (!script_attributes.has_value()) {
+        return chain_parser_error<void>(script_attributes.error(), "");
+    }
+    script_ = Script(script_attributes.value().first,
+                     std::move(script_attributes.value().second));
+    return SetOptionalAttributeForScript(script_.value());
+}
+
+auto tt::ScriptBuilder::GetValidAttributes() const -> std::vector<std::string> {
+    return {"build",       "execute",  "group",   "user",
+            "down_signal", "maxdeath", "timeout", "timeout_kill"};
+}
+
+auto tt::ScriptBuilder::GetValidCodeAttributes() const
+    -> std::vector<std::string> {
+    return {"execute"};
+}
+
+auto tt::ScriptBuilder::GetParsedType() const
+    -> tl::expected<Script::Type, ParserError> {
+    auto type = GetAttribute("build");
+    if (!type.has_value()) {
+        return make_parser_error<Script::Type>(
+            ParserError::Type::MissingScriptType, "Cound not find script type");
+    }
+
+    if (type == "execline") {
         return Script::Type::Execline;
     }
-    if (type_ == "auto" || type_ == "sh") {
+    if (type == "auto" || type == "sh") {
         return Script::Type::SH;
     }
-    if (type_ == "bash") {
+    if (type == "bash") {
         return Script::Type::Bash;
     }
-    if (type_ == "path") {
+    if (type == "path") {
         return Script::Type::Path;
     }
 
-    auto error_message = "Type " + type_ + " is not allowed.";
-    throw tt::ScriptTypeNotValidException(error_message);
+    return make_parser_error<Script::Type>(
+        ParserError::Type::InvalidScriptType,
+        fmt::format("Type '{}' is not valid", type.value()));
 }
 
-auto tt::ScriptBuilder::script() -> Script {
-    Script script = Script(GetParsedType(), std::move(execute_));
-    SetOptionalAttributeForScript(script);
-    return script;
+namespace tt {
+auto convert_int(std::function<void()> f, std::string key, std::string value)
+    -> tl::expected<void, ParserError> {
+    try {
+        std::invoke(f);
+    } catch (std::invalid_argument & /*e*/) {
+        return make_parser_error<void>(
+            ParserError::Type::InvalidInteger,
+            fmt::format("'{}' is not a valid integer for key '{}'", value,
+                        key));
+    } catch (std::out_of_range & /*e*/) {
+        return make_parser_error<void>(
+            ParserError::Type::InvalidInteger,
+            fmt::format("'{}' is not a valid value for key '{}'", value, key));
+    }
+
+    return {};
 }
+} // namespace tt
 
-void tt::ScriptBuilder::SetOptionalAttributeForScript(Script &script) const {
-    if (!user_.empty()) {
-        script.user(user_);
+auto tt::ScriptBuilder::script() -> Script { return script_.value(); }
+
+auto tt::ScriptBuilder::SetOptionalAttributeForScript(Script &script) const
+    -> tl::expected<void, ParserError> {
+    if (auto user = GetAttribute("user")) {
+        script.user(user.value());
     }
 
-    if (!group_.empty()) {
-        script.group(group_);
+    if (auto group = GetAttribute("group")) {
+        script.group(group.value());
     }
 
-    if (!down_signal_.empty()) {
-        script.down_signal(ParseSignalFromString(down_signal_));
+    if (auto down_signal = GetAttribute("down_signal")) {
+        auto signal = ParseSignalFromString(down_signal.value());
+        if (!signal.has_value()) {
+            return make_parser_error<void>(ParserError::Type::InvalidSignal,
+                                           signal.error());
+        }
+        script.down_signal(signal.value());
     }
 
-    if (!max_death_.empty()) {
-        script.max_death(stoi(max_death_));
+    if (auto max_death = GetAttribute("maxdeath")) {
+        if (auto ret = convert_int(
+                [&script, max_death]() {
+                    script.max_death(stoi(max_death.value()));
+                },
+                max_death.value(), "max_death");
+            !ret.has_value()) {
+            return ret;
+        }
     }
 
-    if (!timeout_.empty()) {
-        script.timeout(stoi(timeout_));
+    if (auto timeout = GetAttribute("timeout")) {
+        if (auto ret = convert_int(
+                [&script, timeout]() { script.timeout(stoi(timeout.value())); },
+                timeout.value(), "timeout");
+            !ret.has_value()) {
+            return ret;
+        }
     }
 
-    if (!timeout_kill_.empty()) {
-        script.timeout_kill(stoi(timeout_kill_));
+    if (auto timeout_kill = GetAttribute("timeout_kill")) {
+        if (auto ret = convert_int(
+                [&script, timeout_kill]() {
+                    script.timeout_kill(stoi(timeout_kill.value()));
+                },
+                timeout_kill.value(), "timeout_kill");
+            !ret.has_value()) {
+            return ret;
+        }
     }
+
+    return {};
 }
-
-auto tt::ScriptBuilder::HasScript() const -> bool { return finished_; }
-
-auto tt::ScriptBuilder::execute() const -> const std::string & {
-    return execute_;
-}
-
-void tt::ScriptBuilder::execute(std::string &&execute) {
-    execute_ = std::move(execute);
-}
-
-auto tt::ScriptBuilder::execute() -> std::string && {
-    return std::move(execute_);
-}
-
-auto tt::ScriptBuilder::type() const -> const std::string & { return type_; }
-
-void tt::ScriptBuilder::type(const std::string &type) { type_ = type; }
-
-auto tt::ScriptBuilder::user() const -> const std::string & { return user_; }
-
-void tt::ScriptBuilder::user(const std::string &user) { user_ = user; }
-
-auto tt::ScriptBuilder::user() -> std::string && { return std::move(user_); }
-
-auto tt::ScriptBuilder::group() const -> const std::string & { return group_; }
-
-void tt::ScriptBuilder::group(const std::string &group) { group_ = group; }
-
-auto tt::ScriptBuilder::group() -> std::string && { return std::move(group_); }

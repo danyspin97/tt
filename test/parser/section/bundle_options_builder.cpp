@@ -26,41 +26,31 @@
 #include "catch2/catch.hpp" // for SourceLineInfo, Section, oper...
 
 #include "tt/data/bundle_options.hpp"  // for BundleOptions
+#include "tt/parser/parser_error.hpp"  // for ParserError
 #include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
 
-namespace tt {
-class SectionBuilderException;
-} // namespace tt
-
-using std::string;
-using std::vector;
-
-using tt::BundleOptions;
-using tt::BundleOptionsBuilder;
-using tt::SectionBuilderException;
-
 TEST_CASE("BundleOptionsBuilder") {
-    auto options = BundleOptions();
-    BundleOptionsBuilder builder;
+    tt::BundleOptionsBuilder builder;
 
     SECTION("Parse valid section") {
-        TestBuilderWithFile(builder, "../test/data/bundle_options_section");
+        auto ret =
+            TestBuilderWithFile(builder, "../test/data/bundle_options_section");
+        REQUIRE(ret.has_value());
 
-        auto expected_contents = vector<string>{"foo", "bar"};
-        auto expected_deps = vector<string>{"foobar"};
+        auto expected_contents = std::vector<std::string>{"foo", "bar"};
+        auto expected_deps = std::vector<std::string>{"foobar"};
         REQUIRE(builder.options().contents() == expected_contents);
         REQUIRE(builder.options().dependencies() == expected_deps);
     }
 
     SECTION("Parse invalid section") {
-        const auto testFiles = {
-            "empty_multiline_value",   "invalid",
-            "invalid_multiline_value", "unclosed_multiline_value",
+        const std::vector<std::string> testFiles = {
+            "empty_multiline_value", "invalid", "invalid_multiline_value",
             "unknown_multiline_value", "empty-file"};
         for (const auto &test : testFiles) {
-            CHECK_THROWS_AS(
-                TestBuilderWithFile(builder, string{"../test/data/"} + test),
-                SectionBuilderException);
+            CHECK_FALSE(TestBuilderWithFile(builder,
+                                            std::string{"../test/data/"} + test)
+                            .has_value());
         }
     }
 }

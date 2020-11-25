@@ -21,21 +21,24 @@
 #ifndef TT_DUMMY_BUILDER_HPP_
 #define TT_DUMMY_BUILDER_HPP_
 
-#include "tt/parser/section/exception.hpp"
-#include "tt/parser/section/section_builder.hpp"
-#include <string>
+#include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
 namespace tt {
 
 class DummyBuilder : public SectionBuilder {
 public:
-    void ParseLine(const std::string &line) override {
-        if (!line.empty()) {
-            throw DummyBuilderException();
-        }
-    }
+    DummyBuilder();
 
-    void EndParsing() override {}
+    auto ParseLine(const std::string &line)
+        -> tl::expected<void, ParserError> override;
+
+protected:
+    auto GetValidAttributes() const -> std::vector<std::string> override {
+        return {};
+    }
+    auto GetValidArrayAttributes() const -> std::vector<std::string> override {
+        return {};
+    }
 };
 
 } // namespace tt

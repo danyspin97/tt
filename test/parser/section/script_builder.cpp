@@ -24,16 +24,20 @@
 
 #include "catch2/catch.hpp" // for operator""_catch_sr, SourceLi...
 
+#include "tt/parser/parser_error.hpp"  // for ParserError
 #include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
 #include "tt/signal.hpp"               // for Signal, Signal::kSigKill
 
 TEST_CASE("ScriptBuilder") {
     auto builder = tt::ScriptBuilder("test");
     SECTION("Parse valid script section") {
-        TestBuilderWithFile(builder, "../test/data/script_section");
+        auto ret = TestBuilderWithFile(builder, "../test/data/script_section");
+        REQUIRE(ret.has_value());
         tt::Script s = builder.script();
 
+        REQUIRE(s.user().has_value());
         CHECK(s.user().value() == "dbus");
+        REQUIRE(s.group().has_value());
         CHECK(s.group().value() == "dbus");
         CHECK(s.timeout() == 5000);
         CHECK(s.timeout_kill() == 10);
@@ -42,6 +46,6 @@ TEST_CASE("ScriptBuilder") {
     }
 
     SECTION("Parse invalid line") {
-        REQUIRE_THROWS(builder.ParseLine("invalid"));
+        CHECK_FALSE(builder.ParseLine("invalid").has_value());
     }
 }

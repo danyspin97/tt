@@ -22,11 +22,10 @@
 
 #include <string> // for string
 
+#include "tt/data/long_lived_script.hpp"             // for LongLivedScript
 #include "tt/parser/section/main_script_builder.hpp" // for MainScriptBuilder
 
 namespace tt {
-
-class LongLivedScript;
 
 class LongLivedScriptBuilder : public MainScriptBuilder {
 public:
@@ -34,12 +33,15 @@ public:
     auto long_lived_script() -> LongLivedScript;
 
 protected:
-    auto GetAttributeForKey(const std::string &key) -> std::string & override;
-    void
-    SetOptionalAttributeForLongLivedScript(LongLivedScript &long_lived_script);
+    auto CreateScript() -> tl::expected<void, ParserError> override;
+    auto GetValidAttributes() const -> std::vector<std::string> override;
+    auto
+    SetOptionalAttributeForLongLivedScript(LongLivedScript &long_lived_script)
+        -> tl::expected<void, ParserError>;
 
 private:
     std::string notify_;
+    std::optional<LongLivedScript> long_lived_script_;
 };
 
 } // namespace tt

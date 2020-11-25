@@ -22,6 +22,7 @@
 
 #include <type_traits> // for decay_t
 
+namespace tt {
 auto operator<<(std::ostream &oss, const tt::Service &service)
     -> std::ostream & {
     std::visit(
@@ -35,3 +36,4 @@ auto operator<<(std::ostream &oss, const tt::Service &service)
 
     return oss;
 }
+} // namespace tt

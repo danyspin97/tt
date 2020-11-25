@@ -26,28 +26,31 @@
 #include "tt/data/service.hpp"
 #include "tt/parser/section/dummy_builder.hpp"
 
+namespace tl {
+template <typename T, typename Z> class expected;
+}
+
 namespace tt {
 
+class ParserError;
 class SectionBuilder;
 
 class ServiceDirector {
 public:
-    ServiceDirector() = default;
-
     virtual ~ServiceDirector() = default;
 
-    auto ParseAndGetService(const std::vector<std::string> &service_lines,
-                            std::string &&path) -> Service;
+    auto ParseAndGetService(std::vector<std::string> service_lines,
+                            std::string path)
+        -> tl::expected<Service, ParserError>;
 
 protected:
-    virtual auto InstanceService(std::string &&path) -> Service = 0;
+    virtual auto InstanceService(std::string &&path)
+        -> tl::expected<Service, ParserError> = 0;
     virtual auto GetBuilderForSection(const std::string &section)
-        -> SectionBuilder * = 0;
+        -> tl::expected<SectionBuilder *, ParserError> = 0;
 
 private:
-    void ParseSections();
-
-    void TryParseSections();
+    auto ParseSections() -> tl::expected<void, ParserError>;
 
     std::vector<std::string> service_lines_;
     DummyBuilder dummy_builder_;

@@ -24,13 +24,12 @@
 
 #include "tt/exception.hpp"
 
+namespace tl {
+template <typename T, typename Z> class expected;
+} // namespace tl
+
 namespace tt::utils {
 
-class BooleanParseException : public Exception {
-public:
-    explicit BooleanParseException(const std::string &msg) : Exception(msg) {}
-};
-
-auto ParseBoolean(const std::string &value) -> bool;
+auto ParseBoolean(const std::string &value) -> tl::expected<bool, std::string>;
 
 } // namespace tt::utils

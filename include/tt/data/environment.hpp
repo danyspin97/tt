@@ -32,6 +32,10 @@ namespace bitsery {
 class Access;
 } // namespace bitsery
 
+namespace tl {
+template <typename T, typename Z> class expected;
+}
+
 namespace tt {
 
 class Environment {
@@ -42,7 +46,8 @@ public:
     [[nodiscard]] auto Get(const std::string &key) const -> std::string;
     [[nodiscard]] auto GetKeys() const -> std::vector<std::string>;
     void Set(const std::string &key, const std::string &value);
-    auto SetUnique(const std::string &key, const std::string &value) -> bool;
+    auto SetUnique(const std::string &key, const std::string &value)
+        -> tl::expected<void, std::string>;
     [[nodiscard]] auto CountKeys() const -> int;
     void UpdateValuesWithEnvironment(const Environment &env);
     [[nodiscard]] auto Vector() const -> std::vector<std::string>;

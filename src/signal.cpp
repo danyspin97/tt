@@ -24,6 +24,10 @@
 #include <map>     // for map, operator!=, _Rb_tree_const_iterator
 #include <utility> // for pair
 
+#include "fmt/format.h" // for format
+
+#include "tl/expected.hpp" // for expected
+
 #include "tt/exception.hpp" // for Exception, SignalNotValidExecption
 
 auto tt::GetSignalName(tt::Signal signal) -> std::string {
@@ -43,7 +47,8 @@ auto tt::GetSignalName(tt::Signal signal) -> std::string {
     }
 }
 
-auto tt::ParseSignalFromString(const std::string &signal) -> Signal {
+auto tt::ParseSignalFromString(const std::string &signal)
+    -> tl::expected<Signal, std::string> {
     static const std::map<std::string, Signal> signal_strings{
         {"SIGHUP", Signal::kSigHup},   {"SIGINT", Signal::kSigInt},
         {"SIGQUIT", Signal::kSigQuit}, {"SIGKILL", Signal::kSigKill},
@@ -53,6 +58,5 @@ auto tt::ParseSignalFromString(const std::string &signal) -> Signal {
         return itr->second;
     }
 
-    const auto error_msg = "Signal \"" + signal + "\" is not valid";
-    throw tt::SignalNotValidExecption(error_msg);
+    return tl::make_unexpected(fmt::format("Signal '{}' is not valid", signal));
 }

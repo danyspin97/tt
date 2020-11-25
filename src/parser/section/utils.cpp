@@ -25,10 +25,13 @@
 #include <sstream>    // for stringstream
 #include <string>     // for allocator, string
 
-#include "tt/parser/section/exception.hpp"       // for AttributeNotFoundEx...
+#include "fmt/format.h" // for format
+
+#include "tt/parser/parser_error.hpp"            //for ParserError
 #include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
-void tt::TestBuilderWithFile(SectionBuilder &builder, const std::string &path) {
+auto tt::TestBuilderWithFile(SectionBuilder &builder, const std::string &path)
+    -> tl::expected<void, ParserError> {
     // https://stackoverflow.com/a/40903508
     std::ifstream f{path};
     const auto size = std::filesystem::file_size(path);
@@ -37,14 +40,17 @@ void tt::TestBuilderWithFile(SectionBuilder &builder, const std::string &path) {
     std::stringstream section_stream(section);
     std::string line;
     while (getline(section_stream, line, '\n')) {
-        builder.ParseLine(line);
+        auto ret = builder.ParseLine(line);
+        if (!ret.has_value()) {
+            return chain_parser_error<void>(std::move(ret.error()), "");
+        }
     }
-    builder.EndParsing();
+    return builder.EndParsing();
 }
 
-void tt::AttributeNotFound(const std::string &attribute,
-                           const std::string &section) {
-    const auto error_message =
-        "Key '" + attribute + "' is not allowed in section [" + section + "]";
-    throw AttributeNotFoundException(error_message);
+auto tt::KeyNotFound(const std::string &key, const std::string &section)
+    -> tl::expected<void, ParserError> {
+    return make_parser_error<void>(
+        ParserError::Type::InvalidKeyInSection,
+        fmt::format("Key '{}' is not allowed in [{}] section", key, section));
 }

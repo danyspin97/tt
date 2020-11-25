@@ -24,19 +24,23 @@
 #include <sstream>
 #include <string>
 
+namespace tl {
+template <typename T, typename Z> class expected;
+}
+
 namespace tt {
+
+class ParserError;
 
 class CodeParser {
 public:
-    auto IsParsing() const -> bool { return is_parsing_; }
-
     auto key() const -> std::string { return key_; }
-
     auto code() const -> std::string;
 
-    auto StartParsing(const std::string &line) -> bool;
-
+    auto IsParsing() const -> bool { return is_parsing_; }
     void ParseLine(const std::string &line);
+    auto StartParsing(const std::string &line)
+        -> tl::expected<bool, ParserError>;
 
     void Reset() {
         code_ = std::stringstream();

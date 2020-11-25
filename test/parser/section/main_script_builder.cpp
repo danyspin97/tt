@@ -22,6 +22,7 @@
 
 #include "catch2/catch.hpp" // for SourceLineInfo, Section, oper...
 
+#include "tt/parser/parser_error.hpp"  // for ParserError
 #include "tt/parser/section/utils.hpp" // for TestBuilderWithFile
 
 TEST_CASE("MainScriptBuilder") {
@@ -34,6 +35,6 @@ TEST_CASE("MainScriptBuilder") {
     }
 
     SECTION("Parse invalid line") {
-        REQUIRE_THROWS(builder.ParseLine("invalid"));
+        CHECK_FALSE(builder.ParseLine("invalid").has_value());
     }
 }

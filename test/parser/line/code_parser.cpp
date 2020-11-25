@@ -23,6 +23,8 @@
 #include "catch2/catch.hpp"
 #include <string>
 
+#include "tt/parser/parser_error.hpp" // for ParserError
+
 using std::string;
 using tt::CodeParser;
 
@@ -31,7 +33,9 @@ TEST_CASE("CodeParser parse code") {
     // Start parsing
     auto parser = CodeParser();
     string token = "execute =(";
-    CHECK(parser.StartParsing(token));
+    auto ret = parser.StartParsing(token);
+    REQUIRE(ret.has_value());
+    CHECK(ret.value());
     CHECK(parser.IsParsing());
     CHECK(parser.key() == "execute");
 
@@ -39,37 +43,44 @@ TEST_CASE("CodeParser parse code") {
     string line1 = "foo";
     parser.ParseLine(line1);
     CHECK(parser.IsParsing());
-    // Do not get code until the parser has finished
-    REQUIRE_THROWS(parser.code());
 
     string line2 = "bar";
     parser.ParseLine(line2);
     CHECK(parser.IsParsing());
 
-    // Cannot parse a new value until the previous has been entirely parsed
-    REQUIRE_THROWS(parser.StartParsing(token));
-
     // End parsing
     parser.ParseLine(")");
+    REQUIRE_FALSE(parser.IsParsing());
     CHECK(parser.code() == line1 + newline + line2);
-    CHECK_FALSE(parser.IsParsing());
 }
 
 TEST_CASE("CodeParser parses invalid lines") {
     auto parser = CodeParser();
 
     SECTION("no equal token") {
-        CHECK_FALSE(parser.StartParsing("foo"));
+        auto ret = parser.StartParsing("foo");
+        REQUIRE(ret.has_value());
+        CHECK_FALSE(ret.value());
         CHECK_FALSE(parser.IsParsing());
     }
 
     SECTION("no parenthesis") {
-        CHECK_FALSE(parser.StartParsing("execute = "));
+        auto ret = parser.StartParsing("execute = ");
+        REQUIRE(ret.has_value());
+        CHECK_FALSE(ret.value());
         CHECK_FALSE(parser.IsParsing());
     }
 
     SECTION("value after parenthesis") {
-        CHECK_FALSE(parser.StartParsing("execute =( foo "));
+        auto ret = parser.StartParsing("execute =( foo ");
+        REQUIRE(ret.has_value());
+        CHECK_FALSE(ret.value());
         CHECK_FALSE(parser.IsParsing());
+    }
+
+    SECTION("empty key") {
+        auto ret = parser.StartParsing("=(");
+        REQUIRE_FALSE(ret.has_value());
+        CHECK(ret.error().type() == tt::ParserError::Type::EmptyKey);
     }
 }

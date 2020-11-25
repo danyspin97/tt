@@ -28,28 +28,27 @@
 
 namespace tt {
 
+class ParserError;
+
 class ServiceParser {
 public:
-    explicit ServiceParser(std::string path);
+    virtual ~ServiceParser() = default;
 
-    [[nodiscard]] auto service() const -> Service;
+    [[nodiscard]] auto ParseService(std::string path)
+        -> tl::expected<Service, ParserError>;
 
 protected:
-    static auto GenerateListFrom(const std::string &path)
+    virtual auto GenerateListFrom(const std::string &path)
         -> std::vector<std::string>;
 
 private:
-    [[nodiscard]] auto
-    GetTypeFromService(const std::vector<std::string> &service_lines) const
-        -> std::string;
+    [[nodiscard]] static auto
+    GetTypeFromService(const std::vector<std::string> &service_lines)
+        -> tl::expected<std::string, ParserError>;
 
-    [[nodiscard]] auto
-    GetMainSectionIndex(const std::vector<std::string> &service_lines) const
-        -> size_t;
-    [[nodiscard]] auto ParseService() -> Service;
-
-    std::string path_;
-    Service service_;
+    [[nodiscard]] static auto
+    GetMainSectionIndex(const std::vector<std::string> &service_lines)
+        -> tl::expected<size_t, ParserError>;
 };
 
 } // namespace tt

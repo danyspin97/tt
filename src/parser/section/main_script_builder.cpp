@@ -21,30 +21,46 @@
 #include <string>  // for string, operator==
 #include <utility> // for move
 
+#include "fmt/format.h" // for format
+
 #include "tt/data/main_script.hpp"                   // for MainScript
+#include "tt/parser/parser_error.hpp"                // for ParserError
 #include "tt/parser/section/main_script_builder.hpp" // for MainScriptBuilder
 #include "tt/parser/section/script_builder.hpp"      // for ScriptBuilder
 #include "tt/utils/parse_boolean.hpp"                // for ParseBoolean
 
-auto tt::MainScriptBuilder::GetAttributeForKey(const std::string &key)
-    -> std::string & {
-    if (key == "autostart") {
-        return autostart_;
-    }
-    return ScriptBuilder::GetAttributeForKey(key);
+auto tt::MainScriptBuilder::GetValidAttributes() const
+    -> std::vector<std::string> {
+    auto valid_attributes = ScriptBuilder::GetValidAttributes();
+    valid_attributes.emplace_back("autostart");
+    return valid_attributes;
 }
 
-void tt::MainScriptBuilder::SetOptionalAttributeForMainScript(
-    MainScript &main_script) const {
-    if (!autostart_.empty()) {
-        main_script.autostart(tt::utils::ParseBoolean(autostart_));
+auto tt::MainScriptBuilder::SetOptionalAttributeForMainScript(
+    MainScript &main_script) -> tl::expected<void, ParserError> const {
+    auto autostart = GetAttribute("autostart");
+    if (autostart.has_value()) {
+        auto ret = utils::ParseBoolean(autostart.value());
+        if (!ret.has_value()) {
+            return make_parser_error<void>(ParserError::Type::InvalidBoolean,
+                                           ret.error());
+        }
+        main_script.autostart(ret.value());
     }
+
+    return SetOptionalAttributeForScript(main_script);
+}
+
+auto tt::MainScriptBuilder::CreateScript() -> tl::expected<void, ParserError> {
+    auto script_attributes = GetScriptAttributes();
+    if (!script_attributes.has_value()) {
+        return chain_parser_error<void>(script_attributes.error(), "");
+    }
+    main_script_ = MainScript(script_attributes.value().first,
+                              std::move(script_attributes.value().second));
+    return SetOptionalAttributeForMainScript(main_script_.value());
 }
 
 auto tt::MainScriptBuilder::main_script() -> MainScript {
-    MainScript main_script = MainScript(GetParsedType(), std::move(execute()));
-    SetOptionalAttributeForScript(main_script);
-    SetOptionalAttributeForMainScript(main_script);
-
-    return main_script;
+    return main_script_.value();
 }

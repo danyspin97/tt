@@ -22,26 +22,42 @@
 
 #include "tt/data/longrun_options.hpp"     // for LongrunOptions
 #include "tt/parser/line/array_parser.hpp" // for ArrayParser
+#include "tt/parser/parser_error.hpp"      // for ParserError
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound
 #include "tt/utils/parse_boolean.hpp"      // for ParseBoolean
 
-void tt::LongrunOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
-    const auto key = parser.key();
-    if (key == "depends") {
-        options_.dependencies(parser.values());
-        return;
-    }
+tt::LongrunOptionsBuilder::LongrunOptionsBuilder()
+    : SectionBuilder("options") {}
 
-    AttributeNotFound(key, "options");
+auto tt::LongrunOptionsBuilder::GetValidAttributes() const
+    -> std::vector<std::string> {
+    return {"optional"};
 }
 
-void tt::LongrunOptionsBuilder::TrySetAttributeForKey(
-    const std::string &key, const std::string &value) {
-    if (key == "optional") {
-        options_.optional(utils::ParseBoolean(value));
-    } else {
-        AttributeNotFound(key, "options");
+auto tt::LongrunOptionsBuilder::GetValidArrayAttributes() const
+    -> std::vector<std::string> {
+    return {"depends"};
+}
+
+auto tt::LongrunOptionsBuilder::EndParsing()
+    -> tl::expected<void, ParserError> {
+    if (auto ret = SectionBuilder::EndParsing(); !ret.has_value()) {
+        return ret;
     }
+
+    if (auto optional = GetAttribute("optional"); optional.has_value()) {
+        auto ret = utils::ParseBoolean(optional.value());
+        if (!ret.has_value()) {
+            return make_parser_error<void>(ParserError::Type::InvalidBoolean,
+                                           ret.error());
+        }
+        options_.optional(ret.value());
+    }
+
+    if (auto depends = GetArrayAttribute("depends"); depends.has_value()) {
+        options_.dependencies(depends.value());
+    }
+    return {};
 }
 
 auto tt::LongrunOptionsBuilder::options() -> LongrunOptions && {

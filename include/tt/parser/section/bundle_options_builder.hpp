@@ -24,25 +24,23 @@
 #include <string> // for string
 
 #include "tt/data/bundle_options.hpp"            // for BundleOptions
-#include "tt/parser/section/options_builder.hpp" // for OptionsBuilder
+#include "tt/parser/section/section_builder.hpp" // for SectionBuilder
 
 namespace tt {
-class ArrayParser;
-class BundleOptions;
 
-class BundleOptionsBuilder : public OptionsBuilder {
+class BundleOptionsBuilder : public SectionBuilder {
 public:
-    BundleOptionsBuilder() = default;
+    BundleOptionsBuilder();
 
     [[nodiscard]] auto options() -> BundleOptions &&;
 
-    void EndParsing() override;
-    void ParseLine(const std::string &line) override;
+    auto EndParsing() -> tl::expected<void, ParserError> override;
 
 protected:
-    void SaveValuesOfParser(const ArrayParser &parser) override;
-    void TrySetAttributeForKey(const std::string &key,
-                               const std::string &value) override;
+    auto GetValidAttributes() const -> std::vector<std::string> override {
+        return {};
+    }
+    auto GetValidArrayAttributes() const -> std::vector<std::string> override;
 
 private:
     BundleOptions options_;

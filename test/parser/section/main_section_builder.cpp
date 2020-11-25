@@ -24,17 +24,16 @@
 
 #include "catch2/catch.hpp" // for operator""_catch_sr
 
+#include "tt/parser/parser_error.hpp"         // for ParserError
 #include "tt/parser/section/main_section.hpp" // for MainSection
 #include "tt/parser/section/utils.hpp"        // for TestBuilderWithFile
 
-using std::string;
-using tt::MainSectionBuilder;
-
 TEST_CASE("MainSectionBuilder") {
-    MainSectionBuilder builder;
+    tt::MainSectionBuilder builder;
 
     SECTION("parse valid section") {
-        TestBuilderWithFile(builder, "../test/data/main_section");
+        auto ret = TestBuilderWithFile(builder, "../test/data/main_section");
+        REQUIRE(ret.has_value());
 
         CHECK(builder.main_section().name == "nginx");
         CHECK(builder.main_section().description == "Run nginx server");
@@ -42,14 +41,15 @@ TEST_CASE("MainSectionBuilder") {
     }
 
     SECTION("parse invalid section") {
-        const auto testFiles = std::vector<string>{
+        const auto testFiles = std::vector<std::string>{
             "invalid",
             "invalid_quotes",
             "unclosed_quotes",
             "unknown_key",
         };
-        for (const string &test : testFiles) {
-            CHECK_THROWS(TestBuilderWithFile(builder, "../test/data/" + test));
+        for (const std::string &test : testFiles) {
+            auto ret = TestBuilderWithFile(builder, "../test/data/" + test);
+            CHECK_FALSE(ret.has_value());
         }
     }
 }

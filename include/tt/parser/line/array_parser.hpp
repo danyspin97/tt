@@ -24,7 +24,13 @@
 #include <string>
 #include <vector>
 
+namespace tl {
+template <typename T, typename Z> class expected;
+}
+
 namespace tt {
+
+class ParserError;
 
 class ArrayParser {
 public:
@@ -33,26 +39,30 @@ public:
     }
 
     [[nodiscard]] auto key() const noexcept -> std::string { return key_; }
+    [[nodiscard]] auto key() noexcept -> std::string { return std::move(key_); }
 
     [[nodiscard]] auto values() const noexcept -> std::vector<std::string> {
-        return std::vector<std::string>{values_};
+        return values_;
+    }
+    [[nodiscard]] auto values() noexcept -> std::vector<std::string> {
+        return std::move(values_);
     }
 
-    ArrayParser() : key_(""), values_({}) {}
+    ArrayParser() = default;
 
-    auto StartParsing(const std::string &line) -> bool;
+    auto StartParsing(const std::string &line)
+        -> tl::expected<bool, ParserError>;
 
-    void ParseLine(const std::string &line);
+    auto ParseLine(const std::string &line) -> tl::expected<void, ParserError>;
 
     void Reset() {
-        values_.clear();
         is_parsing_ = false;
-        key_ = "";
+        key_ = {};
+        values_ = {};
     }
 
 private:
     void AddValuesFromLine(const std::string &line);
-    void UpdateStatus(const std::string &line);
 
     // TODO(danyspin97): Make key an Optional
     std::string key_;

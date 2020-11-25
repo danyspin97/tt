@@ -24,35 +24,30 @@
 
 #include "catch2/catch.hpp"
 
-using tt::KeyValueParser;
+#include "tt/parser/parser_error.hpp" // for ParserError
 
 TEST_CASE("parse a value with no spaces") {
-    std::string line = "foo=bar";
-    auto parser = KeyValueParser(line, false);
-    CHECK(parser.IsLineValid());
-    CHECK(parser.key() == "foo");
-    CHECK(parser.value() == "bar");
+    auto result = tt::KeyValueParser::ParseLine("foo=bar");
+    REQUIRE(result);
+    CHECK(result.value().first == "foo");
+    CHECK(result.value().second == "bar");
 }
 
 TEST_CASE("parse a value with spaces in it") {
-    auto parser = KeyValueParser("foo=bar foobar");
-    CHECK(parser.IsLineValid());
-    CHECK(parser.key() == "foo");
-    CHECK(parser.value() == "bar foobar");
+    auto result = tt::KeyValueParser::ParseLine("foo=bar foobar");
+    REQUIRE(result);
+    CHECK(result.value().first == "foo");
+    CHECK(result.value().second == "bar foobar");
 }
 
 TEST_CASE("key and value have been trimmed") {
-    auto parser = KeyValueParser(" foo = bar ");
-    CHECK(parser.IsLineValid());
-    CHECK(parser.key() == "foo");
-    CHECK(parser.value() == "bar");
+    auto result = tt::KeyValueParser::ParseLine(" foo = bar ");
+    REQUIRE(result);
+    CHECK(result.value().first == "foo");
+    CHECK(result.value().second == "bar");
 }
 
 TEST_CASE("parse a not valid line") {
-    auto parser = KeyValueParser("foobar");
-    REQUIRE_FALSE(parser.IsLineValid());
-}
-
-TEST_CASE("parse a not valid line and throws an exception") {
-    REQUIRE_THROWS(KeyValueParser("foo", true));
+    auto result = tt::KeyValueParser::ParseLine("foobar");
+    REQUIRE_FALSE(result.has_value());
 }

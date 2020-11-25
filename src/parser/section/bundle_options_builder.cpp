@@ -20,45 +20,40 @@
 
 #include "tt/parser/section/bundle_options_builder.hpp"
 
+#include <cassert> // for assert
+
 #include "tt/data/bundle_options.hpp"      // for BundleOptions
 #include "tt/parser/line/array_parser.hpp" // for ArrayParser
+#include "tt/parser/parser_error.hpp"      // for ParserError
 #include "tt/parser/section/exception.hpp" // for SectionBuilderException
 #include "tt/parser/section/utils.hpp"     // for AttributeNotFound, IsEmpt...
 
-void tt::BundleOptionsBuilder::ParseLine(const std::string &line) {
-    if (IsEmptyLine(line)) {
-        return;
-    }
+tt::BundleOptionsBuilder::BundleOptionsBuilder() : SectionBuilder("options") {}
 
-    if (ParseMultilineValue(line)) {
-        return;
-    }
-
-    throw SectionBuilderException(line + " : not valid in section [options]");
+auto tt::BundleOptionsBuilder::GetValidArrayAttributes() const
+    -> std::vector<std::string> {
+    return {"contents", "dependencies"};
 }
 
-void tt::BundleOptionsBuilder::SaveValuesOfParser(const ArrayParser &parser) {
-    const auto &key = parser.key();
-    if (key == "contents") {
-        options_.contents(parser.values());
-    } else if (key == "dependencies") {
-        options_.dependencies(parser.values());
-    } else {
-        AttributeNotFound(parser.key(), "options");
+auto tt::BundleOptionsBuilder::EndParsing() -> tl::expected<void, ParserError> {
+    if (auto ret = SectionBuilder::EndParsing(); !ret.has_value()) {
+        return ret;
     }
-}
 
-void tt::BundleOptionsBuilder::TrySetAttributeForKey(
-    const std::string & /*key*/, const std::string & /*value*/) {
-    throw SectionBuilderException("No key is allowed in section [options]");
-}
-
-void tt::BundleOptionsBuilder::EndParsing() {
-    OptionsBuilder::EndParsing();
-    if (options_.contents().empty()) {
-        throw SectionBuilderException(
-            "Bundle cannot have empty contents in section [options]");
+    auto contents = GetArrayAttribute("contents");
+    if (!contents.has_value() || contents.value().empty()) {
+        return make_parser_error<void>(
+            ParserError::Type::BundleEmptyContents,
+            "Bundle cannot have empty contents in [options] section");
     }
+    options_.contents(contents.value());
+
+    if (auto dependencies = GetArrayAttribute("dependencies");
+        dependencies.has_value()) {
+        options_.dependencies(dependencies.value());
+    }
+
+    return {};
 }
 
 auto tt::BundleOptionsBuilder::options() -> BundleOptions && {

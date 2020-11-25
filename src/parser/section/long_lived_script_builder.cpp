@@ -1,4 +1,5 @@
 /*
+ *
  * Copyright (c) 2020 Danilo Spinella <oss@danyspin97.org>.
  *
  * This file is part of tt
@@ -21,31 +22,47 @@
 #include <string>  // for string
 #include <utility> // for move
 
+#include "fmt/format.h" // for format
+
 #include "tt/data/long_lived_script.hpp"                   // for LongLived...
+#include "tt/parser/parser_error.hpp"                      // for ParserError
 #include "tt/parser/section/long_lived_script_builder.hpp" // for LongLived...
 #include "tt/parser/section/main_script_builder.hpp"       // for MainScrip...
 
-auto tt::LongLivedScriptBuilder::GetAttributeForKey(const std::string &key)
-    -> std::string & {
-    if (key == "notify") {
-        return notify_;
-    }
-    return MainScriptBuilder::GetAttributeForKey(key);
+auto tt::LongLivedScriptBuilder::GetValidAttributes() const
+    -> std::vector<std::string> {
+    auto valid_attributes = MainScriptBuilder::GetValidAttributes();
+    valid_attributes.emplace_back("notify");
+    return valid_attributes;
 }
 
-void tt::LongLivedScriptBuilder::SetOptionalAttributeForLongLivedScript(
-    LongLivedScript &long_lived_script) {
-    if (!notify_.empty()) {
-        long_lived_script.notify(stoi(notify_));
+auto tt::LongLivedScriptBuilder::SetOptionalAttributeForLongLivedScript(
+    LongLivedScript &long_lived_script) -> tl::expected<void, ParserError> {
+    if (auto notify = GetAttribute("notify")) {
+        try {
+            long_lived_script.notify(stoi(notify.value()));
+        } catch (std::invalid_argument &) {
+            return make_parser_error<void>(
+                ParserError::Type::InvalidInteger,
+                fmt::format("'{}' is not a valid integer", notify.value()));
+        }
     }
+
+    return SetOptionalAttributeForMainScript(long_lived_script);
+}
+
+auto tt::LongLivedScriptBuilder::CreateScript()
+    -> tl::expected<void, ParserError> {
+    auto script_attributes = GetScriptAttributes();
+    if (!script_attributes.has_value()) {
+        return chain_parser_error<void>(script_attributes.error(), "");
+    }
+    long_lived_script_ =
+        LongLivedScript(script_attributes.value().first,
+                        std::move(script_attributes.value().second));
+    return SetOptionalAttributeForLongLivedScript(long_lived_script_.value());
 }
 
 auto tt::LongLivedScriptBuilder::long_lived_script() -> LongLivedScript {
-    LongLivedScript long_lived_script =
-        LongLivedScript(GetParsedType(), std::move(execute()));
-    SetOptionalAttributeForScript(long_lived_script);
-    SetOptionalAttributeForMainScript(long_lived_script);
-    SetOptionalAttributeForLongLivedScript(long_lived_script);
-
-    return long_lived_script;
+    return std::move(long_lived_script_.value());
 }

@@ -25,6 +25,7 @@
 #include "catch2/catch.hpp" // for operator""_catch_sr, SourceLi...
 
 #include "tt/data/bundle.hpp"          // for Oneshot
+#include "tt/parser/parser_error.hpp"  // for ParserError
 #include "tt/parser/service/utils.hpp" // for GetLinesFromFile
 
 TEST_CASE("BundleDirector") {
@@ -37,7 +38,8 @@ TEST_CASE("BundleDirector") {
         std::vector<std::string> expected_deps{"init-rwfs"};
         auto service =
             director.ParseAndGetService(lines, "/tmp/mount-all.system");
-        auto bundle = std::get<tt::Bundle>(service);
+        REQUIRE(service.has_value());
+        auto bundle = std::get<tt::Bundle>(service.value());
 
         CHECK(bundle.name() == "mount-all");
 

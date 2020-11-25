@@ -29,9 +29,10 @@
 // Include operator<<(ostream, Service) before ostream.h
 #include "tt/data/service.hpp" // for operator<<
 
-#include "fmt/ostream.h" // for formatbuf<>::int_type
+#include "spdlog/fmt/ostr.h"
 
 #include "tt/log/cli_logger.hpp"                // for CliLogger
+#include "tt/parser/parser_error.hpp"           // for ParserError
 #include "tt/parser/service/service_parser.hpp" // for ServiceParser
 #include "tt/path/dirs.hpp"                     // for Dirs
 
@@ -53,14 +54,17 @@ auto tt::cli::ParseCommand::Execute() -> int {
 }
 
 void tt::cli::ParseCommand::ParseFiles() const {
-    for (auto &&service : service_list_) {
-        if (!std::filesystem::exists(service)) {
-            logger()->LogError("File {} does not exist", service);
+    for (auto &&service_file : service_list_) {
+        if (!std::filesystem::exists(service_file)) {
+            logger()->LogError("File {} does not exist", service_file);
             continue;
         }
-
-        auto parser = ServiceParser(service);
-        logger()->LogInfo("{}", parser.service());
+        auto parser = ServiceParser();
+        auto service = parser.ParseService(service_file);
+        if (!service.has_value()) {
+            logger()->LogError("{}", service.error().msg());
+        }
+        logger()->LogInfo("{}", service.value());
     }
 }
 
@@ -85,8 +89,12 @@ auto tt::cli::ParseCommand::ParseForFileInDefaultDirs(
     for (const auto &servicedir : servicedirs) {
         auto filename = servicedir / name;
         if (std::filesystem::exists(filename)) {
-            auto parser = ServiceParser(filename);
-            logger()->LogInfo("{}", parser.service());
+            auto parser = ServiceParser();
+            auto service = parser.ParseService(filename);
+            if (!service.has_value()) {
+                logger()->LogError("{}", service.error().msg());
+            }
+            logger()->LogInfo("{}", service.value());
             return true;
         }
     }

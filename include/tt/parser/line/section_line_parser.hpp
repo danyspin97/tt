@@ -27,8 +27,10 @@ namespace tt {
 
 class SectionLineParser {
 public:
-    [[nodiscard]] auto section() const -> std::string { return section_; }
-    [[nodiscard]] auto IsLineValid() const -> bool { return valid_; }
+    [[nodiscard]] auto section() const noexcept -> std::string {
+        return section_;
+    }
+    [[nodiscard]] auto IsLineValid() const noexcept -> bool { return valid_; }
 
     explicit SectionLineParser(const std::string &line) {
         line_ = line;

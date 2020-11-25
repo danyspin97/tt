@@ -40,13 +40,14 @@ TEST_CASE("ServiceDirector") {
             lines.emplace_back("");
         }
 
-        director.ParseAndGetService(lines, "");
+        auto ret = director.ParseAndGetService(lines, "");
+        REQUIRE(ret.has_value());
         CHECK(director.builder_test_.time_parsed_ == linesNumber);
-        CHECK(director.builder_test_.finished_);
+        CHECK(director.builder_test_.SectionParsed());
     }
 
     SECTION("Parse invalid file") {
         vector<string> lines = {"foo", ""};
-        CHECK_THROWS(director.ParseAndGetService(lines, ""));
+        CHECK_FALSE(director.ParseAndGetService(lines, "").has_value());
     }
 }

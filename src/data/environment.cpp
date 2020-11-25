@@ -22,6 +22,10 @@
 
 #include <algorithm> // for for_each, max
 
+#include "fmt/format.h" // for format
+
+#include "tl/expected.hpp" // for expected
+
 auto tt::Environment::operator==(const Environment &rhs) const -> bool {
     // If the pairs are sorted, we will compare just the content
     // TODO: Make pairs ordered
@@ -51,15 +55,17 @@ void tt::Environment::Set(const std::string &key, const std::string &value) {
 }
 
 auto tt::Environment::SetUnique(const std::string &key,
-                                const std::string &value) -> bool {
+                                const std::string &value)
+    -> tl::expected<void, std::string> {
     for (auto &pair : pairs_) {
         if (std::get<0>(pair) == key) {
-            return false;
+            return tl::make_unexpected(
+                fmt::format("Key '{}' has been already set", key));
         }
     }
 
     pairs_.emplace_back(key, value);
-    return true;
+    return {};
 }
 
 auto tt::Environment::CountKeys() const -> int { return pairs_.size(); }

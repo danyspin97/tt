@@ -20,16 +20,17 @@
 
 #include "tt/parser/line/code_parser.hpp"
 
+#include <cassert> // for assert
 #include <string>
 
 #include "tt/parser/define.hpp"
 #include "tt/parser/line/exception.hpp"
+#include "tt/parser/parser_error.hpp" // for ParserError
 #include "tt/utils/trim.hpp"
 
-auto tt::CodeParser::StartParsing(const std::string &line) -> bool {
-    if (IsParsing()) {
-        throw tt::CodeParserIsStillParsingException();
-    }
+auto tt::CodeParser::StartParsing(const std::string &line)
+    -> tl::expected<bool, ParserError> {
+    assert(!IsParsing());
     auto trimmed_line = utils::trim_copy(line);
     auto equal_token_pos = trimmed_line.find(kAssignmentToken);
     if (equal_token_pos == std::string::npos) {
@@ -48,6 +49,10 @@ auto tt::CodeParser::StartParsing(const std::string &line) -> bool {
 
     key_ = trimmed_line.substr(0, equal_token_pos - 1);
     utils::rtrim(key_);
+    if (key_.empty() || equal_token_pos == 0) {
+        return make_parser_error<bool>(ParserError::Type::EmptyKey,
+                                       "Found empty key");
+    }
     return is_parsing_ = true;
 }
 
@@ -63,9 +68,7 @@ void tt::CodeParser::ParseLine(const std::string &line) {
 }
 
 auto tt::CodeParser::code() const -> std::string {
-    if (IsParsing()) {
-        throw CodeParserIsStillParsingException();
-    }
+    assert(!IsParsing());
 
     auto code = code_.str();
     // Remove last char which is a newline added by ParseLine

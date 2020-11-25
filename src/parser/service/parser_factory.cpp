@@ -20,14 +20,16 @@
 
 #include "tt/parser/service/parser_factory.hpp"
 
-#include "tt/exception.hpp"                       // for Exception
+#include "fmt/format.h" // for format
+
+#include "tt/parser/parser_error.hpp"             // for ParserError
 #include "tt/parser/service/bundle_director.hpp"  // for BundleDirector
 #include "tt/parser/service/longrun_director.hpp" // for LongrunDirector
 #include "tt/parser/service/oneshot_director.hpp" // for OneshotDirector
 #include "tt/parser/service/service_director.hpp" // for ServiceDirector
 
 auto tt::ParserFactory::GetDirectorPerType(const std::string &type)
-    -> std::unique_ptr<ServiceDirector> {
+    -> tl::expected<std::unique_ptr<ServiceDirector>, ParserError> {
     if (type == "bundle") {
         return std::make_unique<BundleDirector>();
     }
@@ -38,6 +40,7 @@ auto tt::ParserFactory::GetDirectorPerType(const std::string &type)
         return std::make_unique<OneshotDirector>();
     }
 
-    auto msg = "Type '" + type + "' is not supported.";
-    throw Exception(msg);
+    return make_parser_error<std::unique_ptr<ServiceDirector>>(
+        ParserError::Type::InvalidServiceType,
+        fmt::format("Type '{}' is not supported.", type));
 }

@@ -22,41 +22,58 @@
 
 #include <utility> // for move
 
+#include "fmt/format.h" // for format
+
+#include "tl/expected.hpp" // for expected
+
 #include "tt/exception.hpp"                       // for Exception
 #include "tt/parser/line/section_line_parser.hpp" // for SectionLineParser
+#include "tt/parser/parser_error.hpp"             // for ParserError
 #include "tt/parser/section/dummy_builder.hpp"    // for DummyBuilder
 #include "tt/parser/section/exception.hpp"        // for DummyBuilderException
 #include "tt/parser/section/section_builder.hpp"  // for SectionBuilder
 
 auto tt::ServiceDirector::ParseAndGetService(
-    const std::vector<std::string> &service_lines, std::string &&path)
-    -> tt::Service {
-    service_lines_ = service_lines;
-    ParseSections();
+    std::vector<std::string> service_lines, std::string path)
+    -> tl::expected<Service, ParserError> {
+    service_lines_ = std::move(service_lines);
+    if (auto ret = ParseSections(); !ret.has_value()) {
+        return chain_parser_error<Service>(
+            ret.error(), fmt::format(" in service '{}'", path));
+    }
     return InstanceService(std::move(path));
 }
 
-void tt::ServiceDirector::ParseSections() {
-    try {
-        TryParseSections();
-    } catch (const DummyBuilderException & /*e*/) {
-        throw Exception("No line is allowed before [main] section");
-    }
-}
-
-void tt::ServiceDirector::TryParseSections() {
+auto tt::ServiceDirector::ParseSections() -> tl::expected<void, ParserError> {
     SectionBuilder *current_builder = &dummy_builder_;
-    for (const auto &line : service_lines_) {
-        auto section_line_parser = SectionLineParser(line);
+    auto line = service_lines_.begin();
+    while (line != service_lines_.end()) {
+        auto section_line_parser = SectionLineParser(*line);
         if (section_line_parser.IsLineValid()) {
-            current_builder->EndParsing();
-            current_builder =
-                GetBuilderForSection(section_line_parser.section());
+            if (auto ret = current_builder->EndParsing(); !ret.has_value()) {
+                return ret;
+            }
+            auto ret = GetBuilderForSection(section_line_parser.section());
+            if (!ret.has_value()) {
+                return chain_parser_error<void>(
+                    std::move(ret.error()),
+                    fmt::format(" in line {}",
+                                std::distance(service_lines_.begin(), line)));
+            }
 
+            current_builder = ret.value();
+            line++;
             continue;
         }
 
-        current_builder->ParseLine(line);
+        if (auto ret = current_builder->ParseLine(*line); !ret.has_value()) {
+            return chain_parser_error<void>(
+                std::move(ret.error()),
+                fmt::format(" in line {}",
+                            std::distance(service_lines_.begin(), line)));
+        }
+
+        line++;
     }
-    current_builder->EndParsing();
+    return current_builder->EndParsing();
 }

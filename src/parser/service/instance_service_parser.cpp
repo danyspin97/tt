@@ -23,9 +23,8 @@
 #include <algorithm>
 #include <utility>
 
-tt::InstanceServiceParser::InstanceServiceParser(const std::string &path,
-                                                 std::string instance_name)
-    : ServiceParser(path), instance_name_(std::move(instance_name)) {}
+tt::InstanceServiceParser::InstanceServiceParser(std::string instance_name)
+    : instance_name_(std::move(instance_name)) {}
 
 auto tt::InstanceServiceParser::GenerateListFrom(const std::string &path)
     -> std::vector<std::string> {
