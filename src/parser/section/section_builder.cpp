@@ -21,8 +21,7 @@ auto tt::SectionBuilder::ParseLine(const std::string &line)
     auto ret = ParseMultilineValue(line);
     // The multiline SetArrayAttributeis invalid/has errored
     if (!ret.has_value()) {
-        return chain_parser_error<void>(std::move(ret.error()),
-                                        section_err_msg);
+        return chain_parser_error<void>(ret.error(), section_err_msg);
     }
 
     // We have found a multiline value and we have also parsed it
@@ -35,13 +34,12 @@ auto tt::SectionBuilder::ParseLine(const std::string &line)
         if (auto ret = SetAttribute(std::move(key_value_pair.value().first),
                                     std::move(key_value_pair.value().second));
             !ret.has_value()) {
-            return chain_parser_error<void>(std::move(ret.error()),
-                                            section_err_msg);
+            return chain_parser_error<void>(ret.error(), section_err_msg);
         }
         return {};
     }
 
-    return chain_parser_error<void>(std::move(key_value_pair.error()), "");
+    return tl::unexpected(key_value_pair.error());
 }
 
 auto tt::SectionBuilder::EndParsing() -> tl::expected<void, ParserError> {
@@ -60,14 +58,14 @@ auto tt::SectionBuilder::ParseMultilineValue(const std::string &line)
     -> tl::expected<bool, ParserError> {
     if (array_parser_.IsParsing()) {
         if (auto ret = array_parser_.ParseLine(line); !ret.has_value()) {
-            return chain_parser_error<bool>(std::move(ret.error()), "");
+            return tl::unexpected(ret.error());
         }
 
         if (!array_parser_.IsParsing()) {
             if (auto ret = SetArrayAttribute(array_parser_.key(),
                                              array_parser_.values());
                 !ret.has_value()) {
-                return chain_parser_error<bool>(std::move(ret.error()), "");
+                return tl::unexpected(ret.error());
             }
             array_parser_.Reset();
         }
@@ -76,14 +74,14 @@ auto tt::SectionBuilder::ParseMultilineValue(const std::string &line)
 
     auto ret = array_parser_.StartParsing(line);
     if (!ret.has_value()) {
-        return chain_parser_error<bool>(std::move(ret.error()), "");
+        return tl::unexpected(ret.error());
     }
     if (ret.value()) {
         if (!array_parser_.IsParsing()) {
             if (auto ret = SetArrayAttribute(array_parser_.key(),
                                              array_parser_.values());
                 !ret.has_value()) {
-                return chain_parser_error<bool>(std::move(ret.error()), "");
+                return tl::unexpected(ret.error());
             }
             array_parser_.Reset();
         }

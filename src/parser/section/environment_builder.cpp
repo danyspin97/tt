@@ -39,8 +39,7 @@ auto tt::EnvironmentBuilder::ParseLine(const std::string &line) noexcept
     -> tl::expected<void, ParserError> {
     auto ret = TryParseLine(line);
     if (!ret) {
-        return chain_parser_error<void>(std::move(ret.error()),
-                                        " in [config] section");
+        return chain_parser_error<void>(ret.error(), " in [config] section");
     }
     return {};
 }
@@ -53,18 +52,17 @@ auto tt::EnvironmentBuilder::TryParseLine(const std::string &line) noexcept
 
     auto key_value_pair = KeyValueParser::ParseLine(line);
     if (!key_value_pair.has_value()) {
-        return chain_parser_error<void>(key_value_pair.error(), "");
+        return tl::unexpected(key_value_pair.error());
     }
     auto is_key_valid = CheckKeyIsValid(key_value_pair.value().first);
     if (!is_key_valid.has_value()) {
-        return chain_parser_error<void>(is_key_valid.error(), "");
+        return tl::unexpected(is_key_valid.error());
     }
     auto ret = environment_.SetUnique(key_value_pair.value().first,
                                       key_value_pair.value().second);
     if (!ret.has_value()) {
         return make_parser_error<void>(
-            ParserError::Type::EnvironmentKeyAlreadySet,
-            std::move(ret.error()));
+            ParserError::Type::EnvironmentKeyAlreadySet, ret.error());
     }
     return {};
 }
@@ -72,17 +70,17 @@ auto tt::EnvironmentBuilder::TryParseLine(const std::string &line) noexcept
 auto tt::EnvironmentBuilder::CheckKeyIsValid(const std::string &key) noexcept
     -> tl::expected<void, ParserError> {
     if (isdigit(key[0]) != 0) {
-        auto err_msg = fmt::format("Key '{}' cannot start with a digit", key);
-        return tl::make_unexpected(ParserError(
-            ParserError::Type::EnvironmentKeyNotValid, std::move(err_msg)));
+        return make_parser_error<void>(
+            ParserError::Type::EnvironmentKeyNotValid,
+            fmt::format("Key '{}' cannot start with a digit", key));
     }
 
     for (char c : key) {
         if ((isalnum(c) == 0) && c != '_') {
-            auto err_msg = fmt::format("Character '{}' not valid in key '{}'",
-                                       std::string{c}, key);
             return make_parser_error<void>(
-                ParserError::Type::EnvironmentKeyNotValid, std::move(err_msg));
+                ParserError::Type::EnvironmentKeyNotValid,
+                fmt::format("Character '{}' not valid in key '{}'",
+                            std::string{c}, key));
         }
     }
 

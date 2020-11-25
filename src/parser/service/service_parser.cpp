@@ -54,11 +54,11 @@ auto tt::ServiceParser::ParseService(std::string path)
     auto service_lines = GenerateListFrom(path);
     auto type = GetTypeFromService(service_lines);
     if (!type.has_value()) {
-        return chain_parser_error<Service>(std::move(type.error()), "");
+        return tl::unexpected(type.error());
     }
     auto director = tt::ParserFactory::GetDirectorPerType(type.value());
     if (!director.has_value()) {
-        return chain_parser_error<Service>(std::move(director.error()), "");
+        return tl::unexpected(director.error());
     }
     return director.value()->ParseAndGetService(std::move(service_lines),
                                                 std::move(path));
@@ -69,8 +69,7 @@ auto tt::ServiceParser::GetTypeFromService(
     -> tl::expected<std::string, ParserError> {
     auto main_section_index = GetMainSectionIndex(service_lines);
     if (!main_section_index.has_value()) {
-        return chain_parser_error<std::string>(
-            std::move(main_section_index.error()), "");
+        return tl::unexpected(main_section_index.error());
     }
 
     for (auto i = main_section_index.value(); i < service_lines.size(); i++) {

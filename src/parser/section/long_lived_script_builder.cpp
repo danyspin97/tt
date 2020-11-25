@@ -55,7 +55,7 @@ auto tt::LongLivedScriptBuilder::CreateScript()
     -> tl::expected<void, ParserError> {
     auto script_attributes = GetScriptAttributes();
     if (!script_attributes.has_value()) {
-        return chain_parser_error<void>(script_attributes.error(), "");
+        return tl::unexpected(script_attributes.error());
     }
     long_lived_script_ =
         LongLivedScript(script_attributes.value().first,

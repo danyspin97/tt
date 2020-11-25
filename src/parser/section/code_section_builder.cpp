@@ -42,8 +42,7 @@ auto tt::CodeSectionBuilder::ParseLine(const std::string &line)
             auto ret = SetCodeAttribute();
             if (!ret.has_value()) {
                 return chain_parser_error<void>(
-                    std::move(ret.error()),
-                    fmt::format("in [{}] section", section()));
+                    ret.error(), fmt::format("in [{}] section", section()));
             }
             code_parser_.Reset();
         }
@@ -56,7 +55,7 @@ auto tt::CodeSectionBuilder::ParseLine(const std::string &line)
 
     auto ret = code_parser_.StartParsing(line);
     if (!ret.has_value()) {
-        return chain_parser_error<void>(std::move(ret.error()), "");
+        return tl::unexpected(ret.error());
     }
 
     if (ret.value()) {

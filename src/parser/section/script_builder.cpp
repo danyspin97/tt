@@ -69,7 +69,7 @@ auto tt::ScriptBuilder::GetScriptAttributes()
 auto tt::ScriptBuilder::CreateScript() -> tl::expected<void, ParserError> {
     auto script_attributes = GetScriptAttributes();
     if (!script_attributes.has_value()) {
-        return chain_parser_error<void>(script_attributes.error(), "");
+        return tl::unexpected(script_attributes.error());
     }
     script_ = Script(script_attributes.value().first,
                      std::move(script_attributes.value().second));

@@ -85,9 +85,7 @@ auto tt::ServicesParser::ParseServices(
         future.wait();
         auto service = future.get();
         if (!service.has_value()) {
-            return chain_parser_error<std::vector<Service>>(
-                std::move(service.error()), "");
-            ;
+            return tl::unexpected(service.error());
         }
         services.emplace_back(service.value());
     }
@@ -115,13 +113,12 @@ auto tt::ServicesParser::ParseService(const std::string &service_name)
 
     auto path = GetPathForServiceName(name);
     if (!path.has_value()) {
-        return chain_parser_error<Service>(std::move(path.error()), "");
+        return tl::unexpected(path.error());
     }
     auto service = parser->ParseService(path.value());
     if (!service.has_value()) {
         return chain_parser_error<Service>(
-            std::move(service.error()),
-            fmt::format(" for service '{}'", path.value()));
+            service.error(), fmt::format(" for service '{}'", path.value()));
     }
     assert(!std::holds_alternative<std::monostate>(service.value()));
     ParseDependenciesOfService(service.value());

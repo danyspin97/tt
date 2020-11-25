@@ -54,7 +54,7 @@ auto tt::MainScriptBuilder::SetOptionalAttributeForMainScript(
 auto tt::MainScriptBuilder::CreateScript() -> tl::expected<void, ParserError> {
     auto script_attributes = GetScriptAttributes();
     if (!script_attributes.has_value()) {
-        return chain_parser_error<void>(script_attributes.error(), "");
+        return tl::unexpected(script_attributes.error());
     }
     main_script_ = MainScript(script_attributes.value().first,
                               std::move(script_attributes.value().second));

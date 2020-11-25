@@ -42,7 +42,7 @@ auto tt::TestBuilderWithFile(SectionBuilder &builder, const std::string &path)
     while (getline(section_stream, line, '\n')) {
         auto ret = builder.ParseLine(line);
         if (!ret.has_value()) {
-            return chain_parser_error<void>(std::move(ret.error()), "");
+            return tl::unexpected(ret.error());
         }
     }
     return builder.EndParsing();

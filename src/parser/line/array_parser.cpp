@@ -63,7 +63,7 @@ auto tt::ArrayParser::StartParsing(const std::string &line)
     is_parsing_ = true;
     auto ret = ParseLine(line.substr(parenthesis_pos + 1, std::string::npos));
     if (!ret.has_value()) {
-        return chain_parser_error<bool>(std::move(ret.error()), "");
+        return tl::unexpected(ret.error());
     }
     return true;
 }
