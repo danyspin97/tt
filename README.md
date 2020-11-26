@@ -47,8 +47,8 @@ which instead are based on runtime services.
 
 tt supports the following compilers:
 
-- gcc >= 9.0 (gcc-8 does not have a good support for `<filesystem>`, despite including it)
-- clang >= 8.0
+- gcc >= 10.0
+- clang >= 9.0
 
 tt depends on the following libraries:
 

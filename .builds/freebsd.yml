@@ -1,6 +1,6 @@
 image: freebsd/latest
 packages:
-  - gcc9
+  - gcc10
   - meson
   - boost-all
 sources:
@@ -8,7 +8,7 @@ sources:
 tasks:
   - setup: |
       cd tt
-      CXX=g++9 meson -Dtests=enabled --unity on build
+      CXX=g++10 meson -Dtests=enabled --unity on build
   - build: |
       cd tt
       ninja -C build
