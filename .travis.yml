@@ -45,7 +45,6 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-10
-      - libboost-all-dev
   coverity_scan:
     project:
       name: "DanySpin97/tt"

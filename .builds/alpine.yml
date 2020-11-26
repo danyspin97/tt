@@ -2,8 +2,6 @@ image: alpine/edge
 packages:
   - gcc
   - meson
-  - boost
-  - boost-dev
 sources:
   - https://github.com/danyspin97/tt
 tasks:
