@@ -65,16 +65,17 @@ auto tt::cli::SerializeCommand::ParseLongrunFromFile() -> int {
     }
 
     auto parser = ServiceParser();
-    auto service = parser.ParseService(service_name);
-    if (!service.has_value()) {
-        logger()->LogError("{}", service.error().msg());
+    auto parsed_service = parser.ParseService(service_name);
+    if (!parsed_service.has_value()) {
+        logger()->LogError("{}", parsed_service.error().msg());
         return 255;
     }
-    if (service.value().index() != 2) {
+    auto service = std::move(parsed_service.value());
+    if (service.index() != 2) {
         logger()->LogError("Service {} is not of type longrun", service_name);
         return 255;
     }
 
-    longrun_ = std::make_unique<Longrun>(std::get<Longrun>(service.value()));
+    longrun_ = std::make_unique<Longrun>(std::get<Longrun>(service));
     return 0;
 }
