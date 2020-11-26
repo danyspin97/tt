@@ -64,6 +64,10 @@ auto tt::OneshotOptionsBuilder::GetValidArrayAttributes() const noexcept
     return {"depends"};
 }
 
-auto tt::OneshotOptionsBuilder::options() noexcept -> OneshotOptions {
+auto tt::OneshotOptionsBuilder::options() const noexcept -> OneshotOptions {
+    return options_;
+}
+
+auto tt::OneshotOptionsBuilder::options() noexcept -> OneshotOptions && {
     return std::move(options_);
 }

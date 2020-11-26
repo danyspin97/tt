@@ -37,7 +37,8 @@ class OneshotOptionsBuilder : public SectionBuilder {
 public:
     OneshotOptionsBuilder() noexcept;
 
-    [[nodiscard]] auto options() noexcept -> OneshotOptions;
+    [[nodiscard]] auto options() const noexcept -> OneshotOptions;
+    [[nodiscard]] auto options() noexcept -> OneshotOptions &&;
 
     [[nodiscard]] auto EndParsing() noexcept
         -> tl::expected<void, ParserError> override;

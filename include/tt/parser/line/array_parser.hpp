@@ -39,12 +39,14 @@ public:
     }
 
     [[nodiscard]] auto key() const noexcept -> std::string { return key_; }
-    [[nodiscard]] auto key() noexcept -> std::string { return std::move(key_); }
+    [[nodiscard]] auto key() noexcept -> std::string && {
+        return std::move(key_);
+    }
 
     [[nodiscard]] auto values() const noexcept -> std::vector<std::string> {
         return values_;
     }
-    [[nodiscard]] auto values() noexcept -> std::vector<std::string> {
+    [[nodiscard]] auto values() noexcept -> std::vector<std::string> && {
         return std::move(values_);
     }
 

@@ -31,7 +31,7 @@ class LongLivedScriptBuilder : public MainScriptBuilder {
 public:
     using MainScriptBuilder::MainScriptBuilder;
     [[nodiscard]] auto long_lived_script() const noexcept -> LongLivedScript;
-    [[nodiscard]] auto long_lived_script() noexcept -> LongLivedScript;
+    [[nodiscard]] auto long_lived_script() noexcept -> LongLivedScript &&;
 
 protected:
     [[nodiscard]] auto CreateScript() noexcept

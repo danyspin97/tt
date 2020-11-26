@@ -138,6 +138,10 @@ auto tt::ScriptBuilder::script() const noexcept -> Script {
     return script_.value();
 }
 
+auto tt::ScriptBuilder::script() noexcept -> Script && {
+    return std::move(script_.value());
+}
+
 auto tt::ScriptBuilder::SetOptionalAttributeForScript(
     Script &script) const noexcept -> tl::expected<void, ParserError> {
     if (auto user = GetAttribute("user")) {

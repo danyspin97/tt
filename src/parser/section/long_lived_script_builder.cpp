@@ -70,6 +70,6 @@ auto tt::LongLivedScriptBuilder::long_lived_script() const noexcept
 }
 
 auto tt::LongLivedScriptBuilder::long_lived_script() noexcept
-    -> LongLivedScript {
+    -> LongLivedScript && {
     return std::move(long_lived_script_.value());
 }

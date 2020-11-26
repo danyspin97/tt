@@ -65,6 +65,6 @@ auto tt::MainScriptBuilder::main_script() const noexcept -> MainScript {
     return main_script_.value();
 }
 
-auto tt::MainScriptBuilder::main_script() noexcept -> MainScript {
+auto tt::MainScriptBuilder::main_script() noexcept -> MainScript && {
     return std::move(main_script_.value());
 }

@@ -54,13 +54,16 @@ protected:
 
     [[nodiscard]] auto GetAttribute(const std::string &key) const noexcept
         -> std::optional<std::string>;
+    [[nodiscard]] auto GetAttribute(const std::string &key) noexcept
+        -> std::optional<std::string>;
     [[nodiscard]] auto SetAttribute(std::string key, std::string value) noexcept
         -> tl::expected<void, ParserError>;
     [[nodiscard]] auto GetArrayAttribute(const std::string &key) const noexcept
         -> std::optional<std::vector<std::string>>;
+    [[nodiscard]] auto GetArrayAttribute(const std::string &key) noexcept
+        -> std::optional<std::vector<std::string>>;
     [[nodiscard]] auto
-    SetArrayAttribute(std::string key,
-                      const std::vector<std::string> &value) noexcept
+    SetArrayAttribute(std::string key, std::vector<std::string> value) noexcept
         -> tl::expected<void, ParserError>;
 
     [[nodiscard]] virtual auto GetValidAttributes() const noexcept

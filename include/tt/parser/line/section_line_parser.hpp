@@ -30,6 +30,10 @@ public:
     [[nodiscard]] auto section() const noexcept -> std::string {
         return section_;
     }
+    [[nodiscard]] auto section() noexcept -> std::string && {
+        return std::move(section_);
+    }
+
     [[nodiscard]] auto IsLineValid() const noexcept -> bool { return valid_; }
 
     explicit SectionLineParser(const std::string &line) noexcept {

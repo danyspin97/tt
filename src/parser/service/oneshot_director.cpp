@@ -45,7 +45,7 @@ auto tt::OneshotDirector::InstanceService(std::string &&path)
                            std::move(main_section.description), std::move(path),
                            std::move(options_builder_.options()),
                            std::move(env_section_builder_.environment()),
-                           start_script_builder_.main_script());
+                           std::move(start_script_builder_.main_script()));
 
     if (stop_script_builder_.SectionParsed()) {
         service.stop(stop_script_builder_.script());

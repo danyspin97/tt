@@ -31,7 +31,7 @@ class MainScriptBuilder : public ScriptBuilder {
 public:
     using ScriptBuilder::ScriptBuilder;
     [[nodiscard]] auto main_script() const noexcept -> MainScript;
-    [[nodiscard]] auto main_script() noexcept -> MainScript;
+    [[nodiscard]] auto main_script() noexcept -> MainScript &&;
 
 protected:
     [[nodiscard]] auto CreateScript() noexcept

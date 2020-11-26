@@ -32,6 +32,7 @@ class ScriptBuilder : public CodeSectionBuilder {
 public:
     explicit ScriptBuilder(const std::string &section) noexcept;
     [[nodiscard]] auto script() const noexcept -> Script;
+    [[nodiscard]] auto script() noexcept -> Script &&;
     [[nodiscard]] auto EndParsing() noexcept
         -> tl::expected<void, ParserError> override;
 

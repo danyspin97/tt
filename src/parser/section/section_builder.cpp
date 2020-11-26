@@ -63,8 +63,8 @@ auto tt::SectionBuilder::ParseMultilineValue(const std::string &line) noexcept
         }
 
         if (!array_parser_.IsParsing()) {
-            if (auto ret = SetArrayAttribute(array_parser_.key(),
-                                             array_parser_.values());
+            if (auto ret = SetArrayAttribute(std::move(array_parser_.key()),
+                                             std::move(array_parser_.values()));
                 !ret.has_value()) {
                 return tl::unexpected(ret.error());
             }
@@ -79,8 +79,8 @@ auto tt::SectionBuilder::ParseMultilineValue(const std::string &line) noexcept
     }
     if (ret.value()) {
         if (!array_parser_.IsParsing()) {
-            if (auto ret = SetArrayAttribute(array_parser_.key(),
-                                             array_parser_.values());
+            if (auto ret = SetArrayAttribute(std::move(array_parser_.key()),
+                                             std::move(array_parser_.values()));
                 !ret.has_value()) {
                 return tl::unexpected(ret.error());
             }
@@ -122,8 +122,17 @@ auto tt::SectionBuilder::GetAttribute(const std::string &key) const noexcept
     return {};
 }
 
+auto tt::SectionBuilder::GetAttribute(const std::string &key) noexcept
+    -> std::optional<std::string> {
+    if (auto value = values_.find(key); value != values_.end()) {
+        return std::move(value->second);
+    }
+
+    return {};
+}
+
 auto tt::SectionBuilder::SetArrayAttribute(
-    std::string key, const std::vector<std::string> &value) noexcept
+    std::string key, std::vector<std::string> value) noexcept
     -> tl::expected<void, ParserError> {
     auto valid_keys = GetValidArrayAttributes();
     if (std::find(valid_keys.begin(), valid_keys.end(), key) ==
@@ -139,7 +148,7 @@ auto tt::SectionBuilder::SetArrayAttribute(
             fmt::format("'{}' has already been set", key));
     }
 
-    array_values_.emplace(std::move(key), value);
+    array_values_.emplace(std::move(key), std::move(value));
     return {};
 }
 
@@ -147,6 +156,15 @@ auto tt::SectionBuilder::GetArrayAttribute(const std::string &key)
     const noexcept -> std::optional<std::vector<std::string>> {
     if (auto value = array_values_.find(key); value != array_values_.end()) {
         return value->second;
+    }
+
+    return {};
+}
+
+auto tt::SectionBuilder::GetArrayAttribute(const std::string &key) noexcept
+    -> std::optional<std::vector<std::string>> {
+    if (auto value = array_values_.find(key); value != array_values_.end()) {
+        return std::move(value->second);
     }
 
     return {};
