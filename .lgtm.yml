@@ -14,7 +14,8 @@ extraction:
     prepare:
       packages:
         - gcc-10
-      - export CXX=gcc++-10
+    after_prepare:
+      - export CXX=g++-10
     configure:
       command:
         # lgtm ships meson version 0.51.2 which doesn't support fs module
