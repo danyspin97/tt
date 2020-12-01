@@ -35,8 +35,6 @@
 #include "tt/data/long_lived_script.hpp"                   // for LongLived...
 #include "tt/data/script.hpp"                              // for Script
 #include "tt/log/script_logger.hpp"                        // for ScriptLogger
-#include "tt/net/client.hpp"                               // for Client
-#include "tt/net/socket.hpp"                               // for Socket
 #include "tt/path/dirs.hpp"                                // for Dirs
 #include "tt/request/notify_service_status.hpp"            // for NotifyServ...
 #include "tt/request/pack_request.hpp"                     // for PackAction
