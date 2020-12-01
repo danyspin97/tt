@@ -34,9 +34,6 @@ namespace tt {
 class ParserError;
 class SectionBuilder;
 
-auto KeyNotFound(const std::string &attribute, const std::string &section)
-    -> tl::expected<void, ParserError>;
-
 // Is called many times during parsing, allow inlining
 inline auto IsEmptyLine(const std::string &line) -> bool {
     const auto strippedLine = utils::trim_copy(line);

@@ -47,10 +47,3 @@ auto tt::TestBuilderWithFile(SectionBuilder &builder, const std::string &path)
     }
     return builder.EndParsing();
 }
-
-auto tt::KeyNotFound(const std::string &key, const std::string &section)
-    -> tl::expected<void, ParserError> {
-    return make_parser_error<void>(
-        ParserError::Type::InvalidKeyInSection,
-        fmt::format("Key '{}' is not allowed in [{}] section", key, section));
-}
