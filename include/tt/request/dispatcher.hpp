@@ -22,8 +22,8 @@
 
 #include <memory> // for unique_ptr
 
-#include "tt/request/visitor.hpp"     // for Visitor
-#include "tt/svc/service_manager.hpp" // for ServiceManager
+#include "tt/request/visitor.hpp"        // for Visitor
+#include "tt/svc/live_service_graph.hpp" // for LiveServiceGraph
 
 namespace tt::request {
 
@@ -31,13 +31,13 @@ class NotifyServiceStatus;
 
 class Dispatcher : public Visitor {
 public:
-    explicit Dispatcher(ServiceManager &service_manager);
+    explicit Dispatcher(LiveServiceGraph &service_manager);
 
     auto operator()(std::shared_ptr<NotifyServiceStatus> notify)
         -> std::optional<std::string> override;
 
 private:
-    ServiceManager &service_manager_;
+    LiveServiceGraph &live_graph_;
 };
 
 } // namespace tt::request

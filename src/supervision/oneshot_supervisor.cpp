@@ -29,7 +29,6 @@
 #include "tt/supervision/oneshot_supervisor.hpp" // for OneshotSupervisor
 #include "tt/supervision/script_supervisor.hpp"  // for ScriptSupervisor
 #include "tt/supervision/types.hpp"              // for ScriptStatus
-#include "tt/svc/service_status_manager.hpp"     // for ServiceStatusMa...
 
 tt::OneshotSupervisor::OneshotSupervisor(Oneshot oneshot,
                                          OneshotLogger &&logger)

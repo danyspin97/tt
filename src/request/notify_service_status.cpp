@@ -22,7 +22,7 @@
 
 #include <utility> // for move
 
-#include "tt/svc/service_status_manager.hpp" // for ServiceStatusMa...
+#include "tt/svc/live_service_graph.hpp" // for LiveServiceGraph
 
 tt::request::NotifyServiceStatus::NotifyServiceStatus(std::string service,
                                                       ServiceStatus status)

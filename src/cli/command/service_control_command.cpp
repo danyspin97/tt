@@ -29,7 +29,7 @@
 #include "tt/file_lock.hpp"                           // for FileLock
 #include "tt/request/request_listener.hpp"            // for ActionListener
 #include "tt/supervision/signal_handler.hpp" // for AddSignalsToSet, ...
-#include "tt/svc/service_manager.hpp"        // for ServiceManager
+#include "tt/svc/live_service_graph.hpp"     // for LiveServiceGraph
 #include "tt/utils/launch_async.hpp"         // for LaunchAsync
 
 namespace args {
@@ -59,20 +59,19 @@ auto tt::cli::ServiceControlCommand::Execute() -> int {
     }
     auto graph = utils::Deserialize<DependencyGraph>(graph_filename);
     auto services = graph.GetActiveServices();
-    ServiceManager service_manager(std::move(graph), dirs());
+    LiveServiceGraph live_graph(std::move(graph), dirs());
 
-    request::RequestListener request_listener(service_manager, dirs());
+    request::RequestListener request_listener(live_graph, dirs());
 
     // Start action listener
     std::thread(&request::RequestListener::Listen, request_listener).detach();
 
-    tt::LaunchAsync(
-        [&service_manager]() { service_manager.StartAllServices(); });
+    tt::LaunchAsync([&live_graph]() { live_graph.StartAllServices(); });
 
     // Wait until we receive a stop signal
     WaitOnSignalSet(&signal_set);
 
-    service_manager.StopAllServices();
+    live_graph.StopAllServices();
 
     return 0;
 }

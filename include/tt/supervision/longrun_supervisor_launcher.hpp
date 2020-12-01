@@ -35,12 +35,12 @@ class LongrunSupervisorLauncher {
 public:
     explicit LongrunSupervisorLauncher(std::shared_ptr<Dirs> dirs);
 
-    void Launch(const Longrun &longrun);
-    void Close(const std::string &service_name);
+    auto Launch(const Longrun &longrun)
+        -> std::unique_ptr<TinyProcessLib::Process>;
+    static void Close(TinyProcessLib::Process &process);
 
 private:
     std::shared_ptr<Dirs> dirs_;
-    std::map<std::string, TinyProcessLib::Process> longrun_supervisors_;
 };
 
 } // namespace tt

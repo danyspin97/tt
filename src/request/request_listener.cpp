@@ -35,10 +35,10 @@
 #include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
 #include "tt/request/request.hpp"               // for Action
 #include "tt/request/request_factory.hpp"       // for ActionFactory
-#include "tt/svc/service_manager.hpp"           // for ServiceManager
+#include "tt/svc/live_service_graph.hpp"        // for LiveServiceGraph
 #include "tt/utils/launch_async.hpp"            // for LaunchAsync
 
-tt::request::RequestListener::RequestListener(ServiceManager &service_manager,
+tt::request::RequestListener::RequestListener(LiveServiceGraph &service_manager,
                                               const std::shared_ptr<Dirs> &dirs)
     : dispatcher_(service_manager),
       socket_path_(dirs->livedir() / "tt-ipc.socket") {}

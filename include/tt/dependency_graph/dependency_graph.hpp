@@ -58,6 +58,10 @@ public:
     void RemoveServices(const std::vector<std::string> &services);
 
 private:
+    friend class LiveServiceGraph;
+    [[nodiscard]] auto nodes() -> std::vector<ServiceNode> &&;
+    [[nodiscard]] auto name_to_index() -> std::map<std::string, size_t> &&;
+
     auto AddNodes(std::vector<Service>::iterator begin,
                   std::vector<Service>::iterator end) -> size_t;
     void AddEnabledServices(const std::vector<std::string> &services_to_enable);

@@ -34,7 +34,7 @@ class Request;
 
 class RequestListener {
 public:
-    RequestListener(ServiceManager &service_manager,
+    RequestListener(LiveServiceGraph &service_manager,
                     const std::shared_ptr<Dirs> &dirs);
 
     [[noreturn]] void Listen();

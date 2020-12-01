@@ -47,18 +47,19 @@ tt::LongrunSupervisorLauncher::LongrunSupervisorLauncher(
     std::shared_ptr<Dirs> dirs)
     : dirs_(std::move(dirs)) {}
 
-void tt::LongrunSupervisorLauncher::Launch(const Longrun &longrun) {
+auto tt::LongrunSupervisorLauncher::Launch(const Longrun &longrun) noexcept
+    -> std::unique_ptr<TinyProcessLib::Process> {
     auto filename = dirs_->supervisedir() / longrun.name();
     utils::Serialize(longrun, filename);
     std::string execute{"tt supervise " + filename.string()};
     PathScriptBuilder builder;
     tt::Environment env;
     auto command = builder.script(execute, env);
-    longrun_supervisors_.emplace(longrun.name(), command);
+    return std::make_unique<TinyProcessLib::Process>(command);
 }
 
-void tt::LongrunSupervisorLauncher::Close(const std::string &service_name) {
-    auto &process = longrun_supervisors_.at(service_name);
+void tt::LongrunSupervisorLauncher::Close(
+    TinyProcessLib::Process &process) noexcept {
     process.signal(SIGINT);
     // Wait for it to close
     process.get_exit_status();

@@ -22,12 +22,11 @@
 
 #include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
 
-tt::request::Dispatcher::Dispatcher(ServiceManager &service_manager)
-    : service_manager_(service_manager) {}
+tt::request::Dispatcher::Dispatcher(LiveServiceGraph &live_graph)
+    : live_graph_(live_graph) {}
 
 auto tt::request::Dispatcher::operator()(
     std::shared_ptr<NotifyServiceStatus> notify) -> std::optional<std::string> {
-    service_manager_.status_manager().ChangeStatusOfService(notify->service(),
-                                                            notify->status());
+    live_graph_.ChangeStatusOfService(notify->service(), notify->status());
     return {};
 }

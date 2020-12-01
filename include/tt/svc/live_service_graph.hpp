@@ -20,38 +20,51 @@
 
 #pragma once
 
-#include <map>          // for map
-#include <memory>       // for shared_ptr
 #include <shared_mutex> // for shared_mutex
 #include <string>       // for string
-#include <vector>       // for vector
 
-#include "tt/svc/service_status.hpp" // for ServiceStatus
-#include "tt/svc/wait_on_start.hpp"  // for WaitOnStart
+#include "tt/data/service.hpp"                      // for Service
+#include "tt/dependency_graph/dependency_graph.hpp" // for DependencyGraph
+#include "tt/log/service_logger_registry.hpp"       // for ServiceLoggerRegistry
+#include "tt/supervision/longrun_supervisor_launcher.hpp" // for LongrunSup...
+#include "tt/svc/live_service.hpp"                        // for LiveService
 
 namespace tt {
 
-class ServiceLoggerRegistry;
-class ServiceStatusImpl;
+class LiveService;
 
-class ServiceStatusManager {
+class LiveServiceGraph {
 public:
-    ServiceStatusManager(const std::vector<std::string> &services,
-                         ServiceLoggerRegistry &logger_registry);
+    LiveServiceGraph(DependencyGraph &&graph, std::shared_ptr<Dirs> dirs);
+
+    [[nodiscard]] auto services() const
+        -> std::vector<std::reference_wrapper<const Service>>;
+
+    void StartAllServices();
+    void StopAllServices();
+
+    [[nodiscard]] auto HasService(const std::string &service) const -> bool;
 
     void ChangeStatusOfService(const std::string &service,
                                ServiceStatus new_status);
     [[nodiscard]] auto GetUpServices() const -> std::vector<std::string>;
+
     [[nodiscard]] auto WaitOnServiceStart(const std::string &service) -> bool;
     void WaitOnServiceDown(const std::string &service);
 
 private:
-    static inline std::shared_mutex mutex_;
-    std::map<std::string,
-             std::pair<ServiceStatus, std::unique_ptr<WaitOnStart>>>
-        services_;
+    auto GetNodeByName(const std::string &name) -> LiveService &;
 
-    ServiceLoggerRegistry &logger_registry_;
+    void StartService(LiveService &service);
+    void StopService(LiveService &service);
+
+    static inline std::shared_mutex mutex_;
+    std::map<std::string, size_t> name_to_index_;
+    std::vector<LiveService> nodes_;
+    std::shared_ptr<Dirs> dirs_;
+    // ServiceLoggerRegistry needs dirs to construct
+    ServiceLoggerRegistry logger_registry_;
+    LongrunSupervisorLauncher longrun_launcher_;
 };
 
 } // namespace tt
