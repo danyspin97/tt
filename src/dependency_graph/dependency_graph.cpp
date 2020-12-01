@@ -287,10 +287,9 @@ auto tt::DependencyGraph::services() const
     return services;
 }
 
-auto tt::DependencyGraph::nodes() noexcept -> std::vector<ServiceNode> && {
+auto tt::DependencyGraph::nodes() -> std::vector<ServiceNode> && {
     return std::move_if_noexcept(nodes_);
 }
-auto tt::DependencyGraph::name_to_index() noexcept
-    -> std::map<std::string, size_t> && {
+auto tt::DependencyGraph::name_to_index() -> std::map<std::string, size_t> && {
     return std::move_if_noexcept(name_to_index_);
 }

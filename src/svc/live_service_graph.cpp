@@ -34,7 +34,7 @@ tt::LiveServiceGraph::LiveServiceGraph(DependencyGraph &&graph,
     auto graph_nodes = graph.nodes();
     nodes_.reserve(graph_nodes.size());
     std::for_each(graph_nodes.begin(), graph_nodes.end(), [this](auto &&node) {
-        nodes_.emplace_back(std::move_if_noexcept(node));
+        nodes_.emplace_back(std::move(node));
     });
     name_to_index_ = std::move(graph.name_to_index());
 }

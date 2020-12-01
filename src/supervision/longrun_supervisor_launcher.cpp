@@ -47,7 +47,7 @@ tt::LongrunSupervisorLauncher::LongrunSupervisorLauncher(
     std::shared_ptr<Dirs> dirs)
     : dirs_(std::move(dirs)) {}
 
-auto tt::LongrunSupervisorLauncher::Launch(const Longrun &longrun) noexcept
+auto tt::LongrunSupervisorLauncher::Launch(const Longrun &longrun)
     -> std::unique_ptr<TinyProcessLib::Process> {
     auto filename = dirs_->supervisedir() / longrun.name();
     utils::Serialize(longrun, filename);
@@ -58,8 +58,7 @@ auto tt::LongrunSupervisorLauncher::Launch(const Longrun &longrun) noexcept
     return std::make_unique<TinyProcessLib::Process>(command);
 }
 
-void tt::LongrunSupervisorLauncher::Close(
-    TinyProcessLib::Process &process) noexcept {
+void tt::LongrunSupervisorLauncher::Close(TinyProcessLib::Process &process) {
     process.signal(SIGINT);
     // Wait for it to close
     process.get_exit_status();
