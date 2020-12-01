@@ -38,27 +38,27 @@ public:
     CliLogger() = delete;
 
     template <typename FormatString, typename... Args>
-    void LogDebug(const FormatString &format, const Args &... args) const {
+    void LogDebug(const FormatString &format, const Args &...args) const {
         logger_->debug(format, args...);
     }
 
     template <typename FormatString, typename... Args>
-    void LogInfo(const FormatString &format, const Args &... args) const {
+    void LogInfo(const FormatString &format, const Args &...args) const {
         logger_->info(format, args...);
     }
 
     template <typename FormatString, typename... Args>
-    void LogWarn(const FormatString &format, const Args &... args) const {
+    void LogWarn(const FormatString &format, const Args &...args) const {
         logger_->warn(format, args...);
     }
 
     template <typename FormatString, typename... Args>
-    void LogCritical(const FormatString &format, const Args &... args) const {
+    void LogCritical(const FormatString &format, const Args &...args) const {
         logger_->critical(format, args...);
     }
 
     template <typename FormatString, typename... Args>
-    void LogError(const FormatString &format, const Args &... args) const {
+    void LogError(const FormatString &format, const Args &...args) const {
         logger_->error(format, args...);
     }
 
