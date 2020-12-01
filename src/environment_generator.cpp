@@ -24,6 +24,6 @@ auto tt::EnvironmentGenerator::GetEnvironment() -> std::vector<const char *> {
     // TODO: Read from /etc/tt/tt.env
     std::vector<const char *> env;
     env.push_back("PATH=/usr/bin/");
-    env.push_back(0);
+    env.push_back(nullptr);
     return env;
 }

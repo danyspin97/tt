@@ -57,7 +57,7 @@ private:
     std::mutex futures_mutex_;
     std::string suffix_;
     std::vector<std::filesystem::path> paths_;
-    std::atomic_uint16_t service_to_parse_;
+    std::atomic_uint16_t service_to_parse_{};
     std::vector<std::string> service_names_to_parse_;
     std::vector<std::future<tl::expected<Service, ParserError>>> futures_;
     std::condition_variable future_cv_;
