@@ -136,6 +136,8 @@ Credits also to:
 ### Third-party libraries included
 
 - [**args**](https://github.com/Taywee/args), command-line argument parser
+- [**Base64**](https://gist.github.com/tomykaira/f0fd86b6c73063283afe550bc5d77594),
+  _base64_ encoding/decoding C++ library
 - [**bitsery**](https://github.com/fraillt/bitsery), binary serialization
   library
 - [**expected**](https://github.com/TartanLlama/expected), c++17 implementation
