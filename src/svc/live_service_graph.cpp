@@ -39,6 +39,55 @@ tt::LiveServiceGraph::LiveServiceGraph(DependencyGraph &&graph,
     name_to_index_ = std::move(graph.name_to_index());
 }
 
+void tt::LiveServiceGraph::Update(DependencyGraph &&new_dependency_graph) {
+    auto name_to_index = std::move(new_dependency_graph.name_to_index());
+    auto existing_services = name_to_index_.begin();
+    auto new_services = name_to_index.begin();
+    std::vector<std::reference_wrapper<const std::string>> nodes_to_add;
+    // Let's iterate both services map. They are alphabetically ordered
+    while (existing_services != name_to_index_.end() &&
+           new_services != name_to_index.end()) {
+        // If the new dependency_graph has a service that isn't
+        // enabled in the new_dependency_graph, it means that
+        // it has been removed
+        if (existing_services->first < new_services->first) {
+            GetLiveServiceFromName(existing_services->first).MarkForRemoval();
+            existing_services++;
+        }
+        // The existing graph is missing a service
+        if (existing_services->first > new_services->first) {
+            nodes_to_add.emplace_back(std::cref(new_services->first));
+            new_services++;
+        }
+
+        // Both graphs have this service
+        auto &live_service = GetLiveServiceFromName(existing_services->first);
+        // It's faster to just change a value rather than adding a branch
+        live_service.UnmarkForRemoval();
+        auto &node = new_dependency_graph.nodes().at(new_services->second);
+        if (live_service.node() != node) {
+            live_service.AddUpdatedNode(std::move(node));
+        }
+        existing_services++;
+        new_services++;
+    }
+
+    if (nodes_to_add.empty()) {
+        return;
+    }
+
+    // Add the new nodes to live_services_
+    auto nodes = std::move(new_dependency_graph.nodes());
+    auto current_index = live_services_.size();
+    live_services_.reserve(current_index + nodes_to_add.size());
+    for (const auto &service_name : nodes_to_add) {
+        auto &node = nodes.at(name_to_index.at(service_name));
+        name_to_index_.emplace(node.name(), current_index);
+        live_services_.emplace_back(std::move(node));
+        current_index++;
+    }
+}
+
 void tt::LiveServiceGraph::StartAllServices() {
     std::vector<std::future<void>> start_scripts_running;
     // TODO: Calculate an optimal order of services to start

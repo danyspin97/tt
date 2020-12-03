@@ -37,6 +37,11 @@ public:
         supervisor_ = std::move_if_noexcept(process);
     }
 
+    void AddUpdatedNode(ServiceNode &&node) { updated_node_ = std::move(node); }
+    void MarkForRemoval() { remove_ = true; }
+    void UnmarkForRemoval() { remove_ = false; }
+    [[nodiscard]] auto IsMarkedForRemoval() const -> bool { return remove_; }
+
     void Wait() {
         std::unique_lock<std::mutex> lock(*mutex_);
         (condition_)->wait(lock, [this]() { return ended_; });
@@ -55,6 +60,7 @@ private:
     Environment config_used_;
     Environment environment_exported_;
     std::unique_ptr<TinyProcessLib::Process> supervisor_;
+    bool remove_ = false;
 
     // Replace this with atomic_flag
     std::unique_ptr<std::mutex> mutex_;

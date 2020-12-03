@@ -52,6 +52,8 @@ public:
     [[nodiscard]] auto WaitOnServiceStart(const std::string &service) -> bool;
     void WaitOnServiceDown(const std::string &service);
 
+    void Update(DependencyGraph &&new_dependency_graph);
+
 private:
     auto GetLiveServiceFromName(const std::string &name) -> LiveService &;
 
