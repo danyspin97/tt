@@ -42,7 +42,11 @@ class Oneshot;
 class ServiceNode {
 public:
     explicit ServiceNode(Service service);
-    auto operator==(const ServiceNode &node) const -> bool;
+    auto operator==(const ServiceNode &rhs) const -> bool;
+    auto operator!=(const ServiceNode &rhs) const -> bool {
+        return !operator==(rhs);
+    }
+
     [[nodiscard]] auto service() const -> const Service &;
     [[nodiscard]] auto name() const -> const std::string &;
     [[nodiscard]] auto dependants() const -> const std::vector<std::string> &;
