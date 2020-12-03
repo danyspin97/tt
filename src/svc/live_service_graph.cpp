@@ -60,7 +60,7 @@ void tt::LiveServiceGraph::StopAllServices() {
     auto up_services = GetUpServices();
     stop_scripts_running.reserve(up_services.size());
     for (auto &service_name : up_services) {
-        auto &node = GetNodeByName(service_name);
+        auto &node = GetLiveServiceFromName(service_name);
         stop_scripts_running.emplace_back(
             std::async(std::launch::async, &tt::LiveServiceGraph::StopService,
                        this, std::ref(node)));
@@ -148,7 +148,7 @@ void tt::LiveServiceGraph::ChangeStatusOfService(const std::string &service,
                                                  ServiceStatus new_status) {
     // We are going to write into the map, do not allow other threads to read
     std::unique_lock lock{mutex_};
-    auto &live_service = GetNodeByName(service);
+    auto &live_service = GetLiveServiceFromName(service);
     live_service.status(new_status);
 
     switch (new_status) {
@@ -164,7 +164,7 @@ void tt::LiveServiceGraph::ChangeStatusOfService(const std::string &service,
 
 auto tt::LiveServiceGraph::WaitOnServiceStart(const std::string &service)
     -> bool {
-    auto &live_service = GetNodeByName(service);
+    auto &live_service = GetLiveServiceFromName(service);
     live_service.Wait();
 
     // We only need the shared_lock when reading from services_ map
@@ -173,22 +173,22 @@ auto tt::LiveServiceGraph::WaitOnServiceStart(const std::string &service)
 }
 
 void tt::LiveServiceGraph::WaitOnServiceDown(const std::string &service) {
-    GetNodeByName(service).Wait();
+    GetLiveServiceFromName(service).Wait();
 }
 
 auto tt::LiveServiceGraph::GetUpServices() const -> std::vector<std::string> {
     std::shared_lock lock(mutex_);
     std::vector<std::string> up_services;
-    for (const auto &node : nodes_) {
-        if (node.status() == ServiceStatus::Up) {
-            up_services.push_back(node.name());
+    for (const auto &live_service : live_services_) {
+        if (live_service.status() == ServiceStatus::Up) {
+            up_services.push_back(live_service.name());
         }
     }
 
     return up_services;
 }
 
-auto tt::LiveServiceGraph::GetNodeByName(const std::string &name)
+auto tt::LiveServiceGraph::GetLiveServiceFromName(const std::string &name)
     -> LiveService & {
     assert(name_to_index_.find(name) != end(name_to_index_));
     const auto index = name_to_index_.at(name);

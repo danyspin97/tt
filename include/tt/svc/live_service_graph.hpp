@@ -53,7 +53,7 @@ public:
     void WaitOnServiceDown(const std::string &service);
 
 private:
-    auto GetNodeByName(const std::string &name) -> LiveService &;
+    auto GetLiveServiceFromName(const std::string &name) -> LiveService &;
 
     void StartService(LiveService &service);
     void StopService(LiveService &service);
