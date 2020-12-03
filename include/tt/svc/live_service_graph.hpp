@@ -60,7 +60,7 @@ private:
 
     static inline std::shared_mutex mutex_;
     std::map<std::string, size_t> name_to_index_;
-    std::vector<LiveService> nodes_;
+    std::vector<LiveService> live_services_;
     std::shared_ptr<Dirs> dirs_;
     // ServiceLoggerRegistry needs dirs to construct
     ServiceLoggerRegistry logger_registry_;

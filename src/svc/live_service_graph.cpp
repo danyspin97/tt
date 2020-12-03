@@ -32,9 +32,9 @@ tt::LiveServiceGraph::LiveServiceGraph(DependencyGraph &&graph,
     : dirs_(std::move(dirs)), logger_registry_(dirs_),
       longrun_launcher_(dirs_) {
     auto graph_nodes = graph.nodes();
-    nodes_.reserve(graph_nodes.size());
+    live_services_.reserve(graph_nodes.size());
     std::for_each(graph_nodes.begin(), graph_nodes.end(), [this](auto &&node) {
-        nodes_.emplace_back(std::move(node));
+        live_services_.emplace_back(std::move(node));
     });
     name_to_index_ = std::move(graph.name_to_index());
 }
@@ -42,7 +42,7 @@ tt::LiveServiceGraph::LiveServiceGraph(DependencyGraph &&graph,
 void tt::LiveServiceGraph::StartAllServices() {
     std::vector<std::future<void>> start_scripts_running;
     // TODO: Calculate an optimal order of services to start
-    for (auto &node : nodes_) {
+    for (auto &node : live_services_) {
         start_scripts_running.emplace_back(
             std::async(std::launch::async, &tt::LiveServiceGraph::StartService,
                        this, std::ref(node)));
@@ -192,7 +192,7 @@ auto tt::LiveServiceGraph::GetNodeByName(const std::string &name)
     -> LiveService & {
     assert(name_to_index_.find(name) != end(name_to_index_));
     const auto index = name_to_index_.at(name);
-    return nodes_.at(index);
+    return live_services_.at(index);
 }
 
 auto tt::LiveServiceGraph::HasService(const std::string &service) const
@@ -204,7 +204,7 @@ auto tt::LiveServiceGraph::HasService(const std::string &service) const
 auto tt::LiveServiceGraph::services() const
     -> std::vector<std::reference_wrapper<const tt::Service>> {
     std::vector<std::reference_wrapper<const tt::Service>> services;
-    for (const auto &node : nodes_) {
+    for (const auto &node : live_services_) {
         services.emplace_back(std::cref(node.service()));
     }
     return services;
