@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <condition_variable> // for condition_variable
+
 #include "tiny-process-library/process.hpp" // for Process
 
 #include "tt/dependency_graph/service_node.hpp" // for ServiceNode
