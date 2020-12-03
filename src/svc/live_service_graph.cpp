@@ -112,7 +112,7 @@ void tt::LiveServiceGraph::StartService(LiveService &live_service) {
 }
 
 void tt::LiveServiceGraph::StopService(LiveService &live_service) {
-    const auto &dependants = live_service.dependants();
+    const auto &dependants = live_service.node().dependants();
     for (const auto &dependant : dependants) {
         WaitOnServiceDown(dependant);
     }

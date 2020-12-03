@@ -10,13 +10,21 @@
 
 namespace tt {
 
-class LiveService : public ServiceNode {
+class LiveService {
 public:
     explicit LiveService(ServiceNode &&node)
-        : ServiceNode(std::move_if_noexcept(node)),
+        : node_(std::move_if_noexcept(node)),
           mutex_(std::make_unique<std::mutex>()),
           condition_(std::make_unique<std::condition_variable>()) {}
     LiveService() = delete;
+
+    [[nodiscard]] auto service() const -> const Service & {
+        return node_.service();
+    }
+    [[nodiscard]] auto name() const -> const std::string & {
+        return node_.name();
+    }
+    [[nodiscard]] auto node() const -> const ServiceNode & { return node_; }
 
     [[nodiscard]] auto status() const -> ServiceStatus { return status_; }
     void status(ServiceStatus status) { status_ = status; }
@@ -41,6 +49,8 @@ public:
     }
 
 private:
+    ServiceNode node_;
+    std::optional<ServiceNode> updated_node_;
     ServiceStatus status_ = ServiceStatus::Reset;
     Environment config_used_;
     Environment environment_exported_;
