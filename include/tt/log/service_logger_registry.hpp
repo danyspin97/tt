@@ -31,7 +31,7 @@ class Dirs;
 class LongrunLogger;
 class OneshotLogger;
 
-enum class ServiceStatus;
+enum class ServiceStatus : std::uint8_t;
 
 class ServiceLoggerRegistry {
 public:

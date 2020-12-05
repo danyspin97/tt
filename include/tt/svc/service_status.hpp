@@ -24,7 +24,7 @@
 
 namespace tt {
 
-enum class ServiceStatus {
+enum class ServiceStatus : std::uint8_t {
     Reset = 0,
     Starting = 1,
     Up = 2,

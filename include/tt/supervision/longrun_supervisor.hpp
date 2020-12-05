@@ -32,7 +32,7 @@ namespace tt {
 
 class Dirs;
 
-enum class ServiceStatus;
+enum class ServiceStatus : std::uint8_t;
 
 class LongrunSupervisor {
 public:

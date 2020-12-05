@@ -58,6 +58,7 @@ public:
     void Dump(std::ostream &oss) const;
 
 private:
+    friend class LiveService;
     friend class bitsery::Access;
     ServiceNode() = default;
     template <typename S> void serialize(S &serializer) {

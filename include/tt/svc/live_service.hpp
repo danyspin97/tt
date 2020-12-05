@@ -16,7 +16,6 @@ public:
         : node_(std::move_if_noexcept(node)),
           mutex_(std::make_unique<std::mutex>()),
           condition_(std::make_unique<std::condition_variable>()) {}
-    LiveService() = delete;
 
     [[nodiscard]] auto service() const -> const Service & {
         return node_.service();
@@ -54,6 +53,17 @@ public:
     }
 
 private:
+    friend class bitsery::Access;
+    LiveService() = default;
+    template <typename S> void serialize(S &s) {
+        s.object(node_);
+        s.ext(updated_node_, bitsery::ext::StdOptional{});
+        s.value1b(status_);
+        s.object(config_used_);
+        s.object(environment_exported_);
+        s.value1b(remove_);
+    }
+
     ServiceNode node_;
     std::optional<ServiceNode> updated_node_;
     ServiceStatus status_ = ServiceStatus::Reset;
