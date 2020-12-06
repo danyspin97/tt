@@ -54,9 +54,9 @@ public:
 
     void Update(DependencyGraph &&new_dependency_graph);
 
-private:
     auto GetLiveServiceFromName(const std::string &name) -> LiveService &;
 
+private:
     void StartService(LiveService &service);
     void StopService(LiveService &service);
 

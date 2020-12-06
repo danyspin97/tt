@@ -29,6 +29,10 @@
 
 namespace tt {
 
+namespace cli {
+class ShowCommand;
+}
+
 class LiveService {
 public:
     explicit LiveService(ServiceNode &&node)
@@ -72,6 +76,7 @@ public:
     }
 
 private:
+    friend tt::cli::ShowCommand;
     friend class bitsery::Access;
     LiveService() = default;
     template <typename S> void serialize(S &s) {

@@ -20,8 +20,21 @@
 
 #include "tt/request/dispatcher.hpp"
 
+#include "Base64.h" // for Encode
+
+#include "bitsery/adapter/buffer.h"
+#include "bitsery/bitsery.h"
+#include "bitsery/traits/string.h"
+#include "bitsery/traits/vector.h"
+
+#include "nlohmann/json.hpp" // for json
+
+#include "fmt/format.h" // for format
+
 #include "tt/request/notify_service_status.hpp"  // for NotifyServiceStatus
 #include "tt/request/service_status_request.hpp" // for ServiceStatus
+
+using nlohmann::json;
 
 tt::request::Dispatcher::Dispatcher(LiveServiceGraph &live_graph)
     : live_graph_(live_graph) {}
@@ -35,5 +48,26 @@ auto tt::request::Dispatcher::operator()(
 auto tt::request::Dispatcher::operator()(
     std::shared_ptr<ServiceStatusRequest> status)
     -> std::optional<std::string> {
-    return {};
+    if (!live_graph_.HasService(status->service())) {
+        json j;
+        j["ok"] = false;
+        j["error"] = fmt::format("Service {} not found", status->service());
+        return j.dump();
+    }
+
+    auto &live_service = live_graph_.GetLiveServiceFromName(status->service());
+
+    using Buffer = std::vector<uint8_t>;
+    Buffer buffer;
+
+    bitsery::quickSerialization<bitsery::OutputBufferAdapter<Buffer>>(
+        buffer, live_service);
+    std::string serialized_live_service;
+    std::copy(buffer.cbegin(), buffer.cend(),
+              std::back_inserter(serialized_live_service));
+    auto encoded_status = macaron::Base64::Encode(serialized_live_service);
+    json j;
+    j["ok"] = true;
+    j["data"] = std::move(encoded_status);
+    return j.dump();
 }
