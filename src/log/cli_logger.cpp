@@ -39,15 +39,16 @@ tt::CliLogger::CliLogger(const std::string &command_name,
                          const std::shared_ptr<Dirs> &dirs,
                          const std::string &verbosity, bool silence_stderr) {
     auto console = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console->set_pattern("%v");
+    console->set_level(spdlog::level::trace);
 
-    console->set_level(spdlog::level::from_str(verbosity));
     if (silence_stderr) {
         console->set_level(spdlog::level::off);
     }
 
     std::vector<spdlog::sink_ptr> sinks;
     sinks.push_back(console);
+
+    auto level = spdlog::level::from_str(verbosity);
 
     if (isatty(STDOUT_FILENO) == 0) {
         std::filesystem::path logdir = dirs->logdir();
@@ -58,14 +59,13 @@ tt::CliLogger::CliLogger(const std::string &command_name,
         // {DATE TIME.milliseconds} (command_name) [short log level (e.g. I)]
         cli_file_sink->set_pattern("{%D %T.%e} (" + command_name +
                                    ") [%L]\n%v");
-        // Do not log debug and trace messages to not fill the file
-        cli_file_sink->set_level(spdlog::level::info);
+        // Set cli_file_sink to the mininum logging level
+        cli_file_sink->set_level(spdlog::level::trace);
         sinks.push_back(cli_file_sink);
     }
 
-    logger_ = std::make_shared<spdlog::logger>("cli", begin(sinks), end(sinks));
-    // Set logger_ to the mininum logging level
-    // let console and cli_file_sink choose their own
-    logger_->set_level(spdlog::level::trace);
+    logger_ = std::make_shared<spdlog::logger>("cli_logger", begin(sinks),
+                                               end(sinks));
+    logger_->set_level(level);
     spdlog::set_default_logger(logger_);
 }
