@@ -20,7 +20,8 @@
 
 #include "tt/request/dispatcher.hpp"
 
-#include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
+#include "tt/request/notify_service_status.hpp"  // for NotifyServiceStatus
+#include "tt/request/service_status_request.hpp" // for ServiceStatus
 
 tt::request::Dispatcher::Dispatcher(LiveServiceGraph &live_graph)
     : live_graph_(live_graph) {}
@@ -28,5 +29,11 @@ tt::request::Dispatcher::Dispatcher(LiveServiceGraph &live_graph)
 auto tt::request::Dispatcher::operator()(
     std::shared_ptr<NotifyServiceStatus> notify) -> std::optional<std::string> {
     live_graph_.ChangeStatusOfService(notify->service(), notify->status());
+    return {};
+}
+
+auto tt::request::Dispatcher::operator()(
+    std::shared_ptr<ServiceStatusRequest> status)
+    -> std::optional<std::string> {
     return {};
 }

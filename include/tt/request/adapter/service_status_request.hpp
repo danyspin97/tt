@@ -20,24 +20,22 @@
 
 #pragma once
 
-#include <sstream> // for stringstream
-#include <string>  // for string
+#include <nlohmann/json.hpp> // for json, adl_serializer
 
-#include <nlohmann/json.hpp>
+#include "tt/request/service_status_request.hpp" // for ServiceStatusRequest
 
-#include "tt/request/adapter/notify_service_statup.hpp"  // IWYU pragma: keep
-#include "tt/request/adapter/service_status_request.hpp" // IWYU pragma: keep
+namespace nlohmann {
+template <> struct adl_serializer<tt::request::ServiceStatusRequest> {
+    static auto from_json(const json &j) -> tt::request::ServiceStatusRequest {
+        return {j.at("service")};
+    }
 
-namespace tt::request {
-
-class Request;
-
-template <typename T> auto PackRequest(const T &request) -> std::string {
-    static_assert(std::is_base_of_v<Request, T>, "T must derive from Request");
-    nlohmann::json j;
-    j["request_name"] = T::request_name;
-    j["request"] = request;
-    return j.dump();
-}
-
-} // namespace tt::request
+    // Here's the catch! You must provide a to_json method! Otherwise you
+    // will not be able to convert move_only_type to json, since you fully
+    // specialized adl_serializer on that type
+    static void
+    to_json(json &j, const tt::request::ServiceStatusRequest &notify_service) {
+        j["service"] = notify_service.service();
+    }
+};
+} // namespace nlohmann

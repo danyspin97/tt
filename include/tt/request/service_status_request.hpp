@@ -20,24 +20,28 @@
 
 #pragma once
 
-#include <sstream> // for stringstream
-#include <string>  // for string
+#include <string> // for string
 
-#include <nlohmann/json.hpp>
-
-#include "tt/request/adapter/notify_service_statup.hpp"  // IWYU pragma: keep
-#include "tt/request/adapter/service_status_request.hpp" // IWYU pragma: keep
+#include "tt/request/request.hpp" // for Request
+#include "tt/request/visited.hpp" // for Visited
 
 namespace tt::request {
 
-class Request;
+class ServiceStatusRequest : public Visited<ServiceStatusRequest> {
+public:
+    explicit ServiceStatusRequest(std::string service)
+        : service_(std::move(service)) {}
+    ServiceStatusRequest() = delete;
 
-template <typename T> auto PackRequest(const T &request) -> std::string {
-    static_assert(std::is_base_of_v<Request, T>, "T must derive from Request");
-    nlohmann::json j;
-    j["request_name"] = T::request_name;
-    j["request"] = request;
-    return j.dump();
-}
+    [[nodiscard]] auto service() const -> std::string { return service_; }
+    [[nodiscard]] auto service() -> std::string && {
+        return std::move(service_);
+    }
+
+    static inline const std::string request_name = "show_service_status";
+
+private:
+    std::string service_;
+};
 
 } // namespace tt::request
