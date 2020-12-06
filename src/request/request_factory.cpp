@@ -24,6 +24,7 @@
 
 #include <nlohmann/json.hpp> // for json, detail::exception
 
+#include "fmt/format.h"    // for format
 #include "tl/expected.hpp" // for expected
 
 #include "tt/exception.hpp"                              // for Exception
@@ -55,6 +56,7 @@ auto tt::request::RequestFactory::GetRequestFromBuffer(
         return tl::make_unexpected(request_name +
                                    " is not a valid request name");
     } catch (const nlohmann::detail::exception &e) {
-        return tl::make_unexpected(e.what());
+        return tl::make_unexpected(
+            fmt::format("'{}', while parsing:\n{}", e.what(), buffer));
     }
 }
