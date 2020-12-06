@@ -39,17 +39,18 @@ auto tt::request::RequestFactory::GetRequestFromBuffer(
     -> tl::expected<std::shared_ptr<Request>, std::string> {
     try {
         json j = json::parse(buffer);
-
         // ComplexRequest:
         //     request_name: "complex_action"
         //     request: { request_object }
-        std::string request_name = j.at("request_name");
+        std::string request_name = std::move(j.at("request_name"));
+
+        auto j_req(std::move(j.at("request")));
 
         if (request_name == NotifyServiceStatus::request_name) {
-            return std::make_shared<NotifyServiceStatus>(j.at("request"));
+            return std::make_shared<NotifyServiceStatus>(std::move(j_req));
         }
         if (request_name == ServiceStatusRequest::request_name) {
-            return std::make_shared<ServiceStatusRequest>(j.at("request"));
+            return std::make_shared<ServiceStatusRequest>(std::move(j_req));
         }
         return tl::make_unexpected(request_name +
                                    " is not a valid request name");
