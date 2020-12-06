@@ -27,7 +27,8 @@
 namespace nlohmann {
 template <> struct adl_serializer<tt::request::ServiceStatusRequest> {
     static auto from_json(const json &j) -> tt::request::ServiceStatusRequest {
-        return {j.at("service")};
+        return tt::request::ServiceStatusRequest{
+            j.at("service").get<std::string>()};
     }
 
     // Here's the catch! You must provide a to_json method! Otherwise you
