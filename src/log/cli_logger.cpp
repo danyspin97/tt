@@ -49,6 +49,10 @@ tt::CliLogger::CliLogger(const std::string &command_name,
     sinks.push_back(console);
 
     auto level = spdlog::level::from_str(verbosity);
+    printer_ =
+        std::make_shared<spdlog::logger>("cli", begin(sinks), end(sinks));
+    printer_->set_level(level);
+    printer_->set_pattern("%v");
 
     if (isatty(STDOUT_FILENO) == 0) {
         std::filesystem::path logdir = dirs->logdir();

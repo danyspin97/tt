@@ -62,8 +62,14 @@ public:
         logger_->error(format, args...);
     }
 
+    template <typename FormatString, typename... Args>
+    void Print(const FormatString &format, const Args &...args) const {
+        printer_->info(format, args...);
+    }
+
 private:
     Logger logger_;
+    Logger printer_;
 };
 
 } // namespace tt
