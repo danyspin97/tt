@@ -32,7 +32,7 @@
 #include "fmt/format.h" // for format
 
 #include "tt/request/notify_service_status.hpp"  // for NotifyServiceStatus
-#include "tt/request/service_status_request.hpp" // for ServiceStatus
+#include "tt/request/service_info.hpp" // for ServiceStatus
 
 using nlohmann::json;
 
@@ -46,7 +46,7 @@ auto tt::request::Dispatcher::operator()(
 }
 
 auto tt::request::Dispatcher::operator()(
-    std::shared_ptr<ServiceStatusRequest> status)
+    std::shared_ptr<ServiceInfo> status)
     -> std::optional<std::string> {
     if (!live_graph_.HasService(status->service())) {
         json j;

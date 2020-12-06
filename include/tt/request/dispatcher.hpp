@@ -36,7 +36,7 @@ public:
     auto operator()(std::shared_ptr<NotifyServiceStatus> notify)
         -> std::optional<std::string> override;
 
-    auto operator()(std::shared_ptr<ServiceStatusRequest> status)
+    auto operator()(std::shared_ptr<ServiceInfo> status)
         -> std::optional<std::string> override;
 
 private:

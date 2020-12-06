@@ -26,7 +26,7 @@
 #include <nlohmann/json.hpp>
 
 #include "tt/request/adapter/notify_service_statup.hpp"  // IWYU pragma: keep
-#include "tt/request/adapter/service_status_request.hpp" // IWYU pragma: keep
+#include "tt/request/adapter/service_info.hpp" // IWYU pragma: keep
 
 namespace tt::request {
 

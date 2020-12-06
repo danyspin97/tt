@@ -26,7 +26,7 @@
 namespace tt::request {
 
 class NotifyServiceStatus;
-class ServiceStatusRequest;
+class ServiceInfo;
 
 class Visitor {
 public:
@@ -34,7 +34,7 @@ public:
     virtual auto operator()(std::shared_ptr<NotifyServiceStatus> notify)
         -> std::optional<std::string> = 0;
 
-    virtual auto operator()(std::shared_ptr<ServiceStatusRequest> status)
+    virtual auto operator()(std::shared_ptr<ServiceInfo> status)
         -> std::optional<std::string> = 0;
 };
 

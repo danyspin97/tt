@@ -29,9 +29,9 @@
 
 #include "tt/exception.hpp"                              // for Exception
 #include "tt/request/adapter/notify_service_statup.hpp"  // IWYU pragma: keep
-#include "tt/request/adapter/service_status_request.hpp" // IWYU pragma: keep
+#include "tt/request/adapter/service_info.hpp" // IWYU pragma: keep
 #include "tt/request/notify_service_status.hpp"  // for NotifyServiceStatus
-#include "tt/request/service_status_request.hpp" // for ServiceStatus
+#include "tt/request/service_info.hpp" // for ServiceStatus
 
 using json = nlohmann::json;
 
@@ -50,8 +50,8 @@ auto tt::request::RequestFactory::GetRequestFromBuffer(
         if (request_name == NotifyServiceStatus::request_name) {
             return std::make_shared<NotifyServiceStatus>(std::move(j_req));
         }
-        if (request_name == ServiceStatusRequest::request_name) {
-            return std::make_shared<ServiceStatusRequest>(std::move(j_req));
+        if (request_name == ServiceInfo::request_name) {
+            return std::make_shared<ServiceInfo>(std::move(j_req));
         }
         return tl::make_unexpected(request_name +
                                    " is not a valid request name");

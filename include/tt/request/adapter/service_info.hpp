@@ -22,20 +22,19 @@
 
 #include <nlohmann/json.hpp> // for json, adl_serializer
 
-#include "tt/request/service_status_request.hpp" // for ServiceStatusRequest
+#include "tt/request/service_info.hpp" // for ServiceInfo
 
 namespace nlohmann {
-template <> struct adl_serializer<tt::request::ServiceStatusRequest> {
-    static auto from_json(const json &j) -> tt::request::ServiceStatusRequest {
-        return tt::request::ServiceStatusRequest{
-            j.at("service").get<std::string>()};
+template <> struct adl_serializer<tt::request::ServiceInfo> {
+    static auto from_json(const json &j) -> tt::request::ServiceInfo {
+        return tt::request::ServiceInfo{j.at("service").get<std::string>()};
     }
 
     // Here's the catch! You must provide a to_json method! Otherwise you
     // will not be able to convert move_only_type to json, since you fully
     // specialized adl_serializer on that type
-    static void
-    to_json(json &j, const tt::request::ServiceStatusRequest &notify_service) {
+    static void to_json(json &j,
+                        const tt::request::ServiceInfo &notify_service) {
         j["service"] = notify_service.service();
     }
 };

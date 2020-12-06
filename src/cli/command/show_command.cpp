@@ -28,7 +28,7 @@
 #include "tt/log/cli_logger.hpp"                 // for CliLogger
 #include "tt/net/client.hpp"                     // for Client
 #include "tt/request/pack_request.hpp"           // for PackRequest
-#include "tt/request/service_status_request.hpp" // for ServiceStatusRequest
+#include "tt/request/service_info.hpp" // for ServiceInfo
 #include "tt/svc/live_service.hpp"               // for LiveService
 #include "tt/utils/deserialize.hpp"              // for Deserialize
 
@@ -49,7 +49,7 @@ auto tt::cli::ShowCommand::Execute() -> int {
         return 255;
     }
 
-    request::ServiceStatusRequest request(service_.Get());
+    request::ServiceInfo request(service_.Get());
     auto s = request::PackRequest(request);
     if (auto ret = client.SendMessage(s); !ret.has_value()) {
         logger()->LogCritical("{}", ret.error());
