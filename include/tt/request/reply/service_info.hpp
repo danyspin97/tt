@@ -22,22 +22,23 @@
 
 #include <string> // for string
 
-#include "nlohmann/json_fwd.hpp" // for json
+#include "tt/request/reply/reply.hpp" // for Reply
+#include "tt/svc/live_service.hpp"    // for LiveService
 
-namespace tl {
-template <typename T, typename Z> class expected;
-} // namespace tl
+namespace tt::request::reply {
 
-namespace tt::request {
-
-class Reply;
-class Visitor;
-
-class Request {
+class ServiceInfo : public Reply {
 public:
-    virtual ~Request() = default;
-    virtual auto accept(Visitor &visitor)
-        -> tl::expected<nlohmann::json, std::string> = 0;
+    explicit ServiceInfo(const LiveService &live_service);
+    explicit ServiceInfo(std::string encoded_info);
+
+    [[nodiscard]] auto data() const -> std::string {
+        return encoded_service_info_;
+    }
+    [[nodiscard]] auto Decode() -> tl::expected<LiveService, std::string>;
+
+private:
+    std::string encoded_service_info_;
 };
 
-} // namespace tt::request
+} // namespace tt::request::reply

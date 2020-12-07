@@ -18,26 +18,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "tt/request/reply/get_reply_from_string.hpp"
 
-#include <string> // for string
+#include "fmt/format.h" // for format
 
-#include "nlohmann/json_fwd.hpp" // for json
+#include "nlohmann/json.hpp" // for json
 
-namespace tl {
-template <typename T, typename Z> class expected;
-} // namespace tl
+#include "tl/expected.hpp" // for expected
 
-namespace tt::request {
+using nlohmann::json;
 
-class Reply;
-class Visitor;
-
-class Request {
-public:
-    virtual ~Request() = default;
-    virtual auto accept(Visitor &visitor)
-        -> tl::expected<nlohmann::json, std::string> = 0;
-};
-
-} // namespace tt::request
+auto tt::request::GetReplyFromString(std::string reply)
+    -> tl::expected<json, std::string> {
+    try {
+        auto j = json::parse(reply);
+        if (!j.at("ok").get<bool>()) {
+            return tl::make_unexpected(j.at("error").get<std::string>());
+        }
+        return j.at("reply");
+    } catch (const nlohmann::detail::exception &e) {
+        return tl::make_unexpected(
+            fmt::format("'{}', while parsing reply '{}'", e.what(), reply));
+    }
+}

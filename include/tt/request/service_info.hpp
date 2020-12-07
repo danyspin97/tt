@@ -27,8 +27,14 @@
 
 namespace tt::request {
 
+namespace reply {
+class ServiceInfo;
+}
+
 class ServiceInfo : public Visited<ServiceInfo> {
 public:
+    using Reply = reply::ServiceInfo;
+
     explicit ServiceInfo(std::string service) : service_(std::move(service)) {}
     ServiceInfo() = delete;
 

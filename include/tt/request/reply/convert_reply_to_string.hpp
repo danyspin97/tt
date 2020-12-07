@@ -20,24 +20,19 @@
 
 #pragma once
 
-#include <string> // for string
+#include <memory> // for unique_ptr
 
-#include "nlohmann/json_fwd.hpp" // for json
+#include "nlohmann/json_fwd.hpp"
 
 namespace tl {
 template <typename T, typename Z> class expected;
-} // namespace tl
+}
 
 namespace tt::request {
 
 class Reply;
-class Visitor;
 
-class Request {
-public:
-    virtual ~Request() = default;
-    virtual auto accept(Visitor &visitor)
-        -> tl::expected<nlohmann::json, std::string> = 0;
-};
+auto ConvertReplyToString(tl::expected<nlohmann::json, std::string> reply)
+    -> std::string;
 
 } // namespace tt::request

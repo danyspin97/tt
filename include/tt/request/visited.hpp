@@ -22,15 +22,21 @@
 
 #include <memory> // for shared_ptr, enable_shared_from_this
 
-#include "tt/request/request.hpp" // for Request
-#include "tt/request/visitor.hpp" // for Visitor
+#include "nlohmann/json.hpp" // for json
+
+#include "tl/expected.hpp" // for expected
+
+#include "tt/request/reply/reply.hpp" // for Reply
+#include "tt/request/request.hpp"     // for Request
+#include "tt/request/visitor.hpp"     // for Visitor
 
 namespace tt::request {
 
 template <typename T>
 class Visited : public Request, public std::enable_shared_from_this<T> {
 public:
-    auto accept(Visitor &visitor) -> std::optional<std::string> override {
+    auto accept(Visitor &visitor)
+        -> tl::expected<nlohmann::json, std::string> override {
         return visitor(this->shared_from_this());
     }
 };

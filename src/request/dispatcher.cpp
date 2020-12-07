@@ -31,8 +31,10 @@
 
 #include "fmt/format.h" // for format
 
-#include "tt/request/notify_service_status.hpp"  // for NotifyServiceStatus
-#include "tt/request/service_info.hpp" // for ServiceStatus
+#include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
+#include "tt/request/reply/pack_reply.hpp"      // for PackReply
+#include "tt/request/reply/service_info.hpp"    // for ServiceInfo
+#include "tt/request/service_info.hpp"          // for ServiceInfo
 
 using nlohmann::json;
 
@@ -40,34 +42,19 @@ tt::request::Dispatcher::Dispatcher(LiveServiceGraph &live_graph)
     : live_graph_(live_graph) {}
 
 auto tt::request::Dispatcher::operator()(
-    std::shared_ptr<NotifyServiceStatus> notify) -> std::optional<std::string> {
+    std::shared_ptr<NotifyServiceStatus> notify)
+    -> tl::expected<json, std::string> {
     live_graph_.ChangeStatusOfService(notify->service(), notify->status());
     return {};
 }
 
-auto tt::request::Dispatcher::operator()(
-    std::shared_ptr<ServiceInfo> status)
-    -> std::optional<std::string> {
+auto tt::request::Dispatcher::operator()(std::shared_ptr<ServiceInfo> status)
+    -> tl::expected<json, std::string> {
     if (!live_graph_.HasService(status->service())) {
-        json j;
-        j["ok"] = false;
-        j["error"] = fmt::format("Service {} not found", status->service());
-        return j.dump();
+        return tl::make_unexpected(
+            fmt::format("Service {} not found", status->service()));
     }
 
-    auto &live_service = live_graph_.GetLiveServiceFromName(status->service());
-
-    using Buffer = std::vector<uint8_t>;
-    Buffer buffer;
-
-    bitsery::quickSerialization<bitsery::OutputBufferAdapter<Buffer>>(
-        buffer, live_service);
-    std::string serialized_live_service;
-    std::copy(buffer.cbegin(), buffer.cend(),
-              std::back_inserter(serialized_live_service));
-    auto encoded_status = macaron::Base64::Encode(serialized_live_service);
-    json j;
-    j["ok"] = true;
-    j["data"] = std::move(encoded_status);
-    return j.dump();
+    return PackReply(reply::ServiceInfo{
+        live_graph_.GetLiveServiceFromName(status->service())});
 }

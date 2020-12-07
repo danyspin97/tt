@@ -7,3 +7,5 @@ tt_cli_src += files(
     'request_factory.cpp',
     'request_listener.cpp',
 )
+
+subdir('reply')

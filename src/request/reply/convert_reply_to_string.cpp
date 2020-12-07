@@ -18,26 +18,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#include "tt/request/reply/convert_reply_to_string.hpp"
 
-#include <string> // for string
+#include "nlohmann/json.hpp" // for json
 
-#include "nlohmann/json_fwd.hpp" // for json
+#include "tl/expected.hpp" // for expected
 
-namespace tl {
-template <typename T, typename Z> class expected;
-} // namespace tl
+#include "tt/request/reply/reply.hpp" // for Reply
 
-namespace tt::request {
+using nlohmann::json;
 
-class Reply;
-class Visitor;
+auto tt::request::ConvertReplyToString(tl::expected<json, std::string> reply)
+    -> std::string {
+    json j;
+    if (!reply.has_value()) {
+        j["ok"] = false;
+        j["error"] = std::move(reply.error());
+    } else {
+        j["ok"] = true;
+        j["reply"] = std::move(reply.value());
+    }
 
-class Request {
-public:
-    virtual ~Request() = default;
-    virtual auto accept(Visitor &visitor)
-        -> tl::expected<nlohmann::json, std::string> = 0;
-};
-
-} // namespace tt::request
+    return j.dump();
+}

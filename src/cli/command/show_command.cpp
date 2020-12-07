@@ -20,17 +20,19 @@
 
 #include "tt/cli/command/show_command.hpp"
 
-#include "Base64.h"
+#include "nlohmann/json.hpp" // for json
 
 #include "tl/expected.hpp" // for expected
 
 #include "tt/cli/global_options.hpp"
-#include "tt/log/cli_logger.hpp"                 // for CliLogger
-#include "tt/net/client.hpp"                     // for Client
-#include "tt/request/pack_request.hpp"           // for PackRequest
-#include "tt/request/service_info.hpp" // for ServiceInfo
-#include "tt/svc/live_service.hpp"               // for LiveService
-#include "tt/utils/deserialize.hpp"              // for Deserialize
+#include "tt/log/cli_logger.hpp"                      // for CliLogger
+#include "tt/net/client.hpp"                          // for Client
+#include "tt/request/pack_request.hpp"                // for PackRequest
+#include "tt/request/reply/adapter/service_info.hpp"  // IWYU pragma: keep
+#include "tt/request/reply/get_reply_from_string.hpp" // for GetReplyFromString
+#include "tt/request/service_info.hpp"                // for ServiceInfo
+#include "tt/svc/live_service.hpp"                    // for LiveService
+#include "tt/utils/deserialize.hpp"                   // for Deserialize
 
 using nlohmann::json;
 
@@ -55,36 +57,35 @@ auto tt::cli::ShowCommand::Execute() -> int {
         logger()->LogCritical("{}", ret.error());
         return 255;
     }
-    auto reply = client.ReceiveMessage();
+    auto message_received = client.ReceiveMessage();
+    if (!message_received.has_value()) {
+        logger()->LogCritical("{}", message_received.error());
+        return 255;
+    }
+
+    auto reply = request::GetReplyFromString(message_received.value());
     if (!reply.has_value()) {
         logger()->LogCritical("{}", reply.error());
         return 255;
     }
 
-    auto j = json::parse(reply.value());
-    if (!j["ok"].get<bool>()) {
-        logger()->LogCritical("{}", j["error"].get<std::string>());
-        return 255;
-    }
-    auto base64_status = j["data"].get<std::string>();
-    std::string encoded_status;
-    macaron::Base64::Decode(base64_status, encoded_status);
-    std::vector<uint8_t> buffer;
-    buffer.reserve(encoded_status.size());
-    std::copy(encoded_status.begin(), encoded_status.end(),
-              std::back_insert_iterator(buffer));
-    LiveService live_service;
-    auto state = bitsery::quickDeserialization<
-        bitsery::InputBufferAdapter<std::vector<uint8_t>>>(
-        {buffer.begin(), buffer.size()}, live_service);
-    if (state.first == bitsery::ReaderError::NoError && state.second) {
-        logger()->LogCritical("{}", state.second);
-        return 255;
-    }
+    try {
+        auto live_service =
+            reply.value().get<request::ServiceInfo::Reply>().Decode();
+        if (!live_service.has_value()) {
+            logger()->LogCritical("{}", live_service.error());
+            return 255;
+        }
 
-    logger()->Print("name: {}\nstatus: {}\nremoval: {}", live_service.name(),
-                    GetServiceStatusName(live_service.status()),
-                    live_service.IsMarkedForRemoval());
+        logger()->Print("name: {}\nstatus: {}\nremoval: {}",
+                        live_service.value().name(),
+                        GetServiceStatusName(live_service.value().status()),
+                        live_service.value().IsMarkedForRemoval());
+
+    } catch (nlohmann::detail::exception &e) {
+        logger()->LogCritical("{}", e.what());
+        return 255;
+    }
 
     return 0;
 }

@@ -28,16 +28,17 @@
 namespace tt::request {
 
 class NotifyServiceStatus;
+class Reply;
 
 class Dispatcher : public Visitor {
 public:
     explicit Dispatcher(LiveServiceGraph &service_manager);
 
     auto operator()(std::shared_ptr<NotifyServiceStatus> notify)
-        -> std::optional<std::string> override;
+        -> tl::expected<nlohmann::json, std::string> override;
 
     auto operator()(std::shared_ptr<ServiceInfo> status)
-        -> std::optional<std::string> override;
+        -> tl::expected<nlohmann::json, std::string> override;
 
 private:
     LiveServiceGraph &live_graph_;

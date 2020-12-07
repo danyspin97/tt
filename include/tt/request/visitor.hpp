@@ -23,19 +23,24 @@
 #include <memory>   // for unique_ptr
 #include <optional> // for optional
 
+#include "nlohmann/json_fwd.hpp" // for json
+
+#include "tl/expected.hpp" // for expected
+
 namespace tt::request {
 
 class NotifyServiceStatus;
+class Reply;
 class ServiceInfo;
 
 class Visitor {
 public:
     virtual ~Visitor() = default;
     virtual auto operator()(std::shared_ptr<NotifyServiceStatus> notify)
-        -> std::optional<std::string> = 0;
+        -> tl::expected<nlohmann::json, std::string> = 0;
 
     virtual auto operator()(std::shared_ptr<ServiceInfo> status)
-        -> std::optional<std::string> = 0;
+        -> tl::expected<nlohmann::json, std::string> = 0;
 };
 
 } // namespace tt::request

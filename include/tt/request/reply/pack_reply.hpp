@@ -20,24 +20,28 @@
 
 #pragma once
 
-#include <string> // for string
+#include <sstream> // for stringstream
+#include <string>  // for string
 
-#include "nlohmann/json_fwd.hpp" // for json
+#include "fmt/format.h"      // for format
+#include "nlohmann/json.hpp" // for json
+#include "tl/expected.hpp"   // for expected
 
-namespace tl {
-template <typename T, typename Z> class expected;
-} // namespace tl
+#include "tt/request/reply/adapter/service_info.hpp" // IWYU pragma: keep
 
 namespace tt::request {
 
-class Reply;
-class Visitor;
+class Request;
 
-class Request {
-public:
-    virtual ~Request() = default;
-    virtual auto accept(Visitor &visitor)
-        -> tl::expected<nlohmann::json, std::string> = 0;
-};
+template <typename T>
+auto PackReply(const T &reply) -> tl::expected<nlohmann::json, std::string> {
+    static_assert(std::is_base_of_v<Reply, T>, "T must derive from Reply");
+    try {
+        return reply;
+    } catch (nlohmann::detail::exception &e) {
+        return tl::make_unexpected(
+            fmt::format("'{}', while converting reply to JSON", e.what()));
+    }
+}
 
 } // namespace tt::request

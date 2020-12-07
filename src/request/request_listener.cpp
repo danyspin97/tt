@@ -33,10 +33,11 @@
 #include "tt/net/server.hpp"                    // for Server
 #include "tt/path/dirs.hpp"                     // for Dirs
 #include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
-#include "tt/request/request.hpp"               // for Action
-#include "tt/request/request_factory.hpp"       // for ActionFactory
-#include "tt/svc/live_service_graph.hpp"        // for LiveServiceGraph
-#include "tt/utils/launch_async.hpp"            // for LaunchAsync
+#include "tt/request/reply/convert_reply_to_string.hpp" // for ConvertReplyT...
+#include "tt/request/request.hpp"                       // for Action
+#include "tt/request/request_factory.hpp"               // for ActionFactory
+#include "tt/svc/live_service_graph.hpp"                // for LiveServiceGraph
+#include "tt/utils/launch_async.hpp"                    // for LaunchAsync
 
 tt::request::RequestListener::RequestListener(LiveServiceGraph &service_manager,
                                               const std::shared_ptr<Dirs> &dirs)
@@ -68,11 +69,9 @@ void tt::request::RequestListener::Listen() {
         }
 
         auto reply = request.value()->accept(dispatcher_);
-        if (reply) {
-            auto send_err = server.SendMessage(reply.value());
-            if (!send_err) {
-                SPDLOG_ERROR(send_err.error());
-            }
+        auto send_err = server.SendMessage(ConvertReplyToString(reply));
+        if (!send_err) {
+            SPDLOG_ERROR(send_err.error());
         }
     }
 }
