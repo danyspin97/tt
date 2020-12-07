@@ -14,5 +14,5 @@ build = auto
 execute = test
 
 [options]
-depends =[ dummy ]
+dependencies =[ dummy ]
 

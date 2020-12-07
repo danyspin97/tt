@@ -10,5 +10,5 @@ execute =(
 )
 
 [options]
-depends = [ init-fsck mount-rwfs ]
+dependencies = [ init-fsck mount-rwfs ]
 

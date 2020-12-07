@@ -1,2 +1,2 @@
 optional = yes
-depends = [ foo bar ]
+dependencies = [ foo bar ]

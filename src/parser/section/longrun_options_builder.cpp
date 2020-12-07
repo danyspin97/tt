@@ -36,7 +36,7 @@ auto tt::LongrunOptionsBuilder::GetValidAttributes() const noexcept
 
 auto tt::LongrunOptionsBuilder::GetValidArrayAttributes() const noexcept
     -> std::vector<std::string> {
-    return {"depends"};
+    return {"dependencies"};
 }
 
 auto tt::LongrunOptionsBuilder::EndParsing() noexcept
@@ -54,8 +54,9 @@ auto tt::LongrunOptionsBuilder::EndParsing() noexcept
         options_.optional(ret.value());
     }
 
-    if (auto depends = GetArrayAttribute("depends"); depends.has_value()) {
-        options_.dependencies(depends.value());
+    if (auto dependencies = GetArrayAttribute("dependencies");
+        dependencies.has_value()) {
+        options_.dependencies(dependencies.value());
     }
     return {};
 }

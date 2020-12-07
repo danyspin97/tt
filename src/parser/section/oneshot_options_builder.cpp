@@ -46,9 +46,10 @@ auto tt::OneshotOptionsBuilder::EndParsing() noexcept
         options_.optional(ret.value());
     }
 
-    if (auto depends = GetArrayAttribute("depends"); depends.has_value()) {
+    if (auto dependencies = GetArrayAttribute("dependencies");
+        dependencies.has_value()) {
         // TODO: Check if deps is set more than one type
-        options_.dependencies(depends.value());
+        options_.dependencies(dependencies.value());
     }
 
     return {};
@@ -61,7 +62,7 @@ auto tt::OneshotOptionsBuilder::GetValidAttributes() const noexcept
 
 auto tt::OneshotOptionsBuilder::GetValidArrayAttributes() const noexcept
     -> std::vector<std::string> {
-    return {"depends"};
+    return {"dependencies"};
 }
 
 auto tt::OneshotOptionsBuilder::options() const noexcept -> OneshotOptions {

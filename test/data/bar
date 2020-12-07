@@ -10,4 +10,4 @@ execute =(
 )
 
 [options]
-depends =[ foobar ]
+dependencies =[ foobar ]
