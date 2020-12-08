@@ -127,7 +127,7 @@ void tt::LiveServiceGraph::StartService(LiveService &live_service) {
 
     auto deps_satisfied = true;
     for (const auto &dep : deps) {
-        if (WaitOnServiceStart(dep)) {
+        if (!WaitOnServiceStart(dep)) {
             deps_satisfied = false;
             break;
         }
