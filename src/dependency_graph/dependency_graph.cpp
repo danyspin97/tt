@@ -143,7 +143,8 @@ void tt::DependencyGraph::CheckGraphIsAcyclic(
                         throw Exception("Cycle found while calculating the "
                                         "dependencies of the services");
                     default:
-                        assert(false);
+                        // Found a black node, go to the next
+                        ;
                     }
                 });
 
