@@ -20,14 +20,12 @@
 
 #pragma once
 
-#include <cstddef>       // for size_t
-#include <filesystem>    // for path
-#include <future>        // for future
-#include <memory>        // for shared_ptr
-#include <shared_mutex>  // for shared_mutex
-#include <string>        // for string, hash
-#include <unordered_map> // for unordered_map
-#include <vector>        // for vector
+#include <cstddef>    // for size_t
+#include <filesystem> // for path
+#include <future>     // for future
+#include <set>        // for set
+#include <string>     // for string, hash
+#include <vector>     // for vector
 
 #include "tt/data/service.hpp" // for Service
 
@@ -53,14 +51,10 @@ private:
     auto GetPathForServiceName(const std::string &name)
         -> tl::expected<std::string, ParserError>;
 
-    std::mutex services_to_parse_mutex_;
-    std::mutex futures_mutex_;
+    std::mutex mutex_;
     std::string suffix_;
     std::vector<std::filesystem::path> paths_;
-    std::atomic_uint16_t service_to_parse_{};
-    std::vector<std::string> service_names_to_parse_;
     std::vector<std::future<tl::expected<Service, ParserError>>> futures_;
-    std::condition_variable future_cv_;
-    std::condition_variable services_cv_;
+    std::set<std::string> services_parsed_;
 };
 } // namespace tt

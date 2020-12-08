@@ -43,42 +43,21 @@ auto tt::ServicesParser::ParseServices(
     const std::vector<std::string> &service_names)
     -> tl::expected<std::vector<Service>, ParserError> {
     std::vector<Service> services;
+    std::unique_lock lock(mutex_);
     for (const auto &name : service_names) {
-        service_names_to_parse_.emplace_back(name);
+        if (services_parsed_.find(name) != services_parsed_.end()) {
+            continue;
+        }
+
+        futures_.emplace_back(std::async(
+            std::launch::async, [this, name]() { return ParseService(name); }));
+        services_parsed_.emplace(name);
     }
-    service_to_parse_.store(service_names_to_parse_.size());
 
-    auto launch_service_parser = std::async(std::launch::async, [this]() {
-        while (service_to_parse_ != 0) {
-            std::unique_lock lock(services_to_parse_mutex_);
-            while (service_names_to_parse_.empty() && service_to_parse_ != 0) {
-                services_cv_.wait(lock);
-            }
+    lock.unlock();
 
-            if (service_to_parse_ == 0) {
-                return;
-            }
-
-            auto name = service_names_to_parse_.back();
-            service_names_to_parse_.pop_back();
-            lock.unlock();
-            auto future = std::async(std::launch::async, [this, name]() {
-                return ParseService(name);
-            });
-            std::unique_lock futures_lock(futures_mutex_);
-            futures_.emplace_back(std::move(future));
-            future_cv_.notify_one();
-            futures_lock.unlock();
-        }
-    });
-
-    while (service_to_parse_ != 0) {
-        std::unique_lock lock(futures_mutex_);
-        while (futures_.empty()) {
-            future_cv_.wait(lock);
-        }
-        service_to_parse_--;
-
+    lock.lock();
+    while (!futures_.empty()) {
         auto future = std::move(futures_.back());
         futures_.pop_back();
         lock.unlock();
@@ -87,11 +66,10 @@ auto tt::ServicesParser::ParseServices(
         if (!service.has_value()) {
             return tl::unexpected(service.error());
         }
-        services.emplace_back(service.value());
+        assert(!std::holds_alternative<std::monostate>(service.value()));
+        services.emplace_back(std::move(service.value()));
+        lock.lock();
     }
-
-    services_cv_.notify_one();
-    launch_service_parser.wait();
 
     return services;
 }
@@ -162,13 +140,14 @@ auto tt::ServicesParser::GetPathForServiceName(const std::string &name)
 }
 
 void tt::ServicesParser::ParseDependenciesOfService(const Service &service) {
-    std::vector<std::string> deps;
-    ForEachDependencyOfService(service,
-                               [&deps](auto name) { deps.emplace_back(name); });
-    service_to_parse_.fetch_add(deps.size());
-    std::unique_lock lock(services_to_parse_mutex_);
-    service_names_to_parse_.insert(service_names_to_parse_.end(), deps.begin(),
-                                   deps.end());
-    lock.unlock();
-    services_cv_.notify_one();
+    std::unique_lock lock(mutex_);
+    ForEachDependencyOfService(service, [this](auto name) {
+        if (services_parsed_.find(name) != services_parsed_.end()) {
+            return;
+        }
+
+        futures_.emplace_back(std::async(
+            std::launch::async, [this, name]() { return ParseService(name); }));
+        services_parsed_.emplace(name);
+    });
 }
