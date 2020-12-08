@@ -183,6 +183,12 @@ void tt::DependencyGraph::RemoveServices(
 }
 
 void tt::DependencyGraph::RemoveNode(std::string service_name) {
+    // This node has already been removed from the graph
+    // When we were recursively removing the depencies of another nodes
+    if (!HasService(service_name)) {
+        return;
+    }
+
     auto &node = GetNodeFromName(service_name);
     ForEachDependencyOfNode(node, [this, &service_name](ServiceNode &dep_node) {
         dep_node.RemoveDependant(service_name);
@@ -224,6 +230,11 @@ void tt::DependencyGraph::ForEachDependencyOfNode(const ServiceNode &node,
                                                   Func function) {
     tt::ForEachDependencyOfService(
         node.service(), [this, function](auto &dep_name) {
+            // This dependency can have been already removed when calling this
+            if (!HasService(dep_name)) {
+                return;
+            }
+
             auto &dep_node = GetNodeFromName(dep_name);
             function(dep_node);
         });

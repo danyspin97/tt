@@ -9,3 +9,5 @@ execute =(
     echo "test"
 )
 
+[options]
+dependencies = [ init-fsck ]
