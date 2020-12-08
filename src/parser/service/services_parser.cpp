@@ -96,7 +96,7 @@ auto tt::ServicesParser::ParseService(const std::string &service_name)
     auto service = parser->ParseService(path.value());
     if (!service.has_value()) {
         return chain_parser_error<Service>(
-            service.error(), fmt::format(" for service '{}'", path.value()));
+            service.error(), fmt::format(" in file '{}'", path.value()));
     }
     assert(!std::holds_alternative<std::monostate>(service.value()));
     ParseDependenciesOfService(service.value());
@@ -134,8 +134,8 @@ auto tt::ServicesParser::GetPathForServiceName(const std::string &name)
          std::ostream_iterator<std::string>(joined_paths, ","));
     return make_parser_error<std::string>(
         ParserError::Type::ServiceNotFound,
-        fmt::format("Service '{}{}' could not be found in directories ", name,
-                    suffix_));
+        fmt::format("Service '{}{}' could not be found in directories {}", name,
+                    suffix_, joined_paths.str()));
     ;
 }
 

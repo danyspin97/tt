@@ -38,8 +38,7 @@ auto tt::ServiceDirector::ParseAndGetService(
     -> tl::expected<Service, ParserError> {
     service_lines_ = std::move(service_lines);
     if (auto ret = ParseSections(); !ret.has_value()) {
-        return chain_parser_error<Service>(
-            ret.error(), fmt::format(" in service '{}'", path));
+        return tl::make_unexpected(ret.error());
     }
     return InstanceService(std::move(path));
 }
