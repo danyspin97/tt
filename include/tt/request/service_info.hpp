@@ -43,7 +43,7 @@ public:
         return std::move(service_);
     }
 
-    static inline const std::string request_name = "show_service_status";
+    static inline const std::string request_name = "service_info";
 
 private:
     std::string service_;
