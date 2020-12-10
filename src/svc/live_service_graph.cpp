@@ -258,3 +258,12 @@ auto tt::LiveServiceGraph::services() const
     }
     return services;
 }
+
+auto tt::LiveServiceGraph::live_services() const
+    -> std::vector<std::reference_wrapper<const LiveService>> {
+    std::vector<std::reference_wrapper<const LiveService>> services;
+    for (const auto &live_service : live_services_) {
+        services.emplace_back(std::cref(live_service));
+    }
+    return services;
+}

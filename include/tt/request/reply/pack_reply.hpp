@@ -28,6 +28,7 @@
 #include "tl/expected.hpp"   // for expected
 
 #include "tt/request/reply/adapter/service_info.hpp" // IWYU pragma: keep
+#include "tt/request/reply/adapter/system_info.hpp"  // IWYU pragma: keep
 
 namespace tt::request {
 

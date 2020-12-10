@@ -32,6 +32,7 @@ namespace tt::request {
 class NotifyServiceStatus;
 class Reply;
 class ServiceInfo;
+class SystemInfo;
 
 class Visitor {
 public:
@@ -40,6 +41,9 @@ public:
         -> tl::expected<nlohmann::json, std::string> = 0;
 
     virtual auto operator()(std::shared_ptr<ServiceInfo> status)
+        -> tl::expected<nlohmann::json, std::string> = 0;
+
+    virtual auto operator()(std::shared_ptr<SystemInfo> status)
         -> tl::expected<nlohmann::json, std::string> = 0;
 };
 

@@ -20,25 +20,29 @@
 
 #pragma once
 
-#include <sstream> // for stringstream
-#include <string>  // for string
+#include <string> // for string
 
-#include <nlohmann/json.hpp>
+#include "tt/request/reply/reply.hpp" // for Reply
+#include "tt/svc/live_service.hpp"    // for LiveService
 
-#include "tt/request/adapter/notify_service_statup.hpp" // IWYU pragma: keep
-#include "tt/request/adapter/service_info.hpp"          // IWYU pragma: keep
-#include "tt/request/adapter/system_info.hpp"           // IWYU pragma: keep
+namespace tt::request::reply {
 
-namespace tt::request {
+class SystemInfo : public Reply {
+public:
+    explicit SystemInfo(
+        const std::vector<std::reference_wrapper<const LiveService>>
+            &live_service);
+    explicit SystemInfo(std::vector<std::string> &&encoded_services);
 
-class Request;
+    [[nodiscard]] auto data() const -> std::vector<std::string> {
+        return encoded_services_;
+    }
 
-template <typename T> auto PackRequest(const T &request) -> std::string {
-    static_assert(std::is_base_of_v<Request, T>, "T must derive from Request");
-    nlohmann::json j;
-    j["request_name"] = T::request_name;
-    j["request"] = request;
-    return j.dump();
-}
+    [[nodiscard]] auto Decode()
+        -> tl::expected<std::vector<LiveService>, std::string>;
 
-} // namespace tt::request
+private:
+    std::vector<std::string> encoded_services_;
+};
+
+} // namespace tt::request::reply

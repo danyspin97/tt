@@ -37,6 +37,8 @@ class LiveServiceGraph {
 public:
     LiveServiceGraph(DependencyGraph &&graph, std::shared_ptr<Dirs> dirs);
 
+    [[nodiscard]] auto live_services() const
+        -> std::vector<std::reference_wrapper<const LiveService>>;
     [[nodiscard]] auto services() const
         -> std::vector<std::reference_wrapper<const Service>>;
 

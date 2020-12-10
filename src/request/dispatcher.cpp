@@ -34,6 +34,7 @@
 #include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
 #include "tt/request/reply/pack_reply.hpp"      // for PackReply
 #include "tt/request/reply/service_info.hpp"    // for ServiceInfo
+#include "tt/request/reply/system_info.hpp"     // for SystemInfo
 #include "tt/request/service_info.hpp"          // for ServiceInfo
 
 using nlohmann::json;
@@ -57,4 +58,10 @@ auto tt::request::Dispatcher::operator()(std::shared_ptr<ServiceInfo> status)
 
     return PackReply(reply::ServiceInfo{
         live_graph_.GetLiveServiceFromName(status->service())});
+}
+
+auto tt::request::Dispatcher::operator()(
+    std::shared_ptr<SystemInfo> /*system_info*/)
+    -> tl::expected<json, std::string> {
+    return PackReply(reply::SystemInfo{live_graph_.live_services()});
 }

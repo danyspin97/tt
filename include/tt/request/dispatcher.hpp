@@ -40,6 +40,9 @@ public:
     auto operator()(std::shared_ptr<ServiceInfo> status)
         -> tl::expected<nlohmann::json, std::string> override;
 
+    auto operator()(std::shared_ptr<SystemInfo> system_info)
+        -> tl::expected<nlohmann::json, std::string> override;
+
 private:
     LiveServiceGraph &live_graph_;
 };
