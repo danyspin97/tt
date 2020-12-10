@@ -53,11 +53,13 @@ void tt::LiveServiceGraph::Update(DependencyGraph &&new_dependency_graph) {
         if (existing_services->first < new_services->first) {
             GetLiveServiceFromName(existing_services->first).MarkForRemoval();
             existing_services++;
+            continue;
         }
         // The existing graph is missing a service
         if (existing_services->first > new_services->first) {
             nodes_to_add.emplace_back(std::cref(new_services->first));
             new_services++;
+            continue;
         }
 
         // Both graphs have this service
@@ -71,6 +73,15 @@ void tt::LiveServiceGraph::Update(DependencyGraph &&new_dependency_graph) {
         existing_services++;
         new_services++;
     }
+
+    std::for_each(existing_services, name_to_index_.end(), [this](auto &pair) {
+        GetLiveServiceFromName(pair.first).MarkForRemoval();
+    });
+
+    std::for_each(new_services, name_to_index.end(),
+                  [&nodes_to_add](const auto &pair) {
+                      nodes_to_add.emplace_back(std::cref(pair.first));
+                  });
 
     if (nodes_to_add.empty()) {
         return;
