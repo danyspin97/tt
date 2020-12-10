@@ -31,21 +31,36 @@
 
 #include "fmt/format.h" // for format
 
-#include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
-#include "tt/request/reply/pack_reply.hpp"      // for PackReply
-#include "tt/request/reply/service_info.hpp"    // for ServiceInfo
-#include "tt/request/reply/system_info.hpp"     // for SystemInfo
-#include "tt/request/service_info.hpp"          // for ServiceInfo
+#include "tt/dependency_graph/get_graph_filename.hpp" // for GetGraphFilename
+#include "tt/request/notify_service_status.hpp"       // for NotifyServiceStatus
+#include "tt/request/reply/pack_reply.hpp"            // for PackReply
+#include "tt/request/reply/service_info.hpp"          // for ServiceInfo
+#include "tt/request/reply/system_info.hpp"           // for SystemInfo
+#include "tt/request/service_info.hpp"                // for ServiceInfo
 
 using nlohmann::json;
 
-tt::request::Dispatcher::Dispatcher(LiveServiceGraph &live_graph)
-    : live_graph_(live_graph) {}
+tt::request::Dispatcher::Dispatcher(LiveServiceGraph &live_graph,
+                                    std::shared_ptr<Dirs> dirs)
+    : live_graph_(live_graph), dirs_(std::move(dirs)) {}
 
 auto tt::request::Dispatcher::operator()(
     std::shared_ptr<NotifyServiceStatus> notify)
     -> tl::expected<json, std::string> {
     live_graph_.ChangeStatusOfService(notify->service(), notify->status());
+    return {};
+}
+
+auto tt::request::Dispatcher::operator()(
+    std::shared_ptr<ReloadGraph> /*reload_graph*/)
+    -> tl::expected<json, std::string> {
+    auto graph_filename = GetGraphFilename(dirs_);
+    if (!std::filesystem::exists(graph_filename) ||
+        !std::filesystem::is_regular_file(graph_filename)) {
+        return tl::make_unexpected("Could not find the serialized graph.");
+    }
+
+    live_graph_.Update(utils::Deserialize<DependencyGraph>(graph_filename));
     return {};
 }
 

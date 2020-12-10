@@ -20,26 +20,20 @@
 
 #pragma once
 
-#include <sstream> // for stringstream
-#include <string>  // for string
+#include <nlohmann/json.hpp> // for json, adl_serializer
 
-#include <nlohmann/json.hpp>
+#include "tt/request/reload_graph.hpp" // for ReloadGraph
 
-#include "tt/request/adapter/notify_service_statup.hpp" // IWYU pragma: keep
-#include "tt/request/adapter/reload_graph.hpp"          // IWYU pragma: keep
-#include "tt/request/adapter/service_info.hpp"          // IWYU pragma: keep
-#include "tt/request/adapter/system_info.hpp"           // IWYU pragma: keep
+namespace nlohmann {
+template <> struct adl_serializer<tt::request::ReloadGraph> {
+    static auto from_json(const json & /*j*/) -> tt::request::ReloadGraph {
+        return tt::request::ReloadGraph{};
+    }
 
-namespace tt::request {
-
-class Request;
-
-template <typename T> auto PackRequest(const T &request) -> std::string {
-    static_assert(std::is_base_of_v<Request, T>, "T must derive from Request");
-    nlohmann::json j;
-    j["request_name"] = T::request_name;
-    j["request"] = request;
-    return j.dump();
-}
-
-} // namespace tt::request
+    // Here's the catch! You must provide a to_json method! Otherwise you
+    // will not be able to convert move_only_type to json, since you fully
+    // specialized adl_serializer on that type
+    static void to_json(json & /*j*/,
+                        const tt::request::ReloadGraph & /*notify_service*/) {}
+};
+} // namespace nlohmann

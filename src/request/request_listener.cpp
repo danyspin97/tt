@@ -41,7 +41,7 @@
 
 tt::request::RequestListener::RequestListener(LiveServiceGraph &service_manager,
                                               const std::shared_ptr<Dirs> &dirs)
-    : dispatcher_(service_manager),
+    : dispatcher_(service_manager, dirs),
       socket_path_(dirs->livedir() / "tt-ipc.socket") {}
 
 void tt::request::RequestListener::Listen() {

@@ -27,9 +27,11 @@
 #include "tt/dependency_graph/utils.hpp" // for GetName
 #include "tt/file_lock.hpp"              // for FileLock
 #include "tt/log/cli_logger.hpp"         // for CliLogger
+#include "tt/net/client.hpp"             // for Client
 #include "tt/parser/parser_error.hpp"    // for ParserError
 #include "tt/parser/service/services_parser.hpp"
 #include "tt/path/dirs.hpp"
+#include "tt/request/pack_request.hpp" // for PackRequest
 #include "tt/utils/deserialize.hpp"
 #include "tt/utils/serialize.hpp"
 
@@ -96,7 +98,29 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
     }
 
     graph.AddServices(service_list, services);
-
     utils::Serialize(graph, graph_filename);
+
+    if (!std::filesystem::exists(dirs()->livedir() / ".svc_lock")) {
+        return 0;
+    }
+
+    net::Client client(dirs()->livedir() / "tt-ipc.socket");
+    if (auto ret = client.Connect(); !ret.has_value()) {
+        logger()->LogCritical("{}", ret.error());
+        return 255;
+    }
+
+    request::ReloadGraph request;
+    auto s = request::PackRequest(request);
+    if (auto ret = client.SendMessage(s); !ret.has_value()) {
+        logger()->LogCritical("{}", ret.error());
+        return 255;
+    }
+    auto message_received = client.ReceiveMessage();
+    if (!message_received.has_value()) {
+        logger()->LogCritical("{}", message_received.error());
+        return 255;
+    }
+
     return 0;
 }

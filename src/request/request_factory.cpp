@@ -29,9 +29,11 @@
 
 #include "tt/exception.hpp"                             // for Exception
 #include "tt/request/adapter/notify_service_statup.hpp" // IWYU pragma: keep
+#include "tt/request/adapter/reload_graph.hpp"          // IWYU pragma: keep
 #include "tt/request/adapter/service_info.hpp"          // IWYU pragma: keep
 #include "tt/request/adapter/system_info.hpp"           // IWYU pragma: keep
 #include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
+#include "tt/request/reload_graph.hpp"          // for ReloadGraph
 #include "tt/request/service_info.hpp"          // for ServiceStatus
 #include "tt/request/system_info.hpp"           // for SystemInfo
 
@@ -57,6 +59,9 @@ auto tt::request::RequestFactory::GetRequestFromBuffer(
         }
         if (request_name == SystemInfo::request_name) {
             return std::make_shared<SystemInfo>(std::move(j_req));
+        }
+        if (request_name == ReloadGraph::request_name) {
+            return std::make_shared<ReloadGraph>(std::move(j_req));
         }
         return tl::make_unexpected(request_name +
                                    " is not a valid request name");

@@ -32,9 +32,13 @@ class Reply;
 
 class Dispatcher : public Visitor {
 public:
-    explicit Dispatcher(LiveServiceGraph &service_manager);
+    explicit Dispatcher(LiveServiceGraph &service_manager,
+                        std::shared_ptr<Dirs> dirs);
 
     auto operator()(std::shared_ptr<NotifyServiceStatus> notify)
+        -> tl::expected<nlohmann::json, std::string> override;
+
+    auto operator()(std::shared_ptr<ReloadGraph> status)
         -> tl::expected<nlohmann::json, std::string> override;
 
     auto operator()(std::shared_ptr<ServiceInfo> status)
@@ -45,6 +49,7 @@ public:
 
 private:
     LiveServiceGraph &live_graph_;
+    std::shared_ptr<Dirs> dirs_;
 };
 
 } // namespace tt::request
