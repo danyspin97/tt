@@ -37,6 +37,8 @@
 #include "tt/request/reply/service_info.hpp"          // for ServiceInfo
 #include "tt/request/reply/system_info.hpp"           // for SystemInfo
 #include "tt/request/service_info.hpp"                // for ServiceInfo
+#include "tt/request/start_services.hpp"              // for StartServices
+#include "tt/request/stop_services.hpp"               // for StopServices
 
 using nlohmann::json;
 
@@ -73,6 +75,62 @@ auto tt::request::Dispatcher::operator()(std::shared_ptr<ServiceInfo> status)
 
     return PackReply(reply::ServiceInfo{
         live_graph_.GetLiveServiceFromName(status->service())});
+}
+
+auto tt::request::Dispatcher::operator()(
+    std::shared_ptr<StartServices> start_request)
+    -> tl::expected<json, std::string> {
+    std::string error_msg;
+
+    auto services = std::move(start_request->services());
+    for (auto &service_name : services) {
+        if (!live_graph_.HasService(service_name)) {
+            return tl::make_unexpected(
+                fmt::format("Service {} not found", service_name));
+        }
+    }
+
+    std::for_each(services.begin(), services.end(),
+                  [this, &error_msg](auto &service_name) {
+                      auto ret = live_graph_.StartService(service_name);
+                      if (!ret.has_value()) {
+                          fmt::format_to(std::back_inserter(error_msg), "{}",
+                                         ret.error());
+                          return;
+                      }
+                      if (ret.value() != ScriptStatus::Success) {
+                          fmt::format_to(std::back_inserter(error_msg),
+                                         "Service {} failed to start",
+                                         service_name);
+                      }
+                  });
+    return error_msg.empty() ? tl::expected<json, std::string>{}
+                             : tl::make_unexpected(error_msg);
+}
+
+auto tt::request::Dispatcher::operator()(
+    std::shared_ptr<StopServices> stop_request)
+    -> tl::expected<json, std::string> {
+    std::string error_msg;
+
+    auto services = std::move(stop_request->services());
+    for (auto &service_name : services) {
+        if (!live_graph_.HasService(service_name)) {
+            return tl::make_unexpected(
+                fmt::format("Service {} not found", service_name));
+        }
+    }
+
+    std::for_each(services.begin(), services.end(),
+                  [this, &error_msg](auto &service_name) {
+                      auto ret = live_graph_.StopService(service_name);
+                      if (!ret.has_value()) {
+                          fmt::format_to(std::back_inserter(error_msg), "{}",
+                                         ret.error());
+                      }
+                  });
+    return error_msg.empty() ? tl::expected<json, std::string>{}
+                             : tl::make_unexpected(error_msg);
 }
 
 auto tt::request::Dispatcher::operator()(

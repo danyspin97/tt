@@ -65,6 +65,17 @@ public:
     void UnmarkForRemoval() { remove_ = false; }
     [[nodiscard]] auto IsMarkedForRemoval() const -> bool { return remove_; }
 
+    [[nodiscard]] auto NeedUpdate() -> bool {
+        return updated_node_.has_value();
+    }
+
+    void Update() {
+        if (updated_node_.has_value()) {
+            node_ = updated_node_.value();
+            updated_node_ = {};
+        }
+    }
+
     void WaitUp() {
         std::unique_lock<std::mutex> lock(*mutex_);
         (start_condition_)->wait(lock, [this]() {

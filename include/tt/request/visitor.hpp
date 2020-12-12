@@ -33,6 +33,8 @@ class NotifyServiceStatus;
 class ReloadGraph;
 class Reply;
 class ServiceInfo;
+class StartServices;
+class StopServices;
 class SystemInfo;
 
 class Visitor {
@@ -45,6 +47,12 @@ public:
         -> tl::expected<nlohmann::json, std::string> = 0;
 
     virtual auto operator()(std::shared_ptr<ServiceInfo> status)
+        -> tl::expected<nlohmann::json, std::string> = 0;
+
+    virtual auto operator()(std::shared_ptr<StartServices> status)
+        -> tl::expected<nlohmann::json, std::string> = 0;
+
+    virtual auto operator()(std::shared_ptr<StopServices> status)
         -> tl::expected<nlohmann::json, std::string> = 0;
 
     virtual auto operator()(std::shared_ptr<SystemInfo> status)

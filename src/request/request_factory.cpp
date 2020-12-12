@@ -31,10 +31,14 @@
 #include "tt/request/adapter/notify_service_statup.hpp" // IWYU pragma: keep
 #include "tt/request/adapter/reload_graph.hpp"          // IWYU pragma: keep
 #include "tt/request/adapter/service_info.hpp"          // IWYU pragma: keep
+#include "tt/request/adapter/start_services.hpp"        // IWYU pragma: keep
+#include "tt/request/adapter/stop_services.hpp"         // IWYU pragma: keep
 #include "tt/request/adapter/system_info.hpp"           // IWYU pragma: keep
 #include "tt/request/notify_service_status.hpp" // for NotifyServiceStatus
 #include "tt/request/reload_graph.hpp"          // for ReloadGraph
 #include "tt/request/service_info.hpp"          // for ServiceStatus
+#include "tt/request/start_services.hpp"        // for StartServices
+#include "tt/request/stop_services.hpp"         // for StopServices
 #include "tt/request/system_info.hpp"           // for SystemInfo
 
 using json = nlohmann::json;
@@ -56,6 +60,12 @@ auto tt::request::RequestFactory::GetRequestFromBuffer(
         }
         if (request_name == ServiceInfo::request_name) {
             return std::make_shared<ServiceInfo>(std::move(j_req));
+        }
+        if (request_name == StartServices::request_name) {
+            return std::make_shared<StartServices>(std::move(j_req));
+        }
+        if (request_name == StopServices::request_name) {
+            return std::make_shared<StopServices>(std::move(j_req));
         }
         if (request_name == SystemInfo::request_name) {
             return std::make_shared<SystemInfo>(std::move(j_req));

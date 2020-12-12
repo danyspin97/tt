@@ -21,8 +21,30 @@
 #include "tt/cli/command/stop_command.hpp"
 
 #include "tt/cli/global_options.hpp"
+#include "tt/log/cli_logger.hpp"       // for CliLogger
+#include "tt/request/make_request.hpp" // for MakeRequest
 
 tt::cli::StopCommand::StopCommand(args::Subparser &parser)
     : Command(parser), services_(parser, "service", "services to stop") {}
 
-auto tt::cli::StopCommand::Execute() -> int { return 0; }
+auto tt::cli::StopCommand::Execute() -> int {
+    net::Client client(dirs()->livedir() / "tt-ipc.socket");
+    if (auto ret = client.Connect(); !ret.has_value()) {
+        logger()->LogError("{}", ret.error());
+        return 255;
+    }
+
+    auto services = std::move(args::get(services_));
+    if (services.empty()) {
+        logger()->LogError("No service passed");
+        return 255;
+    }
+
+    auto reply = request::MakeRequest(
+        dirs(), request::StopServices{std::move(services)});
+    if (!reply.has_value()) {
+        logger()->LogError("{}", reply.error());
+    }
+
+    return 0;
+}
