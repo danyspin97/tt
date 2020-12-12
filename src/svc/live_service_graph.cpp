@@ -132,6 +132,7 @@ void tt::LiveServiceGraph::StopAllServices() {
 }
 
 void tt::LiveServiceGraph::StartService(LiveService &live_service) {
+    ChangeStatusOfService(live_service.name(), ServiceStatus::Starting);
     DependencyReader dep_reader{};
     std::visit(std::ref(dep_reader), live_service.service());
     auto deps = dep_reader.dependencies();
@@ -157,7 +158,6 @@ void tt::LiveServiceGraph::StartService(LiveService &live_service) {
                 const auto &oneshot = static_cast<Oneshot>(service);
                 OneshotSupervisor supervisor{
                     oneshot, logger_registry_.GetOneshotLogger(service_name)};
-                ChangeStatusOfService(service_name, ServiceStatus::Starting);
                 bool success = supervisor.Start();
                 auto new_status =
                     success ? ServiceStatus::Up : ServiceStatus::Down;
@@ -172,6 +172,7 @@ void tt::LiveServiceGraph::StartService(LiveService &live_service) {
 }
 
 void tt::LiveServiceGraph::StopService(LiveService &live_service) {
+    ChangeStatusOfService(live_service.name(), ServiceStatus::Stopping);
     const auto &dependants = live_service.node().dependants();
     for (const auto &dependant : dependants) {
         WaitOnServiceDown(dependant);
@@ -187,11 +188,8 @@ void tt::LiveServiceGraph::StopService(LiveService &live_service) {
                     OneshotSupervisor supervisor{
                         oneshot,
                         logger_registry_.GetOneshotLogger(service_name)};
-                    ChangeStatusOfService(service_name,
-                                          ServiceStatus::Stopping);
                     supervisor.Stop();
                 }
-                ChangeStatusOfService(service_name, ServiceStatus::Down);
             } else if constexpr (std::is_same_v<std::decay_t<decltype(service)>,
                                                 Longrun>) {
                 auto supervisor = std::move(live_service.supervisor());
@@ -202,6 +200,7 @@ void tt::LiveServiceGraph::StopService(LiveService &live_service) {
             }
         },
         live_service.service());
+    ChangeStatusOfService(live_service.name(), ServiceStatus::Down);
 }
 
 void tt::LiveServiceGraph::ChangeStatusOfService(const std::string &service,
