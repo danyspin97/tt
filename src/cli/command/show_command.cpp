@@ -25,14 +25,9 @@
 #include "tl/expected.hpp" // for expected
 
 #include "tt/cli/global_options.hpp"
-#include "tt/log/cli_logger.hpp"                      // for CliLogger
-#include "tt/net/client.hpp"                          // for Client
-#include "tt/request/pack_request.hpp"                // for PackRequest
-#include "tt/request/reply/adapter/service_info.hpp"  // IWYU pragma: keep
-#include "tt/request/reply/get_reply_from_string.hpp" // for GetReplyFromString
-#include "tt/request/service_info.hpp"                // for ServiceInfo
-#include "tt/svc/live_service.hpp"                    // for LiveService
-#include "tt/utils/deserialize.hpp"                   // for Deserialize
+#include "tt/log/cli_logger.hpp"                     // for CliLogger
+#include "tt/request/make_request.hpp"               // for MakeRequest
+#include "tt/request/reply/adapter/service_info.hpp" // IWYU pragma: keep
 
 using nlohmann::json;
 
@@ -45,28 +40,10 @@ auto tt::cli::ShowCommand::Execute() -> int {
         return 255;
     }
 
-    net::Client client(dirs()->livedir() / "tt-ipc.socket");
-    if (auto ret = client.Connect(); !ret.has_value()) {
-        logger()->LogCritical("{}", ret.error());
-        return 255;
-    }
-
-    request::ServiceInfo request(service_.Get());
-    auto s = request::PackRequest(request);
-    if (auto ret = client.SendMessage(s); !ret.has_value()) {
-        logger()->LogCritical("{}", ret.error());
-        return 255;
-    }
-    auto message_received = client.ReceiveMessage();
-    if (!message_received.has_value()) {
-        logger()->LogCritical("{}", message_received.error());
-        return 255;
-    }
-
-    auto reply = request::GetReplyFromString(message_received.value());
+    auto reply =
+        request::MakeRequest(dirs(), request::ServiceInfo{service_.Get()});
     if (!reply.has_value()) {
-        logger()->LogCritical("{}", reply.error());
-        return 255;
+        logger()->LogError("{}", reply.error());
     }
 
     try {

@@ -27,11 +27,10 @@
 #include "tt/dependency_graph/utils.hpp" // for GetName
 #include "tt/file_lock.hpp"              // for FileLock
 #include "tt/log/cli_logger.hpp"         // for CliLogger
-#include "tt/net/client.hpp"             // for Client
 #include "tt/parser/parser_error.hpp"    // for ParserError
 #include "tt/parser/service/services_parser.hpp"
 #include "tt/path/dirs.hpp"
-#include "tt/request/pack_request.hpp" // for PackRequest
+#include "tt/request/make_request.hpp" // for MakeRequest
 #include "tt/utils/deserialize.hpp"
 #include "tt/utils/serialize.hpp"
 
@@ -110,16 +109,9 @@ auto tt::cli::EnableCommand::EnableServices() -> int {
         return 255;
     }
 
-    request::ReloadGraph request;
-    auto s = request::PackRequest(request);
-    if (auto ret = client.SendMessage(s); !ret.has_value()) {
-        logger()->LogCritical("{}", ret.error());
-        return 255;
-    }
-    auto message_received = client.ReceiveMessage();
-    if (!message_received.has_value()) {
-        logger()->LogCritical("{}", message_received.error());
-        return 255;
+    auto reply = request::MakeRequest(dirs(), request::ReloadGraph{});
+    if (!reply.has_value()) {
+        logger()->LogError("{}", reply.error());
     }
 
     return 0;

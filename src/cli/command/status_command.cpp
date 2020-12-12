@@ -24,43 +24,21 @@
 
 #include "tt/cli/global_options.hpp"
 #include "tt/log/cli_logger.hpp"                      // for CliLogger
-#include "tt/net/client.hpp"                          // for Client
-#include "tt/request/pack_request.hpp"                // for PackRequest
+#include "tt/request/make_request.hpp"                // for MakeRequest
 #include "tt/request/reply/adapter/system_info.hpp"   // IWYU pragma: include
 #include "tt/request/reply/get_reply_from_string.hpp" // for GetReplyFromString
 #include "tt/request/reply/system_info.hpp"           // for SystemInfo
-#include "tt/request/system_info.hpp"                 // for SystemInfo
 
 tt::cli::StatusCommand::StatusCommand(args::Subparser &parser)
     : Command(parser) {}
 
 auto tt::cli::StatusCommand::Execute() -> int {
-    net::Client client(dirs()->livedir() / "tt-ipc.socket");
-    if (auto ret = client.Connect(); !ret.has_value()) {
-        logger()->LogCritical("{}", ret.error());
-        return 255;
-    }
-
-    request::SystemInfo request;
-    auto s = request::PackRequest(request);
-    if (auto ret = client.SendMessage(s); !ret.has_value()) {
-        logger()->LogCritical("{}", ret.error());
-        return 255;
-    }
-    auto message_received = client.ReceiveMessage();
-    if (!message_received.has_value()) {
-        logger()->LogCritical("{}", message_received.error());
-        return 255;
-    }
-
-    auto reply = request::GetReplyFromString(message_received.value());
+    auto reply = request::MakeRequest(dirs(), request::SystemInfo{});
     if (!reply.has_value()) {
-        logger()->LogCritical("{}", reply.error());
-        return 255;
+        logger()->LogError("{}", reply.error());
     }
 
     std::vector<LiveService> live_services;
-
     try {
         auto ret = reply.value().get<request::SystemInfo::Reply>().Decode();
         if (!ret.has_value()) {
