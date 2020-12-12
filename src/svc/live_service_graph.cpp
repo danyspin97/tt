@@ -22,6 +22,10 @@
 
 #include <future> // for future
 
+#include "fmt/format.h" // for format
+
+#include "tl/expected.hpp" // for expected
+
 #include "tt/dependency_graph/dependency_reader.hpp" // for DependencyReader
 #include "tt/dependency_graph/utils.hpp"             // for GetName
 #include "tt/supervision/longrun_supervisor_launcher.hpp" // for LongrunSu...
@@ -103,9 +107,9 @@ void tt::LiveServiceGraph::StartAllServices() {
     std::vector<std::future<void>> start_scripts_running;
     // TODO: Calculate an optimal order of services to start
     for (auto &node : live_services_) {
-        start_scripts_running.emplace_back(
-            std::async(std::launch::async, &tt::LiveServiceGraph::StartService,
-                       this, std::ref(node)));
+        start_scripts_running.emplace_back(std::async(
+            std::launch::async, &tt::LiveServiceGraph::StartSingleService, this,
+            std::ref(node)));
     }
 
     for (const auto &future : start_scripts_running) {
@@ -121,9 +125,9 @@ void tt::LiveServiceGraph::StopAllServices() {
     stop_scripts_running.reserve(up_services.size());
     for (auto &service_name : up_services) {
         auto &node = GetLiveServiceFromName(service_name);
-        stop_scripts_running.emplace_back(
-            std::async(std::launch::async, &tt::LiveServiceGraph::StopService,
-                       this, std::ref(node)));
+        stop_scripts_running.emplace_back(std::async(
+            std::launch::async, &tt::LiveServiceGraph::StopSingleService, this,
+            std::ref(node)));
     }
 
     for (const auto &future : stop_scripts_running) {
@@ -131,7 +135,7 @@ void tt::LiveServiceGraph::StopAllServices() {
     }
 }
 
-void tt::LiveServiceGraph::StartService(LiveService &live_service) {
+void tt::LiveServiceGraph::StartSingleService(LiveService &live_service) {
     ChangeStatusOfService(live_service.name(), ServiceStatus::Starting);
     DependencyReader dep_reader{};
     std::visit(std::ref(dep_reader), live_service.service());
@@ -171,7 +175,7 @@ void tt::LiveServiceGraph::StartService(LiveService &live_service) {
         live_service.service());
 }
 
-void tt::LiveServiceGraph::StopService(LiveService &live_service) {
+void tt::LiveServiceGraph::StopSingleService(LiveService &live_service) {
     ChangeStatusOfService(live_service.name(), ServiceStatus::Stopping);
     const auto &dependants = live_service.node().dependants();
     for (const auto &dependant : dependants) {
@@ -201,6 +205,96 @@ void tt::LiveServiceGraph::StopService(LiveService &live_service) {
         },
         live_service.service());
     ChangeStatusOfService(live_service.name(), ServiceStatus::Down);
+}
+
+auto tt::LiveServiceGraph::StartService(const std::string &service_name)
+    -> tl::expected<ScriptStatus, std::string> {
+    std::shared_lock lock{mutex_};
+    if (!HasService(service_name)) {
+        return tl::make_unexpected(
+            fmt::format("Service {} not found", service_name));
+    }
+
+    auto &live_service = GetLiveServiceFromName(service_name);
+    // Service is already up or stopping, either way we cannot start it
+    if (auto status = live_service.status();
+        status != ServiceStatus::Reset && status != ServiceStatus::Down) {
+        return tl::make_unexpected(
+            fmt::format("Cannot start service {} because it is {}",
+                        service_name, GetServiceStatusName(status)));
+    }
+
+    if (live_service.NeedUpdate()) {
+        lock.unlock();
+        std::unique_lock unique_lock{mutex_};
+        live_service.Update();
+        unique_lock.unlock();
+        lock.lock();
+    }
+
+    tt::DependencyReader dep_reader;
+    std::visit(dep_reader, live_service.service());
+    const auto deps = dep_reader.dependencies();
+    lock.unlock();
+    for (const auto &dep : deps) {
+        // Discard error
+        auto ret = StartService(dep);
+        if (!ret.has_value()) {
+            continue;
+        }
+
+        if (ret.value() == ScriptStatus::Failure) {
+            return tl::make_unexpected(fmt::format(
+                "Cannot start service {} its dependency {} has failed",
+                service_name, dep));
+        }
+    }
+
+    StartSingleService(live_service);
+    lock.lock();
+    return live_service.status() == ServiceStatus::Up ? ScriptStatus::Success
+                                                      : ScriptStatus::Failure;
+}
+
+#include "spdlog/spdlog.h"
+
+auto tt::LiveServiceGraph::StopService(const std::string &service_name)
+    -> tl::expected<void, std::string> {
+    std::shared_lock lock{mutex_};
+    if (!HasService(service_name)) {
+        return tl::make_unexpected(
+            fmt::format("Service {} not found", service_name));
+    }
+
+    auto &live_service = GetLiveServiceFromName(service_name);
+    // Service is not up, cannot stop
+    if (auto status = live_service.status(); status != ServiceStatus::Up) {
+        return tl::make_unexpected(fmt::format("Service {} is {}, skipping",
+                                               service_name,
+                                               GetServiceStatusName(status)));
+    }
+
+    auto dependants = live_service.node().dependants();
+    for (const auto &dependant : dependants) {
+        auto &live_service = GetLiveServiceFromName(dependant);
+        if (auto status = live_service.status();
+            status != ServiceStatus::Reset && status != ServiceStatus::Down) {
+            return tl::make_unexpected(
+                fmt::format("Cannot stop service {} because {} depends on it",
+                            service_name, dependant));
+        }
+    }
+
+    lock.unlock();
+    StopSingleService(live_service);
+    lock.lock();
+
+    if (live_service.IsMarkedForRemoval()) {
+        lock.unlock();
+        std::unique_lock unique_lock(mutex_);
+        // RemoveService(live_service);
+    }
+    return {};
 }
 
 void tt::LiveServiceGraph::ChangeStatusOfService(const std::string &service,

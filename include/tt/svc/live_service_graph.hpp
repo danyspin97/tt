@@ -27,6 +27,7 @@
 #include "tt/dependency_graph/dependency_graph.hpp" // for DependencyGraph
 #include "tt/log/service_logger_registry.hpp"       // for ServiceLoggerRegistry
 #include "tt/supervision/longrun_supervisor_launcher.hpp" // for LongrunSup...
+#include "tt/supervision/types.hpp"                       // for ScriptStatus
 #include "tt/svc/live_service.hpp"                        // for LiveService
 
 namespace tt {
@@ -58,9 +59,19 @@ public:
 
     auto GetLiveServiceFromName(const std::string &name) -> LiveService &;
 
+    // Start a service and all its dependency
+    auto StartService(const std::string &service_name)
+        -> tl::expected<ScriptStatus, std::string>;
+    // Same as stop service
+    auto StopService(const std::string &service_name)
+        -> tl::expected<void, std::string>;
+
 private:
-    void StartService(LiveService &service);
-    void StopService(LiveService &service);
+    // Start a single service, check its status is valid before trying to
+    // putting it up
+    void StartSingleService(LiveService &service);
+    // Same as StartSingleService
+    void StopSingleService(LiveService &service);
 
     static inline std::shared_mutex mutex_;
     std::map<std::string, size_t> name_to_index_;
