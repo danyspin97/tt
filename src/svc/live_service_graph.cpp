@@ -213,8 +213,11 @@ void tt::LiveServiceGraph::ChangeStatusOfService(const std::string &service,
 
     switch (new_status) {
     case ServiceStatus::Up:
+        live_service.SignalUp();
+        break;
     case ServiceStatus::Down:
-        live_service.Signal();
+        live_service.SignalDown();
+        break;
     default:
         // No need to do anything here
         ;
@@ -225,7 +228,7 @@ void tt::LiveServiceGraph::ChangeStatusOfService(const std::string &service,
 auto tt::LiveServiceGraph::WaitOnServiceStart(const std::string &service)
     -> bool {
     auto &live_service = GetLiveServiceFromName(service);
-    live_service.Wait();
+    live_service.WaitUp();
 
     // We only need the shared_lock when reading from services_ map
     std::shared_lock lock{mutex_};
@@ -233,7 +236,7 @@ auto tt::LiveServiceGraph::WaitOnServiceStart(const std::string &service)
 }
 
 void tt::LiveServiceGraph::WaitOnServiceDown(const std::string &service) {
-    GetLiveServiceFromName(service).Wait();
+    GetLiveServiceFromName(service).WaitDown();
 }
 
 auto tt::LiveServiceGraph::GetUpServices() const -> std::vector<std::string> {

@@ -38,7 +38,8 @@ public:
     explicit LiveService(ServiceNode &&node)
         : node_(std::move_if_noexcept(node)),
           mutex_(std::make_unique<std::mutex>()),
-          condition_(std::make_unique<std::condition_variable>()) {}
+          start_condition_(std::make_unique<std::condition_variable>()),
+          stop_condition_(std::make_unique<std::condition_variable>()) {}
 
     [[nodiscard]] auto service() const -> const Service & {
         return node_.service();
@@ -64,15 +65,28 @@ public:
     void UnmarkForRemoval() { remove_ = false; }
     [[nodiscard]] auto IsMarkedForRemoval() const -> bool { return remove_; }
 
-    void Wait() {
+    void WaitUp() {
         std::unique_lock<std::mutex> lock(*mutex_);
-        (condition_)->wait(lock, [this]() { return ended_; });
+        (start_condition_)->wait(lock, [this]() {
+            return status_ == ServiceStatus::Up;
+        });
     }
 
-    void Signal() {
+    void WaitDown() {
         std::unique_lock<std::mutex> lock(*mutex_);
-        ended_ = true;
-        condition_->notify_all();
+        (stop_condition_)->wait(lock, [this]() {
+            return status_ == ServiceStatus::Down;
+        });
+    }
+
+    void SignalUp() {
+        std::unique_lock<std::mutex> lock(*mutex_);
+        start_condition_->notify_all();
+    }
+
+    void SignalDown() {
+        std::unique_lock<std::mutex> lock(*mutex_);
+        stop_condition_->notify_all();
     }
 
 private:
@@ -98,8 +112,8 @@ private:
 
     // Replace this with atomic_flag
     std::unique_ptr<std::mutex> mutex_;
-    std::unique_ptr<std::condition_variable> condition_;
-    bool ended_ = false;
+    std::unique_ptr<std::condition_variable> start_condition_;
+    std::unique_ptr<std::condition_variable> stop_condition_;
 };
 
 } // namespace tt
