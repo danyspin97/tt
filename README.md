@@ -33,7 +33,7 @@ which instead are based on runtime services.
 - Predictable dependencies at build time
 - Configurable parameters for services (i.e. change command line arguments
   without editing the service file)
-- Asynchrounus start of the services (no [run
+- Asynchronous start of the services (no [run
   levels](https://en.wikipedia.org/wiki/Runlevel))
 - Log everything into files, no syslog needed
 - Low footprint
